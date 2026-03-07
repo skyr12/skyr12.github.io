@@ -10,13 +10,13 @@
 
 body{
 margin:0;
-font-family: 'Segoe UI', sans-serif;
+font-family:'Segoe UI',sans-serif;
 color:white;
 text-align:center;
 
 background: linear-gradient(135deg,#0f0f0f,#1a1a2e,#16213e);
 background-size:400% 400%;
-animation: gradientBG 10s ease infinite;
+animation: gradientBG 12s ease infinite;
 }
 
 @keyframes gradientBG{
@@ -25,35 +25,23 @@ animation: gradientBG 10s ease infinite;
 100%{background-position:0% 50%;}
 }
 
-background:linear-gradient(135deg,#ff6a88,#ff99ac,#ffb6c1);
-background-size:400% 400%;
-
-animation:gradient 10s ease infinite;
-}
-
-@keyframes gradient{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
-}
-
 header{
-padding:25px;
+padding:30px;
 font-size:26px;
 font-weight:bold;
 }
 
 .hero{
-margin-top:120px;
+margin-top:60px;
 }
 
 h1{
-font-size:38px;
+font-size:40px;
 margin-bottom:10px;
 }
 
 p{
-opacity:0.9;
+opacity:0.8;
 }
 
 .buttons{
@@ -61,27 +49,26 @@ margin-top:40px;
 }
 
 button{
-padding:16px 35px;
-margin:10px;
-border-radius:12px;
+background:#FF4D6D;
 border:none;
-font-size:18px;
+padding:15px 30px;
+border-radius:30px;
+color:white;
+font-size:16px;
 cursor:pointer;
-
-background:rgba(255,255,255,0.9);
-color:#ff4f7b;
-
+margin:10px;
 transition:0.3s;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
 }
 
 button:hover{
-transform:scale(1.08);
-background:white;
+background:#FF758F;
+transform:scale(1.05);
 }
 
 footer{
-margin-top:150px;
-opacity:0.7;
+margin-top:100px;
+opacity:0.5;
 font-size:14px;
 }
 
@@ -98,21 +85,28 @@ font-size:14px;
 
 <h1>نیمه گمشده خود را پیدا کنید</h1>
 
-<p>پلتفرم مدرن آشنایی و ازدواج فارسی زبانان در سراسر جهان</p>
+<p>
+پلتفرم مدرن آشنایی و ازدواج فارسی زبانان در سراسر جهان
+</p>
 
 <div class="buttons">
+
 <a href="signup.html">
 <button>ثبت نام</button>
 </a>
+
 <a href="profile.html">
 <button>ورود</button>
 </a>
+
 <a href="users.html">
 <button>کاربران</button>
 </a>
-  <a href="swipe.html">
+
+<a href="swipe.html">
 <button>پیدا کردن افراد</button>
 </a>
+
 </div>
 
 </div>
