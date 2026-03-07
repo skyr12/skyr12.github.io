@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fa">
-
 <head>
 
 <meta charset="UTF-8">
@@ -12,7 +11,7 @@
 
 body{
 margin:0;
-font-family:'Segoe UI',sans-serif;
+font-family:Segoe UI;
 background:#020617;
 color:white;
 text-align:center;
@@ -68,9 +67,7 @@ object-fit:cover;
 <div class="gallery">
 
 <img id="g1">
-
 <img id="g2">
-
 <img id="g3">
 
 </div>
@@ -81,28 +78,24 @@ object-fit:cover;
 
 let users = JSON.parse(localStorage.getItem("users")) || []
 
+let defaultPhoto="https://picsum.photos/200"
+
 if(users.length>0){
 
 let u = users[users.length-1]
 
-document.getElementById("avatar").src=u.photo
+document.getElementById("avatar").src = u.photo || defaultPhoto
+document.getElementById("name").innerText = u.name
+document.getElementById("city").innerText = u.city
+document.getElementById("bio").innerText = u.bio
 
-document.getElementById("name").innerText=u.name
-
-document.getElementById("city").innerText=u.city
-
-document.getElementById("bio").innerText=u.bio
-
-document.getElementById("g1").src=u.photo
-
-document.getElementById("g2").src=u.photo
-
-document.getElementById("g3").src=u.photo
+document.getElementById("g1").src = u.photo || defaultPhoto
+document.getElementById("g2").src = defaultPhoto
+document.getElementById("g3").src = defaultPhoto
 
 }
 
 </script>
 
 </body>
-
 </html>
