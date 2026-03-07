@@ -28,7 +28,7 @@ overflow:auto;
 
 .message{
 background:#222;
-padding:10px;
+padding:12px;
 border-radius:10px;
 margin:10px 0;
 max-width:70%;
@@ -75,23 +75,45 @@ cursor:pointer;
 
 <script>
 
+let messages = JSON.parse(localStorage.getItem("messages")) || []
+
+function render(){
+
+let chat = document.getElementById("chat")
+
+chat.innerHTML = ""
+
+messages.forEach(m => {
+
+let div = document.createElement("div")
+
+div.className="message"
+
+div.innerText = m
+
+chat.appendChild(div)
+
+})
+
+}
+
 function send(){
 
 let text = document.getElementById("text").value
 
 if(text==="") return
 
-let msg = document.createElement("div")
+messages.push(text)
 
-msg.className="message"
-
-msg.innerText = text
-
-document.getElementById("chat").appendChild(msg)
+localStorage.setItem("messages",JSON.stringify(messages))
 
 document.getElementById("text").value=""
 
+render()
+
 }
+
+render()
 
 </script>
 
