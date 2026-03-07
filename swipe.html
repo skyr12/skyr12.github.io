@@ -13,7 +13,7 @@
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
-background:#111;
+background:#020617;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -21,83 +21,58 @@ height:100vh;
 color:white;
 }
 
-.container{
-width:320px;
-height:480px;
-position:relative;
-}
-
 .card{
-width:100%;
-height:100%;
-background:#222;
+
+background:#111;
+padding:30px;
 border-radius:20px;
-box-shadow:0 10px 40px rgba(0,0,0,0.6);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
+width:300px;
 text-align:center;
-padding:20px;
-transition:0.4s;
+
 }
 
 .avatar{
-width:160px;
-height:160px;
+
+width:150px;
+height:150px;
 border-radius:50%;
 object-fit:cover;
-margin-bottom:20px;
+margin-bottom:15px;
+
 }
 
 .buttons{
+
 display:flex;
-gap:40px;
-margin-top:30px;
+justify-content:center;
+gap:20px;
+margin-top:20px;
+
 }
 
 button{
+
 width:60px;
 height:60px;
-border:none;
 border-radius:50%;
-font-size:24px;
+border:none;
+font-size:22px;
 cursor:pointer;
+
 }
 
 .nope{
+
 background:#333;
-color:#ff3b3b;
+color:red;
+
 }
 
 .like{
+
 background:#FF4D6D;
 color:white;
-}
 
-.matchPopup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.9);
-display:none;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-font-size:26px;
-}
-
-.matchPopup button{
-margin-top:15px;
-padding:12px 25px;
-border:none;
-border-radius:25px;
-background:#FF4D6D;
-color:white;
-font-size:16px;
-cursor:pointer;
 }
 
 </style>
@@ -106,17 +81,15 @@ cursor:pointer;
 
 <body>
 
-<div class="container">
+<div class="card">
 
-<div class="card" id="card">
-
-<img id="avatar" class="avatar">
+<img id="photo" class="avatar">
 
 <h2 id="name"></h2>
 
-<p id="bio"></p>
+<p id="city"></p>
 
-<p id="distance"></p>
+<p id="bio"></p>
 
 <div class="buttons">
 
@@ -128,50 +101,27 @@ cursor:pointer;
 
 </div>
 
-</div>
-
-<div class="matchPopup" id="matchPopup">
-
-🎉 Match شد!
-
-<a href="chat.html">
-<button>💬 شروع چت</button>
-</a>
-
-<a href="matches.html">
-<button>❤️ دیدن Match ها</button>
-</a>
-
-<button onclick="closeMatch()">ادامه</button>
-
-</div>
-
 <script>
 
-let users=[
+let users=[]
 
-{
-name:"سارا",
-bio:"علاقه‌مند به سفر",
-distance:"📍 فاصله 3 km",
-photo:"https://picsum.photos/300/300?1"
-},
+let name=localStorage.getItem("name")
+let city=localStorage.getItem("city")
+let bio=localStorage.getItem("bio")
+let photo=localStorage.getItem("photo")
 
-{
-name:"امیر",
-bio:"ورزشکار",
-distance:"📍 فاصله 5 km",
-photo:"https://picsum.photos/300/300?2"
-},
+if(name){
 
-{
-name:"لیلا",
-bio:"عاشق موسیقی",
-distance:"📍 فاصله 8 km",
-photo:"https://picsum.photos/300/300?3"
+users.push({
+
+name:name,
+city:city,
+bio:bio,
+photo:photo
+
+})
+
 }
-
-]
 
 let index=0
 
@@ -180,9 +130,12 @@ function showUser(){
 let u=users[index]
 
 document.getElementById("name").innerText=u.name
+
+document.getElementById("city").innerText=u.city
+
 document.getElementById("bio").innerText=u.bio
-document.getElementById("distance").innerText=u.distance
-document.getElementById("avatar").src=u.photo
+
+document.getElementById("photo").src=u.photo
 
 }
 
@@ -190,31 +143,11 @@ showUser()
 
 function like(){
 
-let matches = JSON.parse(localStorage.getItem("matches")) || []
-
-matches.push(users[index])
-
-localStorage.setItem("matches",JSON.stringify(matches))
-
-document.getElementById("matchPopup").style.display="flex"
+alert("❤️ Match شد")
 
 }
 
 function nope(){
-
-nextUser()
-
-}
-
-function closeMatch(){
-
-document.getElementById("matchPopup").style.display="none"
-
-nextUser()
-
-}
-
-function nextUser(){
 
 index++
 
@@ -231,5 +164,4 @@ showUser()
 </script>
 
 </body>
-
 </html>
