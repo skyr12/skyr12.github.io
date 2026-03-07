@@ -16,38 +16,58 @@ font-family:Segoe UI;
 background:#020617;
 color:white;
 text-align:center;
-padding:30px;
+padding-bottom:80px;
 }
 
-.container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
+.title{
+margin-top:30px;
+font-size:26px;
+}
+
+.list{
+margin-top:30px;
 }
 
 .card{
 background:#111;
+width:260px;
+margin:20px auto;
 padding:20px;
 border-radius:20px;
-width:220px;
 }
 
 .avatar{
-width:100px;
-height:100px;
+width:90px;
+height:90px;
 border-radius:50%;
 object-fit:cover;
-margin-bottom:10px;
 }
 
-button{
-background:#FF4D6D;
+.btn{
+background:#ff4d6d;
 border:none;
-padding:8px 15px;
+padding:10px 20px;
 border-radius:20px;
 color:white;
+margin-top:10px;
 cursor:pointer;
+}
+
+.bottomMenu{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#111;
+display:flex;
+justify-content:space-around;
+padding:15px;
+font-size:24px;
+}
+
+.bottomMenu a{
+color:white;
+text-decoration:none;
 }
 
 </style>
@@ -56,23 +76,25 @@ cursor:pointer;
 
 <body>
 
-<h1>❤️ Match های شما</h1>
+<h1 class="title">❤️ Match های شما</h1>
 
-<div class="container" id="matches"></div>
+<div class="list" id="list"></div>
+
+<div class="bottomMenu">
+
+<a href="users.html">🔎</a>
+
+<a href="swipe.html">❤️</a>
+
+<a href="matches.html">💬</a>
+
+</div>
 
 <script>
 
 let matches = JSON.parse(localStorage.getItem("matches")) || []
 
 let html=""
-
-if(matches.length===0){
-
-html="<p>هنوز Match نداری</p>"
-
-}
-
-else{
 
 matches.forEach((u,i)=>{
 
@@ -86,7 +108,7 @@ html+=`
 
 <p>${u.city}</p>
 
-<button onclick="openChat(${i})">💬 چت</button>
+<button class="btn" onclick="chat(${i})">💬 شروع چت</button>
 
 </div>
 
@@ -94,11 +116,9 @@ html+=`
 
 })
 
-}
+document.getElementById("list").innerHTML=html
 
-document.getElementById("matches").innerHTML=html
-
-function openChat(i){
+function chat(i){
 
 localStorage.setItem("chatIndex",i)
 
