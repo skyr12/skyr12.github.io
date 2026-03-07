@@ -93,6 +93,8 @@ color:white;
 
 let users = JSON.parse(localStorage.getItem("users")) || []
 
+let matches = JSON.parse(localStorage.getItem("matches")) || []
+
 let index = 0
 
 function showUser(){
@@ -121,7 +123,11 @@ showUser()
 
 function like(){
 
-alert("❤️ Match شد")
+matches.push(users[index])
+
+localStorage.setItem("matches",JSON.stringify(matches))
+
+alert("❤️ Match شد!")
 
 nextUser()
 
