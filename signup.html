@@ -6,48 +6,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>سوایپ کاربران</title>
+<title>ثبت نام</title>
 
 <style>
 
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
-background:#111;
+background:#020617;
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-color:white;
 }
 
-.container{
-position:relative;
-width:320px;
-height:420px;
-}
+.form{
 
-.card{
-position:absolute;
-width:100%;
-height:100%;
-background:#222;
+background:#111;
+padding:30px;
 border-radius:20px;
-box-shadow:0 10px 40px rgba(0,0,0,0.6);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
+width:300px;
 text-align:center;
-padding:20px;
+
 }
 
-.avatar{
-width:150px;
-height:150px;
-border-radius:50%;
-object-fit:cover;
-margin-bottom:20px;
+input,textarea{
+
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+
+}
+
+button{
+
+background:#FF4D6D;
+border:none;
+padding:12px 20px;
+border-radius:20px;
+color:white;
+cursor:pointer;
+
 }
 
 </style>
@@ -56,99 +58,39 @@ margin-bottom:20px;
 
 <body>
 
-<div class="container">
+<div class="form">
 
-<div class="card" id="card">
+<h2>ثبت نام</h2>
 
-<img id="avatar" class="avatar">
+<input id="name" placeholder="نام">
 
-<h2 id="name"></h2>
+<input id="age" placeholder="سن">
 
-<p id="bio"></p>
+<input id="city" placeholder="شهر">
 
-</div>
+<textarea id="bio" placeholder="بیوگرافی"></textarea>
+
+<input type="file" id="photo">
+
+<button onclick="register()">ثبت</button>
 
 </div>
 
 <script>
 
-let users=[
+function register(){
 
-{
-name:"سارا",
-bio:"علاقه‌مند به سفر",
-photo:"https://picsum.photos/300/300?1"
-},
+let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let city=document.getElementById("city").value
+let bio=document.getElementById("bio").value
 
-{
-name:"امیر",
-bio:"ورزشکار",
-photo:"https://picsum.photos/300/300?2"
-},
+localStorage.setItem("name",name)
+localStorage.setItem("age",age)
+localStorage.setItem("city",city)
+localStorage.setItem("bio",bio)
 
-{
-name:"لیلا",
-bio:"عاشق موسیقی",
-photo:"https://picsum.photos/300/300?3"
-}
-
-]
-
-let index=0
-
-function showUser(){
-
-let u=users[index]
-
-document.getElementById("name").innerText=u.name
-
-document.getElementById("bio").innerText=u.bio
-
-document.getElementById("avatar").src=u.photo
-
-}
-
-showUser()
-
-let startX=0
-
-let card=document.getElementById("card")
-
-card.addEventListener("touchstart",e=>{
-
-startX=e.touches[0].clientX
-
-})
-
-card.addEventListener("touchend",e=>{
-
-let endX=e.changedTouches[0].clientX
-
-if(endX-startX>100){
-
-nextUser()
-
-}
-
-if(startX-endX>100){
-
-nextUser()
-
-}
-
-})
-
-function nextUser(){
-
-index++
-
-if(index>=users.length){
-
-index=0
-
-}
-
-showUser()
+window.location.href="profile.html"
 
 }
 
