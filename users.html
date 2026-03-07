@@ -58,6 +58,12 @@ cursor:pointer;
 background:#444;
 }
 
+.match{
+margin-top:10px;
+color:#4CAF50;
+font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -87,9 +93,7 @@ let card = `
 
 <button onclick="like()">❤️ لایک</button>
 
-<a href="chat.html">
-<button class="chat">💬 چت</button>
-</a>
+<div id="match"></div>
 
 </div>
 `
@@ -100,11 +104,7 @@ document.getElementById("users").innerHTML = card
 
 function like(){
 
-alert("شما این کاربر را پسندیدید ❤️")
-
-}
-
-</script>
-
-</body>
-</html>
+document.getElementById("match").innerHTML = 
+`<div class="match">🎉 Match شد!</div>
+<a href="chat.html">
+<button class="chat
