@@ -62,6 +62,10 @@ color:white;
 cursor:pointer;
 }
 
+.block{
+background:#444;
+}
+
 </style>
 
 </head>
@@ -101,9 +105,17 @@ lastSeen:"1 ساعت پیش"
 
 ]
 
+// لیست بلاک
+
+let blocked = JSON.parse(localStorage.getItem("blocked")) || []
+
+function render(){
+
 let html=""
 
 users.forEach((u,i)=>{
+
+if(blocked.includes(i)) return
 
 html+=`
 
@@ -121,7 +133,9 @@ ${u.online ? '<span class="online">🟢 آنلاین</span>' : '⏰ '+u.lastSeen
 
 </p>
 
-<button>❤️ لایک</button>
+<button onclick="like(${i})">❤️ لایک</button>
+
+<button class="block" onclick="blockUser(${i})">🚫 بلاک</button>
 
 </div>
 
@@ -130,6 +144,26 @@ ${u.online ? '<span class="online">🟢 آنلاین</span>' : '⏰ '+u.lastSeen
 })
 
 document.getElementById("users").innerHTML=html
+
+}
+
+function like(i){
+
+alert("کاربر لایک شد ❤️")
+
+}
+
+function blockUser(i){
+
+blocked.push(i)
+
+localStorage.setItem("blocked",JSON.stringify(blocked))
+
+render()
+
+}
+
+render()
 
 </script>
 
