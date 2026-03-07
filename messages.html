@@ -65,6 +65,14 @@ margin-right:10px;
 cursor:pointer;
 }
 
+.upgrade{
+background:#22c55e;
+margin:10px;
+padding:10px;
+text-align:center;
+border-radius:10px;
+}
+
 </style>
 
 </head>
@@ -79,6 +87,16 @@ cursor:pointer;
 
 <div class="messages" id="messages"></div>
 
+<div class="upgrade" id="upgradeBox" style="display:none">
+
+برای ارسال پیام بیشتر باید عضویت ویژه بگیرید
+
+<br><br>
+
+<button onclick="upgrade()">خرید عضویت</button>
+
+</div>
+
 <div class="inputBox">
 
 <input id="msgInput" placeholder="پیام بنویس">
@@ -90,6 +108,8 @@ cursor:pointer;
 <script>
 
 let chats=JSON.parse(localStorage.getItem("chats"))||[]
+
+let premium=localStorage.getItem("premium")
 
 function showMessages(){
 
@@ -107,6 +127,14 @@ document.getElementById("messages").innerHTML=html
 
 function sendMsg(){
 
+if(!premium && chats.length>=3){
+
+document.getElementById("upgradeBox").style.display="block"
+
+return
+
+}
+
 let text=document.getElementById("msgInput").value
 
 if(text==="") return
@@ -118,6 +146,16 @@ localStorage.setItem("chats",JSON.stringify(chats))
 document.getElementById("msgInput").value=""
 
 showMessages()
+
+}
+
+function upgrade(){
+
+localStorage.setItem("premium","yes")
+
+alert("عضویت شما فعال شد")
+
+document.getElementById("upgradeBox").style.display="none"
 
 }
 
