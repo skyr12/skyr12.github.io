@@ -16,10 +16,10 @@ font-family:'Segoe UI',sans-serif;
 background:#020617;
 color:white;
 text-align:center;
-padding:40px;
+padding:30px;
 }
 
-.users{
+.container{
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
@@ -30,7 +30,8 @@ gap:20px;
 background:#111;
 padding:20px;
 border-radius:20px;
-width:200px;
+width:220px;
+position:relative;
 }
 
 .avatar{
@@ -41,19 +42,29 @@ object-fit:cover;
 margin-bottom:10px;
 }
 
+.online{
+position:absolute;
+top:15px;
+right:15px;
+width:12px;
+height:12px;
+background:#00ff6a;
+border-radius:50%;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<h1>کاربران</h1>
+<h1>👥 کاربران</h1>
 
-<div class="users" id="users"></div>
+<div class="container" id="users"></div>
 
 <script>
 
-let users=JSON.parse(localStorage.getItem("users")) || []
+let users = JSON.parse(localStorage.getItem("users")) || []
 
 let html=""
 
@@ -62,6 +73,8 @@ users.forEach(u=>{
 html+=`
 
 <div class="card">
+
+<div class="online"></div>
 
 <img src="${u.photo}" class="avatar">
 
@@ -82,4 +95,5 @@ document.getElementById("users").innerHTML=html
 </script>
 
 </body>
+
 </html>
