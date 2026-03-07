@@ -19,6 +19,17 @@ text-align:center;
 padding:30px;
 }
 
+.search{
+margin-bottom:30px;
+}
+
+.search input{
+padding:10px;
+width:250px;
+border:none;
+border-radius:20px;
+}
+
 .container{
 display:flex;
 flex-wrap:wrap;
@@ -60,15 +71,23 @@ border-radius:50%;
 
 <h1>👥 کاربران</h1>
 
+<div class="search">
+
+<input id="search" placeholder="جستجوی نام..." onkeyup="searchUser()">
+
+</div>
+
 <div class="container" id="users"></div>
 
 <script>
 
 let users = JSON.parse(localStorage.getItem("users")) || []
 
+function showUsers(list){
+
 let html=""
 
-users.forEach(u=>{
+list.forEach(u=>{
 
 html+=`
 
@@ -91,6 +110,20 @@ html+=`
 })
 
 document.getElementById("users").innerHTML=html
+
+}
+
+showUsers(users)
+
+function searchUser(){
+
+let text=document.getElementById("search").value.toLowerCase()
+
+let filtered=users.filter(u=>u.name.toLowerCase().includes(text))
+
+showUsers(filtered)
+
+}
 
 </script>
 
