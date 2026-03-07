@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="fa">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>پروفایل کاربر</title>
+
+<style>
+
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:#111;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+.profile{
+max-width:400px;
+margin:auto;
+background:#222;
+padding:20px;
+border-radius:20px;
+}
+
+.avatar{
+width:200px;
+height:200px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:20px;
+}
+
+.gallery{
+display:flex;
+gap:10px;
+justify-content:center;
+margin-top:20px;
+}
+
+.gallery img{
+width:100px;
+border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="profile">
+
+<img id="avatar" class="avatar">
+
+<h2 id="name"></h2>
+
+<p id="bio"></p>
+
+<div class="gallery">
+
+<img id="p1">
+<img id="p2">
+<img id="p3">
+
+</div>
+
+</div>
+
+<script>
+
+let user = JSON.parse(localStorage.getItem("viewUser"))
+
+document.getElementById("name").innerText=user.name
+document.getElementById("bio").innerText=user.bio
+document.getElementById("avatar").src=user.photo
+
+document.getElementById("p1").src=user.photo
+document.getElementById("p2").src=user.photo
+document.getElementById("p3").src=user.photo
+
+</script>
+
+</body>
+</html>
