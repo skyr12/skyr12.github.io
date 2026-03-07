@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html lang="fa">
-
+<html lang="fa" dir="rtl">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ثبت نام</title>
+<title>ثبت نام | نیمه گمشده</title>
 
 <style>
-
 body{
 margin:0;
-font-family:Segoe UI;
+font-family:Tahoma;
 background:#020617;
 color:white;
 text-align:center;
@@ -20,18 +16,23 @@ text-align:center;
 
 .card{
 background:#111;
-width:320px;
+width:340px;
 margin:40px auto;
 padding:30px;
 border-radius:20px;
 }
 
-input,textarea{
+h2{
+margin-bottom:20px;
+}
+
+input,select,textarea{
 width:90%;
 padding:10px;
-margin:10px;
+margin:8px;
 border:none;
 border-radius:10px;
+font-family:Tahoma;
 }
 
 button{
@@ -42,10 +43,10 @@ border-radius:25px;
 color:white;
 font-size:16px;
 cursor:pointer;
+margin-top:10px;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -56,15 +57,31 @@ cursor:pointer;
 
 <input id="name" placeholder="نام">
 
+<input id="age" type="number" placeholder="سن">
+
+<select id="gender">
+<option value="">جنسیت</option>
+<option>مرد</option>
+<option>زن</option>
+</select>
+
 <input id="city" placeholder="شهر">
 
-<textarea id="bio" placeholder="بیو"></textarea>
+<input id="job" placeholder="شغل">
+
+<select id="education">
+<option value="">تحصیلات</option>
+<option>دیپلم</option>
+<option>کارشناسی</option>
+<option>کارشناسی ارشد</option>
+<option>دکترا</option>
+</select>
+
+<textarea id="bio" placeholder="درباره خودتان"></textarea>
 
 <input type="file" id="photo">
 
-<br><br>
-
-<button onclick="signup()">ثبت</button>
+<button onclick="signup()">ثبت نام</button>
 
 </div>
 
@@ -73,22 +90,33 @@ cursor:pointer;
 function signup(){
 
 let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let gender=document.getElementById("gender").value
 let city=document.getElementById("city").value
+let job=document.getElementById("job").value
+let education=document.getElementById("education").value
 let bio=document.getElementById("bio").value
 
 let file=document.getElementById("photo").files[0]
+
+if(!file){
+alert("عکس انتخاب کنید")
+return
+}
 
 let reader=new FileReader()
 
 reader.onload=function(){
 
-let photo=reader.result
-
 let user={
 name:name,
+age:age,
+gender:gender,
 city:city,
+job:job,
+education:education,
 bio:bio,
-photo:photo
+photo:reader.result
 }
 
 let users=JSON.parse(localStorage.getItem("users"))||[]
@@ -97,7 +125,7 @@ users.push(user)
 
 localStorage.setItem("users",JSON.stringify(users))
 
-window.location.href="users.html"
+window.location.href="search.html"
 
 }
 
@@ -108,5 +136,4 @@ reader.readAsDataURL(file)
 </script>
 
 </body>
-
 </html>
