@@ -40,6 +40,7 @@ justify-content:center;
 align-items:center;
 text-align:center;
 padding:20px;
+transition:0.4s;
 }
 
 .avatar{
@@ -111,11 +112,8 @@ function showUser(){
 let u=users[index]
 
 document.getElementById("name").innerText=u.name
-
 document.getElementById("bio").innerText=u.bio
-
 document.getElementById("distance").innerText="📍 فاصله: "+u.distance
-
 document.getElementById("avatar").src=u.photo
 
 }
@@ -138,13 +136,17 @@ let endX=e.changedTouches[0].clientX
 
 if(endX-startX>100){
 
-nextUser()
+card.style.transform="translateX(400px) rotate(20deg)"
+
+setTimeout(nextUser,300)
 
 }
 
 if(startX-endX>100){
 
-nextUser()
+card.style.transform="translateX(-400px) rotate(-20deg)"
+
+setTimeout(nextUser,300)
 
 }
 
@@ -159,6 +161,8 @@ if(index>=users.length){
 index=0
 
 }
+
+card.style.transform="none"
 
 showUser()
 
