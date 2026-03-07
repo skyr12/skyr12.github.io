@@ -42,16 +42,14 @@ object-fit:cover;
 margin-bottom:10px;
 }
 
-.gallery{
-display:flex;
-gap:5px;
-margin-top:8px;
+.status{
+margin-top:5px;
+font-size:14px;
+opacity:0.8;
 }
 
-.gallery img{
-width:30%;
-border-radius:8px;
-object-fit:cover;
+.online{
+color:#00ff6a;
 }
 
 button{
@@ -62,16 +60,6 @@ padding:10px 15px;
 border-radius:20px;
 color:white;
 cursor:pointer;
-}
-
-.chat{
-background:#444;
-}
-
-.match{
-margin-top:10px;
-color:#4CAF50;
-font-weight:bold;
 }
 
 </style>
@@ -86,54 +74,32 @@ font-weight:bold;
 
 <script>
 
-let users = [
+let users=[
 
 {
 name:"سارا",
-age:27,
 bio:"علاقه‌مند به سفر",
-avatar:"https://picsum.photos/300/300?1",
-photos:[
-"https://picsum.photos/200/200?2",
-"https://picsum.photos/200/200?3",
-"https://picsum.photos/200/200?4"
-]
+photo:"https://picsum.photos/300/300?1",
+online:true
 },
 
 {
 name:"امیر",
-age:30,
 bio:"ورزشکار",
-avatar:"https://picsum.photos/300/300?5",
-photos:[
-"https://picsum.photos/200/200?6",
-"https://picsum.photos/200/200?7",
-"https://picsum.photos/200/200?8"
-]
+photo:"https://picsum.photos/300/300?2",
+online:false,
+lastSeen:"10 دقیقه پیش"
+},
+
+{
+name:"لیلا",
+bio:"عاشق موسیقی",
+photo:"https://picsum.photos/300/300?3",
+online:false,
+lastSeen:"1 ساعت پیش"
 }
 
 ]
-
-let myName = localStorage.getItem("name")
-let myBio = localStorage.getItem("bio")
-
-let photo0 = localStorage.getItem("photo0")
-let photo1 = localStorage.getItem("photo1")
-let photo2 = localStorage.getItem("photo2")
-
-if(myName){
-
-users.unshift({
-
-name:myName,
-age:"",
-bio:myBio,
-avatar:photo0,
-photos:[photo0,photo1,photo2]
-
-})
-
-}
 
 let html=""
 
@@ -143,23 +109,19 @@ html+=`
 
 <div class="card">
 
-<img src="${u.avatar}" class="avatar">
+<img src="${u.photo}" class="avatar">
 
 <h3>${u.name}</h3>
 
 <p>${u.bio}</p>
 
-<div class="gallery">
+<p class="status">
 
-<img src="${u.photos[0]}">
-<img src="${u.photos[1]}">
-<img src="${u.photos[2]}">
+${u.online ? '<span class="online">🟢 آنلاین</span>' : '⏰ '+u.lastSeen}
 
-</div>
+</p>
 
-<button onclick="like(${i})">❤️ لایک</button>
-
-<div id="match${i}"></div>
+<button>❤️ لایک</button>
 
 </div>
 
@@ -168,17 +130,6 @@ html+=`
 })
 
 document.getElementById("users").innerHTML=html
-
-function like(i){
-
-document.getElementById("match"+i).innerHTML=
-
-`<div class="match">🎉 Match شد!</div>
-<a href="chat.html">
-<button class="chat">💬 چت</button>
-</a>`
-
-}
 
 </script>
 
