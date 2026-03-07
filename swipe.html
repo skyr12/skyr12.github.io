@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="fa">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوایپ</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Segoe UI;
@@ -59,9 +57,7 @@ color:red;
 background:#FF4D6D;
 color:white;
 }
-
 </style>
-
 </head>
 
 <body>
@@ -77,11 +73,8 @@ color:white;
 <p id="bio"></p>
 
 <div class="buttons">
-
 <button class="no" onclick="dislike()">❌</button>
-
 <button class="like" onclick="like()">❤️</button>
-
 </div>
 
 </div>
@@ -90,23 +83,21 @@ color:white;
 
 let users = JSON.parse(localStorage.getItem("users")) || []
 
-let index=0
+let index = 0
 
 function showUser(){
 
 if(users.length===0){
-
 document.body.innerHTML="<h2>هیچ کاربری ثبت نام نکرده</h2>"
 return
-
 }
 
-let u=users[index]
+let u = users[index]
 
-document.getElementById("name").innerText=u.name
-document.getElementById("city").innerText=u.city
-document.getElementById("bio").innerText=u.bio
-document.getElementById("photo").src=u.photo
+document.getElementById("name").innerText = u.name
+document.getElementById("city").innerText = u.city
+document.getElementById("bio").innerText = u.bio
+document.getElementById("photo").src = u.photo
 
 }
 
@@ -116,38 +107,23 @@ let matches = JSON.parse(localStorage.getItem("matches")) || []
 
 matches.push(users[index])
 
-localStorage.setItem("matches",JSON.stringify(matches))
+localStorage.setItem("matches", JSON.stringify(matches))
 
-window.location.href="matches.html"
-
-}
-
-let matches = JSON.parse(localStorage.getItem("matches")) || []
-
-matches.push(users[index])
-
-localStorage.setItem("matches",JSON.stringify(matches))
-
-alert("Match شد ❤️")
-
-nextUser()
+// رفتن مستقیم به صفحه Match ها
+window.location.href = "matches.html"
 
 }
 
 function dislike(){
-
 nextUser()
-
 }
 
 function nextUser(){
 
 index++
 
-if(index>=users.length){
-
-index=0
-
+if(index >= users.length){
+index = 0
 }
 
 showUser()
@@ -159,5 +135,4 @@ showUser()
 </script>
 
 </body>
-
 </html>
