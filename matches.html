@@ -30,7 +30,7 @@ gap:20px;
 background:#111;
 padding:20px;
 border-radius:20px;
-width:200px;
+width:220px;
 }
 
 .avatar{
@@ -41,7 +41,14 @@ object-fit:cover;
 margin-bottom:10px;
 }
 
+.last{
+opacity:0.7;
+font-size:14px;
+margin-top:5px;
+}
+
 button{
+margin-top:10px;
 background:#FF4D6D;
 border:none;
 padding:8px 15px;
@@ -64,9 +71,19 @@ cursor:pointer;
 
 let matches = JSON.parse(localStorage.getItem("matches")) || []
 
+let chats = JSON.parse(localStorage.getItem("chats")) || {}
+
 let html=""
 
 matches.forEach((u,i)=>{
+
+let lastMessage="هیچ پیامی نیست"
+
+if(chats[i] && chats[i].length>0){
+
+lastMessage = chats[i][chats[i].length-1]
+
+}
 
 html+=`
 
@@ -78,7 +95,13 @@ html+=`
 
 <p>${u.city}</p>
 
-<button onclick="openChat(${i})">💬 چت</button>
+<div class="last">
+
+💬 ${lastMessage}
+
+</div>
+
+<button onclick="openChat(${i})">چت</button>
 
 </div>
 
