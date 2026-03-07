@@ -33,6 +33,7 @@ padding:20px;
 border-radius:20px;
 width:230px;
 box-shadow:0 10px 30px rgba(0,0,0,0.6);
+position:relative;
 }
 
 .avatar{
@@ -41,6 +42,17 @@ height:200px;
 border-radius:15px;
 object-fit:cover;
 margin-bottom:10px;
+}
+
+.online{
+width:14px;
+height:14px;
+background:#00ff6a;
+border-radius:50%;
+position:absolute;
+top:15px;
+left:15px;
+border:2px solid #222;
 }
 
 button{
@@ -74,49 +86,13 @@ width:30%;
 border-radius:8px;
 }
 
-.filter{
-margin-top:20px;
-}
-
-input,select{
-padding:8px;
-border-radius:10px;
-border:none;
-margin:5px;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<h1>کاربران</h1>
-
-<div class="filter">
-
-سن از
-<input id="minAge" type="number" placeholder="20">
-
-تا
-<input id="maxAge" type="number" placeholder="35">
-
-<br><br>
-
-شهر
-
-<select id="city">
-
-<option value="">همه</option>
-<option value="تهران">تهران</option>
-<option value="دبی">دبی</option>
-<option value="استانبول">استانبول</option>
-
-</select>
-
-<button onclick="filterUsers()">جستجو</button>
-
-</div>
+<h1>کاربران آنلاین</h1>
 
 <div class="users" id="users"></div>
 
@@ -127,7 +103,7 @@ let users = [
 {
 name:"سارا",
 age:27,
-city:"تهران",
+online:true,
 bio:"علاقه‌مند به سفر",
 avatar:"https://picsum.photos/300/300?1",
 photos:[
@@ -140,7 +116,7 @@ photos:[
 {
 name:"امیر",
 age:30,
-city:"دبی",
+online:false,
 bio:"ورزشکار",
 avatar:"https://picsum.photos/300/300?5",
 photos:[
@@ -153,7 +129,7 @@ photos:[
 {
 name:"لیلا",
 age:25,
-city:"استانبول",
+online:true,
 bio:"عاشق موسیقی",
 avatar:"https://picsum.photos/300/300?9",
 photos:[
@@ -165,21 +141,19 @@ photos:[
 
 ]
 
-function showUsers(list){
-
 let html=""
 
-list.forEach((u,i)=>{
+users.forEach((u,i)=>{
 
 html+=`
 
 <div class="card">
 
+${u.online ? '<div class="online"></div>' : ''}
+
 <img src="${u.avatar}" class="avatar">
 
 <h3>${u.name} ${u.age}</h3>
-
-<p>${u.city}</p>
 
 <p>${u.bio}</p>
 
@@ -203,26 +177,6 @@ html+=`
 
 document.getElementById("users").innerHTML=html
 
-}
-
-function filterUsers(){
-
-let min=document.getElementById("minAge").value
-let max=document.getElementById("maxAge").value
-let city=document.getElementById("city").value
-
-let filtered = users.filter(u =>
-
-(!min || u.age >= min) &&
-(!max || u.age <= max) &&
-(!city || u.city === city)
-
-)
-
-showUsers(filtered)
-
-}
-
 function like(i){
 
 document.getElementById("match"+i).innerHTML=
@@ -233,8 +187,6 @@ document.getElementById("match"+i).innerHTML=
 </a>`
 
 }
-
-showUsers(users)
 
 </script>
 
