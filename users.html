@@ -78,11 +78,10 @@ border-radius:8px;
 margin-top:20px;
 }
 
-input{
+input,select{
 padding:8px;
 border-radius:10px;
 border:none;
-width:80px;
 margin:5px;
 }
 
@@ -102,6 +101,19 @@ margin:5px;
 تا
 <input id="maxAge" type="number" placeholder="35">
 
+<br><br>
+
+شهر
+
+<select id="city">
+
+<option value="">همه</option>
+<option value="تهران">تهران</option>
+<option value="دبی">دبی</option>
+<option value="استانبول">استانبول</option>
+
+</select>
+
 <button onclick="filterUsers()">جستجو</button>
 
 </div>
@@ -115,6 +127,7 @@ let users = [
 {
 name:"سارا",
 age:27,
+city:"تهران",
 bio:"علاقه‌مند به سفر",
 avatar:"https://picsum.photos/300/300?1",
 photos:[
@@ -127,6 +140,7 @@ photos:[
 {
 name:"امیر",
 age:30,
+city:"دبی",
 bio:"ورزشکار",
 avatar:"https://picsum.photos/300/300?5",
 photos:[
@@ -139,6 +153,7 @@ photos:[
 {
 name:"لیلا",
 age:25,
+city:"استانبول",
 bio:"عاشق موسیقی",
 avatar:"https://picsum.photos/300/300?9",
 photos:[
@@ -163,6 +178,8 @@ html+=`
 <img src="${u.avatar}" class="avatar">
 
 <h3>${u.name} ${u.age}</h3>
+
+<p>${u.city}</p>
 
 <p>${u.bio}</p>
 
@@ -192,11 +209,13 @@ function filterUsers(){
 
 let min=document.getElementById("minAge").value
 let max=document.getElementById("maxAge").value
+let city=document.getElementById("city").value
 
 let filtered = users.filter(u =>
 
 (!min || u.age >= min) &&
-(!max || u.age <= max)
+(!max || u.age <= max) &&
+(!city || u.city === city)
 
 )
 
