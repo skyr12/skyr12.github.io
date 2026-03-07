@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>درخواست‌ها</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma;
+background:#020617;
+color:white;
+text-align:center;
+}
+
+.header{
+padding:20px;
+font-size:22px;
+}
+
+.card{
+background:#111;
+width:260px;
+margin:20px auto;
+padding:20px;
+border-radius:20px;
+}
+
+.avatar{
+width:100px;
+height:100px;
+border-radius:50%;
+object-fit:cover;
+}
+
+button{
+margin:5px;
+border:none;
+padding:10px 15px;
+border-radius:20px;
+cursor:pointer;
+}
+
+.accept{
+background:#22c55e;
+color:white;
+}
+
+.reject{
+background:#ff4d6d;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+📩 درخواست‌های آشنایی
+
+</div>
+
+<div id="list"></div>
+
+<script>
+
+let requests=JSON.parse(localStorage.getItem("requests"))||[]
+
+let html=""
+
+requests.forEach((u,i)=>{
+
+html+=`
+
+<div class="card">
+
+<img src="${u.photo}" class="avatar">
+
+<h3>${u.name}</h3>
+
+<p>${u.city}</p>
+
+<button class="accept" onclick="accept(${i})">
+قبول
+</button>
+
+<button class="reject" onclick="reject(${i})">
+رد
+</button>
+
+</div>
+
+`
+
+})
+
+document.getElementById("list").innerHTML=html
+
+function accept(i){
+
+localStorage.setItem("chatUser",JSON.stringify(requests[i]))
+
+window.location.href="messages.html"
+
+}
+
+function reject(i){
+
+requests.splice(i,1)
+
+localStorage.setItem("requests",JSON.stringify(requests))
+
+location.reload()
+
+}
+
+</script>
+
+</body>
+
+</html>
