@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="fa">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>پیدا کردن افراد</title>
+<title>سوایپ کاربران</title>
 
 <style>
 
@@ -13,17 +14,17 @@ body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
 background:#111;
-color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+color:white;
 }
 
 .container{
 position:relative;
 width:320px;
-height:420px;
+height:450px;
 }
 
 .card{
@@ -38,19 +39,20 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-transition:0.3s;
+padding:20px;
 }
 
 .avatar{
-width:120px;
-height:120px;
+width:160px;
+height:160px;
 border-radius:50%;
-background:#FF4D6D;
+object-fit:cover;
 margin-bottom:20px;
 }
 
-h2{
-margin:10px 0;
+.distance{
+margin-top:5px;
+opacity:0.7;
 }
 
 </style>
@@ -63,11 +65,13 @@ margin:10px 0;
 
 <div class="card" id="card">
 
-<div class="avatar"></div>
+<img id="avatar" class="avatar">
 
-<h2 id="name">سارا</h2>
+<h2 id="name"></h2>
 
-<p id="info">۲۶ ساله • تهران</p>
+<p id="bio"></p>
+
+<p id="distance" class="distance"></p>
 
 </div>
 
@@ -75,32 +79,73 @@ margin:10px 0;
 
 <script>
 
-const users = [
-{name:"سارا",age:26,city:"تهران"},
-{name:"علی",age:29,city:"دبی"},
-{name:"مریم",age:24,city:"استانبول"},
-{name:"رضا",age:31,city:"برلین"}
-]
+let users=[
 
-let index = 0
-let startX = 0
+{
+name:"سارا",
+bio:"علاقه‌مند به سفر",
+distance:"3 km",
+photo:"https://picsum.photos/300/300?1"
+},
 
-const card = document.getElementById("card")
+{
+name:"امیر",
+bio:"ورزشکار",
+distance:"8 km",
+photo:"https://picsum.photos/300/300?2"
+},
 
-card.addEventListener("touchstart",(e)=>{
-startX = e.touches[0].clientX
-})
-
-card.addEventListener("touchend",(e)=>{
-
-let endX = e.changedTouches[0].clientX
-
-if(endX - startX > 100){
-nextUser()
+{
+name:"لیلا",
+bio:"عاشق موسیقی",
+distance:"5 km",
+photo:"https://picsum.photos/300/300?3"
 }
 
-if(startX - endX > 100){
+]
+
+let index=0
+
+function showUser(){
+
+let u=users[index]
+
+document.getElementById("name").innerText=u.name
+
+document.getElementById("bio").innerText=u.bio
+
+document.getElementById("distance").innerText="📍 فاصله: "+u.distance
+
+document.getElementById("avatar").src=u.photo
+
+}
+
+showUser()
+
+let startX=0
+
+let card=document.getElementById("card")
+
+card.addEventListener("touchstart",e=>{
+
+startX=e.touches[0].clientX
+
+})
+
+card.addEventListener("touchend",e=>{
+
+let endX=e.changedTouches[0].clientX
+
+if(endX-startX>100){
+
 nextUser()
+
+}
+
+if(startX-endX>100){
+
+nextUser()
+
 }
 
 })
@@ -109,14 +154,13 @@ function nextUser(){
 
 index++
 
-if(index >= users.length){
-index = 0
+if(index>=users.length){
+
+index=0
+
 }
 
-document.getElementById("name").innerText = users[index].name
-
-document.getElementById("info").innerText =
-users[index].age + " ساله • " + users[index].city
+showUser()
 
 }
 
