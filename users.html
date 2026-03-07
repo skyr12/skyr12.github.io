@@ -30,13 +30,13 @@ gap:20px;
 background:#222;
 padding:20px;
 border-radius:20px;
-width:200px;
+width:220px;
 box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
 .avatar{
-width:80px;
-height:80px;
+width:90px;
+height:90px;
 border-radius:50%;
 background:#FF4D6D;
 margin:auto;
@@ -45,12 +45,17 @@ object-fit:cover;
 }
 
 button{
+margin-top:8px;
 background:#FF4D6D;
 border:none;
-padding:8px 15px;
+padding:10px 15px;
 border-radius:20px;
 color:white;
 cursor:pointer;
+}
+
+.chat{
+background:#444;
 }
 
 </style>
@@ -82,6 +87,10 @@ let card = `
 
 <button onclick="like()">❤️ لایک</button>
 
+<a href="chat.html">
+<button class="chat">💬 چت</button>
+</a>
+
 </div>
 `
 
@@ -90,8 +99,6 @@ document.getElementById("users").innerHTML = card
 }
 
 function like(){
-
-localStorage.setItem("match","true")
 
 alert("شما این کاربر را پسندیدید ❤️")
 
