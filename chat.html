@@ -12,7 +12,7 @@
 
 body{
 margin:0;
-font-family:'Segoe UI',sans-serif;
+font-family:Segoe UI;
 background:#020617;
 color:white;
 display:flex;
@@ -24,6 +24,7 @@ height:100vh;
 background:#111;
 padding:15px;
 text-align:center;
+font-size:18px;
 }
 
 .messages{
@@ -36,8 +37,8 @@ padding:20px;
 background:#FF4D6D;
 padding:10px 15px;
 border-radius:15px;
-margin:10px 0;
-width:fit-content;
+margin-bottom:10px;
+width:max-content;
 max-width:70%;
 }
 
@@ -55,12 +56,12 @@ border-radius:20px;
 }
 
 button{
-margin-left:10px;
 background:#FF4D6D;
 border:none;
 padding:10px 15px;
 border-radius:20px;
 color:white;
+margin-left:10px;
 cursor:pointer;
 }
 
@@ -80,9 +81,9 @@ cursor:pointer;
 
 <div class="inputBox">
 
-<input id="text" placeholder="پیام بنویس...">
+<input id="msgInput" placeholder="پیام بنویس">
 
-<button onclick="send()">ارسال</button>
+<button onclick="sendMsg()">ارسال</button>
 
 </div>
 
@@ -93,12 +94,10 @@ let index = localStorage.getItem("chatIndex")
 let chats = JSON.parse(localStorage.getItem("chats")) || {}
 
 if(!chats[index]){
-
-chats[index] = []
-
+chats[index]=[]
 }
 
-function show(){
+function showMessages(){
 
 let html=""
 
@@ -112,11 +111,9 @@ document.getElementById("messages").innerHTML=html
 
 }
 
-show()
+function sendMsg(){
 
-function send(){
-
-let text=document.getElementById("text").value
+let text=document.getElementById("msgInput").value
 
 if(text==="") return
 
@@ -124,11 +121,13 @@ chats[index].push(text)
 
 localStorage.setItem("chats",JSON.stringify(chats))
 
-document.getElementById("text").value=""
+document.getElementById("msgInput").value=""
 
-show()
+showMessages()
 
 }
+
+showMessages()
 
 </script>
 
