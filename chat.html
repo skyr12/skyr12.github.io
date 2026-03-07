@@ -81,15 +81,15 @@ function render(){
 
 let chat = document.getElementById("chat")
 
-chat.innerHTML = ""
+chat.innerHTML=""
 
-messages.forEach(m => {
+messages.forEach(m=>{
 
-let div = document.createElement("div")
+let div=document.createElement("div")
 
 div.className="message"
 
-div.innerText = m
+div.innerText=m
 
 chat.appendChild(div)
 
@@ -99,13 +99,17 @@ chat.appendChild(div)
 
 function send(){
 
-let text = document.getElementById("text").value
+let text=document.getElementById("text").value
 
 if(text==="") return
 
 messages.push(text)
 
 localStorage.setItem("messages",JSON.stringify(messages))
+
+// نوتیفیکیشن پیام جدید
+
+localStorage.setItem("newMessage","true")
 
 document.getElementById("text").value=""
 
