@@ -6,53 +6,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>پروفایل</title>
+<title>پروفایل من</title>
 
 <style>
 
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
-background:#111;
+background:#020617;
 color:white;
-text-align:center;
-padding:40px;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-.profile{
-background:#222;
+.card{
+
+background:#111;
 padding:30px;
 border-radius:20px;
-max-width:350px;
-margin:auto;
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
+width:300px;
+text-align:center;
+
 }
 
 .avatar{
+
 width:120px;
 height:120px;
 border-radius:50%;
-background:#FF4D6D;
+background:#333;
 margin:auto;
-margin-bottom:20px;
-object-fit:cover;
+margin-bottom:15px;
+
 }
 
-.gallery{
-display:flex;
-gap:10px;
-justify-content:center;
-margin-top:20px;
+h2{
+margin:10px 0;
 }
 
-.gallery img{
-width:80px;
-height:80px;
-border-radius:10px;
-object-fit:cover;
+p{
+opacity:0.8;
 }
 
 button{
+
 margin-top:20px;
 background:#FF4D6D;
 border:none;
@@ -60,6 +59,7 @@ padding:10px 20px;
 border-radius:20px;
 color:white;
 cursor:pointer;
+
 }
 
 </style>
@@ -68,60 +68,37 @@ cursor:pointer;
 
 <body>
 
-<div class="profile">
+<div class="card">
 
-<img id="avatar" class="avatar">
+<div class="avatar"></div>
 
-<h2 id="name">نام کاربر</h2>
+<h2 id="name"></h2>
 
-<p id="bio">بیوگرافی</p>
+<p id="age"></p>
 
-<div class="gallery">
+<p id="city"></p>
 
-<img id="photo0">
-<img id="photo1">
-<img id="photo2">
+<p id="bio"></p>
 
-</div>
-
-<button onclick="edit()">ویرایش پروفایل</button>
+<a href="users.html">
+<button>مشاهده کاربران</button>
+</a>
 
 </div>
 
 <script>
 
-let name = localStorage.getItem("name")
-let bio = localStorage.getItem("bio")
+document.getElementById("name").innerText =
+localStorage.getItem("name") || "کاربر"
 
-let avatar = localStorage.getItem("avatar")
+document.getElementById("age").innerText =
+"سن: " + (localStorage.getItem("age") || "-")
 
-if(name){
-document.getElementById("name").innerText = name
-}
+document.getElementById("city").innerText =
+"شهر: " + (localStorage.getItem("city") || "-")
 
-if(bio){
-document.getElementById("bio").innerText = bio
-}
-
-if(avatar){
-document.getElementById("avatar").src = avatar
-}
-
-for(let i=0;i<3;i++){
-
-let photo = localStorage.getItem("photo"+i)
-
-if(photo){
-document.getElementById("photo"+i).src = photo
-}
-
-}
-
-function edit(){
-
-window.location.href="signup.html"
-
-}
+document.getElementById("bio").innerText =
+localStorage.getItem("bio") || ""
 
 </script>
 
