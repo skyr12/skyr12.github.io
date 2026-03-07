@@ -25,7 +25,7 @@ height:100vh;
 background:#111;
 padding:30px;
 border-radius:20px;
-width:300px;
+width:320px;
 text-align:center;
 }
 
@@ -62,9 +62,15 @@ cursor:pointer;
 
 <input id="city" placeholder="شهر">
 
-<textarea id="bio" placeholder="بیوگرافی"></textarea>
+<textarea id="bio" placeholder="بیو"></textarea>
 
-<input type="file" id="photo">
+<p>عکس پروفایل</p>
+
+<input type="file" id="photo1">
+
+<input type="file" id="photo2">
+
+<input type="file" id="photo3">
 
 <button onclick="register()">ثبت</button>
 
@@ -79,36 +85,26 @@ let age=document.getElementById("age").value
 let city=document.getElementById("city").value
 let bio=document.getElementById("bio").value
 
-localStorage.setItem("name",name)
-localStorage.setItem("age",age)
-localStorage.setItem("city",city)
-localStorage.setItem("bio",bio)
+let users = JSON.parse(localStorage.getItem("users")) || []
 
-let file=document.getElementById("photo").files[0]
-
-if(file){
-
-let reader=new FileReader()
-
-reader.onload=function(){
-
-localStorage.setItem("photo",reader.result)
-
-window.location.href="profile.html"
-
+let user={
+name:name,
+age:age,
+city:city,
+bio:bio,
+photo:"https://picsum.photos/200"
 }
 
-reader.readAsDataURL(file)
+users.push(user)
 
-}else{
+localStorage.setItem("users",JSON.stringify(users))
 
-window.location.href="profile.html"
-
-}
+window.location.href="users.html"
 
 }
 
 </script>
 
 </body>
+
 </html>
