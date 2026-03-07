@@ -24,7 +24,6 @@ display:flex;
 flex-wrap:wrap;
 justify-content:center;
 gap:20px;
-margin-top:30px;
 }
 
 .card{
@@ -33,7 +32,6 @@ padding:20px;
 border-radius:20px;
 width:230px;
 box-shadow:0 10px 30px rgba(0,0,0,0.6);
-position:relative;
 }
 
 .avatar{
@@ -44,15 +42,16 @@ object-fit:cover;
 margin-bottom:10px;
 }
 
-.online{
-width:14px;
-height:14px;
-background:#00ff6a;
-border-radius:50%;
-position:absolute;
-top:15px;
-left:15px;
-border:2px solid #222;
+.gallery{
+display:flex;
+gap:5px;
+margin-top:8px;
+}
+
+.gallery img{
+width:30%;
+border-radius:8px;
+object-fit:cover;
 }
 
 button{
@@ -75,24 +74,13 @@ color:#4CAF50;
 font-weight:bold;
 }
 
-.gallery{
-display:flex;
-gap:5px;
-margin-top:8px;
-}
-
-.gallery img{
-width:30%;
-border-radius:8px;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<h1>کاربران آنلاین</h1>
+<h1>کاربران</h1>
 
 <div class="users" id="users"></div>
 
@@ -103,7 +91,6 @@ let users = [
 {
 name:"سارا",
 age:27,
-online:true,
 bio:"علاقه‌مند به سفر",
 avatar:"https://picsum.photos/300/300?1",
 photos:[
@@ -116,7 +103,6 @@ photos:[
 {
 name:"امیر",
 age:30,
-online:false,
 bio:"ورزشکار",
 avatar:"https://picsum.photos/300/300?5",
 photos:[
@@ -124,22 +110,30 @@ photos:[
 "https://picsum.photos/200/200?7",
 "https://picsum.photos/200/200?8"
 ]
-},
-
-{
-name:"لیلا",
-age:25,
-online:true,
-bio:"عاشق موسیقی",
-avatar:"https://picsum.photos/300/300?9",
-photos:[
-"https://picsum.photos/200/200?10",
-"https://picsum.photos/200/200?11",
-"https://picsum.photos/200/200?12"
-]
 }
 
 ]
+
+let myName = localStorage.getItem("name")
+let myBio = localStorage.getItem("bio")
+
+let photo0 = localStorage.getItem("photo0")
+let photo1 = localStorage.getItem("photo1")
+let photo2 = localStorage.getItem("photo2")
+
+if(myName){
+
+users.unshift({
+
+name:myName,
+age:"",
+bio:myBio,
+avatar:photo0,
+photos:[photo0,photo1,photo2]
+
+})
+
+}
 
 let html=""
 
@@ -149,11 +143,9 @@ html+=`
 
 <div class="card">
 
-${u.online ? '<div class="online"></div>' : ''}
-
 <img src="${u.avatar}" class="avatar">
 
-<h3>${u.name} ${u.age}</h3>
+<h3>${u.name}</h3>
 
 <p>${u.bio}</p>
 
