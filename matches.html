@@ -33,6 +33,7 @@ padding:20px;
 border-radius:20px;
 width:200px;
 box-shadow:0 10px 30px rgba(0,0,0,0.6);
+position:relative;
 }
 
 .avatar{
@@ -53,6 +54,17 @@ color:white;
 cursor:pointer;
 }
 
+.notification{
+position:absolute;
+top:10px;
+right:10px;
+width:12px;
+height:12px;
+background:red;
+border-radius:50%;
+display:none;
+}
+
 </style>
 
 </head>
@@ -67,6 +79,8 @@ cursor:pointer;
 
 let matches = JSON.parse(localStorage.getItem("matches")) || []
 
+let newMessage = localStorage.getItem("newMessage")
+
 let html=""
 
 matches.forEach((u,i)=>{
@@ -75,6 +89,8 @@ html+=`
 
 <div class="card">
 
+<div class="notification" id="n${i}"></div>
+
 <img src="${u.photo}" class="avatar">
 
 <h3>${u.name}</h3>
@@ -82,7 +98,7 @@ html+=`
 <p>${u.bio}</p>
 
 <a href="chat.html">
-<button>💬 چت</button>
+<button onclick="readMessage()">💬 چت</button>
 </a>
 
 </div>
@@ -92,6 +108,24 @@ html+=`
 })
 
 document.getElementById("matches").innerHTML=html
+
+if(newMessage==="true"){
+
+let dots=document.querySelectorAll(".notification")
+
+dots.forEach(d=>{
+
+d.style.display="block"
+
+})
+
+}
+
+function readMessage(){
+
+localStorage.setItem("newMessage","false")
+
+}
 
 </script>
 
