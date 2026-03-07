@@ -41,6 +41,7 @@ align-items:center;
 text-align:center;
 padding:20px;
 transition:0.4s;
+cursor:grab;
 }
 
 .avatar{
@@ -152,6 +153,7 @@ let startX=0
 
 let card=document.getElementById("card")
 
+// موبایل
 card.addEventListener("touchstart",e=>{
 
 startX=e.touches[0].clientX
@@ -160,7 +162,24 @@ startX=e.touches[0].clientX
 
 card.addEventListener("touchend",e=>{
 
-let endX=e.changedTouches[0].clientX
+handleSwipe(e.changedTouches[0].clientX)
+
+})
+
+// موس
+card.addEventListener("mousedown",e=>{
+
+startX=e.clientX
+
+})
+
+card.addEventListener("mouseup",e=>{
+
+handleSwipe(e.clientX)
+
+})
+
+function handleSwipe(endX){
 
 if(endX-startX>100){
 
@@ -182,7 +201,7 @@ setTimeout(nextUser,400)
 
 }
 
-})
+}
 
 function nextUser(){
 
