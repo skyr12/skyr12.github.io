@@ -1,68 +1,84 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پروفایل</title>
+
+<title>ثبت نام</title>
 
 <style>
 
 body{
-font-family:sans-serif;
+margin:0;
+font-family:'Segoe UI',sans-serif;
 background:#111;
 color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.box{
+background:#222;
+padding:40px;
+border-radius:20px;
+width:300px;
 text-align:center;
-margin:0;
 }
 
-.profile{
-margin-top:80px;
-}
-
-.avatar{
-width:120px;
-height:120px;
-border-radius:50%;
-background:#ff4f7b;
-display:inline-block;
-}
-
-.name{
-font-size:24px;
-margin-top:15px;
-}
-
-.bio{
-opacity:0.7;
-margin-top:10px;
+input,textarea{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:10px;
 }
 
 button{
-margin-top:20px;
-padding:10px 20px;
+background:#FF4D6D;
 border:none;
-border-radius:10px;
-background:#ff4f7b;
+padding:12px 20px;
+border-radius:30px;
 color:white;
 font-size:16px;
+cursor:pointer;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="profile">
+<div class="box">
 
-<div class="avatar"></div>
+<h2>ثبت نام</h2>
 
-<div class="name">نام کاربر</div>
+<input id="name" placeholder="نام">
 
-<div class="bio">این بیوگرافی کاربر است</div>
+<textarea id="bio" placeholder="بیوگرافی"></textarea>
 
-<button>ویرایش پروفایل</button>
+<button onclick="save()">ثبت</button>
 
 </div>
+
+<script>
+
+function save(){
+
+let name = document.getElementById("name").value
+let bio = document.getElementById("bio").value
+
+localStorage.setItem("name",name)
+localStorage.setItem("bio",bio)
+
+window.location.href="profile.html"
+
+}
+
+</script>
 
 </body>
 </html>
