@@ -3,51 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ثبت نام</title>
+<title>پروفایل</title>
 
 <style>
 
 body{
 font-family:sans-serif;
-background:linear-gradient(135deg,#ff758c,#ff7eb3);
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-margin:0;
+background:#111;
 color:white;
-}
-
-.form-box{
-background:rgba(255,255,255,0.15);
-padding:40px;
-border-radius:20px;
-backdrop-filter:blur(10px);
-width:300px;
 text-align:center;
+margin:0;
 }
 
-input{
-width:100%;
-padding:12px;
-margin:10px 0;
-border:none;
-border-radius:10px;
+.profile{
+margin-top:80px;
+}
+
+.avatar{
+width:120px;
+height:120px;
+border-radius:50%;
+background:#ff4f7b;
+display:inline-block;
+}
+
+.name{
+font-size:24px;
+margin-top:15px;
+}
+
+.bio{
+opacity:0.7;
+margin-top:10px;
 }
 
 button{
-width:100%;
-padding:12px;
-background:white;
-color:#ff4f7b;
+margin-top:20px;
+padding:10px 20px;
 border:none;
 border-radius:10px;
+background:#ff4f7b;
+color:white;
 font-size:16px;
-cursor:pointer;
-}
-
-button:hover{
-opacity:0.9;
 }
 
 </style>
@@ -55,17 +52,15 @@ opacity:0.9;
 
 <body>
 
-<div class="form-box">
+<div class="profile">
 
-<h2>ثبت نام</h2>
+<div class="avatar"></div>
 
-<input type="text" placeholder="نام">
+<div class="name">نام کاربر</div>
 
-<input type="email" placeholder="ایمیل">
+<div class="bio">این بیوگرافی کاربر است</div>
 
-<input type="password" placeholder="رمز عبور">
-
-<button>ساخت حساب</button>
+<button>ویرایش پروفایل</button>
 
 </div>
 
