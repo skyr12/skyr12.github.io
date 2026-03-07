@@ -44,11 +44,10 @@ margin-bottom:10px;
 object-fit:cover;
 }
 
-.like{
-margin-top:10px;
+button{
 background:#FF4D6D;
 border:none;
-padding:10px 15px;
+padding:8px 15px;
 border-radius:20px;
 color:white;
 cursor:pointer;
@@ -81,7 +80,7 @@ let card = `
 
 <p>${bio}</p>
 
-<button class="like" onclick="like()">❤️ لایک</button>
+<button onclick="like()">❤️ لایک</button>
 
 </div>
 `
@@ -91,6 +90,8 @@ document.getElementById("users").innerHTML = card
 }
 
 function like(){
+
+localStorage.setItem("match","true")
 
 alert("شما این کاربر را پسندیدید ❤️")
 
