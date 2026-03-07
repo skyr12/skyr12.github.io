@@ -37,11 +37,6 @@ border-radius:50%;
 background:#FF4D6D;
 margin:auto;
 margin-bottom:20px;
-object-fit:cover;
-}
-
-input{
-margin-top:10px;
 }
 
 button{
@@ -63,9 +58,7 @@ cursor:pointer;
 
 <div class="profile">
 
-<img id="avatar" class="avatar">
-
-<input type="file" id="upload">
+<div class="avatar"></div>
 
 <h2 id="name">نام کاربر</h2>
 
@@ -87,27 +80,6 @@ document.getElementById("name").innerText = name
 if(bio){
 document.getElementById("bio").innerText = bio
 }
-
-let avatar = localStorage.getItem("avatar")
-
-if(avatar){
-document.getElementById("avatar").src = avatar
-}
-
-document.getElementById("upload").addEventListener("change",function(){
-
-let file = this.files[0]
-
-let reader = new FileReader()
-
-reader.onload = function(){
-localStorage.setItem("avatar",reader.result)
-document.getElementById("avatar").src = reader.result
-}
-
-reader.readAsDataURL(file)
-
-})
 
 function edit(){
 window.location.href="signup.html"
