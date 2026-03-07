@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>سوایپ کاربران</title>
+<title>پیدا کردن افراد</title>
 
 <style>
 
@@ -22,13 +22,12 @@ color:white;
 }
 
 .container{
-position:relative;
 width:320px;
-height:450px;
+height:480px;
+position:relative;
 }
 
 .card{
-position:absolute;
 width:100%;
 height:100%;
 background:#222;
@@ -41,7 +40,6 @@ align-items:center;
 text-align:center;
 padding:20px;
 transition:0.4s;
-cursor:pointer;
 }
 
 .avatar{
@@ -52,33 +50,29 @@ object-fit:cover;
 margin-bottom:20px;
 }
 
-.distance{
-margin-top:5px;
-opacity:0.7;
+.buttons{
+display:flex;
+gap:40px;
+margin-top:30px;
 }
 
-.likeLabel{
-position:absolute;
-top:40px;
-left:20px;
-border:3px solid #00ff6a;
-padding:10px 20px;
-font-weight:bold;
-transform:rotate(-20deg);
-color:#00ff6a;
-display:none;
+button{
+width:60px;
+height:60px;
+border:none;
+border-radius:50%;
+font-size:24px;
+cursor:pointer;
 }
 
-.nopeLabel{
-position:absolute;
-top:40px;
-right:20px;
-border:3px solid #ff3b3b;
-padding:10px 20px;
-font-weight:bold;
-transform:rotate(20deg);
+.nope{
+background:#333;
 color:#ff3b3b;
-display:none;
+}
+
+.like{
+background:#FF4D6D;
+color:white;
 }
 
 .matchPopup{
@@ -87,24 +81,23 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.85);
-display:flex;
+background:rgba(0,0,0,0.9);
+display:none;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-font-size:28px;
-display:none;
+font-size:26px;
 }
 
 .matchPopup button{
-margin-top:20px;
+margin-top:15px;
 padding:12px 25px;
-background:#FF4D6D;
 border:none;
 border-radius:25px;
+background:#FF4D6D;
 color:white;
-cursor:pointer;
 font-size:16px;
+cursor:pointer;
 }
 
 </style>
@@ -115,10 +108,7 @@ font-size:16px;
 
 <div class="container">
 
-<div class="card" id="card" onclick="openProfile()">
-
-<div class="likeLabel" id="like">LIKE</div>
-<div class="nopeLabel" id="nope">NOPE</div>
+<div class="card" id="card">
 
 <img id="avatar" class="avatar">
 
@@ -126,7 +116,15 @@ font-size:16px;
 
 <p id="bio"></p>
 
-<p id="distance" class="distance"></p>
+<p id="distance"></p>
+
+<div class="buttons">
+
+<button class="nope" onclick="nope()">❌</button>
+
+<button class="like" onclick="like()">❤️</button>
+
+</div>
 
 </div>
 
@@ -155,21 +153,21 @@ let users=[
 {
 name:"سارا",
 bio:"علاقه‌مند به سفر",
-distance:"3 km",
+distance:"📍 فاصله 3 km",
 photo:"https://picsum.photos/300/300?1"
 },
 
 {
 name:"امیر",
 bio:"ورزشکار",
-distance:"8 km",
+distance:"📍 فاصله 5 km",
 photo:"https://picsum.photos/300/300?2"
 },
 
 {
 name:"لیلا",
 bio:"عاشق موسیقی",
-distance:"5 km",
+distance:"📍 فاصله 8 km",
 photo:"https://picsum.photos/300/300?3"
 }
 
@@ -183,59 +181,14 @@ let u=users[index]
 
 document.getElementById("name").innerText=u.name
 document.getElementById("bio").innerText=u.bio
-document.getElementById("distance").innerText="📍 فاصله: "+u.distance
+document.getElementById("distance").innerText=u.distance
 document.getElementById("avatar").src=u.photo
 
 }
 
 showUser()
 
-let startX=0
-let card=document.getElementById("card")
-
-card.addEventListener("mousedown",e=>{
-startX=e.clientX
-})
-
-card.addEventListener("mouseup",e=>{
-handleSwipe(e.clientX)
-})
-
-card.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX
-})
-
-card.addEventListener("touchend",e=>{
-handleSwipe(e.changedTouches[0].clientX)
-})
-
-function handleSwipe(endX){
-
-if(endX-startX>100){
-
-document.getElementById("like").style.display="block"
-
-card.style.transform="translateX(400px) rotate(20deg)"
-
-setTimeout(matchUser,400)
-
-}
-
-if(startX-endX>100){
-
-document.getElementById("nope").style.display="block"
-
-card.style.transform="translateX(-400px) rotate(-20deg)"
-
-setTimeout(nextUser,400)
-
-}
-
-}
-
-function matchUser(){
-
-// ذخیره Match
+function like(){
 
 let matches = JSON.parse(localStorage.getItem("matches")) || []
 
@@ -244,6 +197,12 @@ matches.push(users[index])
 localStorage.setItem("matches",JSON.stringify(matches))
 
 document.getElementById("matchPopup").style.display="flex"
+
+}
+
+function nope(){
+
+nextUser()
 
 }
 
@@ -260,29 +219,17 @@ function nextUser(){
 index++
 
 if(index>=users.length){
+
 index=0
+
 }
-
-document.getElementById("like").style.display="none"
-document.getElementById("nope").style.display="none"
-
-card.style.transform="none"
 
 showUser()
-
-}
-
-function openProfile(){
-
-let user=users[index]
-
-localStorage.setItem("viewUser",JSON.stringify(user))
-
-window.location.href="view.html"
 
 }
 
 </script>
 
 </body>
+
 </html>
