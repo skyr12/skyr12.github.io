@@ -12,7 +12,7 @@
 
 body{
 margin:0;
-font-family:'Segoe UI',sans-serif;
+font-family:Segoe UI;
 background:#020617;
 color:white;
 text-align:center;
@@ -31,7 +31,6 @@ background:#111;
 padding:20px;
 border-radius:20px;
 width:220px;
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
 .avatar{
@@ -43,7 +42,6 @@ margin-bottom:10px;
 }
 
 button{
-margin-top:10px;
 background:#FF4D6D;
 border:none;
 padding:8px 15px;
@@ -66,15 +64,15 @@ cursor:pointer;
 
 let matches = JSON.parse(localStorage.getItem("matches")) || []
 
-if(matches.length === 0){
+let html=""
 
-document.getElementById("matches").innerHTML="<p>هنوز Match نداری</p>"
+if(matches.length===0){
+
+html="<p>هنوز Match نداری</p>"
 
 }
 
 else{
-
-let html=""
 
 matches.forEach((u,i)=>{
 
@@ -96,9 +94,9 @@ html+=`
 
 })
 
-document.getElementById("matches").innerHTML=html
-
 }
+
+document.getElementById("matches").innerHTML=html
 
 function openChat(i){
 
