@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="fa">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>پروفایل</title>
 
 <style>
 
 body{
 margin:0;
-font-family:sans-serif;
+font-family:'Segoe UI',sans-serif;
 background:#111;
 color:white;
 display:flex;
@@ -23,53 +26,94 @@ text-align:center;
 background:#222;
 padding:40px;
 border-radius:20px;
-width:300px;
+width:320px;
+box-shadow:0 10px 40px rgba(0,0,0,0.6);
 }
 
 .avatar{
 width:120px;
 height:120px;
-background:#ff4f7b;
 border-radius:50%;
+background:#FF4D6D;
 margin:auto;
+margin-bottom:20px;
+object-fit:cover;
 }
 
-.name{
-font-size:24px;
-margin-top:15px;
-}
-
-.bio{
-opacity:0.7;
+input{
 margin-top:10px;
 }
 
 button{
 margin-top:20px;
-padding:12px 20px;
+background:#FF4D6D;
 border:none;
-border-radius:10px;
-background:#ff4f7b;
+padding:12px 20px;
+border-radius:30px;
 color:white;
 font-size:16px;
+cursor:pointer;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="profile">
 
-<div class="avatar"></div>
+<img id="avatar" class="avatar">
 
-<div class="name">نام کاربر</div>
+<input type="file" id="upload">
 
-<div class="bio">این بیوگرافی کاربر است</div>
+<h2 id="name">نام کاربر</h2>
 
-<button>ویرایش پروفایل</button>
+<p id="bio">بیوگرافی کاربر</p>
+
+<button onclick="edit()">ویرایش پروفایل</button>
 
 </div>
+
+<script>
+
+let name = localStorage.getItem("name")
+let bio = localStorage.getItem("bio")
+
+if(name){
+document.getElementById("name").innerText = name
+}
+
+if(bio){
+document.getElementById("bio").innerText = bio
+}
+
+let avatar = localStorage.getItem("avatar")
+
+if(avatar){
+document.getElementById("avatar").src = avatar
+}
+
+document.getElementById("upload").addEventListener("change",function(){
+
+let file = this.files[0]
+
+let reader = new FileReader()
+
+reader.onload = function(){
+localStorage.setItem("avatar",reader.result)
+document.getElementById("avatar").src = reader.result
+}
+
+reader.readAsDataURL(file)
+
+})
+
+function edit(){
+window.location.href="signup.html"
+}
+
+</script>
 
 </body>
 </html>
