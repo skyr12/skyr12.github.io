@@ -15,17 +15,44 @@ margin:0;
 font-family:'Segoe UI',sans-serif;
 color:white;
 text-align:center;
-background:linear-gradient(135deg,#0f172a,#1e293b,#020617);
+background:#020617;
+overflow:hidden;
+}
+
+/* قلب ها */
+
+.heart{
+position:fixed;
+bottom:-50px;
+font-size:20px;
+color:#ff4d6d;
+animation:float 6s linear infinite;
+opacity:0.6;
+}
+
+@keyframes float{
+
+0%{
+transform:translateY(0) scale(1);
+}
+
+100%{
+transform:translateY(-100vh) scale(1.5);
+}
+
+}
+
+/* محتوا */
+
+.container{
+position:relative;
+z-index:2;
+padding-top:60px;
 }
 
 header{
 font-size:26px;
 font-weight:bold;
-padding:20px;
-}
-
-.hero{
-margin-top:30px;
 }
 
 h1{
@@ -67,11 +94,10 @@ display:flex;
 justify-content:center;
 gap:20px;
 flex-wrap:wrap;
-padding-bottom:40px;
 }
 
 .card{
-background:#222;
+background:#111;
 padding:20px;
 border-radius:20px;
 width:150px;
@@ -92,10 +118,6 @@ gap:40px;
 padding:40px 0;
 }
 
-.stat{
-font-size:20px;
-}
-
 footer{
 opacity:0.6;
 padding:20px;
@@ -107,16 +129,18 @@ padding:20px;
 
 <body>
 
+<div class="container">
+
 <header>
 ❤️ نیمه گمشده
 </header>
 
-<div class="hero">
-
-<h1>نیمه گمشده خود را پیدا کنید</h1>
+<h1>
+نیمه گمشده خود را پیدا کنید
+</h1>
 
 <p>
-پلتفرم مدرن آشنایی و ازدواج فارسی‌زبانان در سراسر جهان
+پلتفرم مدرن آشنایی فارسی‌زبانان
 </p>
 
 <div class="buttons">
@@ -136,8 +160,6 @@ padding:20px;
 <a href="swipe.html">
 <button>پیدا کردن افراد</button>
 </a>
-
-</div>
 
 </div>
 
@@ -166,23 +188,45 @@ padding:20px;
 
 <div class="stats">
 
-<div class="stat">
-👤 12,540 کاربران
-</div>
+<div>👤 12,540 کاربران</div>
 
-<div class="stat">
-❤️ 8,230 Match
-</div>
+<div>❤️ 8,230 Match</div>
 
-<div class="stat">
-💬 54,000 پیام
-</div>
+<div>💬 54,000 پیام</div>
 
 </div>
 
 <footer>
 © 2026 Nimeh Gomshodeh
 </footer>
+
+</div>
+
+<script>
+
+function createHeart(){
+
+let heart=document.createElement("div")
+
+heart.className="heart"
+
+heart.innerHTML="❤"
+
+heart.style.left=Math.random()*100+"vw"
+
+heart.style.fontSize=(10+Math.random()*20)+"px"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>{
+heart.remove()
+},6000)
+
+}
+
+setInterval(createHeart,400)
+
+</script>
 
 </body>
 </html>
