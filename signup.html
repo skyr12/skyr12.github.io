@@ -12,37 +12,35 @@
 
 body{
 margin:0;
-font-family:'Segoe UI',sans-serif;
+font-family:Segoe UI;
 background:#020617;
 color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.form{
-background:#111;
-padding:30px;
-border-radius:20px;
-width:320px;
 text-align:center;
 }
 
+.card{
+background:#111;
+width:320px;
+margin:40px auto;
+padding:30px;
+border-radius:20px;
+}
+
 input,textarea{
-width:100%;
+width:90%;
 padding:10px;
-margin:10px 0;
+margin:10px;
 border:none;
 border-radius:10px;
 }
 
 button{
-background:#FF4D6D;
+background:#ff4d6d;
 border:none;
-padding:12px 20px;
-border-radius:20px;
+padding:12px 25px;
+border-radius:25px;
 color:white;
+font-size:16px;
 cursor:pointer;
 }
 
@@ -52,32 +50,29 @@ cursor:pointer;
 
 <body>
 
-<div class="form">
+<div class="card">
 
 <h2>ثبت نام</h2>
 
 <input id="name" placeholder="نام">
 
-<input id="age" placeholder="سن">
-
 <input id="city" placeholder="شهر">
 
 <textarea id="bio" placeholder="بیو"></textarea>
 
-<p>عکس پروفایل</p>
-
 <input type="file" id="photo">
 
-<button onclick="register()">ثبت</button>
+<br><br>
+
+<button onclick="signup()">ثبت</button>
 
 </div>
 
 <script>
 
-function register(){
+function signup(){
 
 let name=document.getElementById("name").value
-let age=document.getElementById("age").value
 let city=document.getElementById("city").value
 let bio=document.getElementById("bio").value
 
@@ -87,31 +82,26 @@ let reader=new FileReader()
 
 reader.onload=function(){
 
-let users=JSON.parse(localStorage.getItem("users")) || []
+let photo=reader.result
 
 let user={
-
 name:name,
-age:age,
 city:city,
 bio:bio,
-photo:reader.result
-
+photo:photo
 }
+
+let users=JSON.parse(localStorage.getItem("users"))||[]
 
 users.push(user)
 
 localStorage.setItem("users",JSON.stringify(users))
 
-window.location.href="profile.html"
+window.location.href="users.html"
 
 }
-
-if(file){
 
 reader.readAsDataURL(file)
-
-}
 
 }
 
