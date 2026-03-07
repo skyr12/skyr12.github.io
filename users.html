@@ -38,7 +38,6 @@ box-shadow:0 10px 30px rgba(0,0,0,0.6);
 width:90px;
 height:90px;
 border-radius:50%;
-background:#FF4D6D;
 margin:auto;
 margin-bottom:10px;
 object-fit:cover;
@@ -76,35 +75,86 @@ font-weight:bold;
 
 <script>
 
-let name = localStorage.getItem("name")
-let bio = localStorage.getItem("bio")
-let avatar = localStorage.getItem("avatar")
+let users = [
 
-if(name){
+{
+name:"سارا",
+age:27,
+bio:"علاقه‌مند به سفر",
+avatar:"https://i.pravatar.cc/150?img=5"
+},
 
-let card = `
-<div class="card">
+{
+name:"امیر",
+age:30,
+bio:"ورزشکار",
+avatar:"https://i.pravatar.cc/150?img=12"
+},
 
-<img src="${avatar}" class="avatar">
+{
+name:"لیلا",
+age:25,
+bio:"عاشق موسیقی",
+avatar:"https://i.pravatar.cc/150?img=32"
+}
 
-<h3>${name}</h3>
+]
 
-<p>${bio}</p>
+let myName = localStorage.getItem("name")
+let myBio = localStorage.getItem("bio")
+let myAvatar = localStorage.getItem("avatar")
 
-<button onclick="like()">❤️ لایک</button>
+if(myName){
 
-<div id="match"></div>
+users.unshift({
 
-</div>
-`
+name:myName,
+age:"",
+bio:myBio,
+avatar:myAvatar
 
-document.getElementById("users").innerHTML = card
+})
 
 }
 
-function like(){
+let html=""
 
-document.getElementById("match").innerHTML = 
+users.forEach((u,i)=>{
+
+html+=`
+
+<div class="card">
+
+<img src="${u.avatar}" class="avatar">
+
+<h3>${u.name}</h3>
+
+<p>${u.bio}</p>
+
+<button onclick="like(${i})">❤️ لایک</button>
+
+<div id="match${i}"></div>
+
+</div>
+
+`
+
+})
+
+document.getElementById("users").innerHTML=html
+
+function like(i){
+
+document.getElementById("match"+i).innerHTML=
+
 `<div class="match">🎉 Match شد!</div>
 <a href="chat.html">
-<button class="chat
+<button class="chat">💬 چت</button>
+</a>`
+
+}
+
+</script>
+
+</body>
+</html>
