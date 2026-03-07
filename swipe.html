@@ -41,7 +41,7 @@ align-items:center;
 text-align:center;
 padding:20px;
 transition:0.4s;
-cursor:grab;
+cursor:pointer;
 }
 
 .avatar{
@@ -115,7 +115,7 @@ font-size:16px;
 
 <div class="container">
 
-<div class="card" id="card">
+<div class="card" id="card" onclick="openProfile()">
 
 <div class="likeLabel" id="like">LIKE</div>
 <div class="nopeLabel" id="nope">NOPE</div>
@@ -257,6 +257,16 @@ document.getElementById("nope").style.display="none"
 card.style.transform="none"
 
 showUser()
+
+}
+
+function openProfile(){
+
+let user=users[index]
+
+localStorage.setItem("viewUser",JSON.stringify(user))
+
+window.location.href="view.html"
 
 }
 
