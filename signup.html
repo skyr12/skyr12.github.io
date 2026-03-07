@@ -22,34 +22,28 @@ height:100vh;
 }
 
 .form{
-
 background:#111;
 padding:30px;
 border-radius:20px;
 width:300px;
 text-align:center;
-
 }
 
 input,textarea{
-
 width:100%;
 padding:10px;
 margin:10px 0;
 border:none;
 border-radius:10px;
-
 }
 
 button{
-
 background:#FF4D6D;
 border:none;
 padding:12px 20px;
 border-radius:20px;
 color:white;
 cursor:pointer;
-
 }
 
 </style>
@@ -90,7 +84,27 @@ localStorage.setItem("age",age)
 localStorage.setItem("city",city)
 localStorage.setItem("bio",bio)
 
+let file=document.getElementById("photo").files[0]
+
+if(file){
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+localStorage.setItem("photo",reader.result)
+
 window.location.href="profile.html"
+
+}
+
+reader.readAsDataURL(file)
+
+}else{
+
+window.location.href="profile.html"
+
+}
 
 }
 
