@@ -1,1 +1,128 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>عضویت ویژه</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Tahoma;
+background:#020617;
+color:white;
+text-align:center;
+}
+
+.header{
+padding:20px;
+font-size:24px;
+}
+
+.plans{
+margin-top:30px;
+}
+
+.card{
+background:#111;
+width:260px;
+margin:20px auto;
+padding:20px;
+border-radius:20px;
+}
+
+.price{
+font-size:26px;
+margin:10px 0;
+}
+
+button{
+background:#ff4d6d;
+border:none;
+padding:12px 20px;
+border-radius:25px;
+color:white;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+⭐ عضویت ویژه
+
+</div>
+
+<div class="plans">
+
+<div class="card">
+
+<h3>۱ ماهه</h3>
+
+<div class="price">5$</div>
+
+<p>ارسال پیام نامحدود</p>
+
+<p>دیدن پروفایل کامل</p>
+
+<button onclick="buy()">خرید</button>
+
+</div>
+
+
+<div class="card">
+
+<h3>۳ ماهه</h3>
+
+<div class="price">12$</div>
+
+<p>ارسال پیام نامحدود</p>
+
+<p>اولویت در جستجو</p>
+
+<button onclick="buy()">خرید</button>
+
+</div>
+
+
+<div class="card">
+
+<h3>۶ ماهه</h3>
+
+<div class="price">20$</div>
+
+<p>تمام امکانات ویژه</p>
+
+<p>نمایش بیشتر پروفایل</p>
+
+<button onclick="buy()">خرید</button>
+
+</div>
+
+</div>
+
+<script>
+
+function buy(){
+
+localStorage.setItem("premium","yes")
+
+alert("عضویت شما فعال شد")
+
+window.location.href="search.html"
+
+}
+
+</script>
+
+</body>
+
+</html>
