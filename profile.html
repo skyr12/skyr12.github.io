@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>پروفایل من</title>
+<title>پروفایل</title>
 
 <style>
 
@@ -15,18 +15,16 @@ margin:0;
 font-family:'Segoe UI',sans-serif;
 background:#020617;
 color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+text-align:center;
+padding:30px;
 }
 
 .card{
 background:#111;
 padding:30px;
 border-radius:20px;
-width:300px;
-text-align:center;
+width:320px;
+margin:auto;
 }
 
 .avatar{
@@ -34,19 +32,21 @@ width:120px;
 height:120px;
 border-radius:50%;
 object-fit:cover;
-margin:auto;
 margin-bottom:15px;
-background:#333;
 }
 
-button{
+.gallery{
+display:flex;
+justify-content:center;
+gap:10px;
 margin-top:20px;
-background:#FF4D6D;
-border:none;
-padding:10px 20px;
-border-radius:20px;
-color:white;
-cursor:pointer;
+}
+
+.gallery img{
+width:80px;
+height:80px;
+border-radius:10px;
+object-fit:cover;
 }
 
 </style>
@@ -61,41 +61,48 @@ cursor:pointer;
 
 <h2 id="name"></h2>
 
-<p id="age"></p>
-
 <p id="city"></p>
 
 <p id="bio"></p>
 
-<a href="users.html">
-<button>مشاهده کاربران</button>
-</a>
+<div class="gallery">
+
+<img id="g1">
+
+<img id="g2">
+
+<img id="g3">
+
+</div>
 
 </div>
 
 <script>
 
-document.getElementById("name").innerText =
-localStorage.getItem("name") || "کاربر"
+let users = JSON.parse(localStorage.getItem("users")) || []
 
-document.getElementById("age").innerText =
-"سن: " + (localStorage.getItem("age") || "-")
+if(users.length>0){
 
-document.getElementById("city").innerText =
-"شهر: " + (localStorage.getItem("city") || "-")
+let u = users[users.length-1]
 
-document.getElementById("bio").innerText =
-localStorage.getItem("bio") || ""
+document.getElementById("avatar").src=u.photo
 
-let photo=localStorage.getItem("photo")
+document.getElementById("name").innerText=u.name
 
-if(photo){
+document.getElementById("city").innerText=u.city
 
-document.getElementById("avatar").src=photo
+document.getElementById("bio").innerText=u.bio
+
+document.getElementById("g1").src=u.photo
+
+document.getElementById("g2").src=u.photo
+
+document.getElementById("g3").src=u.photo
 
 }
 
 </script>
 
 </body>
+
 </html>
