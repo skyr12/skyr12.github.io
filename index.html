@@ -15,29 +15,27 @@ margin:0;
 font-family:'Segoe UI',sans-serif;
 color:white;
 text-align:center;
-
 background:linear-gradient(135deg,#0f172a,#1e293b,#020617);
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
 }
 
 header{
 font-size:26px;
 font-weight:bold;
-margin-bottom:20px;
+padding:20px;
+}
+
+.hero{
+margin-top:30px;
 }
 
 h1{
-font-size:38px;
+font-size:36px;
 margin:10px;
 }
 
 p{
 opacity:0.8;
-margin-bottom:40px;
+margin-bottom:30px;
 }
 
 .buttons{
@@ -45,10 +43,10 @@ display:flex;
 flex-wrap:wrap;
 justify-content:center;
 gap:15px;
+margin-bottom:50px;
 }
 
 button{
-
 background:#FF4D6D;
 border:none;
 padding:14px 28px;
@@ -57,22 +55,39 @@ color:white;
 font-size:16px;
 cursor:pointer;
 transition:0.3s;
-
 }
 
 button:hover{
-
 transform:scale(1.05);
 box-shadow:0 10px 30px rgba(255,77,109,0.5);
+}
 
+.users{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+padding-bottom:40px;
+}
+
+.card{
+background:#222;
+padding:20px;
+border-radius:20px;
+width:150px;
+}
+
+.avatar{
+width:80px;
+height:80px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:10px;
 }
 
 footer{
-
-position:absolute;
-bottom:20px;
 opacity:0.6;
-
+padding:20px;
 }
 
 </style>
@@ -85,9 +100,9 @@ opacity:0.6;
 ❤️ نیمه گمشده
 </header>
 
-<h1>
-نیمه گمشده خود را پیدا کنید
-</h1>
+<div class="hero">
+
+<h1>نیمه گمشده خود را پیدا کنید</h1>
 
 <p>
 پلتفرم مدرن آشنایی و ازدواج فارسی‌زبانان در سراسر جهان
@@ -110,6 +125,29 @@ opacity:0.6;
 <a href="swipe.html">
 <button>پیدا کردن افراد</button>
 </a>
+
+</div>
+
+</div>
+
+<h2>⭐ کاربران محبوب</h2>
+
+<div class="users">
+
+<div class="card">
+<img src="https://picsum.photos/100?1" class="avatar">
+<p>سارا</p>
+</div>
+
+<div class="card">
+<img src="https://picsum.photos/100?2" class="avatar">
+<p>علی</p>
+</div>
+
+<div class="card">
+<img src="https://picsum.photos/100?3" class="avatar">
+<p>لیلا</p>
+</div>
 
 </div>
 
