@@ -66,11 +66,7 @@ cursor:pointer;
 
 <p>عکس پروفایل</p>
 
-<input type="file" id="photo1">
-
-<input type="file" id="photo2">
-
-<input type="file" id="photo3">
+<input type="file" id="photo">
 
 <button onclick="register()">ثبت</button>
 
@@ -85,21 +81,37 @@ let age=document.getElementById("age").value
 let city=document.getElementById("city").value
 let bio=document.getElementById("bio").value
 
-let users = JSON.parse(localStorage.getItem("users")) || []
+let file=document.getElementById("photo").files[0]
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+let users=JSON.parse(localStorage.getItem("users")) || []
 
 let user={
+
 name:name,
 age:age,
 city:city,
 bio:bio,
-photo:"https://picsum.photos/200"
+photo:reader.result
+
 }
 
 users.push(user)
 
 localStorage.setItem("users",JSON.stringify(users))
 
-window.location.href="users.html"
+window.location.href="profile.html"
+
+}
+
+if(file){
+
+reader.readAsDataURL(file)
+
+}
 
 }
 
