@@ -6,121 +6,69 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nimeh Gomshodeh</title>
+<title>Nimeh Gomsodeh</title>
 
 <style>
 
 body{
 margin:0;
-font-family:'Segoe UI',sans-serif;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#020617,#020617,#020617);
 color:white;
 text-align:center;
-background:#020617;
-overflow:hidden;
-}
-
-/* قلب ها */
-
-.heart{
-position:fixed;
-bottom:-50px;
-font-size:20px;
-color:#ff4d6d;
-animation:float 6s linear infinite;
-opacity:0.6;
-}
-
-@keyframes float{
-
-0%{
-transform:translateY(0) scale(1);
-}
-
-100%{
-transform:translateY(-100vh) scale(1.5);
-}
-
-}
-
-/* محتوا */
-
-.container{
-position:relative;
-z-index:2;
-padding-top:60px;
-}
-
-header{
-font-size:26px;
-font-weight:bold;
+padding-bottom:90px;
 }
 
 h1{
-font-size:36px;
-margin:10px;
+margin-top:40px;
+font-size:28px;
 }
 
 p{
-opacity:0.8;
-margin-bottom:30px;
+opacity:0.7;
 }
 
-.buttons{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-margin-bottom:50px;
-}
-
-button{
+.btn{
 background:#FF4D6D;
 border:none;
-padding:14px 28px;
+padding:15px 25px;
 border-radius:30px;
 color:white;
 font-size:16px;
+margin:10px;
 cursor:pointer;
-transition:0.3s;
-}
-
-button:hover{
-transform:scale(1.05);
-box-shadow:0 10px 30px rgba(255,77,109,0.5);
-}
-
-.users{
-display:flex;
-justify-content:center;
-gap:20px;
-flex-wrap:wrap;
 }
 
 .card{
 background:#111;
 padding:20px;
 border-radius:20px;
-width:150px;
+width:200px;
+margin:30px auto;
 }
 
 .avatar{
-width:80px;
-height:80px;
+width:100px;
+height:100px;
 border-radius:50%;
 object-fit:cover;
-margin-bottom:10px;
 }
 
-.stats{
+.bottomMenu{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#111;
 display:flex;
-justify-content:center;
-gap:40px;
-padding:40px 0;
+justify-content:space-around;
+padding:15px;
+font-size:24px;
 }
 
-footer{
-opacity:0.6;
-padding:20px;
+.bottomMenu a{
+color:white;
+text-decoration:none;
 }
 
 </style>
@@ -129,104 +77,50 @@ padding:20px;
 
 <body>
 
-<div class="container">
+<h1>❤️ نیمه گمشده</h1>
 
-<header>
-❤️ نیمه گمشده
-</header>
+<h2>نیمه گمشده خود را پیدا کنید</h2>
 
-<h1>
-نیمه گمشده خود را پیدا کنید
-</h1>
-
-<p>
-پلتفرم مدرن آشنایی فارسی‌زبانان
-</p>
-
-<div class="buttons">
+<p>پلتفرم مدرن آشنایی فارسی زبانان</p>
 
 <a href="signup.html">
-<button>ثبت نام</button>
+<button class="btn">ثبت نام</button>
 </a>
 
 <a href="profile.html">
-<button>ورود</button>
+<button class="btn">ورود</button>
 </a>
 
 <a href="users.html">
-<button>کاربران</button>
+<button class="btn">کاربران</button>
 </a>
+
+<br>
 
 <a href="swipe.html">
-<button>پیدا کردن افراد</button>
+<button class="btn">پیدا کردن افراد</button>
 </a>
-
-</div>
 
 <h2>⭐ کاربران محبوب</h2>
 
-<div class="users">
-
 <div class="card">
-<img src="https://picsum.photos/100?1" class="avatar">
-<p>سارا</p>
-</div>
 
-<div class="card">
-<img src="https://picsum.photos/100?2" class="avatar">
-<p>علی</p>
-</div>
+<img src="https://picsum.photos/200" class="avatar">
 
-<div class="card">
-<img src="https://picsum.photos/100?3" class="avatar">
-<p>لیلا</p>
-</div>
+<h3>سارا</h3>
 
 </div>
 
-<h2>📊 آمار سایت</h2>
+<div class="bottomMenu">
 
-<div class="stats">
+<a href="users.html">🔎</a>
 
-<div>👤 12,540 کاربران</div>
+<a href="swipe.html">❤️</a>
 
-<div>❤️ 8,230 Match</div>
-
-<div>💬 54,000 پیام</div>
+<a href="matches.html">💬</a>
 
 </div>
-
-<footer>
-© 2026 Nimeh Gomshodeh
-</footer>
-
-</div>
-
-<script>
-
-function createHeart(){
-
-let heart=document.createElement("div")
-
-heart.className="heart"
-
-heart.innerHTML="❤"
-
-heart.style.left=Math.random()*100+"vw"
-
-heart.style.fontSize=(10+Math.random()*20)+"px"
-
-document.body.appendChild(heart)
-
-setTimeout(()=>{
-heart.remove()
-},6000)
-
-}
-
-setInterval(createHeart,400)
-
-</script>
 
 </body>
+
 </html>
