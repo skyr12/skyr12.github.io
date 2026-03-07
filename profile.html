@@ -15,19 +15,17 @@ margin:0;
 font-family:'Segoe UI',sans-serif;
 background:#111;
 color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
 text-align:center;
+padding:40px;
 }
 
 .profile{
 background:#222;
-padding:40px;
+padding:30px;
 border-radius:20px;
-width:320px;
-box-shadow:0 10px 40px rgba(0,0,0,0.6);
+max-width:350px;
+margin:auto;
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
 .avatar{
@@ -37,16 +35,30 @@ border-radius:50%;
 background:#FF4D6D;
 margin:auto;
 margin-bottom:20px;
+object-fit:cover;
+}
+
+.gallery{
+display:flex;
+gap:10px;
+justify-content:center;
+margin-top:20px;
+}
+
+.gallery img{
+width:80px;
+height:80px;
+border-radius:10px;
+object-fit:cover;
 }
 
 button{
 margin-top:20px;
 background:#FF4D6D;
 border:none;
-padding:12px 20px;
-border-radius:30px;
+padding:10px 20px;
+border-radius:20px;
 color:white;
-font-size:16px;
 cursor:pointer;
 }
 
@@ -58,11 +70,19 @@ cursor:pointer;
 
 <div class="profile">
 
-<div class="avatar"></div>
+<img id="avatar" class="avatar">
 
 <h2 id="name">نام کاربر</h2>
 
-<p id="bio">بیوگرافی کاربر</p>
+<p id="bio">بیوگرافی</p>
+
+<div class="gallery">
+
+<img id="photo0">
+<img id="photo1">
+<img id="photo2">
+
+</div>
 
 <button onclick="edit()">ویرایش پروفایل</button>
 
@@ -73,6 +93,8 @@ cursor:pointer;
 let name = localStorage.getItem("name")
 let bio = localStorage.getItem("bio")
 
+let avatar = localStorage.getItem("avatar")
+
 if(name){
 document.getElementById("name").innerText = name
 }
@@ -81,8 +103,24 @@ if(bio){
 document.getElementById("bio").innerText = bio
 }
 
+if(avatar){
+document.getElementById("avatar").src = avatar
+}
+
+for(let i=0;i<3;i++){
+
+let photo = localStorage.getItem("photo"+i)
+
+if(photo){
+document.getElementById("photo"+i).src = photo
+}
+
+}
+
 function edit(){
+
 window.location.href="signup.html"
+
 }
 
 </script>
