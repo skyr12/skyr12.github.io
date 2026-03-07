@@ -13,7 +13,7 @@
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
-background:#111;
+background:#020617;
 color:white;
 text-align:center;
 padding:40px;
@@ -27,47 +27,34 @@ gap:20px;
 }
 
 .card{
-background:#222;
+
+background:#111;
 padding:20px;
 border-radius:20px;
-width:230px;
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
+width:200px;
+
 }
 
 .avatar{
-width:100%;
-height:200px;
-border-radius:15px;
+
+width:100px;
+height:100px;
+border-radius:50%;
 object-fit:cover;
 margin-bottom:10px;
-}
 
-.status{
-margin-top:5px;
-font-size:14px;
-opacity:0.8;
-}
-
-.online{
-color:#00ff6a;
 }
 
 button{
-margin-top:8px;
+
+margin-top:10px;
 background:#FF4D6D;
 border:none;
-padding:10px 15px;
+padding:8px 15px;
 border-radius:20px;
 color:white;
 cursor:pointer;
-}
 
-.block{
-background:#444;
-}
-
-.report{
-background:#ff3b3b;
 }
 
 </style>
@@ -82,44 +69,31 @@ background:#ff3b3b;
 
 <script>
 
-let users=[
+let users=[]
 
-{
-name:"سارا",
-bio:"علاقه‌مند به سفر",
-photo:"https://picsum.photos/300/300?1",
-online:true
-},
+let name=localStorage.getItem("name")
+let age=localStorage.getItem("age")
+let city=localStorage.getItem("city")
+let bio=localStorage.getItem("bio")
+let photo=localStorage.getItem("photo")
 
-{
-name:"امیر",
-bio:"ورزشکار",
-photo:"https://picsum.photos/300/300?2",
-online:false,
-lastSeen:"10 دقیقه پیش"
-},
+if(name){
 
-{
-name:"لیلا",
-bio:"عاشق موسیقی",
-photo:"https://picsum.photos/300/300?3",
-online:false,
-lastSeen:"1 ساعت پیش"
+users.push({
+
+name:name,
+age:age,
+city:city,
+bio:bio,
+photo:photo
+
+})
+
 }
-
-]
-
-let blocked = JSON.parse(localStorage.getItem("blocked")) || []
-
-let reports = JSON.parse(localStorage.getItem("reports")) || []
-
-function render(){
 
 let html=""
 
-users.forEach((u,i)=>{
-
-if(blocked.includes(i)) return
+users.forEach(u=>{
 
 html+=`
 
@@ -129,19 +103,11 @@ html+=`
 
 <h3>${u.name}</h3>
 
+<p>${u.city}</p>
+
 <p>${u.bio}</p>
 
-<p class="status">
-
-${u.online ? '<span class="online">🟢 آنلاین</span>' : '⏰ '+u.lastSeen}
-
-</p>
-
-<button onclick="like(${i})">❤️ لایک</button>
-
-<button class="block" onclick="blockUser(${i})">🚫 بلاک</button>
-
-<button class="report" onclick="reportUser(${i})">🚨 گزارش</button>
+<button>❤️ لایک</button>
 
 </div>
 
@@ -150,36 +116,6 @@ ${u.online ? '<span class="online">🟢 آنلاین</span>' : '⏰ '+u.lastSeen
 })
 
 document.getElementById("users").innerHTML=html
-
-}
-
-function like(i){
-
-alert("کاربر لایک شد ❤️")
-
-}
-
-function blockUser(i){
-
-blocked.push(i)
-
-localStorage.setItem("blocked",JSON.stringify(blocked))
-
-render()
-
-}
-
-function reportUser(i){
-
-reports.push(users[i])
-
-localStorage.setItem("reports",JSON.stringify(reports))
-
-alert("کاربر گزارش شد 🚨")
-
-}
-
-render()
 
 </script>
 
