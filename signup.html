@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ثبت نام</title>
+<title>سوایپ کاربران</title>
 
 <style>
 
@@ -14,37 +14,40 @@ body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
 background:#111;
-color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-}
-
-.box{
-background:#222;
-padding:40px;
-border-radius:20px;
-width:320px;
-text-align:center;
-}
-
-input,textarea{
-width:100%;
-padding:10px;
-margin:10px 0;
-border:none;
-border-radius:10px;
-}
-
-button{
-background:#FF4D6D;
-border:none;
-padding:12px 20px;
-border-radius:30px;
 color:white;
-font-size:16px;
-cursor:pointer;
+}
+
+.container{
+position:relative;
+width:320px;
+height:420px;
+}
+
+.card{
+position:absolute;
+width:100%;
+height:100%;
+background:#222;
+border-radius:20px;
+box-shadow:0 10px 40px rgba(0,0,0,0.6);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+}
+
+.avatar{
+width:150px;
+height:150px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:20px;
 }
 
 </style>
@@ -53,63 +56,99 @@ cursor:pointer;
 
 <body>
 
-<div class="box">
+<div class="container">
 
-<h2>ثبت نام</h2>
+<div class="card" id="card">
 
-<input id="name" placeholder="نام">
+<img id="avatar" class="avatar">
 
-<textarea id="bio" placeholder="بیوگرافی"></textarea>
+<h2 id="name"></h2>
 
-<input type="file" id="photo1">
+<p id="bio"></p>
 
-<input type="file" id="photo2">
-
-<input type="file" id="photo3">
-
-<button onclick="save()">ثبت</button>
+</div>
 
 </div>
 
 <script>
 
-function save(){
+let users=[
 
-let name = document.getElementById("name").value
-let bio = document.getElementById("bio").value
+{
+name:"سارا",
+bio:"علاقه‌مند به سفر",
+photo:"https://picsum.photos/300/300?1"
+},
 
-localStorage.setItem("name",name)
-localStorage.setItem("bio",bio)
+{
+name:"امیر",
+bio:"ورزشکار",
+photo:"https://picsum.photos/300/300?2"
+},
 
-let files = [
-document.getElementById("photo1").files[0],
-document.getElementById("photo2").files[0],
-document.getElementById("photo3").files[0]
+{
+name:"لیلا",
+bio:"عاشق موسیقی",
+photo:"https://picsum.photos/300/300?3"
+}
+
 ]
 
-files.forEach((file,i)=>{
+let index=0
 
-if(file){
+function showUser(){
 
-let reader = new FileReader()
+let u=users[index]
 
-reader.onload = function(){
+document.getElementById("name").innerText=u.name
 
-localStorage.setItem("photo"+i,reader.result)
+document.getElementById("bio").innerText=u.bio
+
+document.getElementById("avatar").src=u.photo
 
 }
 
-reader.readAsDataURL(file)
+showUser()
+
+let startX=0
+
+let card=document.getElementById("card")
+
+card.addEventListener("touchstart",e=>{
+
+startX=e.touches[0].clientX
+
+})
+
+card.addEventListener("touchend",e=>{
+
+let endX=e.changedTouches[0].clientX
+
+if(endX-startX>100){
+
+nextUser()
+
+}
+
+if(startX-endX>100){
+
+nextUser()
 
 }
 
 })
 
-setTimeout(()=>{
+function nextUser(){
 
-window.location.href="profile.html"
+index++
 
-},500)
+if(index>=users.length){
+
+index=0
+
+}
+
+showUser()
 
 }
 
