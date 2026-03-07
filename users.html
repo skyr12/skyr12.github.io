@@ -66,6 +66,10 @@ cursor:pointer;
 background:#444;
 }
 
+.report{
+background:#ff3b3b;
+}
+
 </style>
 
 </head>
@@ -105,9 +109,9 @@ lastSeen:"1 ساعت پیش"
 
 ]
 
-// لیست بلاک
-
 let blocked = JSON.parse(localStorage.getItem("blocked")) || []
+
+let reports = JSON.parse(localStorage.getItem("reports")) || []
 
 function render(){
 
@@ -137,6 +141,8 @@ ${u.online ? '<span class="online">🟢 آنلاین</span>' : '⏰ '+u.lastSeen
 
 <button class="block" onclick="blockUser(${i})">🚫 بلاک</button>
 
+<button class="report" onclick="reportUser(${i})">🚨 گزارش</button>
+
 </div>
 
 `
@@ -160,6 +166,16 @@ blocked.push(i)
 localStorage.setItem("blocked",JSON.stringify(blocked))
 
 render()
+
+}
+
+function reportUser(i){
+
+reports.push(users[i])
+
+localStorage.setItem("reports",JSON.stringify(reports))
+
+alert("کاربر گزارش شد 🚨")
 
 }
 
