@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa">
+
 <head>
 
 <meta charset="UTF-8">
@@ -24,7 +25,7 @@ height:100vh;
 background:#222;
 padding:40px;
 border-radius:20px;
-width:300px;
+width:320px;
 text-align:center;
 }
 
@@ -60,6 +61,12 @@ cursor:pointer;
 
 <textarea id="bio" placeholder="بیوگرافی"></textarea>
 
+<input type="file" id="photo1">
+
+<input type="file" id="photo2">
+
+<input type="file" id="photo3">
+
 <button onclick="save()">ثبت</button>
 
 </div>
@@ -74,7 +81,35 @@ let bio = document.getElementById("bio").value
 localStorage.setItem("name",name)
 localStorage.setItem("bio",bio)
 
+let files = [
+document.getElementById("photo1").files[0],
+document.getElementById("photo2").files[0],
+document.getElementById("photo3").files[0]
+]
+
+files.forEach((file,i)=>{
+
+if(file){
+
+let reader = new FileReader()
+
+reader.onload = function(){
+
+localStorage.setItem("photo"+i,reader.result)
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
+})
+
+setTimeout(()=>{
+
 window.location.href="profile.html"
+
+},500)
 
 }
 
