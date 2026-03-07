@@ -118,6 +118,16 @@ matches.push(users[index])
 
 localStorage.setItem("matches",JSON.stringify(matches))
 
+window.location.href="matches.html"
+
+}
+
+let matches = JSON.parse(localStorage.getItem("matches")) || []
+
+matches.push(users[index])
+
+localStorage.setItem("matches",JSON.stringify(matches))
+
 alert("Match شد ❤️")
 
 nextUser()
