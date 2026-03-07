@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="fa">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>چت</title>
+
+<style>
+
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:#111;
+color:white;
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+.chat{
+flex:1;
+padding:20px;
+overflow:auto;
+}
+
+.message{
+background:#222;
+padding:10px;
+border-radius:10px;
+margin:10px 0;
+max-width:70%;
+}
+
+.input{
+display:flex;
+padding:10px;
+background:#000;
+}
+
+input{
+flex:1;
+padding:10px;
+border:none;
+border-radius:20px;
+}
+
+button{
+margin-left:10px;
+background:#FF4D6D;
+border:none;
+padding:10px 15px;
+border-radius:20px;
+color:white;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="chat" id="chat"></div>
+
+<div class="input">
+
+<input id="text" placeholder="پیام بنویس...">
+
+<button onclick="send()">ارسال</button>
+
+</div>
+
+<script>
+
+function send(){
+
+let text = document.getElementById("text").value
+
+if(text==="") return
+
+let msg = document.createElement("div")
+
+msg.className="message"
+
+msg.innerText = text
+
+document.getElementById("chat").appendChild(msg)
+
+document.getElementById("text").value=""
+
+}
+
+</script>
+
+</body>
+</html>
