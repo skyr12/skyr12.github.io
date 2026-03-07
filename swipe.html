@@ -1,71 +1,72 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>پیدا کردن نیمه گمشده</title>
+<title>پیدا کردن افراد</title>
 
 <style>
 
 body{
 margin:0;
-font-family:sans-serif;
+font-family:'Segoe UI',sans-serif;
 background:#111;
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-color:white;
+text-align:center;
 }
 
 .card{
-width:300px;
-height:420px;
 background:#222;
+width:300px;
+padding:30px;
 border-radius:20px;
-text-align:center;
-padding:20px;
+box-shadow:0 10px 40px rgba(0,0,0,0.6);
 }
 
 .avatar{
-width:150px;
-height:150px;
+width:120px;
+height:120px;
 border-radius:50%;
-background:#ff4f7b;
+background:#FF4D6D;
 margin:auto;
+margin-bottom:20px;
 }
 
-.name{
-font-size:24px;
-margin-top:15px;
+h2{
+margin:10px 0;
 }
 
 .buttons{
-margin-top:30px;
-display:flex;
-justify-content:space-around;
+margin-top:20px;
 }
 
 button{
-padding:15px;
 border:none;
-border-radius:50%;
-font-size:20px;
+padding:12px 20px;
+margin:10px;
+border-radius:30px;
+font-size:16px;
 cursor:pointer;
 }
 
-.no{
-background:#444;
+.like{
+background:#4CAF50;
 color:white;
 }
 
-.like{
-background:#ff4f7b;
+.nope{
+background:#F44336;
 color:white;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -74,17 +75,47 @@ color:white;
 
 <div class="avatar"></div>
 
-<div class="name">سارا ۲۷</div>
+<h2>سارا</h2>
+
+<p>۲۶ ساله • تهران</p>
 
 <div class="buttons">
 
-<button class="no">❌</button>
+<button class="nope" onclick="next()">رد ❌</button>
 
-<button class="like">❤️</button>
+<button class="like" onclick="next()">پسند ❤️</button>
+
+</div>
 
 </div>
 
-</div>
+<script>
+
+const users = [
+{name:"سارا",age:26,city:"تهران"},
+{name:"علی",age:29,city:"دبی"},
+{name:"مریم",age:24,city:"استانبول"},
+{name:"رضا",age:31,city:"برلین"}
+]
+
+let index = 0
+
+function next(){
+
+index++
+
+if(index >= users.length){
+index = 0
+}
+
+document.querySelector("h2").innerText = users[index].name
+
+document.querySelector("p").innerText =
+users[index].age + " ساله • " + users[index].city
+
+}
+
+</script>
 
 </body>
 </html>
