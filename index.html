@@ -10,9 +10,20 @@
 
 body{
 margin:0;
-font-family:sans-serif;
+font-family: 'Segoe UI', sans-serif;
 color:white;
 text-align:center;
+
+background: linear-gradient(135deg,#0f0f0f,#1a1a2e,#16213e);
+background-size:400% 400%;
+animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
 
 background:linear-gradient(135deg,#ff6a88,#ff99ac,#ffb6c1);
 background-size:400% 400%;
