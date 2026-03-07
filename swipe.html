@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>پیدا کردن افراد</title>
+<title>ثبت نام</title>
 
 <style>
 
@@ -14,65 +14,36 @@ body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
 background:#020617;
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
-color:white;
 }
 
-.card{
-
+.form{
 background:#111;
 padding:30px;
 border-radius:20px;
 width:300px;
 text-align:center;
-
 }
 
-.avatar{
-
-width:150px;
-height:150px;
-border-radius:50%;
-object-fit:cover;
-margin-bottom:15px;
-
-}
-
-.buttons{
-
-display:flex;
-justify-content:center;
-gap:20px;
-margin-top:20px;
-
+input,textarea{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:10px;
 }
 
 button{
-
-width:60px;
-height:60px;
-border-radius:50%;
-border:none;
-font-size:22px;
-cursor:pointer;
-
-}
-
-.nope{
-
-background:#333;
-color:red;
-
-}
-
-.like{
-
 background:#FF4D6D;
+border:none;
+padding:12px 20px;
+border-radius:20px;
 color:white;
-
+cursor:pointer;
 }
 
 </style>
@@ -81,83 +52,80 @@ color:white;
 
 <body>
 
-<div class="card">
+<div class="form">
 
-<img id="photo" class="avatar">
+<h2>ثبت نام</h2>
 
-<h2 id="name"></h2>
+<input id="name" placeholder="نام">
 
-<p id="city"></p>
+<input id="age" placeholder="سن">
 
-<p id="bio"></p>
+<input id="city" placeholder="شهر">
 
-<div class="buttons">
+<textarea id="bio" placeholder="بیوگرافی"></textarea>
 
-<button class="nope" onclick="nope()">❌</button>
+<input type="file" id="photo">
 
-<button class="like" onclick="like()">❤️</button>
-
-</div>
+<button onclick="register()">ثبت</button>
 
 </div>
 
 <script>
 
-let users=[]
+function register(){
 
-let name=localStorage.getItem("name")
-let city=localStorage.getItem("city")
-let bio=localStorage.getItem("bio")
-let photo=localStorage.getItem("photo")
+let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let city=document.getElementById("city").value
+let bio=document.getElementById("bio").value
 
-if(name){
+let users=JSON.parse(localStorage.getItem("users")) || []
+
+let file=document.getElementById("photo").files[0]
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+let photo=reader.result
 
 users.push({
 
 name:name,
+age:age,
 city:city,
 bio:bio,
 photo:photo
 
 })
 
-}
+localStorage.setItem("users",JSON.stringify(users))
 
-let index=0
-
-function showUser(){
-
-let u=users[index]
-
-document.getElementById("name").innerText=u.name
-
-document.getElementById("city").innerText=u.city
-
-document.getElementById("bio").innerText=u.bio
-
-document.getElementById("photo").src=u.photo
+window.location.href="users.html"
 
 }
 
-showUser()
+if(file){
 
-function like(){
+reader.readAsDataURL(file)
 
-alert("❤️ Match شد")
+}else{
+
+users.push({
+
+name:name,
+age:age,
+city:city,
+bio:bio,
+photo:"https://picsum.photos/200"
+
+})
+
+localStorage.setItem("users",JSON.stringify(users))
+
+window.location.href="users.html"
 
 }
-
-function nope(){
-
-index++
-
-if(index>=users.length){
-
-index=0
-
-}
-
-showUser()
 
 }
 
