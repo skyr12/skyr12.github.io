@@ -27,34 +27,18 @@ gap:20px;
 }
 
 .card{
-
 background:#111;
 padding:20px;
 border-radius:20px;
 width:200px;
-
 }
 
 .avatar{
-
 width:100px;
 height:100px;
 border-radius:50%;
 object-fit:cover;
 margin-bottom:10px;
-
-}
-
-button{
-
-margin-top:10px;
-background:#FF4D6D;
-border:none;
-padding:8px 15px;
-border-radius:20px;
-color:white;
-cursor:pointer;
-
 }
 
 </style>
@@ -69,27 +53,7 @@ cursor:pointer;
 
 <script>
 
-let users=[]
-
-let name=localStorage.getItem("name")
-let age=localStorage.getItem("age")
-let city=localStorage.getItem("city")
-let bio=localStorage.getItem("bio")
-let photo=localStorage.getItem("photo")
-
-if(name){
-
-users.push({
-
-name:name,
-age:age,
-city:city,
-bio:bio,
-photo:photo
-
-})
-
-}
+let users=JSON.parse(localStorage.getItem("users")) || []
 
 let html=""
 
@@ -106,8 +70,6 @@ html+=`
 <p>${u.city}</p>
 
 <p>${u.bio}</p>
-
-<button>❤️ لایک</button>
 
 </div>
 
