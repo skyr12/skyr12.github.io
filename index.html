@@ -1,67 +1,39 @@
 <!DOCTYPE html>
-<html lang="fa">
-
+<html>
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Nimeh Gomsodeh</title>
 
 <style>
-
 body{
-margin:0;
-font-family:Tahoma;
-background:#020617;
-color:white;
+font-family: Arial;
+background:#f5f5f5;
 text-align:center;
 }
 
-.header{
-padding:20px;
-font-size:22px;
-}
-
-.hero{
-margin-top:80px;
-}
-
-.hero h1{
-font-size:38px;
-}
-
-.hero p{
-opacity:0.7;
-}
-
-.btn{
-background:#ff4d6d;
-border:none;
-padding:15px 30px;
-border-radius:30px;
-color:white;
-font-size:18px;
-margin:10px;
-cursor:pointer;
-}
-
-.section{
-margin-top:80px;
-}
-
-.card{
-background:#111;
-width:250px;
-margin:20px auto;
-padding:20px;
-border-radius:20px;
-}
-
-.footer{
+.box{
+background:white;
+width:300px;
+margin:auto;
 margin-top:100px;
 padding:20px;
-opacity:0.5;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:90%;
+padding:10px;
+margin:5px;
+}
+
+button{
+padding:10px 20px;
+background:#ff4b5c;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
 }
 
 </style>
@@ -70,54 +42,66 @@ opacity:0.5;
 
 <body>
 
-<div class="header">
+<div class="box">
 
-❤️ نیمه گمشده
+<h2>Nimeh Gomsodeh</h2>
 
-</div>
+<input id="name" placeholder="Name"><br>
+<input id="city" placeholder="City"><br>
 
-<div class="hero">
+<button onclick="register()">Register</button>
 
-<h1>نیمه گمشده خود را پیدا کنید</h1>
-
-<p>
-پلتفرم مدرن آشنایی و ازدواج فارسی زبانان
-</p>
-
-<a href="signup.html">
-<button class="btn">ثبت نام</button>
-</a>
-
-<a href="login.html">
-<button class="btn">ورود</button>
-</a>
+<p id="msg"></p>
 
 </div>
 
-<div class="section">
 
-<h2>چرا نیمه گمشده؟</h2>
+<script type="module">
 
-<div class="card">
-پروفایل‌های واقعی
-</div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-<div class="card">
-امنیت و حریم خصوصی
-</div>
 
-<div class="card">
-جستجوی پیشرفته
-</div>
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
+measurementId: "G-KTCV2B5R9L"
+};
 
-</div>
 
-<div class="footer">
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-© 2026 Nimeh Gomsodeh
 
-</div>
+window.register = async function(){
+
+const name = document.getElementById("name").value;
+const city = document.getElementById("city").value;
+
+try{
+
+await addDoc(collection(db,"users"),{
+name:name,
+city:city
+});
+
+document.getElementById("msg").innerHTML="User registered";
+
+}
+catch(e){
+
+document.getElementById("msg").innerHTML="Error";
+
+}
+
+}
+
+</script>
+
 
 </body>
-
 </html>
