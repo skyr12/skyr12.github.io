@@ -1,1 +1,146 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جستجوی کاربران | نیمه گمشده</title>
 
+<style>
+body{
+margin:0;
+font-family:Tahoma;
+background:#020617;
+color:white;
+text-align:center;
+}
+
+.header{
+padding:20px;
+font-size:22px;
+}
+
+.filters{
+background:#111;
+padding:20px;
+border-radius:20px;
+width:320px;
+margin:20px auto;
+}
+
+input,select{
+width:90%;
+padding:10px;
+margin:8px;
+border:none;
+border-radius:10px;
+}
+
+button{
+background:#ff4d6d;
+border:none;
+padding:10px 20px;
+border-radius:20px;
+color:white;
+cursor:pointer;
+}
+
+.results{
+margin-top:20px;
+}
+
+.card{
+background:#111;
+width:260px;
+margin:20px auto;
+padding:20px;
+border-radius:20px;
+}
+
+.avatar{
+width:100px;
+height:100px;
+border-radius:50%;
+object-fit:cover;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🔎 جستجوی کاربران
+</div>
+
+<div class="filters">
+
+<input id="city" placeholder="شهر">
+
+<input id="age" type="number" placeholder="حداقل سن">
+
+<select id="gender">
+<option value="">جنسیت</option>
+<option>مرد</option>
+<option>زن</option>
+</select>
+
+<button onclick="search()">جستجو</button>
+
+</div>
+
+<div class="results" id="results"></div>
+
+<script>
+
+let users=JSON.parse(localStorage.getItem("users"))||[]
+
+function search(){
+
+let city=document.getElementById("city").value
+let age=document.getElementById("age").value
+let gender=document.getElementById("gender").value
+
+let html=""
+
+users.forEach((u,i)=>{
+
+if(city && u.city!==city) return
+if(age && u.age<age) return
+if(gender && u.gender!==gender) return
+
+html+=`
+<div class="card">
+
+<img src="${u.photo}" class="avatar">
+
+<h3>${u.name}</h3>
+
+<p>${u.city}</p>
+
+<button onclick="request(${i})">درخواست آشنایی</button>
+
+</div>
+`
+
+})
+
+document.getElementById("results").innerHTML=html
+
+}
+
+function request(i){
+
+let requests=JSON.parse(localStorage.getItem("requests"))||[]
+
+requests.push(users[i])
+
+localStorage.setItem("requests",JSON.stringify(requests))
+
+alert("درخواست ارسال شد")
+
+}
+
+</script>
+
+</body>
+</html>
