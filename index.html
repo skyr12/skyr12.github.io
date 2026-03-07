@@ -12,81 +12,56 @@
 
 body{
 margin:0;
-font-family:Segoe UI;
+font-family:Tahoma;
 background:#020617;
 color:white;
 text-align:center;
-padding-bottom:100px;
 }
 
-.title{
-margin-top:40px;
-font-size:26px;
+.header{
+padding:20px;
+font-size:22px;
 }
 
-.subtitle{
-font-size:34px;
-margin-top:20px;
+.hero{
+margin-top:80px;
 }
 
-.text{
+.hero h1{
+font-size:38px;
+}
+
+.hero p{
 opacity:0.7;
-margin-top:10px;
 }
 
 .btn{
 background:#ff4d6d;
 border:none;
-padding:15px 25px;
+padding:15px 30px;
 border-radius:30px;
 color:white;
-font-size:16px;
+font-size:18px;
 margin:10px;
 cursor:pointer;
 }
 
-.bigBtn{
-background:#ff4d6d;
-border:none;
-padding:18px 35px;
-border-radius:30px;
-color:white;
-font-size:18px;
-margin-top:20px;
-cursor:pointer;
-box-shadow:0 0 25px #ff4d6d;
+.section{
+margin-top:80px;
 }
 
 .card{
 background:#111;
-padding:30px;
+width:250px;
+margin:20px auto;
+padding:20px;
 border-radius:20px;
-width:220px;
-margin:30px auto;
 }
 
-.avatar{
-width:100px;
-height:100px;
-border-radius:50%;
-object-fit:cover;
-}
-
-.bottomMenu{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#111;
-display:flex;
-justify-content:space-around;
-padding:15px;
-font-size:24px;
-}
-
-.bottomMenu a{
-color:white;
-text-decoration:none;
+.footer{
+margin-top:100px;
+padding:20px;
+opacity:0.5;
 }
 
 </style>
@@ -95,50 +70,51 @@ text-decoration:none;
 
 <body>
 
-<h2 class="title">❤️ نیمه گمشده</h2>
+<div class="header">
 
-<h1 class="subtitle">نیمه گمشده خود را پیدا کنید</h1>
+❤️ نیمه گمشده
 
-<p class="text">پلتفرم مدرن آشنایی فارسی زبانان</p>
+</div>
+
+<div class="hero">
+
+<h1>نیمه گمشده خود را پیدا کنید</h1>
+
+<p>
+پلتفرم مدرن آشنایی و ازدواج فارسی زبانان
+</p>
 
 <a href="signup.html">
 <button class="btn">ثبت نام</button>
 </a>
 
-<a href="profile.html">
+<a href="login.html">
 <button class="btn">ورود</button>
 </a>
 
-<a href="users.html">
-<button class="btn">کاربران</button>
-</a>
+</div>
 
-<br>
+<div class="section">
 
-<a href="swipe.html">
-<button class="bigBtn">پیدا کردن افراد</button>
-</a>
-
-<h2>⭐ کاربران محبوب</h2>
+<h2>چرا نیمه گمشده؟</h2>
 
 <div class="card">
+پروفایل‌های واقعی
+</div>
 
-<img src="https://picsum.photos/200" class="avatar">
+<div class="card">
+امنیت و حریم خصوصی
+</div>
 
-<h3>سارا</h3>
+<div class="card">
+جستجوی پیشرفته
+</div>
 
 </div>
 
+<div class="footer">
 
-<!-- منوی پایین -->
-
-<div class="bottomMenu">
-
-<a href="users.html">🔎</a>
-
-<a href="swipe.html">❤️</a>
-
-<a href="matches.html">💬</a>
+© 2026 Nimeh Gomsodeh
 
 </div>
 
