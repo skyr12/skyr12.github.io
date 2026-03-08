@@ -21,7 +21,6 @@ height:100vh;
 }
 
 .card{
-
 width:320px;
 height:420px;
 background:white;
@@ -40,10 +39,6 @@ object-fit:cover;
 .info{
 padding:15px;
 text-align:center;
-}
-
-h2{
-margin:5px 0;
 }
 
 button{
@@ -70,15 +65,15 @@ background:#ccc;
 
 <body>
 
-<div class="card" id="card">
+<div class="card">
 
-<img id="photo" src="https://randomuser.me/api/portraits/men/32.jpg">
+<img id="photo">
 
 <div class="info">
 
-<h2 id="name">Farhad</h2>
+<h2 id="name"></h2>
 
-<p id="country">UK • 25</p>
+<p id="country"></p>
 
 <button class="like" onclick="like()">❤️ Like</button>
 
@@ -88,7 +83,6 @@ background:#ccc;
 
 </div>
 
-<!-- Firebase -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -99,10 +93,7 @@ const firebaseConfig = {
 
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+projectId: "nimeh-gomsodeh"
 
 };
 
@@ -111,73 +102,94 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 
+let currentUser = "user1"
+
 let users = [
 
-{name:"Farhad",age:25,country:"UK",photo:"https://randomuser.me/api/portraits/men/32.jpg"},
+{id:"user2",name:"Sara",age:23,country:"Turkey",photo:"https://randomuser.me/api/portraits/women/44.jpg"},
 
-{name:"Sara",age:23,country:"Turkey",photo:"https://randomuser.me/api/portraits/women/44.jpg"},
-
-{name:"Ali",age:28,country:"Germany",photo:"https://randomuser.me/api/portraits/men/51.jpg"}
+{id:"user3",name:"Ali",age:28,country:"Germany",photo:"https://randomuser.me/api/portraits/men/51.jpg"}
 
 ];
 
-let index = 0;
+let index = 0
+
 
 function showUser(){
 
-let user = users[index];
+let user = users[index]
 
-document.getElementById("photo").src=user.photo;
-
-document.getElementById("name").innerText=user.name;
-
-document.getElementById("country").innerText=user.country+" • "+user.age;
+document.getElementById("photo").src = user.photo
+document.getElementById("name").innerText = user.name
+document.getElementById("country").innerText = user.country+" • "+user.age
 
 }
 
 function like(){
 
-let user = users[index];
+let target = users[index]
 
 db.collection("likes").add({
 
-name:user.name,
+from: currentUser,
+to: target.id,
+time: Date.now()
 
-age:user.age,
+})
 
-country:user.country,
+checkMatch(target.id)
 
-photo:user.photo,
+next()
 
+}
+
+function checkMatch(target){
+
+db.collection("likes")
+.where("from","==",target)
+.where("to","==",currentUser)
+.get()
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+alert("🎉 It's a Match!")
+
+db.collection("matches").add({
+
+user1:currentUser,
+user2:target,
 time:Date.now()
 
-});
+})
 
-next();
+}
+
+})
 
 }
 
 function skip(){
 
-next();
+next()
 
 }
 
 function next(){
 
-index++;
+index++
 
 if(index >= users.length){
 
-index = 0;
+index = 0
 
 }
 
-showUser();
+showUser()
 
 }
 
-showUser();
+showUser()
 
 </script>
 
