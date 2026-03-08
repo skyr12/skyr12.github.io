@@ -15,7 +15,7 @@ background:#f3f3f3;
 text-align:center;
 }
 
-.user{
+.card{
 
 background:white;
 width:320px;
@@ -28,21 +28,29 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
 img{
-width:70px;
-height:70px;
+width:80px;
+height:80px;
 border-radius:50%;
 }
 
 button{
 
 padding:8px 15px;
-background:red;
-color:white;
 border:none;
 border-radius:15px;
+margin:5px;
 cursor:pointer;
-margin-top:10px;
 
+}
+
+.block{
+background:red;
+color:white;
+}
+
+.unblock{
+background:green;
+color:white;
 }
 
 </style>
@@ -53,7 +61,13 @@ margin-top:10px;
 
 <h2>Admin Panel</h2>
 
+<h3>Users</h3>
+
 <div id="users"></div>
+
+<h3>Reports</h3>
+
+<div id="reports"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -61,24 +75,17 @@ margin-top:10px;
 <script>
 
 const firebaseConfig = {
-
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
-
 projectId: "nimeh-gomsodeh",
-
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-
 messagingSenderId: "815930956932",
-
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
+const db=firebase.firestore();
 
 
 function loadUsers(){
@@ -87,11 +94,11 @@ db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-const data=doc.data();
+let data=doc.data();
 
-const div=document.createElement("div");
+let div=document.createElement("div");
 
-div.className="user";
+div.className="card";
 
 div.innerHTML=`
 
@@ -103,8 +110,12 @@ div.innerHTML=`
 
 <p>Age: ${data.age}</p>
 
-<button onclick="deleteUser('${doc.id}')">
-Delete
+<button class="block" onclick="blockUser('${doc.id}')">
+Block
+</button>
+
+<button class="unblock" onclick="unblockUser('${doc.id}')">
+Unblock
 </button>
 
 `;
@@ -118,11 +129,15 @@ document.getElementById("users").appendChild(div);
 }
 
 
-function deleteUser(id){
+function blockUser(id){
 
-db.collection("users").doc(id).delete().then(()=>{
+db.collection("users").doc(id).update({
 
-alert("User deleted");
+blocked:true
+
+}).then(()=>{
+
+alert("User blocked");
 
 location.reload();
 
@@ -130,7 +145,56 @@ location.reload();
 
 }
 
+
+function unblockUser(id){
+
+db.collection("users").doc(id).update({
+
+blocked:false
+
+}).then(()=>{
+
+alert("User unblocked");
+
+location.reload();
+
+});
+
+}
+
+
+function loadReports(){
+
+db.collection("reports").get().then(snapshot=>{
+
+snapshot.forEach(doc=>{
+
+let r=doc.data();
+
+let div=document.createElement("div");
+
+div.className="card";
+
+div.innerHTML=`
+
+<p>Reported User: ${r.to}</p>
+
+<p>Reason: ${r.reason}</p>
+
+`;
+
+document.getElementById("reports").appendChild(div);
+
+});
+
+});
+
+}
+
+
 loadUsers();
+
+loadReports();
 
 </script>
 
