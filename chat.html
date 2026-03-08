@@ -39,6 +39,10 @@ width:200px;
 border-radius:10px;
 }
 
+audio{
+width:200px;
+}
+
 input{
 width:220px;
 padding:10px;
@@ -78,6 +82,12 @@ margin-top:5px;
 <input id="imageUrl" placeholder="Image URL">
 
 <button onclick="sendImage()">Send Image</button>
+
+<br>
+
+<button onclick="startRecording()">🎤 Record Voice</button>
+
+<button onclick="stopRecording()">Stop</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -141,6 +151,53 @@ document.getElementById("imageUrl").value=""
 }
 
 
+let recorder
+let audioChunks=[]
+
+function startRecording(){
+
+navigator.mediaDevices.getUserMedia({audio:true})
+.then(stream=>{
+
+recorder=new MediaRecorder(stream)
+
+recorder.start()
+
+recorder.ondataavailable=e=>{
+
+audioChunks.push(e.data)
+
+}
+
+})
+
+}
+
+function stopRecording(){
+
+recorder.stop()
+
+recorder.onstop=e=>{
+
+let blob=new Blob(audioChunks)
+
+let url=URL.createObjectURL(blob)
+
+db.collection("messages").add({
+
+from:currentUser.uid,
+voice:url,
+time:Date.now()
+
+})
+
+audioChunks=[]
+
+}
+
+}
+
+
 function loadMessages(){
 
 db.collection("messages")
@@ -166,6 +223,12 @@ div.innerText=data.text
 if(data.image){
 
 div.innerHTML="<img src='"+data.image+"'>"
+
+}
+
+if(data.voice){
+
+div.innerHTML="<audio controls src='"+data.voice+"'></audio>"
 
 }
 
