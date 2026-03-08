@@ -1,1 +1,73 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Users Map</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+#map{
+height:500px;
+width:100%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Users Near You</h2>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig={
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
+
+firebase.initializeApp(firebaseConfig)
+
+const db=firebase.firestore()
+
+let map=L.map('map').setView([51.5074,-0.1278],5)
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+attribution:'Map data'
+}).addTo(map)
+
+
+db.collection("users").get().then(snapshot=>{
+
+snapshot.forEach(doc=>{
+
+let user=doc.data()
+
+if(!user.lat || !user.lng) return
+
+L.marker([user.lat,user.lng])
+.addTo(map)
+.bindPopup(user.name)
+
+})
+
+})
+
+</script>
+
+</body>
+
+</html>
