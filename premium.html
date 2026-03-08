@@ -3,35 +3,46 @@
 
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Upgrade to Premium</title>
+<title>Premium</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f3f3f3;
+background:#ff4d6d;
+color:white;
 text-align:center;
+padding:40px;
 }
 
-.card{
-width:320px;
-margin:auto;
-margin-top:40px;
+.box{
 background:white;
+color:black;
 border-radius:20px;
-padding:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+padding:30px;
+max-width:350px;
+margin:auto;
+}
+
+h1{
+margin-bottom:10px;
+}
+
+.price{
+font-size:30px;
+margin:20px 0;
 }
 
 button{
-padding:12px 20px;
-margin-top:20px;
+padding:15px 25px;
+border:none;
 background:#ff4d6d;
 color:white;
-border:none;
-border-radius:20px;
+border-radius:30px;
+font-size:16px;
 cursor:pointer;
 }
 
@@ -41,56 +52,32 @@ cursor:pointer;
 
 <body>
 
-<h2>Upgrade to Premium</h2>
+<h1>NIMEH PREMIUM</h1>
 
-<div class="card">
+<div class="box">
 
-<p>⭐ See who liked you</p>
-<p>⭐ Unlimited likes</p>
-<p>⭐ Boost profile</p>
+<p>Unlock Premium Features</p>
 
-<button onclick="buyPremium()">
-Upgrade Now
-</button>
+<div class="price">$9.99 / month</div>
+
+<ul style="text-align:left">
+
+<li>See who liked you</li>
+<li>Unlimited likes</li>
+<li>Boost profile</li>
+<li>Priority match</li>
+
+</ul>
+
+<button onclick="buy()">Upgrade Now</button>
 
 </div>
 
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
 <script>
 
-const firebaseConfig={
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
-}
+function buy(){
 
-firebase.initializeApp(firebaseConfig)
-
-const db=firebase.firestore()
-
-let currentUser=null
-
-firebase.auth().onAuthStateChanged(user=>{
-
-currentUser=user
-
-})
-
-function buyPremium(){
-
-db.collection("users")
-.doc(currentUser.uid)
-.update({
-
-premium:true
-
-})
-
-alert("Premium Activated")
+alert("Payment system will be added")
 
 }
 
