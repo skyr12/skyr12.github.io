@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Match</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+}
+
+.card{
+background:white;
+width:300px;
+margin:auto;
+margin-top:20px;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+img{
+width:80px;
+height:80px;
+border-radius:50%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Recommended Matches</h2>
+
+<div id="matches"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+
+function loadMatches(){
+
+db.collection("users").get().then(snapshot=>{
+
+snapshot.forEach(doc=>{
+
+const data=doc.data()
+
+if(data.age<20 || data.age>35) return
+
+if(data.country!=="UK") return
+
+const div=document.createElement("div")
+
+div.className="card"
+
+div.innerHTML=`
+
+<img src="${data.photo}">
+
+<h3>${data.name}</h3>
+
+<p>${data.city}, ${data.country}</p>
+
+<p>Age: ${data.age}</p>
+
+`
+
+document.getElementById("matches").appendChild(div)
+
+})
+
+})
+
+}
+
+loadMatches()
+
+</script>
+
+</body>
+
+</html>
