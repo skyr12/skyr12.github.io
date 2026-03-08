@@ -16,17 +16,21 @@ text-align:center;
 margin:0;
 }
 
+.filter{
+
+margin-top:20px;
+
+}
+
 .card{
 
 background:white;
 width:320px;
 margin:auto;
-margin-top:60px;
+margin-top:40px;
 padding:20px;
 border-radius:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
-position:relative;
-transition:0.3s;
 
 }
 
@@ -43,6 +47,18 @@ border-radius:20px;
 
 <h2>Discover</h2>
 
+
+<div class="filter">
+
+<input id="country" placeholder="Country">
+
+<input id="age" placeholder="Max Age">
+
+<button onclick="applyFilter()">Search</button>
+
+</div>
+
+
 <div id="card" class="card">
 
 <img id="photo">
@@ -51,7 +67,7 @@ border-radius:20px;
 
 <p id="city"></p>
 
-<p id="age"></p>
+<p id="ageText"></p>
 
 </div>
 
@@ -85,6 +101,7 @@ const db = firebase.firestore();
 
 
 let users=[];
+let filteredUsers=[];
 let index=0;
 
 
@@ -105,12 +122,11 @@ db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-users.push({
-id:doc.id,
-...doc.data()
-});
+users.push(doc.data());
 
 });
+
+filteredUsers=users;
 
 showUser();
 
@@ -121,120 +137,40 @@ showUser();
 
 function showUser(){
 
-const user=users[index];
+if(filteredUsers.length==0)return;
+
+const user=filteredUsers[index];
 
 document.getElementById("name").innerText=user.name;
 
 document.getElementById("city").innerText=user.city+" , "+user.country;
 
-document.getElementById("age").innerText="Age: "+user.age;
+document.getElementById("ageText").innerText="Age: "+user.age;
 
 document.getElementById("photo").src=user.photo;
 
 }
 
 
+function applyFilter(){
 
-let startX=0;
+const country=document.getElementById("country").value.toLowerCase();
 
-const card=document.getElementById("card");
+const age=document.getElementById("age").value;
 
+filteredUsers=users.filter(u=>{
 
-card.addEventListener("touchstart",e=>{
+let ok=true;
 
-startX=e.touches[0].clientX;
+if(country && !u.country.toLowerCase().includes(country)) ok=false;
 
-});
+if(age && u.age>age) ok=false;
 
-
-card.addEventListener("touchend",e=>{
-
-let endX=e.changedTouches[0].clientX;
-
-let diff=endX-startX;
-
-
-if(diff>80){
-
-like();
-
-}
-
-if(diff<-80){
-
-skip();
-
-}
+return ok;
 
 });
-
-
-function like(){
-
-const currentUser=firebase.auth().currentUser;
-
-const target=users[index];
-
-db.collection("likes").add({
-
-from:currentUser.uid,
-
-to:target.id,
-
-time:Date.now()
-
-}).then(()=>{
-
-checkMatch(target.id);
-
-nextUser();
-
-});
-
-}
-
-
-function checkMatch(userId){
-
-const currentUser=firebase.auth().currentUser;
-
-db.collection("likes")
-
-.where("from","==",userId)
-
-.where("to","==",currentUser.uid)
-
-.get()
-
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-alert("❤️ It's a Match!");
-
-}
-
-});
-
-}
-
-
-function skip(){
-
-nextUser();
-
-}
-
-
-function nextUser(){
-
-index++;
-
-if(index>=users.length){
 
 index=0;
-
-}
 
 showUser();
 
