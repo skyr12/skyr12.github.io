@@ -5,7 +5,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Premium</title>
+<title>Upgrade to Premium</title>
 
 <style>
 
@@ -16,22 +16,22 @@ text-align:center;
 }
 
 .card{
-background:white;
 width:320px;
 margin:auto;
-margin-top:60px;
-padding:30px;
+margin-top:40px;
+background:white;
 border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
+padding:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 button{
-padding:12px 25px;
+padding:12px 20px;
+margin-top:20px;
 background:#ff4d6d;
 color:white;
 border:none;
 border-radius:20px;
-font-size:16px;
 cursor:pointer;
 }
 
@@ -41,57 +41,56 @@ cursor:pointer;
 
 <body>
 
+<h2>Upgrade to Premium</h2>
+
 <div class="card">
 
-<h2>Premium Membership</h2>
-
-<p>✔ Unlimited Likes</p>
-
-<p>✔ See Who Liked You</p>
-
-<p>✔ Boost Your Profile</p>
-
-<p>✔ Advanced Filters</p>
+<p>⭐ See who liked you</p>
+<p>⭐ Unlimited likes</p>
+<p>⭐ Boost profile</p>
 
 <button onclick="buyPremium()">
-Upgrade to Premium
+Upgrade Now
 </button>
 
 </div>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
 
-const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-};
+const firebaseConfig={
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore();
+const db=firebase.firestore()
+
+let currentUser=null
+
+firebase.auth().onAuthStateChanged(user=>{
+
+currentUser=user
+
+})
 
 function buyPremium(){
 
-const user=firebase.auth().currentUser;
-
-db.collection("users").doc(user.uid).update({
+db.collection("users")
+.doc(currentUser.uid)
+.update({
 
 premium:true
 
-}).then(()=>{
+})
 
-alert("You are now Premium!");
-
-});
+alert("Premium Activated")
 
 }
 
