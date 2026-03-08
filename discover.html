@@ -28,6 +28,7 @@ border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
 overflow:hidden;
 position:absolute;
+transition:0.3s;
 }
 
 .card img{
@@ -41,31 +42,13 @@ padding:15px;
 text-align:center;
 }
 
-button{
-padding:10px 20px;
-border:none;
-border-radius:20px;
-margin:5px;
-font-size:16px;
-cursor:pointer;
-}
-
-.like{
-background:#ff4d6d;
-color:white;
-}
-
-.skip{
-background:#ccc;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<div class="card">
+<div class="card" id="card">
 
 <img id="photo">
 
@@ -74,10 +57,6 @@ background:#ccc;
 <h2 id="name"></h2>
 
 <p id="country"></p>
-
-<button class="like" onclick="like()">❤️ Like</button>
-
-<button class="skip" onclick="next()">❌ Skip</button>
 
 </div>
 
@@ -104,7 +83,6 @@ const db = firebase.firestore();
 
 let users=[]
 let index=0
-
 
 db.collection("users").get().then(snapshot=>{
 
@@ -145,13 +123,50 @@ showUser()
 }
 
 
-function like(){
+let card=document.getElementById("card")
 
-alert("Liked ❤️")
+let startX=0
+
+card.addEventListener("touchstart",function(e){
+
+startX=e.touches[0].clientX
+
+})
+
+
+card.addEventListener("touchend",function(e){
+
+let endX=e.changedTouches[0].clientX
+
+if(endX-startX>100){
+
+card.style.transform="translateX(400px) rotate(20deg)"
+
+setTimeout(()=>{
+
+card.style.transform="none"
 
 next()
 
+},300)
+
 }
+
+if(startX-endX>100){
+
+card.style.transform="translateX(-400px) rotate(-20deg)"
+
+setTimeout(()=>{
+
+card.style.transform="none"
+
+next()
+
+},300)
+
+}
+
+})
 
 </script>
 
