@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
@@ -9,40 +9,54 @@
 <title>Nimeh Dating</title>
 
 <link rel="manifest" href="manifest.json">
-
-<meta name="theme-color" content="#ff4d6d">
+<link rel="icon" href="icon.png">
 
 <style>
 
 body{
-font-family:Arial;
 margin:0;
-background:#f2f2f2;
+font-family:Arial, sans-serif;
+background:#ff4d6d;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 text-align:center;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:30px;
-font-size:28px;
+.container{
+max-width:400px;
 }
 
-.container{
-margin-top:40px;
+h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+p{
+font-size:18px;
+margin-bottom:30px;
 }
 
 button{
-display:block;
-width:260px;
-margin:10px auto;
+width:100%;
 padding:15px;
-font-size:18px;
+margin:10px 0;
 border:none;
 border-radius:30px;
-background:#ff4d6d;
-color:white;
+font-size:16px;
 cursor:pointer;
+}
+
+.google{
+background:white;
+color:black;
+}
+
+.email{
+background:#e63950;
+color:white;
 }
 
 </style>
@@ -51,43 +65,21 @@ cursor:pointer;
 
 <body>
 
-<div class="header">
-Nimeh Dating
-</div>
-
 <div class="container">
 
-<a href="register.html">
-<button>Register</button>
-</a>
+<h1>NIMEH</h1>
 
-<a href="discover.html">
-<button>Discover</button>
-</a>
+<p>Where Muslims Meet</p>
 
-<a href="chat.html">
-<button>Chat</button>
-</a>
+<button class="google">
+Continue with Google
+</button>
 
-<a href="story.html">
-<button>Stories</button>
-</a>
-
-<a href="video.html">
-<button>Video Call</button>
-</a>
+<button class="email" onclick="location.href='login.html'">
+Continue with Email
+</button>
 
 </div>
-
-<script>
-
-if('serviceWorker' in navigator){
-
-navigator.serviceWorker.register('sw.js')
-
-}
-
-</script>
 
 </body>
 
