@@ -59,6 +59,11 @@ background:gray;
 color:white;
 }
 
+.report{
+background:black;
+color:white;
+}
+
 .match{
 color:#ff4d6d;
 font-weight:bold;
@@ -94,6 +99,7 @@ font-weight:bold;
 
 <button class="like" onclick="likeUser()">❤️ Like</button>
 <button class="skip" onclick="nextUser()">❌ Skip</button>
+<button class="report" onclick="reportUser()">🚩 Report</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -117,7 +123,6 @@ let index=0
 let currentUser=null
 let myData=null
 
-
 firebase.auth().onAuthStateChanged(user=>{
 
 currentUser=user
@@ -131,7 +136,6 @@ loadUsers()
 })
 
 })
-
 
 function distance(lat1,lon1,lat2,lon2){
 
@@ -151,7 +155,6 @@ return Math.round(R*c)
 
 }
 
-
 function matchScore(user){
 
 let score=0
@@ -168,7 +171,6 @@ return score
 
 }
 
-
 function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
@@ -178,8 +180,6 @@ snapshot.forEach(doc=>{
 let data=doc.data()
 
 if(doc.id===currentUser.uid) return
-
-// جلوگیری از پروفایل فیک
 
 if(!data.name) return
 if(!data.age) return
@@ -202,7 +202,6 @@ showUser()
 
 }
 
-
 function showUser(){
 
 if(users.length==0) return
@@ -218,13 +217,11 @@ user.lng
 
 document.getElementById("name").innerText=user.name
 
-document.getElementById("city").innerText=
-user.city+" • "+km+" km away"
+document.getElementById("city").innerText=user.city+" • "+km+" km away"
 
 document.getElementById("age").innerText="Age: "+user.age
 
 document.getElementById("photo").src=user.photo
-
 
 if(user.online){
 
@@ -236,12 +233,9 @@ document.getElementById("status").innerHTML="Offline"
 
 }
 
-
-document.getElementById("score").innerText=
-"Match Score: "+user.score
+document.getElementById("score").innerText="Match Score: "+user.score
 
 }
-
 
 function nextUser(){
 
@@ -257,7 +251,6 @@ showUser()
 
 }
 
-
 function likeUser(){
 
 let target=users[index]
@@ -269,6 +262,24 @@ to:target.id,
 time:Date.now()
 
 })
+
+nextUser()
+
+}
+
+function reportUser(){
+
+let target=users[index]
+
+db.collection("reports").add({
+
+from:currentUser.uid,
+to:target.id,
+time:Date.now()
+
+})
+
+alert("User reported")
 
 nextUser()
 
