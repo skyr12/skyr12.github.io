@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Discover</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Discover</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
 font-family:Arial;
@@ -11,22 +11,18 @@ height:100vh;
 }
 
 .card{
-
 width:320px;
 background:white;
 border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
 text-align:center;
 overflow:hidden;
-
 }
 
 .card img{
-
 width:100%;
 height:320px;
 object-fit:cover;
-
 }
 
 .info{
@@ -40,12 +36,10 @@ padding:15px;
 }
 
 button{
-
 padding:10px 20px;
 border:none;
 border-radius:20px;
 font-size:16px;
-
 }
 
 .like{
@@ -57,7 +51,9 @@ color:white;
 background:#ccc;
 }
 
-</style></head><body><div class="card"><img id="photo"><div class="info"><h2 id="name"></h2><p id="country"></p><p id="age"></p></div><div class="buttons"><button class="like" onclick="like()">❤️ Like</button>
+</style></head><body><div class="card"><img id="photo"><div class="info"><h2 id="name"></h2>
+<p id="age"></p>
+<p id="country"></p></div><div class="buttons"><button class="like" onclick="like()">❤️ Like</button>
 <button class="skip" onclick="next()">❌ Skip</button>
 
 </div></div><script>
@@ -70,26 +66,48 @@ projectId: "nimeh-gomsodeh"
 
 };
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-const db = firebase.firestore();
+const db = firebase.firestore()
 
 let users=[]
 let index=0
+
+firebase.auth().onAuthStateChanged(function(user){
+
+if(!user){
+
+window.location="login.html"
+return
+
+}
+
+loadUsers()
+
+})
+
+function loadUsers(){
 
 db.collection("users").get()
 
 .then(snapshot=>{
 
+users=[]
+
 snapshot.forEach(doc=>{
 
-users.push(doc.data())
+users.push({
+id:doc.id,
+...doc.data()
+})
 
 })
 
 showUser()
 
 })
+
+}
 
 function showUser(){
 
@@ -111,7 +129,6 @@ index++
 if(index>=users.length){
 
 alert("No more users")
-
 return
 
 }
@@ -122,7 +139,22 @@ showUser()
 
 function like(){
 
-alert("Liked ❤️")
+let currentUser=firebase.auth().currentUser
+let likedUser=users[index]
+
+db.collection("likes").add({
+
+from:currentUser.uid,
+to:likedUser.id,
+time:Date.now()
+
+})
+
+.then(()=>{
+
+console.log("Like saved")
+
+})
 
 next()
 
