@@ -103,6 +103,8 @@ const db=firebase.firestore();
 let users=[];
 let index=0;
 let currentUser=null;
+let myLat=0;
+let myLng=0;
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -113,6 +115,8 @@ currentUser=user;
 db.collection("users").doc(user.uid).update({
 online:true
 });
+
+getLocation();
 
 loadUsers();
 
@@ -132,6 +136,25 @@ online:false
 }
 
 });
+
+
+function getLocation(){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+myLat=position.coords.latitude;
+myLng=position.coords.longitude;
+
+db.collection("users").doc(currentUser.uid).update({
+
+lat:myLat,
+lng:myLng
+
+});
+
+});
+
+}
 
 
 function loadUsers(){
@@ -167,9 +190,24 @@ let status=user.online ? "🟢 Online" : "⚫ Offline";
 
 let verified=user.verified ? " ✔ Verified" : "";
 
+let distance="";
+
+if(user.lat && user.lng){
+
+let d=Math.floor(
+Math.sqrt(
+Math.pow(user.lat-myLat,2)+
+Math.pow(user.lng-myLng,2)
+)*111
+);
+
+distance=" • "+d+" km away";
+
+}
+
 document.getElementById("name").innerText=user.name + verified + " " + status;
 
-document.getElementById("city").innerText=user.city+" , "+user.country;
+document.getElementById("city").innerText=user.city+" , "+user.country + distance;
 
 document.getElementById("age").innerText="Age: "+user.age;
 
