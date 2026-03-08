@@ -16,15 +16,27 @@ text-align:center;
 }
 
 .story{
+
 display:inline-block;
 margin:10px;
+
 }
 
 .story img{
+
 width:80px;
 height:80px;
 border-radius:50%;
 border:3px solid #ff4d6d;
+
+}
+
+.viewer img{
+
+width:320px;
+border-radius:20px;
+margin-top:20px;
+
 }
 
 </style>
@@ -35,38 +47,42 @@ border:3px solid #ff4d6d;
 
 <h2>Stories</h2>
 
-<input type="text" id="storyUrl" placeholder="Story image URL">
+<input id="url" placeholder="Story Image URL">
 
 <button onclick="addStory()">Add Story</button>
 
+<br><br>
+
 <div id="stories"></div>
+
+<div class="viewer">
+
+<img id="viewer">
+
+</div>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
 
-const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-};
+const firebaseConfig={
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore();
-
+const db=firebase.firestore()
 
 function addStory(){
 
-const url=document.getElementById("storyUrl").value;
+let url=document.getElementById("url").value
 
-const user=firebase.auth().currentUser;
+let user=firebase.auth().currentUser
 
 db.collection("stories").add({
 
@@ -74,13 +90,11 @@ user:user.uid,
 photo:url,
 time:Date.now()
 
-}).then(()=>{
+})
 
-alert("Story added!");
+alert("Story added")
 
-loadStories();
-
-});
+loadStories()
 
 }
 
@@ -91,28 +105,31 @@ db.collection("stories").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-const data=doc.data();
+let data=doc.data()
 
-const div=document.createElement("div");
+let div=document.createElement("div")
 
-div.className="story";
+div.className="story"
 
 div.innerHTML=`
-
 <img src="${data.photo}">
+`
 
-`;
+div.onclick=function(){
 
-document.getElementById("stories").appendChild(div);
-
-});
-
-});
+document.getElementById("viewer").src=data.photo
 
 }
 
+document.getElementById("stories").appendChild(div)
 
-loadStories();
+})
+
+})
+
+}
+
+loadStories()
 
 </script>
 
