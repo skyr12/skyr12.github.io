@@ -44,6 +44,11 @@ background:#ff4d6d;
 color:white;
 }
 
+.super{
+background:gold;
+color:black;
+}
+
 .skip{
 background:gray;
 color:white;
@@ -73,6 +78,8 @@ color:white;
 <p id="age"></p>
 
 <button class="like" onclick="likeUser()">❤️ Like</button>
+
+<button class="super" onclick="superLike()">⭐ Super Like</button>
 
 <button class="skip" onclick="nextUser()">❌ Skip</button>
 
@@ -252,6 +259,25 @@ checkMatch(target.id);
 nextUser();
 
 });
+
+}
+
+
+function superLike(){
+
+let target=users[index];
+
+db.collection("superLikes").add({
+
+from:currentUser.uid,
+to:target.id,
+time:Date.now()
+
+});
+
+alert("⭐ Super Like Sent!");
+
+nextUser();
 
 }
 
