@@ -1,1 +1,104 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Video Profile</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+}
+
+video{
+width:320px;
+border-radius:20px;
+margin-top:20px;
+}
+
+input{
+margin-top:20px;
+padding:10px;
+width:250px;
+}
+
+button{
+padding:10px 20px;
+background:#ff4d6d;
+color:white;
+border:none;
+border-radius:20px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Upload Video Profile</h2>
+
+<input type="text" id="videoUrl" placeholder="Video URL">
+
+<br><br>
+
+<button onclick="saveVideo()">
+Save Video
+</button>
+
+<br><br>
+
+<video id="video" controls></video>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+
+function saveVideo(){
+
+const url=document.getElementById("videoUrl").value;
+
+const user=firebase.auth().currentUser;
+
+db.collection("users").doc(user.uid).update({
+
+video:url
+
+}).then(()=>{
+
+document.getElementById("video").src=url;
+
+alert("Video saved!");
+
+});
+
+}
+
+</script>
+
+</body>
+
+</html>
