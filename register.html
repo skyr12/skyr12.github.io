@@ -1,77 +1,80 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<title>Register</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script><style>
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Create Account</title>
+<style>
 body{
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
 .box{
-width:320px;
-margin:80px auto;
 background:white;
 padding:30px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+border-radius:12px;
+width:300px;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 input{
-width:90%;
+width:100%;
 padding:10px;
-margin:8px;
-border-radius:10px;
+margin:8px 0;
+border-radius:6px;
 border:1px solid #ccc;
 }
 
 button{
-padding:10px 20px;
 background:red;
 color:white;
 border:none;
-border-radius:10px;
+padding:10px;
+width:100%;
+border-radius:6px;
 cursor:pointer;
 }
+</style>
+</head>
 
-</style></head><body><div class="box"><h2>Create Account</h2><input id="name" placeholder="Name">
+<body>
+
+<div class="box">
+
+<h2>Create Account</h2>
+
+<input id="name" placeholder="Name">
 <input id="age" placeholder="Age">
 <input id="city" placeholder="City">
-<input id="country" placeholder="Country"><input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password"><button onclick="register()">Register</button>
+<input id="country" placeholder="Country">
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
 
-</div><script>
+<button onclick="register()">Register</button>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAA0xYFgIY",
-  authDomain: "nimeh-gomsode.firebaseapp.com",
-  projectId: "nimeh-gomsode",
-  storageBucket: "nimeh-gomsode.appspot.com",
-  messagingSenderId: "815930956932",
-  appId: "1:815930956932:web:xxxxx"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-window.registerUser = function(email, password){
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("Account created successfully");
-      window.location.href = "discover.html";
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-}
-</script>
+apiKey: "AIzaSyAA0xYFgIY",
+authDomain: "nimeh-gomsode.firebaseapp.com",
+projectId: "nimeh-gomsode",
+storageBucket: "nimeh-gomsode.appspot.com",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:xxxxx"
 };
 
 firebase.initializeApp(firebaseConfig);
-
 const db = firebase.firestore();
 
 function register(){
@@ -80,38 +83,35 @@ let name=document.getElementById("name").value;
 let age=document.getElementById("age").value;
 let city=document.getElementById("city").value;
 let country=document.getElementById("country").value;
-
 let email=document.getElementById("email").value;
 let password=document.getElementById("password").value;
 
 firebase.auth().createUserWithEmailAndPassword(email,password)
-
 .then((userCredential)=>{
 
 let user=userCredential.user;
 
 db.collection("users").doc(user.uid).set({
-
 name:name,
 age:age,
 city:city,
 country:country,
 photo:"https://randomuser.me/api/portraits/men/50.jpg"
-
 });
+
+alert("Account created");
 
 window.location.href="discover.html";
 
 })
 
 .catch((error)=>{
-
 alert(error.message);
-
 });
 
 }
 
-</script></body>
+</script>
 
+</body>
 </html>
