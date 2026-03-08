@@ -25,8 +25,10 @@ object-fit:cover;
 margin-bottom:20px;
 }
 
-input{
-margin:10px 0;
+input,select{
+margin:10px;
+padding:10px;
+width:200px;
 }
 
 button{
@@ -54,8 +56,32 @@ cursor:pointer;
 
 <br>
 
-<button onclick="upload()">Upload Photo</button>
+<input id="name" placeholder="Your name">
 
+<br>
+
+<input id="age" placeholder="Age">
+
+<br>
+
+<select id="country">
+
+<option>UK</option>
+<option>Germany</option>
+<option>France</option>
+<option>Turkey</option>
+<option>UAE</option>
+<option>USA</option>
+<option>Canada</option>
+<option>Australia</option>
+<option>Indonesia</option>
+<option>Pakistan</option>
+
+</select>
+
+<br>
+
+<button onclick="save()">Save Profile</button>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
@@ -80,9 +106,15 @@ const db = firebase.firestore();
 let currentUser = "user1";
 
 
-function upload(){
+function save(){
+
+let name = document.getElementById("name").value;
+let age = document.getElementById("age").value;
+let country = document.getElementById("country").value;
 
 let file = document.getElementById("file").files[0];
+
+if(file){
 
 let ref = storage.ref("profiles/"+currentUser+".jpg");
 
@@ -90,17 +122,34 @@ ref.put(file).then(()=>{
 
 ref.getDownloadURL().then(url=>{
 
-document.getElementById("photo").src=url;
-
 db.collection("users").doc(currentUser).set({
 
+name:name,
+age:age,
+country:country,
 photo:url
 
 });
 
+document.getElementById("photo").src=url;
+
 });
 
 });
+
+}else{
+
+db.collection("users").doc(currentUser).set({
+
+name:name,
+age:age,
+country:country
+
+});
+
+}
+
+alert("Profile saved")
 
 }
 
