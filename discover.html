@@ -16,10 +16,14 @@ text-align:center;
 margin:0;
 }
 
+.filter{
+margin-top:20px;
+}
+
 .card{
 width:320px;
 margin:auto;
-margin-top:80px;
+margin-top:40px;
 background:white;
 border-radius:20px;
 overflow:hidden;
@@ -36,13 +40,8 @@ object-fit:cover;
 padding:20px;
 }
 
-.online{
-color:green;
-font-weight:bold;
-}
-
 button{
-padding:12px 20px;
+padding:10px 20px;
 margin:10px;
 border:none;
 border-radius:20px;
@@ -67,6 +66,22 @@ color:white;
 
 <h2>Discover</h2>
 
+<div class="filter">
+
+Age Min
+<input id="minAge" type="number" value="18">
+
+Age Max
+<input id="maxAge" type="number" value="40">
+
+Distance km
+<input id="maxDistance" type="number" value="100">
+
+<button onclick="applyFilter()">Apply Filter</button>
+
+</div>
+
+
 <div class="card">
 
 <img id="photo">
@@ -78,8 +93,6 @@ color:white;
 <p id="city"></p>
 
 <p id="age"></p>
-
-<p id="status"></p>
 
 </div>
 
@@ -106,6 +119,7 @@ firebase.initializeApp(firebaseConfig)
 const db=firebase.firestore()
 
 let users=[]
+let filteredUsers=[]
 let index=0
 let currentUser=null
 let myData=null
@@ -160,6 +174,8 @@ users.push(data)
 
 })
 
+filteredUsers=[...users]
+
 showUser()
 
 })
@@ -167,11 +183,41 @@ showUser()
 }
 
 
+function applyFilter(){
+
+let minAge=document.getElementById("minAge").value
+let maxAge=document.getElementById("maxAge").value
+let maxDistance=document.getElementById("maxDistance").value
+
+filteredUsers=users.filter(user=>{
+
+let km=distance(
+myData.lat,
+myData.lng,
+user.lat,
+user.lng
+)
+
+return(
+user.age>=minAge &&
+user.age<=maxAge &&
+km<=maxDistance
+)
+
+})
+
+index=0
+
+showUser()
+
+}
+
+
 function showUser(){
 
-if(users.length==0) return
+if(filteredUsers.length==0) return
 
-let user=users[index]
+let user=filteredUsers[index]
 
 document.getElementById("name").innerText=user.name
 
@@ -189,16 +235,6 @@ document.getElementById("age").innerText="Age: "+user.age
 
 document.getElementById("photo").src=user.photo
 
-if(user.online){
-
-document.getElementById("status").innerHTML="🟢 Online"
-
-}else{
-
-document.getElementById("status").innerHTML="Offline"
-
-}
-
 }
 
 
@@ -206,7 +242,7 @@ function nextUser(){
 
 index++
 
-if(index>=users.length){
+if(index>=filteredUsers.length){
 
 index=0
 
@@ -219,7 +255,7 @@ showUser()
 
 function likeUser(){
 
-let target=users[index]
+let target=filteredUsers[index]
 
 db.collection("likes").add({
 
