@@ -169,7 +169,11 @@ if(data.blocked) return;
 
 data.id=doc.id;
 
+if(data.boost){
+users.unshift(data);
+}else{
 users.push(data);
+}
 
 });
 
