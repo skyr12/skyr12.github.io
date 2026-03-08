@@ -1,44 +1,34 @@
-function likeUser(){
+function loadUsers(){
 
-let target=users[index]
+db.collection("users").get().then(snapshot=>{
 
-let today=new Date().toDateString()
+snapshot.forEach(doc=>{
 
-let likeKey=currentUser.uid+"_"+today
+let data=doc.data()
 
-db.collection("dailyLikes").doc(likeKey).get().then(doc=>{
+if(data.blocked) return
 
-let count=0
+if(data.id===currentUser.uid) return
 
-if(doc.exists){
-count=doc.data().count
+// Match algorithm
+
+let ageDiff=Math.abs(data.age-25)
+
+if(ageDiff>10) return
+
+if(data.country!=="UK") return
+
+data.id=doc.id
+
+if(data.boost){
+users.unshift(data)
+}else{
+users.push(data)
 }
-
-if(count>=20){
-
-alert("Daily like limit reached")
-
-return
-
-}
-
-db.collection("likes").add({
-
-from:currentUser.uid,
-to:target.id,
-time:Date.now()
 
 })
 
-db.collection("dailyLikes").doc(likeKey).set({
-
-count:count+1
-
-})
-
-checkMatch(target.id)
-
-nextUser()
+showUser()
 
 })
 
