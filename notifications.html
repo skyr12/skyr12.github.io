@@ -16,13 +16,15 @@ text-align:center;
 }
 
 .card{
+
 background:white;
 width:320px;
 margin:auto;
 margin-top:20px;
 padding:20px;
 border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+
 }
 
 </style>
@@ -35,63 +37,58 @@ box-shadow:0 10px 20px rgba(0,0,0,0.1);
 
 <div id="notifications"></div>
 
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
 
-const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-};
+const firebaseConfig={
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore();
+const db=firebase.firestore()
 
+let currentUser=null
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(user){
+currentUser=user
 
-loadNotifications(user.uid);
+loadNotifications()
 
-}
-
-});
+})
 
 
-function loadNotifications(uid){
+function loadNotifications(){
 
 db.collection("notifications")
-.where("to","==",uid)
+.where("to","==",currentUser.uid)
 .get()
 .then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-const data=doc.data();
+let data=doc.data()
 
-const div=document.createElement("div");
+let div=document.createElement("div")
 
-div.className="card";
+div.className="card"
 
 div.innerHTML=`
+<p>${data.text}</p>
+`
 
-<h3>${data.message}</h3>
+document.getElementById("notifications").appendChild(div)
 
-`;
+})
 
-document.getElementById("notifications").appendChild(div);
-
-});
-
-});
+})
 
 }
 
