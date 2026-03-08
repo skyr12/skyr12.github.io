@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Discover</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Discover</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
-margin:0;
 font-family:Arial;
 background:#f5f5f5;
 display:flex;
@@ -21,52 +11,56 @@ height:100vh;
 }
 
 .card{
+
 width:320px;
-height:420px;
 background:white;
 border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
+text-align:center;
 overflow:hidden;
-position:absolute;
-transition:0.3s;
+
 }
 
 .card img{
+
 width:100%;
-height:70%;
+height:320px;
 object-fit:cover;
+
 }
 
 .info{
 padding:15px;
-text-align:center;
 }
 
-</style>
+.buttons{
+display:flex;
+justify-content:space-around;
+padding:15px;
+}
 
-</head>
+button{
 
-<body>
+padding:10px 20px;
+border:none;
+border-radius:20px;
+font-size:16px;
 
-<div class="card" id="card">
+}
 
-<img id="photo">
+.like{
+background:#ff4d6d;
+color:white;
+}
 
-<div class="info">
+.skip{
+background:#ccc;
+}
 
-<h2 id="name"></h2>
+</style></head><body><div class="card"><img id="photo"><div class="info"><h2 id="name"></h2><p id="country"></p><p id="age"></p></div><div class="buttons"><button class="like" onclick="like()">❤️ Like</button>
+<button class="skip" onclick="next()">❌ Skip</button>
 
-<p id="country"></p>
-
-</div>
-
-</div>
-
-
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-<script>
+</div></div><script>
 
 const firebaseConfig = {
 
@@ -80,11 +74,12 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-
 let users=[]
 let index=0
 
-db.collection("users").get().then(snapshot=>{
+db.collection("users").get()
+
+.then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
@@ -96,17 +91,18 @@ showUser()
 
 })
 
-
 function showUser(){
+
+if(users.length===0) return
 
 let user=users[index]
 
 document.getElementById("photo").src=user.photo
 document.getElementById("name").innerText=user.name
-document.getElementById("country").innerText=user.country+" • "+user.age
+document.getElementById("age").innerText="Age: "+user.age
+document.getElementById("country").innerText=user.country
 
 }
-
 
 function next(){
 
@@ -114,7 +110,9 @@ index++
 
 if(index>=users.length){
 
-index=0
+alert("No more users")
+
+return
 
 }
 
@@ -122,54 +120,12 @@ showUser()
 
 }
 
+function like(){
 
-let card=document.getElementById("card")
-
-let startX=0
-
-card.addEventListener("touchstart",function(e){
-
-startX=e.touches[0].clientX
-
-})
-
-
-card.addEventListener("touchend",function(e){
-
-let endX=e.changedTouches[0].clientX
-
-if(endX-startX>100){
-
-card.style.transform="translateX(400px) rotate(20deg)"
-
-setTimeout(()=>{
-
-card.style.transform="none"
+alert("Liked ❤️")
 
 next()
 
-},300)
-
 }
 
-if(startX-endX>100){
-
-card.style.transform="translateX(-400px) rotate(-20deg)"
-
-setTimeout(()=>{
-
-card.style.transform="none"
-
-next()
-
-},300)
-
-}
-
-})
-
-</script>
-
-</body>
-
-</html>
+</script></body></html>
