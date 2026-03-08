@@ -23,27 +23,17 @@ padding:20px;
 font-size:24px;
 }
 
-.container{
-margin-top:40px;
-}
-
 .card{
 background:white;
 width:300px;
 margin:auto;
-margin-top:20px;
+margin-top:30px;
 padding:20px;
 border-radius:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
-a{
-text-decoration:none;
-color:black;
-}
-
 .navbar{
-
 position:fixed;
 bottom:0;
 width:100%;
@@ -52,14 +42,12 @@ display:flex;
 justify-content:space-around;
 padding:15px 0;
 box-shadow:0 -5px 10px rgba(0,0,0,0.1);
-
 }
 
 .navbar a{
-
 color:#ff4d6d;
 font-size:18px;
-
+text-decoration:none;
 }
 
 </style>
@@ -72,14 +60,9 @@ font-size:18px;
 Nimeh Dating
 </div>
 
-
-<div class="container">
-
 <div class="card">
-<h3>Find your perfect match</h3>
-<p>Start discovering people around the world</p>
-</div>
-
+<h3>Welcome to Nimeh</h3>
+<p>Find people around the world</p>
 </div>
 
 
@@ -95,6 +78,54 @@ Nimeh Dating
 
 </div>
 
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+<script>
+
+const firebaseConfig={
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
+
+firebase.initializeApp(firebaseConfig)
+
+const db=firebase.firestore()
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(user){
+
+db.collection("users").doc(user.uid).update({
+
+online:true
+
+})
+
+}
+
+})
+
+window.onbeforeunload=function(){
+
+let user=firebase.auth().currentUser
+
+if(user){
+
+db.collection("users").doc(user.uid).update({
+
+online:false
+
+})
+
+}
+
+}
+
+</script>
 
 </body>
 
