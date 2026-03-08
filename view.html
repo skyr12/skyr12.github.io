@@ -1,79 +1,34 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html>
 
 <head>
 
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>پروفایل کاربر</title>
+<title>Profile Views</title>
 
 <style>
 
 body{
-margin:0;
-font-family:Segoe UI;
-background:#020617;
-color:white;
+font-family:Arial;
+background:#f3f3f3;
 text-align:center;
-padding-bottom:100px;
 }
 
 .card{
-background:#111;
-width:320px;
-margin:40px auto;
-padding:30px;
+background:white;
+width:300px;
+margin:auto;
+margin-top:20px;
+padding:20px;
 border-radius:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
-.avatar{
-width:140px;
-height:140px;
+img{
+width:80px;
+height:80px;
 border-radius:50%;
-object-fit:cover;
-}
-
-.name{
-font-size:24px;
-margin-top:10px;
-}
-
-.city{
-opacity:0.7;
-margin-top:5px;
-}
-
-.bio{
-margin-top:15px;
-}
-
-.btn{
-background:#ff4d6d;
-border:none;
-padding:12px 25px;
-border-radius:30px;
-color:white;
-font-size:16px;
-margin-top:15px;
-cursor:pointer;
-}
-
-.bottomMenu{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#111;
-display:flex;
-justify-content:space-around;
-padding:15px;
-font-size:24px;
-}
-
-.bottomMenu a{
-color:white;
-text-decoration:none;
 }
 
 </style>
@@ -82,48 +37,80 @@ text-decoration:none;
 
 <body>
 
-<div class="card">
+<h2>Who viewed your profile</h2>
 
-<img id="photo" class="avatar">
+<div id="views"></div>
 
-<h2 id="name" class="name"></h2>
 
-<p id="city" class="city"></p>
-
-<p id="bio" class="bio"></p>
-
-<button class="btn" onclick="like()">❤️ لایک</button>
-
-</div>
-
-<div class="bottomMenu">
-
-<a href="users.html">🔎</a>
-
-<a href="swipe.html">❤️</a>
-
-<a href="matches.html">💬</a>
-
-</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
 
-let user = JSON.parse(localStorage.getItem("viewUser"))
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
 
-document.getElementById("name").innerText = user.name
-document.getElementById("city").innerText = user.city
-document.getElementById("bio").innerText = user.bio
-document.getElementById("photo").src = user.photo
+firebase.initializeApp(firebaseConfig);
 
-function like(){
+const db=firebase.firestore();
 
-let matches = JSON.parse(localStorage.getItem("matches")) || []
 
-matches.push(user)
+firebase.auth().onAuthStateChanged(user=>{
 
-localStorage.setItem("matches",JSON.stringify(matches))
+if(user){
 
-window.location.href="matches.html"
+loadViews(user.uid);
+
+}
+
+});
+
+
+function loadViews(uid){
+
+db.collection("profileViews")
+.where("to","==",uid)
+.get()
+.then(snapshot=>{
+
+snapshot.forEach(doc=>{
+
+const data=doc.data();
+
+db.collection("users").doc(data.from).get()
+
+.then(userDoc=>{
+
+const u=userDoc.data();
+
+const div=document.createElement("div");
+
+div.className="card";
+
+div.innerHTML=`
+
+<img src="${u.photo}">
+
+<h3>${u.name}</h3>
+
+<p>${u.city}, ${u.country}</p>
+
+`;
+
+document.getElementById("views").appendChild(div);
+
+});
+
+});
+
+});
 
 }
 
