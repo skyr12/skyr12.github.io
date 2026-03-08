@@ -16,27 +16,37 @@ text-align:center;
 margin:0;
 }
 
-.filter{
-
-margin-top:20px;
-
-}
-
 .card{
-
 background:white;
 width:320px;
 margin:auto;
-margin-top:40px;
+margin-top:60px;
 padding:20px;
 border-radius:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
-
 }
 
 img{
 width:100%;
 border-radius:20px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:20px;
+margin:10px;
+cursor:pointer;
+}
+
+.like{
+background:#ff4d6d;
+color:white;
+}
+
+.skip{
+background:gray;
+color:white;
 }
 
 </style>
@@ -47,19 +57,7 @@ border-radius:20px;
 
 <h2>Discover</h2>
 
-
-<div class="filter">
-
-<input id="country" placeholder="Country">
-
-<input id="age" placeholder="Max Age">
-
-<button onclick="applyFilter()">Search</button>
-
-</div>
-
-
-<div id="card" class="card">
+<div class="card">
 
 <img id="photo">
 
@@ -67,49 +65,61 @@ border-radius:20px;
 
 <p id="city"></p>
 
-<p id="ageText"></p>
+<p id="age"></p>
+
+<button class="like" onclick="likeUser()">❤️ Like</button>
+
+<button class="skip" onclick="nextUser()">❌ Skip</button>
 
 </div>
-
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-
 <script>
 
 const firebaseConfig = {
-
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
-
 projectId: "nimeh-gomsodeh",
-
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-
 messagingSenderId: "815930956932",
-
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
-
+const db=firebase.firestore();
 
 let users=[];
-let filteredUsers=[];
 let index=0;
-
+let currentUser=null;
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(user){
 
+currentUser=user;
+
+db.collection("users").doc(user.uid).update({
+online:true
+});
+
 loadUsers();
+
+}
+
+});
+
+
+window.addEventListener("beforeunload",()=>{
+
+if(currentUser){
+
+db.collection("users").doc(currentUser.uid).update({
+online:false
+});
 
 }
 
@@ -122,11 +132,13 @@ db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-users.push(doc.data());
+let data=doc.data();
+
+data.id=doc.id;
+
+users.push(data);
 
 });
-
-filteredUsers=users;
 
 showUser();
 
@@ -137,42 +149,74 @@ showUser();
 
 function showUser(){
 
-if(filteredUsers.length==0)return;
+if(users.length==0)return;
 
-const user=filteredUsers[index];
+let user=users[index];
 
-document.getElementById("name").innerText=user.name;
+let status=user.online ? "🟢 Online" : "⚫ Offline";
+
+document.getElementById("name").innerText=user.name+" "+status;
 
 document.getElementById("city").innerText=user.city+" , "+user.country;
 
-document.getElementById("ageText").innerText="Age: "+user.age;
+document.getElementById("age").innerText="Age: "+user.age;
 
 document.getElementById("photo").src=user.photo;
 
 }
 
 
-function applyFilter(){
+function nextUser(){
 
-const country=document.getElementById("country").value.toLowerCase();
+index++;
 
-const age=document.getElementById("age").value;
-
-filteredUsers=users.filter(u=>{
-
-let ok=true;
-
-if(country && !u.country.toLowerCase().includes(country)) ok=false;
-
-if(age && u.age>age) ok=false;
-
-return ok;
-
-});
+if(index>=users.length){
 
 index=0;
 
+}
+
 showUser();
+
+}
+
+
+function likeUser(){
+
+let target=users[index];
+
+db.collection("likes").add({
+
+from:currentUser.uid,
+to:target.id,
+time:Date.now()
+
+}).then(()=>{
+
+checkMatch(target.id);
+
+nextUser();
+
+});
+
+}
+
+
+function checkMatch(userId){
+
+db.collection("likes")
+.where("from","==",userId)
+.where("to","==",currentUser.uid)
+.get()
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+alert("❤️ It's a Match!");
+
+}
+
+});
 
 }
 
