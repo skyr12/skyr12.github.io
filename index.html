@@ -8,8 +8,6 @@
 
 <title>Nimeh Dating</title>
 
-<link rel="manifest" href="manifest.json">
-
 <style>
 
 body{
@@ -22,29 +20,52 @@ text-align:center;
 .header{
 background:#ff4d6d;
 color:white;
-padding:30px;
+padding:25px;
 font-size:28px;
 }
 
-.container{
-margin-top:40px;
+.hero{
+margin-top:60px;
+}
+
+.hero h2{
+font-size:28px;
+}
+
+.hero p{
+color:gray;
 }
 
 button{
-display:block;
-width:260px;
-margin:10px auto;
-padding:15px;
+padding:15px 25px;
 font-size:18px;
 border:none;
 border-radius:30px;
 background:#ff4d6d;
 color:white;
 cursor:pointer;
+margin-top:20px;
 }
 
-button:hover{
-background:#ff2e55;
+.navbar{
+
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+box-shadow:0 -5px 20px rgba(0,0,0,0.1);
+
+}
+
+.navbar a{
+
+text-decoration:none;
+color:#444;
+font-size:14px;
+
 }
 
 </style>
@@ -57,48 +78,33 @@ background:#ff2e55;
 Nimeh Dating
 </div>
 
-<div class="container">
 
-<a href="register.html">
-<button>Register</button>
-</a>
+<div class="hero">
 
-<a href="login.html">
-<button>Login</button>
-</a>
+<h2>Find Your Perfect Match</h2>
+
+<p>Meet people around the world</p>
 
 <a href="discover.html">
-<button>Discover</button>
-</a>
-
-<a href="likes.html">
-<button>Who Liked You</button>
-</a>
-
-<a href="map.html">
-<button>Users Map</button>
-</a>
-
-<a href="chat.html">
-<button>Chat</button>
-</a>
-
-<a href="premium.html">
-<button>Premium</button>
+<button>Start Discovering</button>
 </a>
 
 </div>
 
 
-<script>
+<div class="navbar">
 
-if('serviceWorker' in navigator){
+<a href="discover.html">Discover</a>
 
-navigator.serviceWorker.register('sw.js')
+<a href="likes.html">Likes</a>
 
-}
+<a href="map.html">Map</a>
 
-</script>
+<a href="chat.html">Chat</a>
+
+<a href="profile.html">Profile</a>
+
+</div>
 
 </body>
 
