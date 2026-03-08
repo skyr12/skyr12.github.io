@@ -1,58 +1,100 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<title>Premium</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Premium</title>
+
+<style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f3f3f3;
 text-align:center;
 }
 
-.box{
-width:320px;
-margin:80px auto;
+.card{
+
 background:white;
-border-radius:20px;
+width:320px;
+margin:auto;
+margin-top:60px;
 padding:30px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+border-radius:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+
 }
 
 button{
+
 padding:12px 25px;
-background:gold;
+background:#ff4d6d;
+color:white;
 border:none;
 border-radius:20px;
-font-size:18px;
+font-size:16px;
 cursor:pointer;
+
 }
 
-</style></head><body><div class="box"><h2>Premium Membership</h2><p>Unlimited Likes</p>
-<p>See who liked you</p>
-<p>Boost your profile</p><button onclick="buyPremium()">Upgrade</button>
+</style>
 
-</div><script>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Premium Membership</h2>
+
+<p>Unlimited Likes</p>
+<p>See who liked you</p>
+<p>Advanced Filters</p>
+
+<button onclick="buyPremium()">
+Upgrade to Premium
+</button>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_ONI-PstgS4nP3uNIpyA",
+
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
+
 projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.appspot.com",
+
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+
 messagingSenderId: "815930956932",
+
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const db=firebase.firestore();
+const db = firebase.firestore();
+
 
 function buyPremium(){
 
-firebase.auth().onAuthStateChanged((user)=>{
+const user=firebase.auth().currentUser;
 
 db.collection("users").doc(user.uid).update({
 
 premium:true
 
-});
+}).then(()=>{
 
 alert("You are now Premium!");
 
@@ -60,5 +102,8 @@ alert("You are now Premium!");
 
 }
 
-</script></body>
+</script>
+
+</body>
+
 </html>
