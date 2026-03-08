@@ -8,6 +8,10 @@
 
 <title>Nimeh Dating</title>
 
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#ff4d6d">
+
 <style>
 
 body{
@@ -53,56 +57,35 @@ Nimeh Dating
 
 <div class="container">
 
-<a href="discover.html">
-<button>Discover</button>
+<a href="register.html">
+<button>Register</button>
 </a>
 
-<a href="likes.html">
-<button>Who Liked You</button>
+<a href="discover.html">
+<button>Discover</button>
 </a>
 
 <a href="chat.html">
 <button>Chat</button>
 </a>
 
-<a href="map.html">
-<button>Users Map</button>
+<a href="story.html">
+<button>Stories</button>
 </a>
 
-<a href="premium.html">
-<button>Premium</button>
+<a href="video.html">
+<button>Video Call</button>
 </a>
 
 </div>
 
-
 <script>
 
-function sendNotification(){
+if('serviceWorker' in navigator){
 
-if(Notification.permission==="granted"){
-
-new Notification("Nimeh Dating",{
-
-body:"You have a new match ❤️"
-
-})
+navigator.serviceWorker.register('sw.js')
 
 }
-
-}
-
-function requestNotification(){
-
-if(Notification.permission!=="granted"){
-
-Notification.requestPermission()
-
-}
-
-}
-
-requestNotification()
 
 </script>
 
