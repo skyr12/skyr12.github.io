@@ -20,52 +20,25 @@ text-align:center;
 .header{
 background:#ff4d6d;
 color:white;
-padding:25px;
+padding:30px;
 font-size:28px;
 }
 
-.hero{
-margin-top:60px;
-}
-
-.hero h2{
-font-size:28px;
-}
-
-.hero p{
-color:gray;
+.container{
+margin-top:40px;
 }
 
 button{
-padding:15px 25px;
+display:block;
+width:260px;
+margin:10px auto;
+padding:15px;
 font-size:18px;
 border:none;
 border-radius:30px;
 background:#ff4d6d;
 color:white;
 cursor:pointer;
-margin-top:20px;
-}
-
-.navbar{
-
-position:fixed;
-bottom:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:15px 0;
-box-shadow:0 -5px 20px rgba(0,0,0,0.1);
-
-}
-
-.navbar a{
-
-text-decoration:none;
-color:#444;
-font-size:14px;
-
 }
 
 </style>
@@ -78,33 +51,60 @@ font-size:14px;
 Nimeh Dating
 </div>
 
-
-<div class="hero">
-
-<h2>Find Your Perfect Match</h2>
-
-<p>Meet people around the world</p>
+<div class="container">
 
 <a href="discover.html">
-<button>Start Discovering</button>
+<button>Discover</button>
+</a>
+
+<a href="likes.html">
+<button>Who Liked You</button>
+</a>
+
+<a href="chat.html">
+<button>Chat</button>
+</a>
+
+<a href="map.html">
+<button>Users Map</button>
+</a>
+
+<a href="premium.html">
+<button>Premium</button>
 </a>
 
 </div>
 
 
-<div class="navbar">
+<script>
 
-<a href="discover.html">Discover</a>
+function sendNotification(){
 
-<a href="likes.html">Likes</a>
+if(Notification.permission==="granted"){
 
-<a href="map.html">Map</a>
+new Notification("Nimeh Dating",{
 
-<a href="chat.html">Chat</a>
+body:"You have a new match ❤️"
 
-<a href="profile.html">Profile</a>
+})
 
-</div>
+}
+
+}
+
+function requestNotification(){
+
+if(Notification.permission!=="granted"){
+
+Notification.requestPermission()
+
+}
+
+}
+
+requestNotification()
+
+</script>
 
 </body>
 
