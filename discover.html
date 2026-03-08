@@ -16,21 +16,16 @@ text-align:center;
 margin:0;
 }
 
-.container{
+.card{
+
 width:320px;
 margin:auto;
 margin-top:80px;
-position:relative;
-}
-
-.card{
-width:100%;
 background:white;
 border-radius:20px;
 overflow:hidden;
 box-shadow:0 10px 25px rgba(0,0,0,0.2);
-position:absolute;
-touch-action:none;
+
 }
 
 .card img{
@@ -43,6 +38,11 @@ object-fit:cover;
 padding:20px;
 }
 
+.online{
+color:green;
+font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -51,9 +51,7 @@ padding:20px;
 
 <h2>Discover</h2>
 
-<div class="container">
-
-<div class="card" id="card">
+<div class="card">
 
 <img id="photo">
 
@@ -65,11 +63,15 @@ padding:20px;
 
 <p id="age"></p>
 
-</div>
+<p id="status"></p>
 
 </div>
 
 </div>
+
+<button onclick="likeUser()">❤️ Like</button>
+
+<button onclick="nextUser()">❌ Skip</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -78,7 +80,7 @@ padding:20px;
 
 <script>
 
-const firebaseConfig = {
+const firebaseConfig={
 apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain:"nimeh-gomsodeh.firebaseapp.com",
 projectId:"nimeh-gomsodeh"
@@ -105,6 +107,9 @@ function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
 
+let online=[]
+let offline=[]
+
 snapshot.forEach(doc=>{
 
 let data=doc.data()
@@ -113,9 +118,19 @@ if(doc.id===currentUser.uid) return
 
 data.id=doc.id
 
-users.push(data)
+if(data.online){
+
+online.push(data)
+
+}else{
+
+offline.push(data)
+
+}
 
 })
+
+users=[...online,...offline]
 
 showUser()
 
@@ -137,6 +152,16 @@ document.getElementById("city").innerText=user.city+" , "+user.country
 document.getElementById("age").innerText="Age: "+user.age
 
 document.getElementById("photo").src=user.photo
+
+if(user.online){
+
+document.getElementById("status").innerHTML="🟢 Online"
+
+}else{
+
+document.getElementById("status").innerHTML="Offline"
+
+}
 
 }
 
@@ -171,47 +196,6 @@ time:Date.now()
 nextUser()
 
 }
-
-
-const card=document.getElementById("card")
-
-let startX=0
-
-card.addEventListener("touchstart",(e)=>{
-
-startX=e.touches[0].clientX
-
-})
-
-
-card.addEventListener("touchmove",(e)=>{
-
-let moveX=e.touches[0].clientX-startX
-
-card.style.transform="translateX("+moveX+"px)"
-
-})
-
-
-card.addEventListener("touchend",(e)=>{
-
-let endX=e.changedTouches[0].clientX-startX
-
-if(endX>100){
-
-likeUser()
-
-}
-
-else if(endX<-100){
-
-nextUser()
-
-}
-
-card.style.transform="translateX(0)"
-
-})
 
 </script>
 
