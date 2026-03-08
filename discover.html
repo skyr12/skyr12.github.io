@@ -16,17 +16,21 @@ text-align:center;
 margin:0;
 }
 
-.card{
-
+.container{
 width:320px;
 margin:auto;
 margin-top:80px;
+position:relative;
+}
+
+.card{
+width:100%;
 background:white;
 border-radius:20px;
 overflow:hidden;
 box-shadow:0 10px 25px rgba(0,0,0,0.2);
-position:relative;
-
+position:absolute;
+touch-action:none;
 }
 
 .card img{
@@ -39,30 +43,6 @@ object-fit:cover;
 padding:20px;
 }
 
-.buttons{
-
-margin-top:20px;
-
-}
-
-button{
-padding:12px 20px;
-margin:5px;
-border:none;
-border-radius:20px;
-cursor:pointer;
-}
-
-.like{
-background:#ff4d6d;
-color:white;
-}
-
-.skip{
-background:gray;
-color:white;
-}
-
 </style>
 
 </head>
@@ -70,6 +50,8 @@ color:white;
 <body>
 
 <h2>Discover</h2>
+
+<div class="container">
 
 <div class="card" id="card">
 
@@ -86,12 +68,6 @@ color:white;
 </div>
 
 </div>
-
-<div class="buttons">
-
-<button class="like" onclick="likeUser()">❤️ Like</button>
-
-<button class="skip" onclick="nextUser()">❌ Skip</button>
 
 </div>
 
@@ -195,6 +171,47 @@ time:Date.now()
 nextUser()
 
 }
+
+
+const card=document.getElementById("card")
+
+let startX=0
+
+card.addEventListener("touchstart",(e)=>{
+
+startX=e.touches[0].clientX
+
+})
+
+
+card.addEventListener("touchmove",(e)=>{
+
+let moveX=e.touches[0].clientX-startX
+
+card.style.transform="translateX("+moveX+"px)"
+
+})
+
+
+card.addEventListener("touchend",(e)=>{
+
+let endX=e.changedTouches[0].clientX-startX
+
+if(endX>100){
+
+likeUser()
+
+}
+
+else if(endX<-100){
+
+nextUser()
+
+}
+
+card.style.transform="translateX(0)"
+
+})
 
 </script>
 
