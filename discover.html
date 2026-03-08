@@ -3,42 +3,59 @@
 
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Discover</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial;
-background:#f2f2f2;
-text-align:center;
+background:#f5f5f5;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
 .card{
+
 width:320px;
-margin:40px auto;
+height:420px;
 background:white;
 border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+position:absolute;
 }
 
 .card img{
 width:100%;
-height:320px;
+height:70%;
 object-fit:cover;
 }
 
 .info{
-padding:20px;
+padding:15px;
+text-align:center;
+}
+
+h2{
+margin:5px 0;
+}
+
+.buttons{
+margin-top:10px;
 }
 
 button{
-padding:12px 25px;
-margin:10px;
+padding:10px 20px;
 border:none;
-border-radius:25px;
+border-radius:20px;
+margin:5px;
+font-size:16px;
 cursor:pointer;
 }
 
@@ -48,8 +65,7 @@ color:white;
 }
 
 .skip{
-background:gray;
-color:white;
+background:#ccc;
 }
 
 </style>
@@ -58,129 +74,53 @@ color:white;
 
 <body>
 
-<h2>Discover</h2>
+<div class="card" id="card">
 
-<div class="card">
-
-<img id="photo">
+<img src="https://randomuser.me/api/portraits/men/32.jpg">
 
 <div class="info">
 
-<h3 id="name"></h3>
+<h2>Farhad</h2>
 
-<p id="city"></p>
+<p>Age 25 • UK</p>
 
-<p id="age"></p>
+<div class="buttons">
+
+<button class="like" onclick="like()">❤️ Like</button>
+
+<button class="skip" onclick="skip()">❌ Skip</button>
 
 </div>
 
 </div>
 
-<button class="like" onclick="likeUser()">❤️ Like</button>
-<button class="skip" onclick="nextUser()">❌ Skip</button>
-
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+</div>
 
 <script>
 
-const firebaseConfig={
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
-}
+let card = document.getElementById("card");
 
-firebase.initializeApp(firebaseConfig)
+function like(){
 
-const db=firebase.firestore()
+card.style.transform="translateX(500px) rotate(20deg)";
 
-let users=[]
-let index=0
-let currentUser=null
-
-
-firebase.auth().onAuthStateChanged(user=>{
-
-currentUser=user
-
-loadUsers()
-
-})
-
-
-function loadUsers(){
-
-db.collection("users").get().then(snapshot=>{
-
-snapshot.forEach(doc=>{
-
-let data=doc.data()
-
-// Fake detection
-
-if(!data.name) return
-if(!data.age) return
-if(!data.photo) return
-
-if(doc.id===currentUser.uid) return
-
-data.id=doc.id
-
-users.push(data)
-
-})
-
-showUser()
-
-})
+setTimeout(loadNext,300);
 
 }
 
+function skip(){
 
-function showUser(){
+card.style.transform="translateX(-500px) rotate(-20deg)";
 
-if(users.length==0) return
-
-let user=users[index]
-
-document.getElementById("name").innerText=user.name
-document.getElementById("city").innerText=user.city
-document.getElementById("age").innerText="Age: "+user.age
-document.getElementById("photo").src=user.photo
+setTimeout(loadNext,300);
 
 }
 
+function loadNext(){
 
-function nextUser(){
+card.style.transform="none";
 
-index++
-
-if(index>=users.length){
-
-index=0
-
-}
-
-showUser()
-
-}
-
-
-function likeUser(){
-
-let target=users[index]
-
-db.collection("likes").add({
-
-from:currentUser.uid,
-to:target.id,
-time:Date.now()
-
-})
-
-nextUser()
+card.querySelector("img").src="https://randomuser.me/api/portraits/women/"+Math.floor(Math.random()*50)+".jpg";
 
 }
 
