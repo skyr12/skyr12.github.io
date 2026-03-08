@@ -17,7 +17,6 @@ margin:0;
 }
 
 .card{
-
 width:320px;
 margin:auto;
 margin-top:80px;
@@ -25,7 +24,6 @@ background:white;
 border-radius:20px;
 overflow:hidden;
 box-shadow:0 10px 25px rgba(0,0,0,0.2);
-
 }
 
 .card img{
@@ -41,6 +39,24 @@ padding:20px;
 .online{
 color:green;
 font-weight:bold;
+}
+
+button{
+padding:12px 20px;
+margin:10px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+}
+
+.like{
+background:#ff4d6d;
+color:white;
+}
+
+.skip{
+background:gray;
+color:white;
 }
 
 </style>
@@ -69,9 +85,8 @@ font-weight:bold;
 
 </div>
 
-<button onclick="likeUser()">❤️ Like</button>
-
-<button onclick="nextUser()">❌ Skip</button>
+<button class="like" onclick="likeUser()">❤️ Like</button>
+<button class="skip" onclick="nextUser()">❌ Skip</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -93,22 +108,45 @@ const db=firebase.firestore()
 let users=[]
 let index=0
 let currentUser=null
+let myData=null
 
 firebase.auth().onAuthStateChanged(user=>{
 
 currentUser=user
 
+db.collection("users").doc(user.uid).get().then(doc=>{
+
+myData=doc.data()
+
 loadUsers()
 
 })
+
+})
+
+
+function distance(lat1,lon1,lat2,lon2){
+
+const R=6371
+
+let dLat=(lat2-lat1)*Math.PI/180
+let dLon=(lon2-lon1)*Math.PI/180
+
+let a=
+Math.sin(dLat/2)*Math.sin(dLat/2)+
+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+Math.sin(dLon/2)*Math.sin(dLon/2)
+
+let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
+
+return Math.round(R*c)
+
+}
 
 
 function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
-
-let online=[]
-let offline=[]
 
 snapshot.forEach(doc=>{
 
@@ -118,19 +156,9 @@ if(doc.id===currentUser.uid) return
 
 data.id=doc.id
 
-if(data.online){
-
-online.push(data)
-
-}else{
-
-offline.push(data)
-
-}
+users.push(data)
 
 })
-
-users=[...online,...offline]
 
 showUser()
 
@@ -147,7 +175,15 @@ let user=users[index]
 
 document.getElementById("name").innerText=user.name
 
-document.getElementById("city").innerText=user.city+" , "+user.country
+let km=distance(
+myData.lat,
+myData.lng,
+user.lat,
+user.lng
+)
+
+document.getElementById("city").innerText=
+user.city+" • "+km+" km away"
 
 document.getElementById("age").innerText="Age: "+user.age
 
