@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,40 +13,26 @@ body{
 font-family:Arial;
 background:#f3f3f3;
 text-align:center;
+margin:0;
 }
 
 .card{
+
 background:white;
-width:300px;
+width:320px;
 margin:auto;
-margin-top:40px;
+margin-top:60px;
 padding:20px;
 border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+position:relative;
+transition:0.3s;
+
 }
 
 img{
 width:100%;
-border-radius:15px;
-}
-
-button{
-padding:12px 20px;
-border:none;
 border-radius:20px;
-margin:10px;
-font-size:16px;
-cursor:pointer;
-}
-
-.like{
-background:red;
-color:white;
-}
-
-.skip{
-background:gray;
-color:white;
 }
 
 </style>
@@ -56,19 +43,15 @@ color:white;
 
 <h2>Discover</h2>
 
-<div class="card">
+<div id="card" class="card">
 
-<img id="photo" src="https://randomuser.me/api/portraits/men/50.jpg">
+<img id="photo">
 
-<h3 id="name">User</h3>
+<h3 id="name"></h3>
 
-<p id="city">City</p>
+<p id="city"></p>
 
-<p id="age">Age</p>
-
-<button class="like" onclick="likeUser()">❤️ Like</button>
-
-<button class="skip" onclick="nextUser()">❌ Skip</button>
+<p id="age"></p>
 
 </div>
 
@@ -77,23 +60,44 @@ color:white;
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
+
 <script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
+
 projectId: "nimeh-gomsodeh",
+
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+
 messagingSenderId: "815930956932",
+
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
+
 let users=[];
 let index=0;
+
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(user){
+
+loadUsers();
+
+}
+
+});
+
 
 function loadUsers(){
 
@@ -114,9 +118,8 @@ showUser();
 
 }
 
-function showUser(){
 
-if(users.length==0)return;
+function showUser(){
 
 const user=users[index];
 
@@ -129,6 +132,99 @@ document.getElementById("age").innerText="Age: "+user.age;
 document.getElementById("photo").src=user.photo;
 
 }
+
+
+
+let startX=0;
+
+const card=document.getElementById("card");
+
+
+card.addEventListener("touchstart",e=>{
+
+startX=e.touches[0].clientX;
+
+});
+
+
+card.addEventListener("touchend",e=>{
+
+let endX=e.changedTouches[0].clientX;
+
+let diff=endX-startX;
+
+
+if(diff>80){
+
+like();
+
+}
+
+if(diff<-80){
+
+skip();
+
+}
+
+});
+
+
+function like(){
+
+const currentUser=firebase.auth().currentUser;
+
+const target=users[index];
+
+db.collection("likes").add({
+
+from:currentUser.uid,
+
+to:target.id,
+
+time:Date.now()
+
+}).then(()=>{
+
+checkMatch(target.id);
+
+nextUser();
+
+});
+
+}
+
+
+function checkMatch(userId){
+
+const currentUser=firebase.auth().currentUser;
+
+db.collection("likes")
+
+.where("from","==",userId)
+
+.where("to","==",currentUser.uid)
+
+.get()
+
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+alert("❤️ It's a Match!");
+
+}
+
+});
+
+}
+
+
+function skip(){
+
+nextUser();
+
+}
+
 
 function nextUser(){
 
@@ -144,71 +240,8 @@ showUser();
 
 }
 
-function likeUser(){
-
-const currentUser=firebase.auth().currentUser;
-
-const target=users[index];
-
-db.collection("likes").add({
-
-from:currentUser.uid,
-to:target.id,
-time:Date.now()
-
-}).then(()=>{
-
-checkMatch(target.id);
-
-nextUser();
-
-});
-
-}
-
-function checkMatch(userId){
-
-const currentUser=firebase.auth().currentUser;
-
-db.collection("likes")
-.where("from","==",userId)
-.where("to","==",currentUser.uid)
-.get()
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-user1:currentUser.uid,
-user2:userId,
-time:Date.now()
-
-});
-
-alert("🎉 It's a Match!");
-
-}
-
-});
-
-}
-
-firebase.auth().onAuthStateChanged(user=>{
-
-if(user){
-
-loadUsers();
-
-}else{
-
-window.location.href="login.html";
-
-}
-
-});
-
 </script>
 
 </body>
+
 </html>
