@@ -16,11 +16,22 @@ text-align:center;
 margin:0;
 }
 
+.filter{
+margin-top:20px;
+}
+
+.filter input{
+padding:8px;
+margin:5px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
 .card{
 background:white;
 width:320px;
 margin:auto;
-margin-top:60px;
+margin-top:40px;
 padding:20px;
 border-radius:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
@@ -46,7 +57,6 @@ color:white;
 
 .super{
 background:gold;
-color:black;
 }
 
 .skip{
@@ -66,6 +76,19 @@ color:white;
 <body>
 
 <h2>Discover</h2>
+
+<div class="filter">
+
+<input id="minAge" placeholder="Min Age">
+
+<input id="maxAge" placeholder="Max Age">
+
+<input id="countryFilter" placeholder="Country">
+
+<button onclick="applyFilter()">Search</button>
+
+</div>
+
 
 <div class="card">
 
@@ -108,6 +131,7 @@ firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
 let users=[]
+let filteredUsers=[]
 let index=0
 let currentUser=null
 let myLat=0
@@ -118,12 +142,6 @@ firebase.auth().onAuthStateChanged(user=>{
 if(user){
 
 currentUser=user
-
-db.collection("users").doc(user.uid).get().then(doc=>{
-
-currentUser.country=doc.data().country
-
-})
 
 db.collection("users").doc(user.uid).update({
 online:true
@@ -137,20 +155,6 @@ loadUsers()
 
 })
 
-
-window.addEventListener("beforeunload",()=>{
-
-if(currentUser){
-
-db.collection("users").doc(currentUser.uid).update({
-online:false
-})
-
-}
-
-})
-
-
 function getLocation(){
 
 navigator.geolocation.getCurrentPosition(function(position){
@@ -158,48 +162,29 @@ navigator.geolocation.getCurrentPosition(function(position){
 myLat=position.coords.latitude
 myLng=position.coords.longitude
 
-db.collection("users").doc(currentUser.uid).update({
-
-lat:myLat,
-lng:myLng
-
-})
-
 })
 
 }
-
 
 function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
 
-let localUsers=[]
-let globalUsers=[]
+users=[]
 
 snapshot.forEach(doc=>{
 
 let data=doc.data()
 
-if(data.blocked) return
-
 if(doc.id===currentUser.uid) return
 
 data.id=doc.id
 
-if(data.country===currentUser.country){
-
-localUsers.push(data)
-
-}else{
-
-globalUsers.push(data)
-
-}
+users.push(data)
 
 })
 
-users=[...localUsers,...globalUsers]
+filteredUsers=[...users]
 
 showUser()
 
@@ -207,35 +192,43 @@ showUser()
 
 }
 
+function applyFilter(){
+
+let minAge=document.getElementById("minAge").value
+let maxAge=document.getElementById("maxAge").value
+let country=document.getElementById("countryFilter").value
+
+filteredUsers=users.filter(user=>{
+
+if(minAge && user.age<minAge) return false
+
+if(maxAge && user.age>maxAge) return false
+
+if(country && user.country!==country) return false
+
+return true
+
+})
+
+index=0
+
+showUser()
+
+}
 
 function showUser(){
 
-if(users.length==0)return
+if(filteredUsers.length==0) return
 
-let user=users[index]
+let user=filteredUsers[index]
 
 let status=user.online ? "🟢 Online" : "⚫ Offline"
 
 let verified=user.verified ? " ✔ Verified" : ""
 
-let distance=""
+document.getElementById("name").innerText=user.name+verified+" "+status
 
-if(user.lat && user.lng){
-
-let d=Math.floor(
-Math.sqrt(
-Math.pow(user.lat-myLat,2)+
-Math.pow(user.lng-myLng,2)
-)*111
-)
-
-distance=" • "+d+" km away"
-
-}
-
-document.getElementById("name").innerText=user.name + verified + " " + status
-
-document.getElementById("city").innerText=user.city+" , "+user.country + distance
+document.getElementById("city").innerText=user.city+" , "+user.country
 
 document.getElementById("age").innerText="Age: "+user.age
 
@@ -243,12 +236,11 @@ document.getElementById("photo").src=user.photo
 
 }
 
-
 function nextUser(){
 
 index++
 
-if(index>=users.length){
+if(index>=filteredUsers.length){
 
 index=0
 
@@ -258,10 +250,9 @@ showUser()
 
 }
 
-
 function likeUser(){
 
-let target=users[index]
+let target=filteredUsers[index]
 
 db.collection("likes").add({
 
@@ -269,20 +260,15 @@ from:currentUser.uid,
 to:target.id,
 time:Date.now()
 
-}).then(()=>{
-
-checkMatch(target.id)
+})
 
 nextUser()
 
-})
-
 }
-
 
 function superLike(){
 
-let target=users[index]
+let target=filteredUsers[index]
 
 db.collection("superLikes").add({
 
@@ -292,39 +278,19 @@ time:Date.now()
 
 })
 
-alert("⭐ Super Like Sent!")
+alert("Super Like sent ⭐")
 
 nextUser()
 
 }
 
-
-function checkMatch(userId){
-
-db.collection("likes")
-.where("from","==",userId)
-.where("to","==",currentUser.uid)
-.get()
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-alert("❤️ It's a Match!")
-
-}
-
-})
-
-}
-
-
 function reportUser(){
 
-let target=users[index]
+let target=filteredUsers[index]
 
-let reason=prompt("Why are you reporting this user?")
+let reason=prompt("Why are you reporting?")
 
-if(!reason)return
+if(!reason) return
 
 db.collection("reports").add({
 
