@@ -34,6 +34,11 @@ object-fit:cover;
 padding:20px;
 }
 
+.match{
+color:#ff4d6d;
+font-weight:bold;
+}
+
 button{
 padding:12px 25px;
 margin:10px;
@@ -72,6 +77,8 @@ color:white;
 
 <p id="age"></p>
 
+<p class="match" id="matchScore"></p>
+
 </div>
 
 </div>
@@ -99,15 +106,41 @@ const db=firebase.firestore()
 let users=[]
 let index=0
 let currentUser=null
+let myData=null
 
 
 firebase.auth().onAuthStateChanged(user=>{
 
 currentUser=user
 
+db.collection("users").doc(user.uid).get().then(doc=>{
+
+myData=doc.data()
+
 loadUsers()
 
 })
+
+})
+
+
+function calculateMatch(user){
+
+let score=100
+
+let ageDiff=Math.abs(user.age-myData.age)
+
+score-=ageDiff
+
+if(user.city!==myData.city){
+
+score-=10
+
+}
+
+return score
+
+}
 
 
 function loadUsers(){
@@ -118,15 +151,17 @@ snapshot.forEach(doc=>{
 
 let data=doc.data()
 
+if(doc.id===currentUser.uid) return
+
 data.id=doc.id
 
-if(data.id!==currentUser.uid){
+data.score=calculateMatch(data)
 
 users.push(data)
 
-}
-
 })
+
+users.sort((a,b)=>b.score-a.score)
 
 showUser()
 
@@ -145,6 +180,9 @@ document.getElementById("name").innerText=user.name
 document.getElementById("city").innerText=user.city
 document.getElementById("age").innerText="Age: "+user.age
 document.getElementById("photo").src=user.photo
+
+document.getElementById("matchScore").innerText=
+"Match "+user.score+"%"
 
 }
 
@@ -167,31 +205,6 @@ showUser()
 function likeUser(){
 
 let target=users[index]
-
-db.collection("likes")
-.where("from","==",target.id)
-.where("to","==",currentUser.uid)
-.get()
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-user1:currentUser.uid,
-user2:target.id,
-time:Date.now()
-
-})
-
-alert("🎉 It's a Match!")
-
-window.location.href="chat.html"
-
-}
-
-})
-
 
 db.collection("likes").add({
 
