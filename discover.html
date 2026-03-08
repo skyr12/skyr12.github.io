@@ -77,7 +77,7 @@ background:#ccc;
 
 <button class="like" onclick="like()">❤️ Like</button>
 
-<button class="skip" onclick="skip()">❌ Skip</button>
+<button class="skip" onclick="next()">❌ Skip</button>
 
 </div>
 
@@ -102,94 +102,56 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 
-let currentUser = "user1"
+let users=[]
+let index=0
 
-let users = [
 
-{id:"user2",name:"Sara",age:23,country:"Turkey",photo:"https://randomuser.me/api/portraits/women/44.jpg"},
+db.collection("users").get().then(snapshot=>{
 
-{id:"user3",name:"Ali",age:28,country:"Germany",photo:"https://randomuser.me/api/portraits/men/51.jpg"}
+snapshot.forEach(doc=>{
 
-];
+users.push(doc.data())
 
-let index = 0
+})
+
+showUser()
+
+})
 
 
 function showUser(){
 
-let user = users[index]
+let user=users[index]
 
-document.getElementById("photo").src = user.photo
-document.getElementById("name").innerText = user.name
-document.getElementById("country").innerText = user.country+" • "+user.age
-
-}
-
-function like(){
-
-let target = users[index]
-
-db.collection("likes").add({
-
-from: currentUser,
-to: target.id,
-time: Date.now()
-
-})
-
-checkMatch(target.id)
-
-next()
+document.getElementById("photo").src=user.photo
+document.getElementById("name").innerText=user.name
+document.getElementById("country").innerText=user.country+" • "+user.age
 
 }
 
-function checkMatch(target){
-
-db.collection("likes")
-.where("from","==",target)
-.where("to","==",currentUser)
-.get()
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-alert("🎉 It's a Match!")
-
-db.collection("matches").add({
-
-user1:currentUser,
-user2:target,
-time:Date.now()
-
-})
-
-}
-
-})
-
-}
-
-function skip(){
-
-next()
-
-}
 
 function next(){
 
 index++
 
-if(index >= users.length){
+if(index>=users.length){
 
-index = 0
-
-}
-
-showUser()
+index=0
 
 }
 
 showUser()
+
+}
+
+
+function like(){
+
+alert("Liked ❤️")
+
+next()
+
+}
 
 </script>
 
