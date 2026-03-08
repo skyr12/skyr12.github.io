@@ -41,13 +41,33 @@ cursor:pointer;
 
 </div><script>
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_ONI-PstgS4nP3uNIpyA",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.appspot.com",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+  apiKey: "AIzaSyAA0xYFgIY",
+  authDomain: "nimeh-gomsode.firebaseapp.com",
+  projectId: "nimeh-gomsode",
+  storageBucket: "nimeh-gomsode.appspot.com",
+  messagingSenderId: "815930956932",
+  appId: "1:815930956932:web:xxxxx"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.registerUser = function(email, password){
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      alert("Account created successfully");
+      window.location.href = "discover.html";
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+}
+</script>
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -93,4 +113,5 @@ alert(error.message);
 }
 
 </script></body>
+
 </html>
