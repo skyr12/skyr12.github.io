@@ -11,36 +11,35 @@
 
 body{
 font-family:Arial;
-background:#f3f3f3;
+background:#f2f2f2;
 text-align:center;
 }
 
 .card{
-background:white;
 width:320px;
-margin:auto;
-margin-top:20px;
-padding:20px;
+margin:20px auto;
+background:white;
 border-radius:20px;
+overflow:hidden;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
+padding:20px;
+}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+border-radius:10px;
 }
 
 button{
-padding:8px 16px;
-margin:5px;
+padding:10px 20px;
 border:none;
-border-radius:10px;
-cursor:pointer;
-}
-
-.verify{
-background:green;
-color:white;
-}
-
-.delete{
+border-radius:20px;
 background:red;
 color:white;
+cursor:pointer;
+margin-top:10px;
 }
 
 </style>
@@ -59,18 +58,16 @@ color:white;
 
 <script>
 
-const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-};
+const firebaseConfig={
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore();
+const db=firebase.firestore()
+
 
 function loadUsers(){
 
@@ -78,7 +75,7 @@ db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-let data=doc.data()
+let user=doc.data()
 
 let div=document.createElement("div")
 
@@ -86,16 +83,14 @@ div.className="card"
 
 div.innerHTML=`
 
-<h3>${data.name}</h3>
+<img src="${user.photo}">
 
-<p>${data.city}, ${data.country}</p>
+<h3>${user.name}</h3>
 
-<button class="verify" onclick="verifyUser('${doc.id}')">
-Verify
-</button>
+<p>${user.city}</p>
 
-<button class="delete" onclick="deleteUser('${doc.id}')">
-Delete
+<button onclick="deleteUser('${doc.id}')">
+Delete User
 </button>
 
 `
@@ -108,25 +103,17 @@ document.getElementById("users").appendChild(div)
 
 }
 
-function verifyUser(id){
-
-db.collection("users").doc(id).update({
-
-verified:true
-
-})
-
-alert("User verified")
-
-}
 
 function deleteUser(id){
 
 db.collection("users").doc(id).delete()
 
-alert("User deleted")
+alert("User Deleted")
+
+location.reload()
 
 }
+
 
 loadUsers()
 
