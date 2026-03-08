@@ -36,8 +36,8 @@ object-fit:cover;
 padding:20px;
 }
 
-.match{
-color:#ff4d6d;
+.online{
+color:green;
 font-weight:bold;
 }
 
@@ -59,6 +59,11 @@ background:gray;
 color:white;
 }
 
+.match{
+color:#ff4d6d;
+font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -78,6 +83,8 @@ color:white;
 <p id="city"></p>
 
 <p id="age"></p>
+
+<p id="status"></p>
 
 <p class="match" id="score"></p>
 
@@ -109,6 +116,7 @@ let users=[]
 let index=0
 let currentUser=null
 let myData=null
+
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -171,6 +179,13 @@ let data=doc.data()
 
 if(doc.id===currentUser.uid) return
 
+// جلوگیری از پروفایل فیک
+
+if(!data.name) return
+if(!data.age) return
+if(!data.photo) return
+if(data.age<18) return
+
 data.id=doc.id
 
 data.score=matchScore(data)
@@ -203,13 +218,27 @@ user.lng
 
 document.getElementById("name").innerText=user.name
 
-document.getElementById("city").innerText=user.city+" • "+km+" km away"
+document.getElementById("city").innerText=
+user.city+" • "+km+" km away"
 
 document.getElementById("age").innerText="Age: "+user.age
 
 document.getElementById("photo").src=user.photo
 
-document.getElementById("score").innerText="Best Match Score: "+user.score
+
+if(user.online){
+
+document.getElementById("status").innerHTML="🟢 Online"
+
+}else{
+
+document.getElementById("status").innerHTML="Offline"
+
+}
+
+
+document.getElementById("score").innerText=
+"Match Score: "+user.score
 
 }
 
