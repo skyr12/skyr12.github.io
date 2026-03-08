@@ -85,6 +85,8 @@ color:white;
 
 <input id="countryFilter" placeholder="Country">
 
+<input id="languageFilter" placeholder="Language">
+
 <input id="distanceFilter" placeholder="Max Distance (km)">
 
 <button onclick="applyFilter()">Search</button>
@@ -215,6 +217,7 @@ function applyFilter(){
 let minAge=document.getElementById("minAge").value
 let maxAge=document.getElementById("maxAge").value
 let country=document.getElementById("countryFilter").value
+let language=document.getElementById("languageFilter").value
 let maxDistance=document.getElementById("distanceFilter").value
 
 filteredUsers=users.filter(user=>{
@@ -224,6 +227,8 @@ if(minAge && user.age<minAge) return false
 if(maxAge && user.age>maxAge) return false
 
 if(country && user.country!==country) return false
+
+if(language && user.language!==language) return false
 
 if(maxDistance && user.lat && user.lng){
 
