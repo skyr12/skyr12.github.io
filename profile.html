@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Profile</title>
+<title>My Profile</title>
 
 <style>
 
@@ -12,32 +13,63 @@ body{
 font-family:Arial;
 background:#f3f3f3;
 text-align:center;
+margin:0;
 }
 
 .card{
+
 background:white;
-width:300px;
+width:320px;
 margin:auto;
 margin-top:40px;
 padding:20px;
 border-radius:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
+
 }
 
 img{
+
 width:120px;
 height:120px;
 border-radius:50%;
+margin-bottom:15px;
+
+}
+
+input{
+
+width:90%;
+padding:10px;
+margin:5px;
+border-radius:10px;
+border:1px solid #ddd;
+
 }
 
 button{
+
 padding:10px 20px;
 border:none;
+border-radius:20px;
+margin:10px;
+cursor:pointer;
+font-size:16px;
+
+}
+
+.save{
+
 background:#ff4d6d;
 color:white;
-border-radius:20px;
-margin-top:15px;
-cursor:pointer;
+
+}
+
+.logout{
+
+background:gray;
+color:white;
+
 }
 
 </style>
@@ -52,52 +84,53 @@ cursor:pointer;
 
 <img id="photo">
 
-<h3 id="name"></h3>
+<input id="name" placeholder="Name">
 
-<p id="city"></p>
+<input id="city" placeholder="City">
 
-<p id="age"></p>
+<input id="age" placeholder="Age">
 
-<button onclick="logout()">Logout</button>
+<button class="save" onclick="saveProfile()">Save Profile</button>
+
+<button class="logout" onclick="logout()">Logout</button>
 
 </div>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
+
 <script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
+
 projectId: "nimeh-gomsodeh",
+
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+
 messagingSenderId: "815930956932",
+
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
+
+
 firebase.auth().onAuthStateChanged(user=>{
 
 if(user){
 
-db.collection("users").doc(user.uid).get().then(doc=>{
-
-const data=doc.data();
-
-document.getElementById("name").innerText=data.name;
-
-document.getElementById("city").innerText=data.city+" , "+data.country;
-
-document.getElementById("age").innerText="Age: "+data.age;
-
-document.getElementById("photo").src=data.photo;
-
-});
+loadProfile(user.uid);
 
 }else{
 
@@ -106,6 +139,56 @@ window.location.href="login.html";
 }
 
 });
+
+
+
+function loadProfile(uid){
+
+db.collection("users").doc(uid).get().then(doc=>{
+
+const data=doc.data();
+
+document.getElementById("name").value=data.name;
+
+document.getElementById("city").value=data.city;
+
+document.getElementById("age").value=data.age;
+
+document.getElementById("photo").src=data.photo;
+
+});
+
+}
+
+
+
+function saveProfile(){
+
+const user=firebase.auth().currentUser;
+
+const name=document.getElementById("name").value;
+
+const city=document.getElementById("city").value;
+
+const age=document.getElementById("age").value;
+
+db.collection("users").doc(user.uid).update({
+
+name:name,
+
+city:city,
+
+age:age
+
+}).then(()=>{
+
+alert("Profile updated");
+
+});
+
+}
+
+
 
 function logout(){
 
@@ -118,4 +201,5 @@ window.location.href="login.html";
 </script>
 
 </body>
+
 </html>
