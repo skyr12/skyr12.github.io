@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Push Notifications</title>
+
+</head>
+
+<body>
+
+<h2>Enable Notifications</h2>
+
+<button onclick="enableNotifications()">
+Enable Notifications
+</button>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const messaging = firebase.messaging();
+
+
+function enableNotifications(){
+
+Notification.requestPermission().then(permission=>{
+
+if(permission==="granted"){
+
+alert("Notifications enabled!");
+
+}
+
+});
+
+}
+
+</script>
+
+</body>
+
+</html>
