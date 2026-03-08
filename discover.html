@@ -49,6 +49,11 @@ background:gray;
 color:white;
 }
 
+.report{
+background:black;
+color:white;
+}
+
 </style>
 
 </head>
@@ -71,7 +76,10 @@ color:white;
 
 <button class="skip" onclick="nextUser()">❌ Skip</button>
 
+<button class="report" onclick="reportUser()">🚨 Report</button>
+
 </div>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -217,6 +225,28 @@ alert("❤️ It's a Match!");
 }
 
 });
+
+}
+
+
+function reportUser(){
+
+let target=users[index];
+
+let reason=prompt("Why are you reporting this user?");
+
+if(!reason)return;
+
+db.collection("reports").add({
+
+from:currentUser.uid,
+to:target.id,
+reason:reason,
+time:Date.now()
+
+});
+
+alert("User reported");
 
 }
 
