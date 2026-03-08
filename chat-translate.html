@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chat Translate</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+}
+
+textarea{
+width:300px;
+height:100px;
+margin-top:20px;
+}
+
+button{
+padding:10px 20px;
+background:#ff4d6d;
+color:white;
+border:none;
+border-radius:20px;
+cursor:pointer;
+}
+
+.result{
+margin-top:20px;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Chat Translator</h2>
+
+<textarea id="text" placeholder="Type message"></textarea>
+
+<br><br>
+
+<select id="lang">
+
+<option value="en">English</option>
+<option value="fa">Persian</option>
+<option value="ar">Arabic</option>
+<option value="tr">Turkish</option>
+<option value="de">German</option>
+<option value="fr">French</option>
+<option value="es">Spanish</option>
+
+</select>
+
+<br><br>
+
+<button onclick="translateText()">Translate</button>
+
+<div class="result" id="result"></div>
+
+<script>
+
+async function translateText(){
+
+let text=document.getElementById("text").value
+let lang=document.getElementById("lang").value
+
+let res=await fetch(
+"https://api.mymemory.translated.net/get?q="+text+"&langpair=en|"+lang
+)
+
+let data=await res.json()
+
+document.getElementById("result").innerText=
+data.responseData.translatedText
+
+}
+
+</script>
+
+</body>
+
+</html>
