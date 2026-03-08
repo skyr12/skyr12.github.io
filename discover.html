@@ -46,10 +46,6 @@ h2{
 margin:5px 0;
 }
 
-.buttons{
-margin-top:10px;
-}
-
 button{
 padding:10px 20px;
 border:none;
@@ -76,15 +72,13 @@ background:#ccc;
 
 <div class="card" id="card">
 
-<img src="https://randomuser.me/api/portraits/men/32.jpg">
+<img id="photo" src="https://randomuser.me/api/portraits/men/32.jpg">
 
 <div class="info">
 
-<h2>Farhad</h2>
+<h2 id="name">Farhad</h2>
 
-<p>Age 25 • UK</p>
-
-<div class="buttons">
+<p id="country">UK • 25</p>
 
 <button class="like" onclick="like()">❤️ Like</button>
 
@@ -94,35 +88,96 @@ background:#ccc;
 
 </div>
 
-</div>
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
 
-let card = document.getElementById("card");
+const firebaseConfig = {
+
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
+
+let users = [
+
+{name:"Farhad",age:25,country:"UK",photo:"https://randomuser.me/api/portraits/men/32.jpg"},
+
+{name:"Sara",age:23,country:"Turkey",photo:"https://randomuser.me/api/portraits/women/44.jpg"},
+
+{name:"Ali",age:28,country:"Germany",photo:"https://randomuser.me/api/portraits/men/51.jpg"}
+
+];
+
+let index = 0;
+
+function showUser(){
+
+let user = users[index];
+
+document.getElementById("photo").src=user.photo;
+
+document.getElementById("name").innerText=user.name;
+
+document.getElementById("country").innerText=user.country+" • "+user.age;
+
+}
 
 function like(){
 
-card.style.transform="translateX(500px) rotate(20deg)";
+let user = users[index];
 
-setTimeout(loadNext,300);
+db.collection("likes").add({
+
+name:user.name,
+
+age:user.age,
+
+country:user.country,
+
+photo:user.photo,
+
+time:Date.now()
+
+});
+
+next();
 
 }
 
 function skip(){
 
-card.style.transform="translateX(-500px) rotate(-20deg)";
-
-setTimeout(loadNext,300);
+next();
 
 }
 
-function loadNext(){
+function next(){
 
-card.style.transform="none";
+index++;
 
-card.querySelector("img").src="https://randomuser.me/api/portraits/women/"+Math.floor(Math.random()*50)+".jpg";
+if(index >= users.length){
+
+index = 0;
 
 }
+
+showUser();
+
+}
+
+showUser();
 
 </script>
 
