@@ -34,6 +34,11 @@ margin:5px;
 border-radius:10px;
 }
 
+.msg img{
+width:200px;
+border-radius:10px;
+}
+
 input{
 width:220px;
 padding:10px;
@@ -49,6 +54,7 @@ color:white;
 border:none;
 border-radius:20px;
 cursor:pointer;
+margin-top:5px;
 }
 
 </style>
@@ -66,6 +72,12 @@ cursor:pointer;
 <input id="message" placeholder="Type message">
 
 <button onclick="sendMessage()">Send</button>
+
+<br>
+
+<input id="imageUrl" placeholder="Image URL">
+
+<button onclick="sendImage()">Send Image</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -112,6 +124,23 @@ document.getElementById("message").value=""
 }
 
 
+function sendImage(){
+
+let img=document.getElementById("imageUrl").value
+
+db.collection("messages").add({
+
+from:currentUser.uid,
+image:img,
+time:Date.now()
+
+})
+
+document.getElementById("imageUrl").value=""
+
+}
+
+
 function loadMessages(){
 
 db.collection("messages")
@@ -128,7 +157,17 @@ let div=document.createElement("div")
 
 div.className="msg"
 
+if(data.text){
+
 div.innerText=data.text
+
+}
+
+if(data.image){
+
+div.innerHTML="<img src='"+data.image+"'>"
+
+}
 
 document.getElementById("messages").appendChild(div)
 
