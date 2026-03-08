@@ -15,8 +15,7 @@ background:#f3f3f3;
 text-align:center;
 }
 
-.user{
-
+.card{
 background:white;
 width:300px;
 margin:auto;
@@ -24,7 +23,6 @@ margin-top:20px;
 padding:20px;
 border-radius:20px;
 box-shadow:0 10px 20px rgba(0,0,0,0.1);
-
 }
 
 img{
@@ -51,24 +49,17 @@ border-radius:50%;
 <script>
 
 const firebaseConfig = {
-
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
-
 projectId: "nimeh-gomsodeh",
-
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-
 messagingSenderId: "815930956932",
-
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
+const db=firebase.firestore();
 
 
 firebase.auth().onAuthStateChanged(user=>{
@@ -85,11 +76,8 @@ loadLikes(user.uid);
 function loadLikes(uid){
 
 db.collection("likes")
-
 .where("to","==",uid)
-
 .get()
-
 .then(snapshot=>{
 
 snapshot.forEach(doc=>{
@@ -104,12 +92,14 @@ const u=userDoc.data();
 
 const div=document.createElement("div");
 
-div.className="user";
+div.className="card";
 
 div.innerHTML=`
 
 <img src="${u.photo}">
+
 <h3>${u.name}</h3>
+
 <p>${u.city}, ${u.country}</p>
 
 `;
@@ -127,4 +117,5 @@ document.getElementById("likes").appendChild(div);
 </script>
 
 </body>
+
 </html>
