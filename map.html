@@ -3,7 +3,8 @@
 
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Users Map</title>
 
@@ -11,8 +12,13 @@
 
 <style>
 
+body{
+margin:0;
+font-family:Arial;
+}
+
 #map{
-height:500px;
+height:100vh;
 width:100%;
 }
 
@@ -22,45 +28,50 @@ width:100%;
 
 <body>
 
-<h2>Users Near You</h2>
-
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
 
-const firebaseConfig={
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
-}
+const firebaseConfig = {
 
-firebase.initializeApp(firebaseConfig)
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh"
 
-const db=firebase.firestore()
+};
 
-let map=L.map('map').setView([51.5074,-0.1278],5)
+firebase.initializeApp(firebaseConfig);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-attribution:'Map data'
-}).addTo(map)
+const db = firebase.firestore();
+
+
+let map = L.map('map').setView([51.505, -0.09], 3);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+}).addTo(map);
 
 
 db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-let user=doc.data()
+let user = doc.data()
 
-if(!user.lat || !user.lng) return
+if(user.lat && user.lng){
 
 L.marker([user.lat,user.lng])
+
 .addTo(map)
+
 .bindPopup(user.name)
+
+}
 
 })
 
