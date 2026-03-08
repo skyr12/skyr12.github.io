@@ -21,19 +21,15 @@ margin:0;
 padding:0;
 }
 
-h2{
-margin-top:20px;
-}
-
 .card{
 
-width:300px;
+width:320px;
 margin:auto;
 background:white;
 border-radius:15px;
 box-shadow:0 5px 15px rgba(0,0,0,0.2);
 overflow:hidden;
-margin-top:30px;
+margin-top:40px;
 
 }
 
@@ -60,17 +56,13 @@ font-size:16px;
 }
 
 .like{
-
 background:red;
 color:white;
-
 }
 
 .skip{
-
 background:gray;
 color:white;
-
 }
 
 </style>
@@ -81,7 +73,7 @@ color:white;
 
 <h2>Discover</h2>
 
-<div class="card" id="card">
+<div class="card">
 
 <img id="photo">
 
@@ -117,53 +109,103 @@ const db=firebase.firestore();
 
 let users=[];
 let index=0;
+let currentUser=null;
+
+firebase.auth().onAuthStateChanged((user)=>{
+
+if(user){
+
+currentUser=user;
+
+loadUsers();
+
+}
+
+})
+
+function loadUsers(){
 
 db.collection("users").get().then((snapshot)=>{
 
 snapshot.forEach((doc)=>{
 
-users.push(doc.data())
+let data=doc.data();
+
+data.id=doc.id;
+
+users.push(data);
 
 })
 
-showUser()
+showUser();
 
 })
+
+}
 
 function showUser(){
 
-if(users.length==0) return
+if(users.length==0)return;
 
-let user=users[index]
+let user=users[index];
 
-document.getElementById("photo").src=user.photo
-document.getElementById("name").innerText=user.name
-document.getElementById("location").innerText=user.city+" , "+user.country
-document.getElementById("age").innerText="Age: "+user.age
+document.getElementById("photo").src=user.photo;
+document.getElementById("name").innerText=user.name;
+document.getElementById("location").innerText=user.city+" , "+user.country;
+document.getElementById("age").innerText="Age: "+user.age;
 
 }
 
 function next(){
 
-index++
+index++;
 
 if(index>=users.length){
 
-alert("No more users")
+alert("No more users");
 
-return
+return;
 
 }
 
-showUser()
+showUser();
 
 }
 
 function like(){
 
-alert("Liked ❤️")
+let likedUser=users[index];
 
-next()
+db.collection("likes").add({
+
+from:currentUser.uid,
+to:likedUser.id
+
+}).then(()=>{
+
+checkMatch(currentUser.uid,likedUser.id);
+
+})
+
+next();
+
+}
+
+function checkMatch(user1,user2){
+
+db.collection("likes")
+.where("from","==",user2)
+.where("to","==",user1)
+.get()
+.then((snapshot)=>{
+
+if(!snapshot.empty){
+
+alert("❤️ It's a Match!");
+
+}
+
+})
 
 }
 
