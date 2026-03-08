@@ -1,150 +1,94 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<title>Nimeh</title><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nimeh Dating</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
 
 body{
-margin:0;
 font-family:Arial;
-background:#111;
-color:white;
+margin:0;
+background:#f3f3f3;
 text-align:center;
 }
 
-.hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:linear-gradient(45deg,#ff4b6e,#ff8a5b);
+.header{
+background:#ff4d6d;
+color:white;
+padding:30px;
+font-size:28px;
 }
 
-h1{
-font-size:60px;
-margin:20px;
-}
-
-p{
-font-size:22px;
+.card{
+width:320px;
+margin:auto;
+margin-top:40px;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 button{
-padding:15px 40px;
-margin:10px;
-font-size:18px;
+padding:14px 25px;
+margin-top:20px;
 border:none;
-border-radius:30px;
+border-radius:25px;
+background:#ff4d6d;
+color:white;
+font-size:18px;
 cursor:pointer;
 }
 
-.join{
-background:white;
-color:black;
-}
+</style>
 
-.login{
-background:black;
-color:white;
-border:2px solid white;
-}
+</head>
 
-select{
-padding:10px;
-border-radius:10px;
-margin-top:20px;
-}
+<body>
 
-</style></head><body><div class="hero"><h1 id="title">NIMEH</h1><p id="subtitle">Find your perfect partner anywhere in the world</p><a href="register.html">
-<button class="join" id="joinBtn">Join Now</button>
-</a><a href="login.html">
-<button class="login" id="loginBtn">Login</button>
-</a><select onchange="changeLang(this.value)"><option value="en">English</option>
-<option value="fa">Persian</option>
-<option value="ar">Arabic</option>
-<option value="tr">Turkish</option>
-<option value="fr">French</option>
-<option value="es">Spanish</option>
-<option value="de">German</option>
-<option value="ur">Urdu</option>
-<option value="id">Indonesian</option></select></div><script>
+<div class="header">
 
-function changeLang(lang){
+Nimeh Dating
 
-if(lang=="fa"){
+</div>
 
-title.innerText="نیمه";
-subtitle.innerText="نیمه گمشده خود را پیدا کنید";
-joinBtn.innerText="ثبت نام";
-loginBtn.innerText="ورود";
+
+<div class="card">
+
+<h2>Find Your Perfect Match</h2>
+
+<p>Meet people around the world</p>
+
+<a href="discover.html">
+
+<button>
+
+Start Discovering
+
+</button>
+
+</a>
+
+</div>
+
+
+<script>
+
+if('serviceWorker' in navigator){
+
+navigator.serviceWorker.register('sw.js')
 
 }
 
-if(lang=="ar"){
+</script>
 
-title.innerText="نيمه";
-subtitle.innerText="اعثر على شريك حياتك";
-joinBtn.innerText="إنشاء حساب";
-loginBtn.innerText="تسجيل الدخول";
+</body>
 
-}
-
-if(lang=="tr"){
-
-subtitle.innerText="Hayat arkadaşını bul";
-joinBtn.innerText="Kayıt ol";
-loginBtn.innerText="Giriş";
-
-}
-
-if(lang=="fr"){
-
-subtitle.innerText="Trouvez votre partenaire idéal";
-joinBtn.innerText="S'inscrire";
-loginBtn.innerText="Connexion";
-
-}
-
-if(lang=="es"){
-
-subtitle.innerText="Encuentra tu pareja ideal";
-joinBtn.innerText="Registrarse";
-loginBtn.innerText="Iniciar sesión";
-
-}
-
-if(lang=="de"){
-
-subtitle.innerText="Finde deinen perfekten Partner";
-joinBtn.innerText="Registrieren";
-loginBtn.innerText="Login";
-
-}
-
-if(lang=="ur"){
-
-subtitle.innerText="اپنا جیون ساتھی تلاش کریں";
-joinBtn.innerText="سائن اپ";
-loginBtn.innerText="لاگ ان";
-
-}
-
-if(lang=="id"){
-
-subtitle.innerText="Temukan pasangan hidupmu";
-joinBtn.innerText="Daftar";
-loginBtn.innerText="Masuk";
-
-}
-
-if(lang=="en"){
-
-title.innerText="NIMEH";
-subtitle.innerText="Find your perfect partner anywhere in the world";
-joinBtn.innerText="Join Now";
-loginBtn.innerText="Login";
-
-}
-
-}
-
-</script></body>
 </html>
