@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8">
-<title>Matches</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script><style>
+<title>Admin Panel</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script><style>
 
 body{
 font-family:Arial;
@@ -18,7 +18,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.2);
 
 .card img{
 width:100%;
-height:300px;
+height:250px;
 object-fit:cover;
 }
 
@@ -32,7 +32,7 @@ cursor:pointer;
 margin:10px;
 }
 
-</style></head><body><h1>Your Matches</h1><div id="matches"></div><script>
+</style></head><body><h1>Admin Panel</h1><div id="users"></div><script>
 
 const firebaseConfig = {
 apiKey: "AIzaSyAA0xYFglY_ONI-PstgS4nP3uNIpyA",
@@ -45,37 +45,15 @@ appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-const matchesDiv=document.getElementById("matches");
+const usersDiv=document.getElementById("users");
 
-firebase.auth().onAuthStateChanged((user)=>{
-
-db.collection("matches").get().then((snapshot)=>{
+db.collection("users").get().then((snapshot)=>{
 
 snapshot.forEach((doc)=>{
 
-let match=doc.data();
-
-let otherUserId;
-
-if(match.user1==user.uid){
-
-otherUserId=match.user2;
-
-}else if(match.user2==user.uid){
-
-otherUserId=match.user1;
-
-}else{
-
-return;
-
-}
-
-db.collection("users").doc(otherUserId).get().then((userDoc)=>{
-
-let u=userDoc.data();
+let u=doc.data();
 
 let card=document.createElement("div");
 
@@ -89,26 +67,24 @@ card.innerHTML=`
 
 <p>${u.city} • ${u.country}</p>
 
-<button onclick="openChat('${otherUserId}')">Chat</button>
+<button onclick="deleteUser('${doc.id}')">Delete User</button>
 
 `;
 
-matchesDiv.appendChild(card);
+usersDiv.appendChild(card);
 
 });
 
 });
 
-});
 
-});
+function deleteUser(id){
 
+db.collection("users").doc(id).delete();
 
-function openChat(id){
+alert("User deleted");
 
-localStorage.setItem("chatUser",id);
-
-window.location.href="chat.html";
+location.reload();
 
 }
 

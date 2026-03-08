@@ -1,1 +1,72 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Login</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script><style>
 
+body{
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+}
+
+.box{
+width:300px;
+margin:100px auto;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+input{
+width:90%;
+padding:10px;
+margin:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+button{
+padding:10px 20px;
+background:red;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+</style></head><body><div class="box"><h2>Login</h2><input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password"><button onclick="login()">Login</button>
+
+</div><script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_ONI-PstgS4nP3uNIpyA",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.appspot.com",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+function login(){
+
+let email=document.getElementById("email").value;
+let password=document.getElementById("password").value;
+
+firebase.auth().signInWithEmailAndPassword(email,password)
+.then(()=>{
+
+window.location.href="discover.html";
+
+})
+.catch((error)=>{
+
+alert(error.message);
+
+});
+
+}
+
+</script></body>
+</html>

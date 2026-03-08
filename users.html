@@ -1,66 +1,26 @@
 <!DOCTYPE html>
-<html lang="fa">
-
+<html lang="fa" dir="rtl">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>کاربران</title>
+<title>Users</title>
 
 <style>
 
 body{
-margin:0;
-font-family:'Segoe UI',sans-serif;
-background:#020617;
-color:white;
+font-family:tahoma;
+background:#f4f4f4;
 text-align:center;
-padding:30px;
-}
-
-.search{
-margin-bottom:30px;
-}
-
-.search input{
-padding:10px;
-width:250px;
-border:none;
-border-radius:20px;
-}
-
-.container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
 }
 
 .card{
-background:#111;
+background:white;
+width:300px;
+margin:auto;
+margin-top:20px;
 padding:20px;
-border-radius:20px;
-width:220px;
-position:relative;
-}
-
-.avatar{
-width:100px;
-height:100px;
-border-radius:50%;
-object-fit:cover;
-margin-bottom:10px;
-}
-
-.online{
-position:absolute;
-top:15px;
-right:15px;
-width:12px;
-height:12px;
-background:#00ff6a;
-border-radius:50%;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 </style>
@@ -69,64 +29,49 @@ border-radius:50%;
 
 <body>
 
-<h1>👥 کاربران</h1>
+<h2>Users</h2>
 
-<div class="search">
+<div id="users"></div>
 
-<input id="search" placeholder="جستجوی نام..." onkeyup="searchUser()">
+<script type="module">
 
-</div>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-<div class="container" id="users"></div>
 
-<script>
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
+measurementId: "G-KTCV2B5R9L"
+};
 
-let users = JSON.parse(localStorage.getItem("users")) || []
 
-function showUsers(list){
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-let html=""
 
-list.forEach(u=>{
+const querySnapshot = await getDocs(collection(db,"users"));
 
-html+=`
+querySnapshot.forEach((doc)=>{
+
+let user = doc.data()
+
+document.getElementById("users").innerHTML += `
 
 <div class="card">
-
-<div class="online"></div>
-
-<img src="${u.photo}" class="avatar">
-
-<h3>${u.name}</h3>
-
-<p>${u.city}</p>
-
-<p>${u.bio}</p>
-
+<h3>${user.name}</h3>
+<p>${user.city}</p>
 </div>
 
 `
 
 })
 
-document.getElementById("users").innerHTML=html
-
-}
-
-showUsers(users)
-
-function searchUser(){
-
-let text=document.getElementById("search").value.toLowerCase()
-
-let filtered=users.filter(u=>u.name.toLowerCase().includes(text))
-
-showUsers(filtered)
-
-}
-
 </script>
 
 </body>
-
 </html>

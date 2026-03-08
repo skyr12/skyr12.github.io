@@ -1,128 +1,64 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>عضویت ویژه</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Premium</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script><style>
 
 body{
-margin:0;
-font-family:Tahoma;
-background:#020617;
-color:white;
+font-family:Arial;
+background:#f2f2f2;
 text-align:center;
 }
 
-.header{
-padding:20px;
-font-size:24px;
-}
-
-.plans{
-margin-top:30px;
-}
-
-.card{
-background:#111;
-width:260px;
-margin:20px auto;
-padding:20px;
+.box{
+width:320px;
+margin:80px auto;
+background:white;
 border-radius:20px;
-}
-
-.price{
-font-size:26px;
-margin:10px 0;
+padding:30px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 button{
-background:#ff4d6d;
+padding:12px 25px;
+background:gold;
 border:none;
-padding:12px 20px;
-border-radius:25px;
-color:white;
+border-radius:20px;
+font-size:18px;
 cursor:pointer;
 }
 
-</style>
+</style></head><body><div class="box"><h2>Premium Membership</h2><p>Unlimited Likes</p>
+<p>See who liked you</p>
+<p>Boost your profile</p><button onclick="buyPremium()">Upgrade</button>
 
-</head>
+</div><script>
 
-<body>
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_ONI-PstgS4nP3uNIpyA",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.appspot.com",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
 
-<div class="header">
+firebase.initializeApp(firebaseConfig);
 
-⭐ عضویت ویژه
+const db=firebase.firestore();
 
-</div>
+function buyPremium(){
 
-<div class="plans">
+firebase.auth().onAuthStateChanged((user)=>{
 
-<div class="card">
+db.collection("users").doc(user.uid).update({
 
-<h3>۱ ماهه</h3>
+premium:true
 
-<div class="price">5$</div>
+});
 
-<p>ارسال پیام نامحدود</p>
+alert("You are now Premium!");
 
-<p>دیدن پروفایل کامل</p>
-
-<button onclick="buy()">خرید</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>۳ ماهه</h3>
-
-<div class="price">12$</div>
-
-<p>ارسال پیام نامحدود</p>
-
-<p>اولویت در جستجو</p>
-
-<button onclick="buy()">خرید</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>۶ ماهه</h3>
-
-<div class="price">20$</div>
-
-<p>تمام امکانات ویژه</p>
-
-<p>نمایش بیشتر پروفایل</p>
-
-<button onclick="buy()">خرید</button>
-
-</div>
-
-</div>
-
-<script>
-
-function buy(){
-
-localStorage.setItem("premium","yes")
-
-alert("عضویت شما فعال شد")
-
-window.location.href="search.html"
+});
 
 }
 
-</script>
-
-</body>
-
+</script></body>
 </html>

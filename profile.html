@@ -1,101 +1,110 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>پروفایل</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Profile</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script><style>
 
 body{
-margin:0;
-font-family:Segoe UI;
-background:#020617;
-color:white;
+font-family:Arial;
+background:#f2f2f2;
 text-align:center;
-padding:30px;
 }
 
 .card{
-background:#111;
-padding:30px;
-border-radius:20px;
 width:320px;
-margin:auto;
+margin:80px auto;
+background:white;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-.avatar{
-width:120px;
-height:120px;
-border-radius:50%;
+.card img{
+width:100%;
+height:320px;
 object-fit:cover;
-margin-bottom:15px;
 }
 
-.gallery{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:20px;
+.info{
+padding:20px;
 }
 
-.gallery img{
-width:80px;
-height:80px;
+button{
+padding:10px 20px;
+margin:10px;
+background:red;
+color:white;
+border:none;
 border-radius:10px;
-object-fit:cover;
+cursor:pointer;
 }
 
-</style>
+.boost{
+background:gold;
+color:black;
+}
 
-</head>
-
-<body>
-
-<div class="card">
-
-<img id="avatar" class="avatar">
-
-<h2 id="name"></h2>
-
-<p id="city"></p>
-
-<p id="bio"></p>
-
-<div class="gallery">
-
-<img id="g1">
-<img id="g2">
-<img id="g3">
-
-</div>
-
-</div>
+</style></head><body><h1>Your Profile</h1><div id="profile"></div><button class="boost" onclick="boostProfile()">⭐ Boost Profile</button>
 
 <script>
 
-let users = JSON.parse(localStorage.getItem("users")) || []
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_ONI-PstgS4nP3uNIpyA",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.appspot.com",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
 
-let defaultPhoto="https://picsum.photos/200"
+firebase.initializeApp(firebaseConfig);
 
-if(users.length>0){
+const db=firebase.firestore();
 
-let u = users[users.length-1]
+firebase.auth().onAuthStateChanged((user)=>{
 
-document.getElementById("avatar").src = u.photo || defaultPhoto
-document.getElementById("name").innerText = u.name
-document.getElementById("city").innerText = u.city
-document.getElementById("bio").innerText = u.bio
+db.collection("users").doc(user.uid).get().then((doc)=>{
 
-document.getElementById("g1").src = u.photo || defaultPhoto
-document.getElementById("g2").src = defaultPhoto
-document.getElementById("g3").src = defaultPhoto
+let data=doc.data();
+
+document.getElementById("profile").innerHTML=`
+
+<div class="card">
+
+<img src="${data.photo}">
+
+<div class="info">
+
+<h2>${data.name}</h2>
+
+<p>${data.city} • ${data.country}</p>
+
+<p>Age: ${data.age}</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+});
+
+
+function boostProfile(){
+
+firebase.auth().onAuthStateChanged((user)=>{
+
+db.collection("users").doc(user.uid).update({
+
+boost:true,
+boostTime:Date.now()
+
+});
+
+alert("Profile Boost Activated 🚀");
+
+});
 
 }
 
-</script>
-
-</body>
+</script></body>
 </html>

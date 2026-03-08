@@ -1,138 +1,157 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html>
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سوایپ</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Discover</title>
 
 <style>
-body{
-margin:0;
-font-family:Segoe UI;
-background:#020617;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-color:white;
-}
 
-.card{
-background:#111;
-padding:30px;
-border-radius:20px;
-width:300px;
+body{
+font-family:Arial;
+background:#f2f2f2;
 text-align:center;
 }
 
-.avatar{
-width:140px;
-height:140px;
-border-radius:50%;
-object-fit:cover;
-margin-bottom:15px;
+.card{
+width:300px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:20px;
+margin-top:40px;
 }
 
-.buttons{
-margin-top:20px;
-display:flex;
-justify-content:center;
-gap:20px;
+img{
+width:100%;
+border-radius:15px;
 }
 
 button{
+margin:10px;
+padding:12px 20px;
 border:none;
-padding:15px 20px;
-border-radius:50%;
-font-size:20px;
+border-radius:30px;
+font-size:18px;
 cursor:pointer;
 }
 
-.no{
-background:#333;
-color:red;
-}
-
 .like{
-background:#FF4D6D;
+background:#ff4d6d;
 color:white;
 }
+
+.nope{
+background:#ccc;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="card">
+<h2>Discover People</h2>
 
-<img id="photo" class="avatar">
+<div id="card"></div>
 
-<h2 id="name"></h2>
+<button class="nope" onclick="nextUser()">❌</button>
+<button class="like" onclick="likeUser()">❤️</button>
 
-<p id="city"></p>
+<script type="module">
 
-<p id="bio"></p>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
 
-<div class="buttons">
-<button class="no" onclick="dislike()">❌</button>
-<button class="like" onclick="like()">❤️</button>
-</div>
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc
+} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
 
-</div>
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
+measurementId: "G-KTCV2B5R9L"
+};
 
-<script>
+const app = initializeApp(firebaseConfig);
 
-let users = JSON.parse(localStorage.getItem("users")) || []
+const db = getFirestore(app);
 
-let index = 0
+let users=[]
+let index=0
+
+async function loadUsers(){
+
+let querySnapshot=await getDocs(collection(db,"users"))
+
+querySnapshot.forEach((doc)=>{
+
+users.push(doc.data())
+
+})
+
+showUser()
+
+}
 
 function showUser(){
 
-if(users.length===0){
-document.body.innerHTML="<h2>هیچ کاربری ثبت نام نکرده</h2>"
-return
-}
+if(users.length==0)return
 
-let u = users[index]
+let user=users[index]
 
-document.getElementById("name").innerText = u.name
-document.getElementById("city").innerText = u.city
-document.getElementById("bio").innerText = u.bio
-document.getElementById("photo").src = u.photo
+document.getElementById("card").innerHTML=`
 
-}
+<div class="card">
 
-function like(){
+<img src="https://randomuser.me/api/portraits/men/1.jpg">
 
-let matches = JSON.parse(localStorage.getItem("matches")) || []
+<h3>${user.name}</h3>
+<p>${user.city}</p>
 
-matches.push(users[index])
+</div>
 
-localStorage.setItem("matches", JSON.stringify(matches))
-
-// رفتن مستقیم به صفحه Match ها
-window.location.href = "matches.html"
+`
 
 }
 
-function dislike(){
-nextUser()
-}
-
-function nextUser(){
+window.nextUser=function(){
 
 index++
 
-if(index >= users.length){
-index = 0
-}
+if(index>=users.length)index=0
 
 showUser()
 
 }
 
-showUser()
+window.likeUser=async function(){
+
+let user=users[index]
+
+await addDoc(collection(db,"likes"),{
+
+name:user.name,
+city:user.city
+
+})
+
+nextUser()
+
+}
+
+loadUsers()
 
 </script>
 
 </body>
+
 </html>
