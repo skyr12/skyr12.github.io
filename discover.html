@@ -1,6 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Discover</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+margin:0;
+}
+
+.card{
+background:white;
+width:320px;
+margin:auto;
+margin-top:60px;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+img{
+width:100%;
+border-radius:20px;
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:20px;
+margin:10px;
+cursor:pointer;
+}
+
+.like{
+background:#ff4d6d;
+color:white;
+}
+
+.super{
+background:gold;
+color:black;
+}
+
+.skip{
+background:gray;
+color:white;
+}
+
+.report{
+background:black;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Discover</h2>
+
+<div class="card">
+
+<img id="photo">
+
+<h3 id="name"></h3>
+
+<p id="city"></p>
+
+<p id="age"></p>
+
+<button class="like" onclick="likeUser()">❤️ Like</button>
+
+<button class="super" onclick="superLike()">⭐ Super Like</button>
+
+<button class="skip" onclick="nextUser()">❌ Skip</button>
+
+<button class="report" onclick="reportUser()">🚨 Report</button>
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+let users=[]
+let index=0
+let currentUser=null
+let myLat=0
+let myLng=0
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(user){
+
+currentUser=user
+
+db.collection("users").doc(user.uid).get().then(doc=>{
+
+currentUser.country=doc.data().country
+
+})
+
+db.collection("users").doc(user.uid).update({
+online:true
+})
+
+getLocation()
+
+loadUsers()
+
+}
+
+})
+
+
+window.addEventListener("beforeunload",()=>{
+
+if(currentUser){
+
+db.collection("users").doc(currentUser.uid).update({
+online:false
+})
+
+}
+
+})
+
+
+function getLocation(){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+myLat=position.coords.latitude
+myLng=position.coords.longitude
+
+db.collection("users").doc(currentUser.uid).update({
+
+lat:myLat,
+lng:myLng
+
+})
+
+})
+
+}
+
+
 function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
+
+let localUsers=[]
+let globalUsers=[]
 
 snapshot.forEach(doc=>{
 
@@ -8,28 +183,164 @@ let data=doc.data()
 
 if(data.blocked) return
 
-if(data.id===currentUser.uid) return
-
-// Match algorithm
-
-let ageDiff=Math.abs(data.age-25)
-
-if(ageDiff>10) return
-
-if(data.country!=="UK") return
+if(doc.id===currentUser.uid) return
 
 data.id=doc.id
 
-if(data.boost){
-users.unshift(data)
+if(data.country===currentUser.country){
+
+localUsers.push(data)
+
 }else{
-users.push(data)
+
+globalUsers.push(data)
+
 }
 
 })
+
+users=[...localUsers,...globalUsers]
 
 showUser()
 
 })
 
 }
+
+
+function showUser(){
+
+if(users.length==0)return
+
+let user=users[index]
+
+let status=user.online ? "🟢 Online" : "⚫ Offline"
+
+let verified=user.verified ? " ✔ Verified" : ""
+
+let distance=""
+
+if(user.lat && user.lng){
+
+let d=Math.floor(
+Math.sqrt(
+Math.pow(user.lat-myLat,2)+
+Math.pow(user.lng-myLng,2)
+)*111
+)
+
+distance=" • "+d+" km away"
+
+}
+
+document.getElementById("name").innerText=user.name + verified + " " + status
+
+document.getElementById("city").innerText=user.city+" , "+user.country + distance
+
+document.getElementById("age").innerText="Age: "+user.age
+
+document.getElementById("photo").src=user.photo
+
+}
+
+
+function nextUser(){
+
+index++
+
+if(index>=users.length){
+
+index=0
+
+}
+
+showUser()
+
+}
+
+
+function likeUser(){
+
+let target=users[index]
+
+db.collection("likes").add({
+
+from:currentUser.uid,
+to:target.id,
+time:Date.now()
+
+}).then(()=>{
+
+checkMatch(target.id)
+
+nextUser()
+
+})
+
+}
+
+
+function superLike(){
+
+let target=users[index]
+
+db.collection("superLikes").add({
+
+from:currentUser.uid,
+to:target.id,
+time:Date.now()
+
+})
+
+alert("⭐ Super Like Sent!")
+
+nextUser()
+
+}
+
+
+function checkMatch(userId){
+
+db.collection("likes")
+.where("from","==",userId)
+.where("to","==",currentUser.uid)
+.get()
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+alert("❤️ It's a Match!")
+
+}
+
+})
+
+}
+
+
+function reportUser(){
+
+let target=users[index]
+
+let reason=prompt("Why are you reporting this user?")
+
+if(!reason)return
+
+db.collection("reports").add({
+
+from:currentUser.uid,
+to:target.id,
+reason:reason,
+time:Date.now()
+
+})
+
+alert("User reported")
+
+}
+
+</script>
+
+</body>
+
+</html>
