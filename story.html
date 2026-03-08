@@ -1,1 +1,121 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Stories</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+}
+
+.story{
+display:inline-block;
+margin:10px;
+}
+
+.story img{
+width:80px;
+height:80px;
+border-radius:50%;
+border:3px solid #ff4d6d;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Stories</h2>
+
+<input type="text" id="storyUrl" placeholder="Story image URL">
+
+<button onclick="addStory()">Add Story</button>
+
+<div id="stories"></div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+
+function addStory(){
+
+const url=document.getElementById("storyUrl").value;
+
+const user=firebase.auth().currentUser;
+
+db.collection("stories").add({
+
+user:user.uid,
+photo:url,
+time:Date.now()
+
+}).then(()=>{
+
+alert("Story added!");
+
+loadStories();
+
+});
+
+}
+
+
+function loadStories(){
+
+db.collection("stories").get().then(snapshot=>{
+
+snapshot.forEach(doc=>{
+
+const data=doc.data();
+
+const div=document.createElement("div");
+
+div.className="story";
+
+div.innerHTML=`
+
+<img src="${data.photo}">
+
+`;
+
+document.getElementById("stories").appendChild(div);
+
+});
+
+});
+
+}
+
+
+loadStories();
+
+</script>
+
+</body>
+
+</html>
