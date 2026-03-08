@@ -1,44 +1,66 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<title>Matches</title><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script><style>
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Matches</title>
+
+<style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f3f3f3;
 text-align:center;
 }
 
-.card{
-width:300px;
-margin:20px auto;
+.match{
 background:white;
+width:300px;
+margin:auto;
+margin-top:20px;
+padding:20px;
 border-radius:20px;
-overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
 }
 
-.card img{
-width:100%;
-height:300px;
-object-fit:cover;
+img{
+width:100px;
+height:100px;
+border-radius:50%;
 }
 
 button{
 padding:10px 20px;
-background:red;
+background:#ff4d6d;
 color:white;
 border:none;
-border-radius:10px;
+border-radius:20px;
 cursor:pointer;
-margin:10px;
+margin-top:10px;
 }
 
-</style></head><body><h1>Your Matches</h1><div id="matches"></div><script>
+</style>
+
+</head>
+
+<body>
+
+<h2>Your Matches</h2>
+
+<div id="matches"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_ONI-PstgS4nP3uNIpyA",
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.appspot.com",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 };
@@ -47,70 +69,73 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-const matchesDiv=document.getElementById("matches");
+function loadMatches(){
 
-firebase.auth().onAuthStateChanged((user)=>{
+const user = firebase.auth().currentUser;
 
-db.collection("matches").get().then((snapshot)=>{
+db.collection("matches").get().then(snapshot=>{
 
-snapshot.forEach((doc)=>{
+snapshot.forEach(doc=>{
 
-let match=doc.data();
+const match = doc.data();
 
-let otherUserId;
+if(match.user1==user.uid || match.user2==user.uid){
 
-if(match.user1==user.uid){
+const otherUser = match.user1==user.uid ? match.user2 : match.user1;
 
-otherUserId=match.user2;
+db.collection("users").doc(otherUser).get().then(userDoc=>{
 
-}else if(match.user2==user.uid){
+const data=userDoc.data();
 
-otherUserId=match.user1;
+const div=document.createElement("div");
 
-}else{
+div.className="match";
 
-return;
+div.innerHTML=`
 
-}
+<img src="${data.photo}">
+<h3>${data.name}</h3>
+<p>${data.city}, ${data.country}</p>
 
-db.collection("users").doc(otherUserId).get().then((userDoc)=>{
-
-let u=userDoc.data();
-
-let card=document.createElement("div");
-
-card.className="card";
-
-card.innerHTML=`
-
-<img src="${u.photo}">
-
-<h2>${u.name}</h2>
-
-<p>${u.city} • ${u.country}</p>
-
-<button onclick="openChat('${otherUserId}')">Chat</button>
+<button onclick="openChat('${otherUser}')">
+Chat
+</button>
 
 `;
 
-matchesDiv.appendChild(card);
+document.getElementById("matches").appendChild(div);
 
 });
-
-});
-
-});
-
-});
-
-
-function openChat(id){
-
-localStorage.setItem("chatUser",id);
-
-window.location.href="chat.html";
 
 }
 
-</script></body>
+});
+
+});
+
+}
+
+function openChat(id){
+
+window.location.href="chat.html?user="+id;
+
+}
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(user){
+
+loadMatches();
+
+}else{
+
+window.location.href="login.html";
+
+}
+
+});
+
+</script>
+
+</body>
 </html>
