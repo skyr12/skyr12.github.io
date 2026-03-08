@@ -165,7 +165,9 @@ let user=users[index];
 
 let status=user.online ? "🟢 Online" : "⚫ Offline";
 
-document.getElementById("name").innerText=user.name+" "+status;
+let verified=user.verified ? " ✔ Verified" : "";
+
+document.getElementById("name").innerText=user.name + verified + " " + status;
 
 document.getElementById("city").innerText=user.city+" , "+user.country;
 
