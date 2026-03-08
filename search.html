@@ -1,146 +1,131 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html>
+
 <head>
-<meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>جستجوی کاربران | نیمه گمشده</title>
+
+<title>Search</title>
 
 <style>
+
 body{
-margin:0;
-font-family:Tahoma;
-background:#020617;
-color:white;
+font-family:Arial;
+background:#f2f2f2;
 text-align:center;
 }
 
-.header{
-padding:20px;
-font-size:22px;
-}
-
-.filters{
-background:#111;
-padding:20px;
-border-radius:20px;
+.card{
 width:320px;
 margin:20px auto;
+background:white;
+border-radius:20px;
+padding:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
-input,select{
-width:90%;
-padding:10px;
-margin:8px;
-border:none;
+.card img{
+width:100%;
+height:250px;
+object-fit:cover;
 border-radius:10px;
 }
 
+input{
+padding:10px;
+margin:5px;
+width:120px;
+}
+
 button{
-background:#ff4d6d;
-border:none;
 padding:10px 20px;
+border:none;
 border-radius:20px;
+background:#ff4d6d;
 color:white;
 cursor:pointer;
 }
 
-.results{
-margin-top:20px;
-}
-
-.card{
-background:#111;
-width:260px;
-margin:20px auto;
-padding:20px;
-border-radius:20px;
-}
-
-.avatar{
-width:100px;
-height:100px;
-border-radius:50%;
-object-fit:cover;
-}
-
 </style>
+
 </head>
 
 <body>
 
-<div class="header">
-🔎 جستجوی کاربران
-</div>
+<h2>Search Users</h2>
 
-<div class="filters">
+<input id="minAge" placeholder="Min Age">
 
-<input id="city" placeholder="شهر">
+<input id="maxAge" placeholder="Max Age">
 
-<input id="age" type="number" placeholder="حداقل سن">
+<input id="country" placeholder="Country">
 
-<select id="gender">
-<option value="">جنسیت</option>
-<option>مرد</option>
-<option>زن</option>
-</select>
+<br>
 
-<button onclick="search()">جستجو</button>
+<button onclick="searchUsers()">Search</button>
 
-</div>
+<div id="results"></div>
 
-<div class="results" id="results"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
 <script>
 
-let users=JSON.parse(localStorage.getItem("users"))||[]
+const firebaseConfig={
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
 
-function search(){
+firebase.initializeApp(firebaseConfig)
 
-let city=document.getElementById("city").value
-let age=document.getElementById("age").value
-let gender=document.getElementById("gender").value
+const db=firebase.firestore()
 
-let html=""
+function searchUsers(){
 
-users.forEach((u,i)=>{
+let minAge=document.getElementById("minAge").value
+let maxAge=document.getElementById("maxAge").value
+let country=document.getElementById("country").value
 
-if(city && u.city!==city) return
-if(age && u.age<age) return
-if(gender && u.gender!==gender) return
+document.getElementById("results").innerHTML=""
 
-html+=`
-<div class="card">
+db.collection("users").get().then(snapshot=>{
 
-<img src="${u.photo}" class="avatar">
+snapshot.forEach(doc=>{
 
-<h3>${u.name}</h3>
+let user=doc.data()
 
-<p>${u.city}</p>
+if(user.age>=minAge && user.age<=maxAge && user.country==country){
 
-<button onclick="request(${i})">درخواست آشنایی</button>
+let div=document.createElement("div")
 
-</div>
+div.className="card"
+
+div.innerHTML=`
+
+<img src="${user.photo}">
+
+<h3>${user.name}</h3>
+
+<p>${user.country}</p>
+
+<p>Age ${user.age}</p>
+
 `
 
-})
-
-document.getElementById("results").innerHTML=html
+document.getElementById("results").appendChild(div)
 
 }
 
-function request(i){
+})
 
-let requests=JSON.parse(localStorage.getItem("requests"))||[]
-
-requests.push(users[i])
-
-localStorage.setItem("requests",JSON.stringify(requests))
-
-alert("درخواست ارسال شد")
+})
 
 }
 
 </script>
 
 </body>
+
 </html>
