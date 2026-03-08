@@ -1,1 +1,71 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Video Call</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#000;
+text-align:center;
+color:white;
+}
+
+video{
+width:90%;
+max-width:500px;
+margin-top:20px;
+border-radius:20px;
+}
+
+button{
+padding:12px 20px;
+background:#ff4d6d;
+color:white;
+border:none;
+border-radius:20px;
+font-size:16px;
+cursor:pointer;
+margin-top:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Video Call</h2>
+
+<video id="localVideo" autoplay muted></video>
+
+<br>
+
+<button onclick="startCall()">
+Start Camera
+</button>
+
+
+<script>
+
+async function startCall(){
+
+const stream = await navigator.mediaDevices.getUserMedia({
+video:true,
+audio:true
+})
+
+document.getElementById("localVideo").srcObject=stream
+
+}
+
+</script>
+
+</body>
+
+</html>
