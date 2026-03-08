@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Boost Profile</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+}
+
+.card{
+background:white;
+width:320px;
+margin:auto;
+margin-top:60px;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+button{
+padding:12px 20px;
+background:#ff4d6d;
+color:white;
+border:none;
+border-radius:20px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Boost Your Profile</h2>
+
+<p>Your profile will appear first in Discover</p>
+
+<button onclick="boost()">
+Boost Now
+</button>
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+function boost(){
+
+const user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+boost:true
+
+})
+
+alert("Profile Boost Activated!")
+
+}
+
+</script>
+
+</body>
+
+</html>
