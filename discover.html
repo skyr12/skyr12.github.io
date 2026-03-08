@@ -142,6 +142,8 @@ snapshot.forEach(doc=>{
 
 let data=doc.data();
 
+if(data.blocked) return;
+
 data.id=doc.id;
 
 users.push(data);
