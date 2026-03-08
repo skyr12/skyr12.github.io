@@ -85,6 +85,8 @@ color:white;
 
 <input id="countryFilter" placeholder="Country">
 
+<input id="distanceFilter" placeholder="Max Distance (km)">
+
 <button onclick="applyFilter()">Search</button>
 
 </div>
@@ -143,10 +145,6 @@ if(user){
 
 currentUser=user
 
-db.collection("users").doc(user.uid).update({
-online:true
-})
-
 getLocation()
 
 loadUsers()
@@ -192,11 +190,32 @@ showUser()
 
 }
 
+function distance(lat1,lon1,lat2,lon2){
+
+let R=6371
+
+let dLat=(lat2-lat1)*Math.PI/180
+
+let dLon=(lon2-lon1)*Math.PI/180
+
+let a=
+Math.sin(dLat/2)*Math.sin(dLat/2)+
+Math.cos(lat1*Math.PI/180)*
+Math.cos(lat2*Math.PI/180)*
+Math.sin(dLon/2)*Math.sin(dLon/2)
+
+let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
+
+return R*c
+
+}
+
 function applyFilter(){
 
 let minAge=document.getElementById("minAge").value
 let maxAge=document.getElementById("maxAge").value
 let country=document.getElementById("countryFilter").value
+let maxDistance=document.getElementById("distanceFilter").value
 
 filteredUsers=users.filter(user=>{
 
@@ -205,6 +224,14 @@ if(minAge && user.age<minAge) return false
 if(maxAge && user.age>maxAge) return false
 
 if(country && user.country!==country) return false
+
+if(maxDistance && user.lat && user.lng){
+
+let d=distance(myLat,myLng,user.lat,user.lng)
+
+if(d>maxDistance) return false
+
+}
 
 return true
 
@@ -222,11 +249,7 @@ if(filteredUsers.length==0) return
 
 let user=filteredUsers[index]
 
-let status=user.online ? "🟢 Online" : "⚫ Offline"
-
-let verified=user.verified ? " ✔ Verified" : ""
-
-document.getElementById("name").innerText=user.name+verified+" "+status
+document.getElementById("name").innerText=user.name
 
 document.getElementById("city").innerText=user.city+" , "+user.country
 
