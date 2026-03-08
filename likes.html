@@ -43,6 +43,8 @@ border-radius:10px;
 
 <div id="likes"></div>
 
+<div id="premiumMessage"></div>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -61,14 +63,34 @@ firebase.initializeApp(firebaseConfig)
 const db=firebase.firestore()
 
 let currentUser=null
+let myData=null
 
 firebase.auth().onAuthStateChanged(user=>{
 
 currentUser=user
 
+db.collection("users")
+.doc(user.uid)
+.get()
+.then(doc=>{
+
+myData=doc.data()
+
+if(!myData.premium){
+
+document.getElementById("premiumMessage").innerHTML=
+"⭐ Upgrade to Premium to see who liked you"
+
+return
+
+}
+
 loadLikes()
 
 })
+
+})
+
 
 function loadLikes(){
 
