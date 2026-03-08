@@ -16,37 +16,40 @@ text-align:center;
 margin:0;
 }
 
-.filter{
-margin-top:20px;
-}
-
-.filter input{
-padding:8px;
-margin:5px;
-border-radius:10px;
-border:1px solid #ccc;
-}
-
 .card{
-background:white;
+
 width:320px;
 margin:auto;
-margin-top:40px;
-padding:20px;
+margin-top:80px;
+background:white;
 border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+position:relative;
+
 }
 
-img{
+.card img{
 width:100%;
-border-radius:20px;
+height:320px;
+object-fit:cover;
+}
+
+.info{
+padding:20px;
+}
+
+.buttons{
+
+margin-top:20px;
+
 }
 
 button{
-padding:10px 20px;
+padding:12px 20px;
+margin:5px;
 border:none;
 border-radius:20px;
-margin:10px;
 cursor:pointer;
 }
 
@@ -55,17 +58,8 @@ background:#ff4d6d;
 color:white;
 }
 
-.super{
-background:gold;
-}
-
 .skip{
 background:gray;
-color:white;
-}
-
-.report{
-background:black;
 color:white;
 }
 
@@ -77,26 +71,11 @@ color:white;
 
 <h2>Discover</h2>
 
-<div class="filter">
-
-<input id="minAge" placeholder="Min Age">
-
-<input id="maxAge" placeholder="Max Age">
-
-<input id="countryFilter" placeholder="Country">
-
-<input id="languageFilter" placeholder="Language">
-
-<input id="distanceFilter" placeholder="Max Distance (km)">
-
-<button onclick="applyFilter()">Search</button>
-
-</div>
-
-
-<div class="card">
+<div class="card" id="card">
 
 <img id="photo">
+
+<div class="info">
 
 <h3 id="name"></h3>
 
@@ -104,73 +83,51 @@ color:white;
 
 <p id="age"></p>
 
+</div>
+
+</div>
+
+<div class="buttons">
+
 <button class="like" onclick="likeUser()">❤️ Like</button>
 
-<button class="super" onclick="superLike()">⭐ Super Like</button>
-
 <button class="skip" onclick="nextUser()">❌ Skip</button>
-
-<button class="report" onclick="reportUser()">🚨 Report</button>
 
 </div>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-};
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+}
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore();
+const db=firebase.firestore()
 
 let users=[]
-let filteredUsers=[]
 let index=0
 let currentUser=null
-let myLat=0
-let myLng=0
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(user){
-
 currentUser=user
-
-getLocation()
 
 loadUsers()
 
-}
-
 })
 
-function getLocation(){
-
-navigator.geolocation.getCurrentPosition(function(position){
-
-myLat=position.coords.latitude
-myLng=position.coords.longitude
-
-})
-
-}
 
 function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
-
-users=[]
 
 snapshot.forEach(doc=>{
 
@@ -184,75 +141,18 @@ users.push(data)
 
 })
 
-filteredUsers=[...users]
-
 showUser()
 
 })
 
 }
 
-function distance(lat1,lon1,lat2,lon2){
-
-let R=6371
-
-let dLat=(lat2-lat1)*Math.PI/180
-
-let dLon=(lon2-lon1)*Math.PI/180
-
-let a=
-Math.sin(dLat/2)*Math.sin(dLat/2)+
-Math.cos(lat1*Math.PI/180)*
-Math.cos(lat2*Math.PI/180)*
-Math.sin(dLon/2)*Math.sin(dLon/2)
-
-let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
-
-return R*c
-
-}
-
-function applyFilter(){
-
-let minAge=document.getElementById("minAge").value
-let maxAge=document.getElementById("maxAge").value
-let country=document.getElementById("countryFilter").value
-let language=document.getElementById("languageFilter").value
-let maxDistance=document.getElementById("distanceFilter").value
-
-filteredUsers=users.filter(user=>{
-
-if(minAge && user.age<minAge) return false
-
-if(maxAge && user.age>maxAge) return false
-
-if(country && user.country!==country) return false
-
-if(language && user.language!==language) return false
-
-if(maxDistance && user.lat && user.lng){
-
-let d=distance(myLat,myLng,user.lat,user.lng)
-
-if(d>maxDistance) return false
-
-}
-
-return true
-
-})
-
-index=0
-
-showUser()
-
-}
 
 function showUser(){
 
-if(filteredUsers.length==0) return
+if(users.length==0) return
 
-let user=filteredUsers[index]
+let user=users[index]
 
 document.getElementById("name").innerText=user.name
 
@@ -264,11 +164,12 @@ document.getElementById("photo").src=user.photo
 
 }
 
+
 function nextUser(){
 
 index++
 
-if(index>=filteredUsers.length){
+if(index>=users.length){
 
 index=0
 
@@ -278,9 +179,10 @@ showUser()
 
 }
 
+
 function likeUser(){
 
-let target=filteredUsers[index]
+let target=users[index]
 
 db.collection("likes").add({
 
@@ -291,45 +193,6 @@ time:Date.now()
 })
 
 nextUser()
-
-}
-
-function superLike(){
-
-let target=filteredUsers[index]
-
-db.collection("superLikes").add({
-
-from:currentUser.uid,
-to:target.id,
-time:Date.now()
-
-})
-
-alert("Super Like sent ⭐")
-
-nextUser()
-
-}
-
-function reportUser(){
-
-let target=filteredUsers[index]
-
-let reason=prompt("Why are you reporting?")
-
-if(!reason) return
-
-db.collection("reports").add({
-
-from:currentUser.uid,
-to:target.id,
-reason:reason,
-time:Date.now()
-
-})
-
-alert("User reported")
 
 }
 
