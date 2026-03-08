@@ -34,13 +34,9 @@ margin:5px;
 border-radius:10px;
 }
 
-.msg img{
-width:200px;
-border-radius:10px;
-}
-
-audio{
-width:200px;
+.status{
+font-size:12px;
+color:#333;
 }
 
 input{
@@ -58,7 +54,6 @@ color:white;
 border:none;
 border-radius:20px;
 cursor:pointer;
-margin-top:5px;
 }
 
 </style>
@@ -76,18 +71,6 @@ margin-top:5px;
 <input id="message" placeholder="Type message">
 
 <button onclick="sendMessage()">Send</button>
-
-<br>
-
-<input id="imageUrl" placeholder="Image URL">
-
-<button onclick="sendImage()">Send Image</button>
-
-<br>
-
-<button onclick="startRecording()">🎤 Record Voice</button>
-
-<button onclick="stopRecording()">Stop</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -125,75 +108,12 @@ db.collection("messages").add({
 
 from:currentUser.uid,
 text:text,
+seen:false,
 time:Date.now()
 
 })
 
 document.getElementById("message").value=""
-
-}
-
-
-function sendImage(){
-
-let img=document.getElementById("imageUrl").value
-
-db.collection("messages").add({
-
-from:currentUser.uid,
-image:img,
-time:Date.now()
-
-})
-
-document.getElementById("imageUrl").value=""
-
-}
-
-
-let recorder
-let audioChunks=[]
-
-function startRecording(){
-
-navigator.mediaDevices.getUserMedia({audio:true})
-.then(stream=>{
-
-recorder=new MediaRecorder(stream)
-
-recorder.start()
-
-recorder.ondataavailable=e=>{
-
-audioChunks.push(e.data)
-
-}
-
-})
-
-}
-
-function stopRecording(){
-
-recorder.stop()
-
-recorder.onstop=e=>{
-
-let blob=new Blob(audioChunks)
-
-let url=URL.createObjectURL(blob)
-
-db.collection("messages").add({
-
-from:currentUser.uid,
-voice:url,
-time:Date.now()
-
-})
-
-audioChunks=[]
-
-}
 
 }
 
@@ -214,25 +134,21 @@ let div=document.createElement("div")
 
 div.className="msg"
 
-if(data.text){
+let status="✓ Sent"
 
-div.innerText=data.text
+if(data.seen){
 
-}
-
-if(data.image){
-
-div.innerHTML="<img src='"+data.image+"'>"
+status="✓✓ Seen"
 
 }
 
-if(data.voice){
-
-div.innerHTML="<audio controls src='"+data.voice+"'></audio>"
-
-}
+div.innerHTML=data.text+"<br><span class='status'>"+status+"</span>"
 
 document.getElementById("messages").appendChild(div)
+
+db.collection("messages")
+.doc(doc.id)
+.update({seen:true})
 
 })
 
