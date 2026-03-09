@@ -172,6 +172,7 @@ function like(target){
 
 let user=firebase.auth().currentUser
 
+// ذخیره Like
 db.collection("likes").add({
 
 from:user.uid,
@@ -180,9 +181,34 @@ time:Date.now()
 
 })
 
-.then(()=>{
+// بررسی Match
+db.collection("likes")
+.where("from","==",target)
+.where("to","==",user.uid)
+.get()
+
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+// ساخت Match
+db.collection("matches").add({
+
+user1:user.uid,
+user2:target,
+time:Date.now()
+
+})
+
+alert("🎉 It's a Match!")
+
+}
+
+else{
 
 alert("❤️ Liked")
+
+}
 
 })
 
