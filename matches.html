@@ -1,11 +1,20 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Your Matches</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Matches</title>
+
+<style>
 
 body{
+margin:0;
 font-family:Arial;
 background:#f2f2f2;
-margin:0;
 text-align:center;
+padding-bottom:80px;
 }
 
 .header{
@@ -15,105 +24,100 @@ padding:20px;
 font-size:22px;
 }
 
-.container{
-max-width:500px;
-margin:auto;
-padding:20px;
+.match-list{
+width:90%;
+max-width:400px;
+margin:30px auto;
 }
 
-.card{
+.match{
+display:flex;
+align-items:center;
 background:white;
-border-radius:15px;
-padding:15px;
+padding:10px;
 margin-bottom:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
 cursor:pointer;
 }
 
-.card img{
+.match img{
+width:60px;
+height:60px;
+border-radius:50%;
+margin-right:15px;
+object-fit:cover;
+}
+
+.match-name{
+font-size:18px;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
 width:100%;
-border-radius:10px;
+height:65px;
+background:white;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 15px rgba(0,0,0,0.15);
 }
 
-</style></head><body><div class="header">💘 Your Matches
-
-</div><div id="matches" class="container"></div><script>
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
-
+.navbar a{
+text-decoration:none;
+font-size:24px;
+color:#444;
 }
 
-firebase.initializeApp(firebaseConfig)
+</style>
 
-const db = firebase.firestore()
+</head>
 
-firebase.auth().onAuthStateChanged(user=>{
+<body>
 
-if(!user){
+<div class="header">
+Your Matches ❤️
+</div>
 
-window.location="login.html"
-return
+<div class="match-list">
 
-}
+<div class="match" onclick="openChat('Sara')">
+<img src="https://randomuser.me/api/portraits/women/44.jpg">
+<div class="match-name">Sara</div>
+</div>
 
-loadMatches(user.uid)
+<div class="match" onclick="openChat('John')">
+<img src="https://randomuser.me/api/portraits/men/65.jpg">
+<div class="match-name">John</div>
+</div>
 
-})
-
-function loadMatches(uid){
-
-db.collection("matches")
-
-.where("users","array-contains",uid)
-
-.get()
-
-.then(snapshot=>{
-
-let html=""
-
-snapshot.forEach(doc=>{
-
-let data = doc.data()
-
-let otherUser = data.users.find(u => u !== uid)
-
-db.collection("users").doc(otherUser).get().then(userDoc=>{
-
-let u = userDoc.data()
-
-html += `
-
-<div class="card" onclick="openChat('${doc.id}')">
-
-<img src="${u.photo || 'https://via.placeholder.com/400'}">
-
-<h2>${u.name}</h2>
-
-<p>${u.country}</p>
+<div class="match" onclick="openChat('Anna')">
+<img src="https://randomuser.me/api/portraits/women/68.jpg">
+<div class="match-name">Anna</div>
+</div>
 
 </div>
 
-`
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+</div>
 
-document.getElementById("matches").innerHTML = html
+<script>
 
-})
+function openChat(name){
 
-})
-
-})
-
-}
-
-function openChat(matchId){
-
-window.location = "chat.html?match=" + matchId
+alert("Open chat with " + name)
 
 }
 
-</script></body></html>
+</script>
+
+</body>
+</html>
