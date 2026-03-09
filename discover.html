@@ -58,15 +58,28 @@ background:#ff4d6d;
 color:white;
 }
 
-</style></head><body><div class="header">Discover
+.status{
+font-size:14px;
+margin-top:5px;
+}
+
+.online{
+color:green;
+}
+
+.offline{
+color:gray;
+}
+
+</style></head><body><div class="header">Discover People
 
 </div><div id="card"></div><script>
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
 
 }
 
@@ -74,8 +87,8 @@ firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore()
 
-let users=[]
-let index=0
+let users = []
+let index = 0
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -94,11 +107,18 @@ function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
 
+users=[]
+
 snapshot.forEach(doc=>{
 
-users.push({id:doc.id,...doc.data()})
+let u = doc.data()
+u.id = doc.id
+
+users.push(u)
 
 })
+
+sortUsers()
 
 showUser()
 
@@ -106,19 +126,53 @@ showUser()
 
 }
 
+function sortUsers(){
+
+let now = Date.now()
+
+users.sort((a,b)=>{
+
+let boostA = (a.boostUntil && a.boostUntil > now) ? 1 : 0
+let boostB = (b.boostUntil && b.boostUntil > now) ? 1 : 0
+
+if(boostA !== boostB){
+
+return boostB - boostA
+
+}
+
+let onlineA = a.online ? 1 : 0
+let onlineB = b.online ? 1 : 0
+
+return onlineB - onlineA
+
+})
+
+}
+
 function showUser(){
 
-if(index>=users.length){
+if(index >= users.length){
 
-document.getElementById("card").innerHTML="No more users"
+document.getElementById("card").innerHTML = "No more users"
 
 return
 
 }
 
-let u=users[index]
+let u = users[index]
 
-document.getElementById("card").innerHTML=`
+let statusText = "Offline"
+let statusClass = "offline"
+
+if(u.online){
+
+statusText = "Online"
+statusClass = "online"
+
+}
+
+document.getElementById("card").innerHTML = `
 
 <div class="card">
 
@@ -129,6 +183,8 @@ document.getElementById("card").innerHTML=`
 <h2>${u.name} • ${u.age}</h2>
 
 <p>${u.country}</p>
+
+<p class="status ${statusClass}">${statusText}</p>
 
 <div class="buttons">
 
@@ -148,9 +204,9 @@ document.getElementById("card").innerHTML=`
 
 function like(){
 
-let currentUser=firebase.auth().currentUser
+let currentUser = firebase.auth().currentUser
 
-let likedUser=users[index]
+let likedUser = users[index]
 
 db.collection("likes").add({
 
