@@ -1,141 +1,119 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Matches</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Your Matches</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
 font-family:Arial;
-background:#f3f3f3;
+background:#f2f2f2;
+margin:0;
 text-align:center;
 }
 
-.match{
-background:white;
-width:300px;
-margin:auto;
-margin-top:20px;
-padding:20px;
-border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
-}
-
-img{
-width:100px;
-height:100px;
-border-radius:50%;
-}
-
-button{
-padding:10px 20px;
+.header{
 background:#ff4d6d;
 color:white;
-border:none;
-border-radius:20px;
-cursor:pointer;
-margin-top:10px;
+padding:20px;
+font-size:22px;
 }
 
-</style>
+.container{
+max-width:500px;
+margin:auto;
+padding:20px;
+}
 
-</head>
+.card{
+background:white;
+border-radius:15px;
+padding:15px;
+margin-bottom:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+cursor:pointer;
+}
 
-<body>
+.card img{
+width:100%;
+border-radius:10px;
+}
 
-<h2>Your Matches</h2>
+</style></head><body><div class="header">💘 Your Matches
 
-<div id="matches"></div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-<script>
+</div><div id="matches" class="container"></div><script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-};
 
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-
-function loadMatches(){
-
-const user = firebase.auth().currentUser;
-
-db.collection("matches").get().then(snapshot=>{
-
-snapshot.forEach(doc=>{
-
-const match = doc.data();
-
-if(match.user1==user.uid || match.user2==user.uid){
-
-const otherUser = match.user1==user.uid ? match.user2 : match.user1;
-
-db.collection("users").doc(otherUser).get().then(userDoc=>{
-
-const data=userDoc.data();
-
-const div=document.createElement("div");
-
-div.className="match";
-
-div.innerHTML=`
-
-<img src="${data.photo}">
-<h3>${data.name}</h3>
-<p>${data.city}, ${data.country}</p>
-
-<button onclick="openChat('${otherUser}')">
-Chat
-</button>
-
-`;
-
-document.getElementById("matches").appendChild(div);
-
-});
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
 
 }
 
-});
+firebase.initializeApp(firebaseConfig)
 
-});
-
-}
-
-function openChat(id){
-
-window.location.href="chat.html?user="+id;
-
-}
+const db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(user){
+if(!user){
 
-loadMatches();
-
-}else{
-
-window.location.href="login.html";
+window.location="login.html"
+return
 
 }
 
-});
+loadMatches(user.uid)
 
-</script>
+})
 
-</body>
-</html>
+function loadMatches(uid){
+
+db.collection("matches")
+
+.where("users","array-contains",uid)
+
+.get()
+
+.then(snapshot=>{
+
+let html=""
+
+snapshot.forEach(doc=>{
+
+let data = doc.data()
+
+let otherUser = data.users.find(u => u !== uid)
+
+db.collection("users").doc(otherUser).get().then(userDoc=>{
+
+let u = userDoc.data()
+
+html += `
+
+<div class="card" onclick="openChat('${doc.id}')">
+
+<img src="${u.photo || 'https://via.placeholder.com/400'}">
+
+<h2>${u.name}</h2>
+
+<p>${u.country}</p>
+
+</div>
+
+`
+
+document.getElementById("matches").innerHTML = html
+
+})
+
+})
+
+})
+
+}
+
+function openChat(matchId){
+
+window.location = "chat.html?match=" + matchId
+
+}
+
+</script></body></html>
