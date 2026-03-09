@@ -169,8 +169,30 @@ photo:photo
 alert("Profile Saved")
 
 }
+<script>
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(!user) return
+
+let viewer=user.uid
+
+let profile=localStorage.getItem("viewProfile")
+
+if(!profile) return
+
+db.collection("visitors").add({
+
+viewer:viewer,
+profile:profile,
+time:Date.now()
+
+})
+
+})
 
 </script>
 
 </body>
 </html>
+
