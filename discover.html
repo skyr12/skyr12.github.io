@@ -120,45 +120,104 @@ Discover
 <a href="profile.html">👤</a>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 <script>
 
+var firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID"
+
+};
+
+firebase.initializeApp(firebaseConfig)
+
+var db = firebase.firestore()
+
 let users = [
+
 {
-name:"Farhad",
-country:"UK • 25",
-photo:"https://randomuser.me/api/portraits/men/32.jpg"
-},
-{
+id:"user2",
 name:"Sara",
 country:"Germany • 23",
 photo:"https://randomuser.me/api/portraits/women/44.jpg"
 },
+
 {
+id:"user3",
 name:"John",
 country:"USA • 27",
 photo:"https://randomuser.me/api/portraits/men/65.jpg"
+},
+
+{
+id:"user4",
+name:"Anna",
+country:"France • 24",
+photo:"https://randomuser.me/api/portraits/women/68.jpg"
 }
+
 ]
 
-let index = 0
+let currentUser="user1"
+
+let index=0
 
 function showUser(){
 
-if(index >= users.length){
-index = 0
+if(index>=users.length){
+
+index=0
+
 }
 
-let u = users[index]
+let u=users[index]
 
-document.getElementById("photo").src = u.photo
-document.getElementById("name").innerText = u.name
-document.getElementById("country").innerText = u.country
+document.getElementById("photo").src=u.photo
+document.getElementById("name").innerText=u.name
+document.getElementById("country").innerText=u.country
 
 }
 
 function like(){
 
+let likedUser=users[index]
+
+db.collection("likes").add({
+
+from:currentUser,
+to:likedUser.id,
+time:Date.now()
+
+})
+
+db.collection("likes")
+.where("from","==",likedUser.id)
+.where("to","==",currentUser)
+.get()
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+db.collection("matches").add({
+
+user1:currentUser,
+user2:likedUser.id,
+time:Date.now()
+
+})
+
+alert("❤️ It's a Match!")
+
+}
+
+})
+
 index++
+
 showUser()
 
 }
@@ -166,6 +225,7 @@ showUser()
 function dislike(){
 
 index++
+
 showUser()
 
 }
