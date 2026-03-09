@@ -143,7 +143,11 @@ return
 
 }
 
-db.collection("users").get()
+db.collection("users")
+
+.orderBy("boost","desc")
+
+.get()
 
 .then(snapshot=>{
 
