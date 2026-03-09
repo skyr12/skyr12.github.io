@@ -2,52 +2,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Notifications</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
-margin:0;
 font-family:Arial;
 background:#f2f2f2;
+margin:0;
 }
 
 .header{
 background:#ff4d6d;
 color:white;
-padding:15px;
+padding:20px;
 text-align:center;
-font-size:20px;
+font-size:22px;
 }
 
-.list{
-padding:10px;
+.container{
+padding:20px;
+max-width:500px;
+margin:auto;
 }
 
-.item{
+.notification{
 background:white;
 padding:15px;
-margin:10px 0;
+margin-bottom:10px;
 border-radius:10px;
-box-shadow:0 5px 10px rgba(0,0,0,0.1);
-}
-
-.time{
-font-size:12px;
-color:gray;
-margin-top:5px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
 </style></head><body><div class="header">Notifications
 
-</div><div class="list" id="list"></div><script>
+</div><div class="container" id="notifications"></div><script>
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
 
 }
 
 firebase.initializeApp(firebaseConfig)
 
-const db = firebase.firestore()
+const db=firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -65,28 +61,32 @@ loadNotifications(user.uid)
 function loadNotifications(uid){
 
 db.collection("notifications")
-.where("user","==",uid)
+
+.where("to","==",uid)
+
 .orderBy("time","desc")
+
 .onSnapshot(snapshot=>{
 
-let box=document.getElementById("list")
-box.innerHTML=""
+let html=""
 
 snapshot.forEach(doc=>{
 
 let n=doc.data()
 
-let div=document.createElement("div")
-div.className="item"
+html+=`
 
-div.innerHTML=`
-<div>${n.text}</div>
-<div class="time">${new Date(n.time).toLocaleString()}</div>
+<div class="notification">
+
+${n.text}
+
+</div>
+
 `
 
-box.appendChild(div)
-
 })
+
+document.getElementById("notifications").innerHTML=html
 
 })
 
