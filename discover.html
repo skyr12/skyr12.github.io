@@ -15,13 +15,6 @@ margin:0;
 text-align:center;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:15px;
-font-size:20px;
-}
-
 .card{
 width:320px;
 margin:40px auto;
@@ -38,19 +31,23 @@ object-fit:cover;
 }
 
 .info{
-padding:20px;
+padding:15px;
 }
 
-.buttons{
-display:flex;
-justify-content:space-around;
-padding:20px;
+.name{
+font-size:22px;
+font-weight:bold;
+}
+
+.distance{
+color:gray;
 }
 
 button{
 border:none;
-padding:12px 20px;
+padding:12px 25px;
 border-radius:30px;
+margin:10px;
 font-size:16px;
 cursor:pointer;
 }
@@ -76,26 +73,15 @@ border-top:1px solid #ddd;
 font-size:22px;
 }
 
-.navbar a{
-text-decoration:none;
-}
-
 </style>
 
 </head>
 
 <body>
 
-<div class="header">🔥 Discover</div>
+<h2>🔥 Discover</h2>
 
 <div id="card"></div>
-
-<div class="buttons">
-
-<button class="skip" onclick="skip()">Skip</button>
-<button class="like" onclick="like()">❤️ Like</button>
-
-</div>
 
 <div class="navbar">
 <a href="discover.html">🔥</a>
@@ -105,6 +91,7 @@ text-decoration:none;
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 </div>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -131,33 +118,41 @@ const db=firebase.firestore()
 
 let users=[]
 let index=0
-
+let currentUserLocation=null
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
-
 location.href="login.html"
-
 return
-
 }
 
+navigator.geolocation.getCurrentPosition(pos=>{
+
+currentUserLocation={
+lat:pos.coords.latitude,
+lng:pos.coords.longitude
+}
+
+loadUsers()
+
+})
+
+})
+
+function loadUsers(){
+
 db.collection("users")
-
 .orderBy("boost","desc")
-
 .get()
-
 .then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-let data=doc.data()
+let u=doc.data()
+u.id=doc.id
 
-data.id=doc.id
-
-users.push(data)
+users.push(u)
 
 })
 
@@ -165,59 +160,77 @@ showUser()
 
 })
 
-})
+}
 
+function distance(lat1,lng1,lat2,lng2){
 
-function showUser(){
+let R=6371
+let dLat=(lat2-lat1)*Math.PI/180
+let dLng=(lng2-lng1)*Math.PI/180
 
-if(index>=users.length){
+let a=
+Math.sin(dLat/2)*Math.sin(dLat/2)+
+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+Math.sin(dLng/2)*Math.sin(dLng/2)
 
-document.getElementById("card").innerHTML="No more users"
+let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
 
-return
+return (R*c).toFixed(1)
 
 }
 
+function showUser(){
+
 let u=users[index]
 
-document.getElementById("card").innerHTML=`
+if(!u){
+document.getElementById("card").innerHTML="<h3>No more users</h3>"
+return
+}
 
-<div class="card" onclick="openProfile()">
+let dist=""
+
+if(u.lat && currentUserLocation){
+
+dist=distance(
+currentUserLocation.lat,
+currentUserLocation.lng,
+u.lat,
+u.lng
+)+" km away"
+
+}
+
+let vip=u.vip?"👑 ":""
+
+document.getElementById("card").innerHTML=
+
+`<div class="card">
 
 <img src="${u.photo}">
 
 <div class="info">
 
-<h2>${u.name} ${u.vip ? "👑" : ""}</h2>
+<div class="name">${vip}${u.name}, ${u.age}</div>
 
-<p>${u.country}</p>
+<div>${u.country}</div>
 
-<p>Age: ${u.age}</p>
+<div class="distance">${dist}</div>
+
+<button class="like" onclick="like()">❤️ Like</button>
+
+<button class="skip" onclick="skip()">Skip</button>
 
 </div>
 
-</div>
-
-`
+</div>`
 
 }
-
-
-function skip(){
-
-index++
-
-showUser()
-
-}
-
 
 function like(){
 
 let currentUser=firebase.auth().currentUser.uid
-
 let likedUser=users[index].id
-
 
 db.collection("likes").add({
 
@@ -227,14 +240,10 @@ time:Date.now()
 
 })
 
-
 db.collection("likes")
-
 .where("from","==",likedUser)
 .where("to","==",currentUser)
-
 .get()
-
 .then(snapshot=>{
 
 if(!snapshot.empty){
@@ -260,21 +269,15 @@ alert("❤️ It's a Match!")
 
 })
 
-
 index++
-
 showUser()
 
 }
 
+function skip(){
 
-function openProfile(){
-
-let user=users[index]
-
-localStorage.setItem("viewUser",JSON.stringify(user))
-
-window.location.href="view.html"
+index++
+showUser()
 
 }
 
