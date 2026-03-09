@@ -1,111 +1,178 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin Dashboard</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Panel</title>
+
+<style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:#f2f2f2;
 }
 
 .header{
-background:#111;
+background:#ff4d6d;
 color:white;
 padding:20px;
 text-align:center;
-font-size:22px;
+font-size:24px;
 }
 
-.stats{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-padding:30px;
-max-width:800px;
-margin:auto;
+.container{
+padding:20px;
 }
 
-.card{
+.box{
 background:white;
-padding:30px;
-border-radius:15px;
-box-shadow:0 10px 20px rgba(0,0,0,0.15);
-text-align:center;
+margin:15px 0;
+padding:20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-.number{
-font-size:35px;
-color:#ff4d6d;
-margin-top:10px;
+button{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+background:#ff4d6d;
+color:white;
+cursor:pointer;
 }
 
-</style></head><body><div class="header">Admin Dashboard
-
-</div><div class="stats"><div class="card">
-Users
-<div id="users" class="number">0</div>
-</div><div class="card">
-Matches
-<div id="matches" class="number">0</div>
-</div><div class="card">
-Messages
-<div id="messages" class="number">0</div>
-</div><div class="card">
-Gifts
-<div id="gifts" class="number">0</div>
-</div></div><script>
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh"
-
+.user{
+display:flex;
+justify-content:space-between;
+margin:10px 0;
 }
 
-firebase.initializeApp(firebaseConfig)
+</style>
 
-const db = firebase.firestore()
+</head>
 
-const ADMIN_EMAIL = "YOUR_EMAIL@gmail.com"
+<body>
 
-firebase.auth().onAuthStateChanged(user=>{
+<div class="header">
+Admin Dashboard
+</div>
 
-if(!user){
+<div class="container">
 
-window.location="login.html"
-return
+<div class="box">
 
-}
+<h3>📊 Site Stats</h3>
 
-if(user.email !== ADMIN_EMAIL){
+<p>Total Users: <span id="usersCount">0</span></p>
 
-document.body.innerHTML="Access denied"
-return
+<p>Total Coins: <span id="coinsCount">0</span></p>
 
-}
+</div>
 
-loadStats()
+<div class="box">
+
+<h3>👥 Manage Users</h3>
+
+<div id="usersList"></div>
+
+</div>
+
+<div class="box">
+
+<h3>🏆 Leaderboard</h3>
+
+<div id="leaderboard"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let users=[
+
+{name:"Sara",coins:120},
+
+{name:"John",coins:80},
+
+{name:"Anna",coins:200},
+
+{name:"Omar",coins:50}
+
+]
+
+function loadUsers(){
+
+let list=document.getElementById("usersList")
+
+list.innerHTML=""
+
+users.forEach((u,i)=>{
+
+let div=document.createElement("div")
+
+div.className="user"
+
+div.innerHTML=`
+
+<span>${u.name} - ${u.coins} coins</span>
+
+<button onclick="deleteUser(${i})">Delete</button>
+
+`
+
+list.appendChild(div)
 
 })
 
-function loadStats(){
-
-db.collection("users").get().then(snap=>{
-document.getElementById("users").innerText=snap.size
-})
-
-db.collection("matches").get().then(snap=>{
-document.getElementById("matches").innerText=snap.size
-})
-
-db.collection("messages").get().then(snap=>{
-document.getElementById("messages").innerText=snap.size
-})
-
-db.collection("gifts").get().then(snap=>{
-document.getElementById("gifts").innerText=snap.size
-})
+document.getElementById("usersCount").innerText=users.length
 
 }
 
-</script></body></html>
+function loadLeaderboard(){
+
+let board=document.getElementById("leaderboard")
+
+board.innerHTML=""
+
+let sorted=[...users].sort((a,b)=>b.coins-a.coins)
+
+sorted.forEach((u,i)=>{
+
+let div=document.createElement("div")
+
+div.innerHTML=`${i+1}. ${u.name} (${u.coins} coins)`
+
+board.appendChild(div)
+
+})
+
+let total=users.reduce((sum,u)=>sum+u.coins,0)
+
+document.getElementById("coinsCount").innerText=total
+
+}
+
+function deleteUser(i){
+
+users.splice(i,1)
+
+loadUsers()
+
+loadLeaderboard()
+
+}
+
+loadUsers()
+
+loadLeaderboard()
+
+</script>
+
+</body>
+
+</html>
