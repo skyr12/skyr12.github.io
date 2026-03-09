@@ -67,6 +67,11 @@ background:#ff4d6d;
 color:white;
 }
 
+.status{
+font-size:14px;
+margin-top:5px;
+}
+
 .navbar{
 position:fixed;
 bottom:0;
@@ -98,11 +103,16 @@ Discover
 
 <div class="card">
 
-<img id="photo" src="https://randomuser.me/api/portraits/men/32.jpg">
+<img id="photo" src="https://randomuser.me/api/portraits/women/44.jpg">
 
 <div class="info">
-<h2 id="name">Farhad</h2>
-<p id="country">UK • 25</p>
+
+<h2 id="name">Sara</h2>
+
+<p id="country">Germany • 23</p>
+
+<p id="status" class="status">🟢 Online</p>
+
 </div>
 
 <div class="buttons">
@@ -137,32 +147,32 @@ firebase.initializeApp(firebaseConfig)
 
 var db = firebase.firestore()
 
-let users = [
+let currentUser="user1"
+
+let users=[
 
 {
-id:"user2",
 name:"Sara",
 country:"Germany • 23",
-photo:"https://randomuser.me/api/portraits/women/44.jpg"
+photo:"https://randomuser.me/api/portraits/women/44.jpg",
+online:true
 },
 
 {
-id:"user3",
 name:"John",
 country:"USA • 27",
-photo:"https://randomuser.me/api/portraits/men/65.jpg"
+photo:"https://randomuser.me/api/portraits/men/65.jpg",
+online:false
 },
 
 {
-id:"user4",
 name:"Anna",
 country:"France • 24",
-photo:"https://randomuser.me/api/portraits/women/68.jpg"
+photo:"https://randomuser.me/api/portraits/women/68.jpg",
+online:true
 }
 
 ]
-
-let currentUser="user1"
 
 let index=0
 
@@ -180,44 +190,13 @@ document.getElementById("photo").src=u.photo
 document.getElementById("name").innerText=u.name
 document.getElementById("country").innerText=u.country
 
+document.getElementById("status").innerText = u.online ? "🟢 Online" : "⚫ Offline"
+
 }
 
 function like(){
 
-let likedUser=users[index]
-
-db.collection("likes").add({
-
-from:currentUser,
-to:likedUser.id,
-time:Date.now()
-
-})
-
-db.collection("likes")
-.where("from","==",likedUser.id)
-.where("to","==",currentUser)
-.get()
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-user1:currentUser,
-user2:likedUser.id,
-time:Date.now()
-
-})
-
-alert("❤️ It's a Match!")
-
-}
-
-})
-
 index++
-
 showUser()
 
 }
@@ -225,7 +204,6 @@ showUser()
 function dislike(){
 
 index++
-
 showUser()
 
 }
