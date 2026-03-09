@@ -35,6 +35,11 @@ color:white;
 margin-left:auto;
 }
 
+.seen{
+font-size:12px;
+color:gray;
+}
+
 #sendBox{
 position:fixed;
 bottom:60px;
@@ -142,10 +147,8 @@ snapshot.forEach(doc=>{
 let data=doc.data()
 
 if(
-
 (data.from==currentUser && data.to==otherUser) ||
 (data.from==otherUser && data.to==currentUser)
-
 ){
 
 let div=document.createElement("div")
@@ -158,9 +161,33 @@ div.classList.add("me")
 
 }
 
-div.innerText=data.text
+div.innerHTML=data.text
+
+if(data.from==currentUser){
+
+if(data.seen){
+
+div.innerHTML += "<div class='seen'>✓✓ Seen</div>"
+
+}else{
+
+div.innerHTML += "<div class='seen'>✓ Sent</div>"
+
+}
+
+}
 
 box.appendChild(div)
+
+if(data.to==currentUser && !data.seen){
+
+db.collection("messages").doc(doc.id).update({
+
+seen:true
+
+})
+
+}
 
 }
 
@@ -183,7 +210,8 @@ db.collection("messages").add({
 from:currentUser,
 to:otherUser,
 text:input.value,
-time:Date.now()
+time:Date.now(),
+seen:false
 
 })
 
