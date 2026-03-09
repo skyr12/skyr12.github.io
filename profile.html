@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile</title><style>
 
 body{
 font-family:Arial;
 background:#f2f2f2;
-margin:0;
 text-align:center;
+margin:0;
 }
 
 .header{
@@ -24,8 +17,9 @@ font-size:20px;
 
 .card{
 background:white;
-width:320px;
-margin:30px auto;
+width:300px;
+margin:auto;
+margin-top:30px;
 padding:20px;
 border-radius:15px;
 box-shadow:0 5px 20px rgba(0,0,0,0.1);
@@ -34,33 +28,19 @@ box-shadow:0 5px 20px rgba(0,0,0,0.1);
 .card img{
 width:120px;
 height:120px;
-border-radius:50%;
+border-radius:100px;
 object-fit:cover;
-margin-bottom:10px;
-}
-
-input{
-width:90%;
-padding:10px;
-margin:10px;
-border-radius:8px;
-border:1px solid #ccc;
 }
 
 button{
+background:#ff4d6d;
+color:white;
 border:none;
-padding:12px 20px;
-border-radius:30px;
-font-size:16px;
+padding:10px 20px;
+border-radius:25px;
+margin:8px;
 cursor:pointer;
-margin:5px;
 }
-
-.save{background:#ff4d6d;color:white;}
-.vip{background:gold;}
-.boost{background:orange;color:white;}
-.coins{background:#00b894;color:white;}
-.logout{background:#ddd;}
 
 .navbar{
 position:fixed;
@@ -78,52 +58,20 @@ font-size:22px;
 text-decoration:none;
 }
 
-</style>
+</style></head><body><div class="header">👤 Profile</div><div class="card"><img id="photo"><h2 id="name"></h2><p id="country"></p><a href="premium.html">
+<button>💎 Premium</button>
+</a><button onclick="boost()">🔥 Boost</button>
 
-</head>
+<button onclick="addCoins()">💰 Add Coins</button>
 
-<body>
-
-<div class="header">👤 My Profile</div>
-
-<div class="card">
-
-<img id="photoPreview">
-
-<h3 id="coinBox">💰 Coins: 0</h3>
-
-<input id="name" placeholder="Name">
-<input id="age" placeholder="Age">
-<input id="country" placeholder="Country">
-<input id="photo" placeholder="Photo URL">
-
-<button class="save" onclick="save()">Save Profile</button>
-
-<button class="vip" onclick="vip()">Become VIP 👑</button>
-
-<button class="boost" onclick="boost()">Boost Profile 🔥</button>
-
-<button class="coins" onclick="addCoins()">💰 Add Coins</button>
-
-<button class="logout" onclick="logout()">Logout</button>
-
-</div>
-
-<div class="navbar">
-<a href="discover.html">🔥</a>
+</div><div class="navbar"><a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
+<a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
-</div>
 
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
+</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
 
 const firebaseConfig = {
 
@@ -142,7 +90,6 @@ firebase.initializeApp(firebaseConfig)
 
 const db=firebase.firestore()
 
-
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
@@ -152,7 +99,15 @@ return
 
 }
 
+loadProfile(user)
+
 setOnline()
+
+saveLocation()
+
+})
+
+function loadProfile(user){
 
 db.collection("users").doc(user.uid).get()
 
@@ -160,68 +115,13 @@ db.collection("users").doc(user.uid).get()
 
 let u=doc.data()
 
-document.getElementById("name").value=u.name
-document.getElementById("age").value=u.age
-document.getElementById("country").value=u.country
-document.getElementById("photo").value=u.photo
-document.getElementById("photoPreview").src=u.photo
-
-if(u.coins){
-document.getElementById("coinBox").innerText="💰 Coins: "+u.coins
-}
-
-})
-
-})
-
-
-function save(){
-
-let user=firebase.auth().currentUser
-
-let name=document.getElementById("name").value
-let age=document.getElementById("age").value
-let country=document.getElementById("country").value
-let photo=document.getElementById("photo").value
-
-db.collection("users").doc(user.uid).update({
-
-name:name,
-age:age,
-country:country,
-photo:photo
-
-})
-
-.then(()=>{
-
-alert("Profile Updated")
-
-document.getElementById("photoPreview").src=photo
+document.getElementById("photo").src=u.photo
+document.getElementById("name").innerText=u.name
+document.getElementById("country").innerText=u.country
 
 })
 
 }
-
-
-function vip(){
-
-let user=firebase.auth().currentUser
-
-db.collection("users").doc(user.uid).update({
-
-vip:true
-
-})
-
-.then(()=>{
-
-alert("👑 You are now VIP")
-
-})
-
-}
-
 
 function boost(){
 
@@ -241,7 +141,6 @@ alert("🔥 Your profile is boosted!")
 
 }
 
-
 function addCoins(){
 
 let user=firebase.auth().currentUser
@@ -254,41 +153,13 @@ coins:firebase.firestore.FieldValue.increment(100)
 
 .then(()=>{
 
-alert("💰 100 Coins added")
-
-location.reload()
+alert("💰 100 coins added!")
 
 })
 
 }
 
-
-function logout(){
-
-firebase.auth().signOut()
-
-.then(()=>{
-
-location.href="login.html"
-
-})
-
-}
-
-
-function setOnline(){
-
-let user=firebase.auth().currentUser
-
-db.collection("users").doc(user.uid).update({
-
-online:true,
-lastActive:Date.now()
-
-})
-
-}
-
+function saveLocation(){
 
 navigator.geolocation.getCurrentPosition(function(position){
 
@@ -306,7 +177,20 @@ lng:lng
 
 })
 
-</script>
+}
 
-</body>
+function setOnline(){
+
+let user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+online:true,
+lastActive:Date.now()
+
+})
+
+}
+
+</script></body>
 </html>
