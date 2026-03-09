@@ -2,8 +2,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Discover</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
+margin:0;
 font-family:Arial;
-background:#f5f5f5;
+background:#f2f2f2;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -11,50 +12,78 @@ height:100vh;
 }
 
 .card{
-width:320px;
+
+width:340px;
 background:white;
 border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-text-align:center;
 overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+
 }
 
-.card img{
+.photo{
+
 width:100%;
-height:320px;
+height:350px;
 object-fit:cover;
+
 }
 
 .info{
-padding:15px;
+
+padding:20px;
+text-align:center;
+
 }
 
-.buttons{
+.name{
+
+font-size:24px;
+font-weight:bold;
+
+}
+
+.meta{
+
+color:#666;
+margin-top:5px;
+
+}
+
+.actions{
+
 display:flex;
 justify-content:space-around;
-padding:15px;
+padding:20px;
+
 }
 
 button{
-padding:10px 20px;
+
+padding:12px 25px;
 border:none;
-border-radius:20px;
-font-size:16px;
+border-radius:30px;
+font-size:18px;
+cursor:pointer;
+
 }
 
 .like{
+
 background:#ff4d6d;
 color:white;
+
 }
 
 .skip{
-background:#ccc;
+
+background:#ddd;
+
 }
 
-</style></head><body><div class="card"><img id="photo"><div class="info"><h2 id="name"></h2>
-<p id="age"></p>
-<p id="country"></p></div><div class="buttons"><button class="like" onclick="like()">❤️ Like</button>
-<button class="skip" onclick="next()">❌ Skip</button>
+</style></head><body><div class="card"><img id="photo" class="photo"><div class="info"><div id="name" class="name"></div><div id="meta" class="meta"></div></div><div class="actions"><button class="skip" onclick="next()">❌ Skip</button>
+
+<button class="like" onclick="like()">❤️ Like</button>
 
 </div></div><script>
 
@@ -64,7 +93,7 @@ apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh"
 
-};
+}
 
 firebase.initializeApp(firebaseConfig)
 
@@ -73,7 +102,7 @@ const db = firebase.firestore()
 let users=[]
 let index=0
 
-firebase.auth().onAuthStateChanged(function(user){
+firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
 
@@ -97,8 +126,10 @@ users=[]
 snapshot.forEach(doc=>{
 
 users.push({
+
 id:doc.id,
 ...doc.data()
+
 })
 
 })
@@ -111,14 +142,13 @@ showUser()
 
 function showUser(){
 
-if(users.length===0) return
+if(users.length==0)return
 
 let user=users[index]
 
 document.getElementById("photo").src=user.photo
 document.getElementById("name").innerText=user.name
-document.getElementById("age").innerText="Age: "+user.age
-document.getElementById("country").innerText=user.country
+document.getElementById("meta").innerText=user.country+" • "+user.age
 
 }
 
