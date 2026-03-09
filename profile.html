@@ -1,82 +1,79 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Profile</title>
 
 <style>
 
-<script>
-
-const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh"
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+padding-bottom:80px;
 }
 
-firebase.initializeApp(firebaseConfig)
-
-const db = firebase.firestore()
-
-firebase.auth().onAuthStateChanged(user=>{
-
-if(user){
-
-db.collection("users").doc(user.uid).update({
-
-online:true,
-lastActive:Date.now()
-
-})
-
+.header{
+background:#ff4d6d;
+color:white;
+padding:20px;
+font-size:22px;
 }
 
-})
-
-window.addEventListener("beforeunload",function(){
-
-let user=firebase.auth().currentUser
-
-if(user){
-
-db.collection("users").doc(user.uid).update({
-
-online:false
-
-})
-
+.profile-card{
+width:90%;
+max-width:400px;
+margin:30px auto;
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
-})
-
-</script>
-}
-
-img{
-width:150px;
-height:150px;
+.profile-card img{
+width:120px;
+height:120px;
 border-radius:50%;
 object-fit:cover;
-margin-bottom:20px;
 }
 
-input,select{
-margin:10px;
+input{
+width:90%;
 padding:10px;
-width:200px;
+margin:10px 0;
+border-radius:10px;
+border:1px solid #ccc;
 }
 
 button{
-padding:10px 20px;
+padding:10px 25px;
+border:none;
 background:#ff4d6d;
 color:white;
-border:none;
 border-radius:20px;
-cursor:pointer;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:65px;
+background:white;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+}
+
+.navbar a{
+text-decoration:none;
+font-size:24px;
+color:#444;
 }
 
 </style>
@@ -85,116 +82,35 @@ cursor:pointer;
 
 <body>
 
-<h2>Your Profile</h2>
+<div class="header">
+Your Profile 👤
+</div>
 
-<img id="photo" src="https://via.placeholder.com/150">
+<div class="profile-card">
 
-<br>
+<img src="https://randomuser.me/api/portraits/men/32.jpg">
 
-<input type="file" id="file">
+<br><br>
 
-<br>
+<input placeholder="Your name">
 
-<input id="name" placeholder="Your name">
+<input placeholder="Age">
 
-<br>
-
-<input id="age" placeholder="Age">
-
-<br>
-
-<select id="country">
-
-<option>UK</option>
-<option>Germany</option>
-<option>France</option>
-<option>Turkey</option>
-<option>UAE</option>
-<option>USA</option>
-<option>Canada</option>
-<option>Australia</option>
-<option>Indonesia</option>
-<option>Pakistan</option>
-
-</select>
+<input placeholder="Country">
 
 <br>
 
-<button onclick="save()">Save Profile</button>
+<button>Save Profile</button>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</div>
 
-<script>
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.appspot.com"
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const storage = firebase.storage();
-const db = firebase.firestore();
-
-let currentUser = "user1";
-
-
-function save(){
-
-let name = document.getElementById("name").value;
-let age = document.getElementById("age").value;
-let country = document.getElementById("country").value;
-
-let file = document.getElementById("file").files[0];
-
-if(file){
-
-let ref = storage.ref("profiles/"+currentUser+".jpg");
-
-ref.put(file).then(()=>{
-
-ref.getDownloadURL().then(url=>{
-
-db.collection("users").doc(currentUser).set({
-
-name:name,
-age:age,
-country:country,
-photo:url
-
-});
-
-document.getElementById("photo").src=url;
-
-});
-
-});
-
-}else{
-
-db.collection("users").doc(currentUser).set({
-
-name:name,
-age:age,
-country:country
-
-});
-
-}
-
-alert("Profile saved")
-
-}
-
-</script>
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+</div>
 
 </body>
-
 </html>
-
