@@ -3,7 +3,7 @@
 
 <head>
 
-<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Notifications</title>
 
 <style>
@@ -12,38 +12,37 @@ body{
 font-family:Arial;
 background:#f2f2f2;
 margin:0;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
 text-align:center;
-padding-bottom:70px;
 }
 
-h2{
-margin-top:20px;
-}
-
-.card{
+.notice{
 background:white;
 margin:15px;
 padding:15px;
 border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 .navbar{
 position:fixed;
 bottom:0;
-left:0;
-right:0;
+width:100%;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:12px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+padding:10px 0;
+border-top:1px solid #ddd;
 font-size:22px;
 }
 
 .navbar a{
 text-decoration:none;
-color:black;
 }
 
 </style>
@@ -52,44 +51,60 @@ color:black;
 
 <body>
 
-<h2>🔔 Notifications</h2>
+<div class="header">🔔 Notifications</div>
 
-<div id="notifications"></div>
+<div id="list"></div>
 
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
+<a href="profile.html">👤</a>
+</div>
 
-<!-- Firebase -->
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-
 <script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
-measurementId: "G-KTCV2B5R9L"
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig);
 }
 
-firebase.initializeApp(firebaseConfig)
-
-let db = firebase.firestore()
+const db = firebase.firestore()
 
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(!user) return
+if(!user){
+location.href="login.html"
+return
+}
 
 db.collection("notifications")
+
 .where("to","==",user.uid)
+
+.orderBy("time","desc")
+
 .onSnapshot(snapshot=>{
 
-let box=document.getElementById("notifications")
+let box=document.getElementById("list")
 
 box.innerHTML=""
 
@@ -97,13 +112,15 @@ snapshot.forEach(doc=>{
 
 let n=doc.data()
 
-let div=document.createElement("div")
+box.innerHTML+=`
 
-div.className="card"
+<div class="notice">
 
-div.innerText=n.text
+${n.text}
 
-box.appendChild(div)
+</div>
+
+`
 
 })
 
@@ -112,19 +129,6 @@ box.appendChild(div)
 })
 
 </script>
-
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
-<a href="profile.html">👤</a>
-
-</div>
-
 
 </body>
 </html>
