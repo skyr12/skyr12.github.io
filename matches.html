@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -24,31 +25,12 @@ padding:20px;
 font-size:22px;
 }
 
-.match-list{
-width:90%;
-max-width:400px;
-margin:30px auto;
-}
-
-.match{
-display:flex;
-align-items:center;
+.card{
 background:white;
-padding:10px;
-margin-bottom:15px;
+margin:20px;
+padding:20px;
 border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.15);
-}
-
-.match img{
-width:60px;
-height:60px;
-border-radius:50%;
-margin-right:15px;
-}
-
-.match-name{
-font-size:18px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
 .navbar{
@@ -56,18 +38,18 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-height:65px;
+height:70px;
 background:white;
 display:flex;
 justify-content:space-around;
 align-items:center;
-box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+box-shadow:0 -5px 15px rgba(0,0,0,0.2);
 }
 
 .navbar a{
 text-decoration:none;
-font-size:24px;
-color:#444;
+font-size:26px;
+color:black;
 }
 
 </style>
@@ -77,65 +59,92 @@ color:#444;
 <body>
 
 <div class="header">
-Your Matches ❤️
+❤️ Your Matches
 </div>
 
-<div id="matchList" class="match-list"></div>
+<div id="matches"></div>
 
 <div class="navbar">
+
 <a href="discover.html">🔥</a>
+
 <a href="matches.html">❤️</a>
+
 <a href="chat.html">💬</a>
+
 <a href="notifications.html">🔔</a>
+
 <a href="profile.html">👤</a>
+
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
 
-var firebaseConfig = {
+const firebaseConfig = {
 
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID"
+apiKey: "YOUR_API_KEY",
+
+authDomain: "YOUR_DOMAIN",
+
+projectId: "YOUR_PROJECT_ID",
+
+storageBucket: "YOUR_BUCKET",
+
+messagingSenderId: "YOUR_ID",
+
+appId: "YOUR_APP"
 
 };
 
 firebase.initializeApp(firebaseConfig)
 
-var db = firebase.firestore()
+const db = firebase.firestore()
 
-let currentUser="user1"
+firebase.auth().onAuthStateChanged(user=>{
 
-function loadMatches(){
+if(!user){
+
+alert("Login first")
+
+return
+
+}
+
+loadMatches(user.uid)
+
+})
+
+function loadMatches(uid){
 
 db.collection("matches")
-.where("user1","==",currentUser)
-.get()
-.then(snapshot=>{
+.where("users","array-contains",uid)
+.onSnapshot(snapshot=>{
+
+let container=document.getElementById("matches")
+
+container.innerHTML=""
 
 snapshot.forEach(doc=>{
 
-let data=doc.data()
-
 let div=document.createElement("div")
-div.className="match"
+
+div.className="card"
 
 div.innerHTML=`
 
-<img src="https://randomuser.me/api/portraits/men/32.jpg">
+<h3>New Match 🎉</h3>
 
-<div class="match-name">
-
-Match with ${data.user2}
-
-</div>
+<button onclick="location.href='chat.html'">Open Chat</button>
 
 `
 
-document.getElementById("matchList").appendChild(div)
+container.appendChild(div)
 
 })
 
@@ -143,9 +152,8 @@ document.getElementById("matchList").appendChild(div)
 
 }
 
-loadMatches()
-
 </script>
 
 </body>
+
 </html>
