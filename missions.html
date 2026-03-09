@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta charset="UTF-8">
+<title>Daily Missions</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f5f5f5;
+text-align:center;
+margin:0;
+padding-bottom:80px;
+}
+
+.card{
+width:320px;
+margin:40px auto;
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.mission{
+background:#eee;
+padding:15px;
+margin:10px;
+border-radius:10px;
+}
+
+button{
+margin-top:10px;
+padding:10px 20px;
+border:none;
+border-radius:20px;
+background:#ff4d6d;
+color:white;
+cursor:pointer;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+font-size:22px;
+}
+
+.navbar a{
+text-decoration:none;
+color:black;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>📅 Daily Missions</h2>
+
+<div class="card">
+
+<div class="mission">
+❤️ Like 5 users
+</div>
+
+<div class="mission">
+💬 Send 3 messages
+</div>
+
+<div class="mission">
+🎁 Send 1 gift
+</div>
+
+<button onclick="completeMission()">Claim 100 Coins</button>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+}
+
+firebase.initializeApp(firebaseConfig)
+
+let db = firebase.firestore()
+
+function completeMission(){
+
+let user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).get().then(doc=>{
+
+let coins=doc.data().coins || 0
+
+coins+=100
+
+db.collection("users").doc(user.uid).update({
+
+coins:coins
+
+})
+
+alert("Mission completed 🎉 +100 coins")
+
+})
+
+}
+
+</script>
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="missions.html">📅</a>
+<a href="wallet.html">💰</a>
+<a href="leaderboard.html">🏆</a>
+<a href="profile.html">👤</a>
+
+</div>
+
+</body>
+</html>
