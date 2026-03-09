@@ -94,12 +94,13 @@ measurementId: "G-KTCV2B5R9L"
 
 firebase.initializeApp(firebaseConfig)
 
-let db=firebase.firestore()
+let db = firebase.firestore()
 
 let users=[]
 let index=0
 
 const usersDiv=document.getElementById("users")
+
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -109,11 +110,15 @@ db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
+if(doc.id !== user.uid){
+
 let data=doc.data()
 
 data.id=doc.id
 
 users.push(data)
+
+}
 
 })
 
@@ -126,7 +131,12 @@ showUser()
 
 function showUser(){
 
-if(index>=users.length) return
+if(index>=users.length){
+
+usersDiv.innerHTML="<h3>No more users</h3>"
+
+return
+}
 
 let user=users[index]
 
@@ -183,6 +193,7 @@ users:[currentUser,likedUser],
 time:Date.now()
 
 })
+
 
 db.collection("notifications").add({
 
