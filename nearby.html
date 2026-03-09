@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nearby Users</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+padding-bottom:80px;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+.user{
+width:90%;
+max-width:400px;
+margin:20px auto;
+background:white;
+border-radius:15px;
+padding:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+.user img{
+width:80px;
+height:80px;
+border-radius:50%;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:65px;
+background:white;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+}
+
+.navbar a{
+text-decoration:none;
+font-size:24px;
+color:#444;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+Nearby Users 📍
+</div>
+
+<div id="users"></div>
+
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+</div>
+
+<script>
+
+let users=[
+
+{
+name:"Sara",
+country:"Germany",
+distance:"2 km",
+photo:"https://randomuser.me/api/portraits/women/44.jpg"
+},
+
+{
+name:"John",
+country:"USA",
+distance:"5 km",
+photo:"https://randomuser.me/api/portraits/men/65.jpg"
+},
+
+{
+name:"Anna",
+country:"France",
+distance:"8 km",
+photo:"https://randomuser.me/api/portraits/women/68.jpg"
+}
+
+]
+
+let html=""
+
+users.forEach(u=>{
+
+html+=`
+
+<div class="user">
+
+<img src="${u.photo}">
+
+<h3>${u.name}</h3>
+
+<p>${u.country}</p>
+
+<p>📍 ${u.distance}</p>
+
+</div>
+
+`
+
+})
+
+document.getElementById("users").innerHTML=html
+
+</script>
+
+</body>
+</html>
