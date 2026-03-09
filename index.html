@@ -1,67 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Nimeh Dating</title>
-
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-
-<!-- Theme color -->
-<meta name="theme-color" content="#ff4d6d">
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inbox</title><style>
 
 body{
-margin:0;
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
+margin:0;
 }
 
 .header{
 background:#ff4d6d;
 color:white;
-padding:20px;
-font-size:24px;
+padding:15px;
+text-align:center;
+font-size:20px;
 }
 
-.container{
-margin-top:40px;
-}
-
-button{
-padding:15px 25px;
-border:none;
-border-radius:30px;
-background:#ff4d6d;
-color:white;
-font-size:18px;
+.chat{
+background:white;
+margin:10px;
+padding:15px;
+border-radius:10px;
 cursor:pointer;
 }
 
-</style>
+.navbar{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+border-top:1px solid #ddd;
+font-size:22px;
+}
 
-</head>
+</style></head><body><div class="header">💬 Inbox</div><div id="chats"></div><div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="inbox.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
 
-<body>
+const firebaseConfig = {
 
-<div class="header">
-Nimeh Dating ❤️
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig)
+}
+
+const db=firebase.firestore()
+
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(!user){
+
+location.href="login.html"
+return
+
+}
+
+loadChats(user.uid)
+
+})
+
+
+
+function loadChats(uid){
+
+db.collection("messages")
+.orderBy("time","desc")
+.onSnapshot(snapshot=>{
+
+let chats={}
+let html=""
+
+snapshot.forEach(doc=>{
+
+let m=doc.data()
+
+if(m.from!==uid && m.chat.includes(uid)){
+
+let other=m.chat.replace(uid,"").replace("_","")
+
+chats[other]=m
+
+}
+
+})
+
+for(let id in chats){
+
+html+=`
+
+<div class="chat" onclick="openChat('${id}')">
+
+💬 Chat with ${id}
+
 </div>
 
-<div class="container">
+`
 
-<button onclick="location.href='discover.html'">
-Start Discover 🔥
-</button>
+}
 
-</div>
+document.getElementById("chats").innerHTML=html
 
-</body>
+})
 
+}
+
+
+
+function openChat(id){
+
+location.href="chat.html?id="+id
+
+}
+
+</script></body>
 </html>
