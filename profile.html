@@ -127,17 +127,17 @@ text-decoration:none;
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
 if(!firebase.apps.length){
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 }
 
 const db=firebase.firestore()
@@ -151,6 +151,8 @@ location.href="login.html"
 return
 
 }
+
+setOnline()
 
 db.collection("users").doc(user.uid).get()
 
@@ -171,6 +173,7 @@ document.getElementById("coinBox").innerText="💰 Coins: "+u.coins
 })
 
 })
+
 
 function save(){
 
@@ -200,6 +203,7 @@ document.getElementById("photoPreview").src=photo
 
 }
 
+
 function vip(){
 
 let user=firebase.auth().currentUser
@@ -218,6 +222,7 @@ alert("👑 You are now VIP")
 
 }
 
+
 function boost(){
 
 let user=firebase.auth().currentUser
@@ -235,6 +240,7 @@ alert("🔥 Your profile is boosted!")
 })
 
 }
+
 
 function addCoins(){
 
@@ -256,6 +262,7 @@ location.reload()
 
 }
 
+
 function logout(){
 
 firebase.auth().signOut()
@@ -269,17 +276,31 @@ location.href="login.html"
 }
 
 
-navigator.geolocation.getCurrentPosition(function(position){
+function setOnline(){
 
-let lat = position.coords.latitude
-let lng = position.coords.longitude
-
-let user = firebase.auth().currentUser
+let user=firebase.auth().currentUser
 
 db.collection("users").doc(user.uid).update({
 
-lat: lat,
-lng: lng
+online:true,
+lastActive:Date.now()
+
+})
+
+}
+
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat=position.coords.latitude
+let lng=position.coords.longitude
+
+let user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+lat:lat,
+lng:lng
 
 })
 
