@@ -5,9 +5,6 @@ body{
 margin:0;
 font-family:Arial;
 background:#f2f2f2;
-display:flex;
-flex-direction:column;
-height:100vh;
 }
 
 .header{
@@ -18,17 +15,17 @@ text-align:center;
 font-size:20px;
 }
 
-.messages{
-flex:1;
-overflow-y:auto;
-padding:10px;
+.chat{
+padding:15px;
+height:70vh;
+overflow:auto;
 }
 
 .message{
 background:white;
 padding:10px;
 border-radius:10px;
-margin:5px 0;
+margin-bottom:10px;
 max-width:70%;
 }
 
@@ -39,16 +36,19 @@ margin-left:auto;
 }
 
 .input{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
 display:flex;
 padding:10px;
-background:white;
 }
 
 input{
 flex:1;
 padding:10px;
-border-radius:20px;
 border:1px solid #ccc;
+border-radius:10px;
 }
 
 button{
@@ -57,12 +57,12 @@ padding:10px 20px;
 background:#ff4d6d;
 color:white;
 border:none;
-border-radius:20px;
+border-radius:10px;
 }
 
 </style></head><body><div class="header">Chat
 
-</div><div class="messages" id="messages"></div><div class="input"><input id="text" placeholder="Type message"><button onclick="send()">Send</button>
+</div><div id="chat" class="chat"></div><div class="input"><input id="msg" placeholder="Type message"><button onclick="send()">Send</button>
 
 </div><script>
 
@@ -78,48 +78,51 @@ firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore()
 
-let chatId = new URLSearchParams(window.location.search).get("chat")
+let matchId = new URLSearchParams(location.search).get("match")
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
+
 window.location="login.html"
-return
+
 }
 
-loadMessages(user.uid)
+loadMessages()
 
 })
 
-function loadMessages(uid){
+function loadMessages(){
 
 db.collection("messages")
-.where("chat","==",chatId)
+
+.where("match","==",matchId)
+
 .orderBy("time")
+
 .onSnapshot(snapshot=>{
 
-let box=document.getElementById("messages")
-box.innerHTML=""
+let html=""
+
+let user=firebase.auth().currentUser
 
 snapshot.forEach(doc=>{
 
 let m=doc.data()
 
-let div=document.createElement("div")
+let cls="message"
 
-div.className="message"
+if(m.from===user.uid){
 
-if(m.from==uid){
-
-div.classList.add("me")
+cls+=" me"
 
 }
 
-div.innerText=m.text
-
-box.appendChild(div)
+html+=`<div class="${cls}">${m.text}</div>`
 
 })
+
+document.getElementById("chat").innerHTML=html
 
 })
 
@@ -127,21 +130,20 @@ box.appendChild(div)
 
 function send(){
 
-let user=firebase.auth().currentUser
-let text=document.getElementById("text").value
+let text=document.getElementById("msg").value
 
-if(text=="") return
+let user=firebase.auth().currentUser
 
 db.collection("messages").add({
 
-chat:chatId,
+match:matchId,
 from:user.uid,
 text:text,
 time:Date.now()
 
 })
 
-document.getElementById("text").value=""
+document.getElementById("msg").value=""
 
 }
 
