@@ -11,7 +11,7 @@ text-align:center;
 .header{
 background:#ff4d6d;
 color:white;
-padding:15px;
+padding:20px;
 font-size:22px;
 }
 
@@ -22,7 +22,7 @@ margin:40px auto;
 background:white;
 border-radius:20px;
 overflow:hidden;
-box-shadow:0 15px 30px rgba(0,0,0,0.2);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 .card img{
@@ -58,20 +58,7 @@ background:#ff4d6d;
 color:white;
 }
 
-.status{
-font-size:14px;
-margin-top:5px;
-}
-
-.online{
-color:green;
-}
-
-.offline{
-color:gray;
-}
-
-</style></head><body><div class="header">Discover People
+</style></head><body><div class="header">Discover
 
 </div><div id="card"></div><script>
 
@@ -118,33 +105,7 @@ users.push(u)
 
 })
 
-sortUsers()
-
 showUser()
-
-})
-
-}
-
-function sortUsers(){
-
-let now = Date.now()
-
-users.sort((a,b)=>{
-
-let boostA = (a.boostUntil && a.boostUntil > now) ? 1 : 0
-let boostB = (b.boostUntil && b.boostUntil > now) ? 1 : 0
-
-if(boostA !== boostB){
-
-return boostB - boostA
-
-}
-
-let onlineA = a.online ? 1 : 0
-let onlineB = b.online ? 1 : 0
-
-return onlineB - onlineA
 
 })
 
@@ -154,23 +115,13 @@ function showUser(){
 
 if(index >= users.length){
 
-document.getElementById("card").innerHTML = "No more users"
+document.getElementById("card").innerHTML="No more users"
 
 return
 
 }
 
 let u = users[index]
-
-let statusText = "Offline"
-let statusClass = "offline"
-
-if(u.online){
-
-statusText = "Online"
-statusClass = "online"
-
-}
 
 document.getElementById("card").innerHTML = `
 
@@ -183,8 +134,6 @@ document.getElementById("card").innerHTML = `
 <h2>${u.name} • ${u.age}</h2>
 
 <p>${u.country}</p>
-
-<p class="status ${statusClass}">${statusText}</p>
 
 <div class="buttons">
 
@@ -205,10 +154,9 @@ document.getElementById("card").innerHTML = `
 function like(){
 
 let currentUser = firebase.auth().currentUser
-
 let likedUser = users[index]
 
-/* ذخیره لایک */
+/* ذخیره Like */
 
 db.collection("likes").add({
 
@@ -218,7 +166,7 @@ time: Date.now()
 
 })
 
-/* ذخیره اعلان */
+/* ذخیره Notification */
 
 db.collection("notifications").add({
 
@@ -228,29 +176,26 @@ time: Date.now()
 
 })
 
-.then(()=>{
+/* بررسی Match */
 
-console.log("Like + Notification saved")
+db.collection("likes")
+.where("from","==",likedUser.id)
+.where("to","==",currentUser.uid)
+.get()
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+db.collection("matches").add({
+
+users:[currentUser.uid,likedUser.id],
+time:Date.now()
 
 })
 
-/* رفتن به کاربر بعدی */
-
-index++
-
-showUser()
+alert("💘 It's a Match!")
 
 }
-
-let currentUser = firebase.auth().currentUser
-
-let likedUser = users[index]
-
-db.collection("likes").add({
-
-from:currentUser.uid,
-to:likedUser.id,
-time:Date.now()
 
 })
 
@@ -269,4 +214,3 @@ showUser()
 }
 
 </script></body></html>
-
