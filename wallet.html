@@ -1,120 +1,193 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Wallet</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<title>Wallet</title>
+
+<style>
 
 body{
-margin:0;
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 text-align:center;
+margin:0;
+padding-bottom:80px;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:15px;
-font-size:22px;
-}
-
-.box{
-margin-top:60px;
+.card{
+width:320px;
+margin:50px auto;
 background:white;
-display:inline-block;
-padding:40px;
+padding:30px;
 border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.15);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-.coins{
-font-size:40px;
+h2{
 color:#ff4d6d;
-margin:20px 0;
+}
+
+.balance{
+font-size:26px;
+margin:20px;
+}
+
+.pack{
+background:#eee;
+padding:15px;
+margin:10px;
+border-radius:15px;
 }
 
 button{
-padding:12px 30px;
+margin-top:10px;
+padding:10px 20px;
 border:none;
-border-radius:25px;
+border-radius:20px;
 background:#ff4d6d;
 color:white;
-font-size:16px;
 cursor:pointer;
 }
 
-</style></head><body><div class="header">💰 Wallet
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+font-size:22px;
+}
 
-</div><div class="box"><h2>Your Coins</h2><div class="coins" id="coins">0</div><button onclick="getDaily()">Daily Reward</button>
+.navbar a{
+text-decoration:none;
+color:black;
+}
 
-</div><script>
+</style>
+
+</head>
+
+<body>
+
+<h2>💰 Coins Wallet</h2>
+
+<div class="card">
+
+<div class="balance">
+
+Coins: <span id="coins">0</span>
+
+</div>
+
+<div class="pack">
+
+100 Coins
+
+<br>
+
+<button onclick="buyCoins(100)">Buy</button>
+
+</div>
+
+<div class="pack">
+
+500 Coins
+
+<br>
+
+<button onclick="buyCoins(500)">Buy</button>
+
+</div>
+
+<div class="pack">
+
+1000 Coins
+
+<br>
+
+<button onclick="buyCoins(1000)">Buy</button>
+
+</div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
-
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh"
-
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 }
 
 firebase.initializeApp(firebaseConfig)
 
-const db = firebase.firestore()
+let db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(!user){
+if(!user) return
 
-window.location="login.html"
-return
+db.collection("users").doc(user.uid).get().then(doc=>{
 
-}
+let u=doc.data()
 
-loadWallet(user.uid)
+if(!u.coins) u.coins=0
 
-})
-
-function loadWallet(uid){
-
-db.collection("wallet").doc(uid).get()
-
-.then(doc=>{
-
-if(!doc.exists){
-
-db.collection("wallet").doc(uid).set({
-
-coins:100
+document.getElementById("coins").innerText=u.coins
 
 })
 
-document.getElementById("coins").innerText=100
-
-}
-
-else{
-
-document.getElementById("coins").innerText=doc.data().coins
-
-}
-
 })
 
-}
-
-function getDaily(){
+function buyCoins(amount){
 
 let user=firebase.auth().currentUser
 
-let ref=db.collection("wallet").doc(user.uid)
+db.collection("users").doc(user.uid).get().then(doc=>{
 
-ref.get().then(doc=>{
+let coins=doc.data().coins || 0
 
-let coins=doc.data().coins+10
+coins+=amount
 
-ref.update({coins:coins})
+db.collection("users").doc(user.uid).update({
+
+coins:coins
+
+})
 
 document.getElementById("coins").innerText=coins
+
+alert("Coins Added 💰")
 
 })
 
 }
 
-</script></body></html>
+</script>
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="inbox.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="wallet.html">💰</a>
+<a href="profile.html">👤</a>
+
+</div>
+
+</body>
+</html>
