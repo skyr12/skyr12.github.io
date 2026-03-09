@@ -208,6 +208,44 @@ let currentUser = firebase.auth().currentUser
 
 let likedUser = users[index]
 
+/* ذخیره لایک */
+
+db.collection("likes").add({
+
+from: currentUser.uid,
+to: likedUser.id,
+time: Date.now()
+
+})
+
+/* ذخیره اعلان */
+
+db.collection("notifications").add({
+
+to: likedUser.id,
+text: "❤️ Someone liked you",
+time: Date.now()
+
+})
+
+.then(()=>{
+
+console.log("Like + Notification saved")
+
+})
+
+/* رفتن به کاربر بعدی */
+
+index++
+
+showUser()
+
+}
+
+let currentUser = firebase.auth().currentUser
+
+let likedUser = users[index]
+
 db.collection("likes").add({
 
 from:currentUser.uid,
@@ -231,3 +269,4 @@ showUser()
 }
 
 </script></body></html>
+
