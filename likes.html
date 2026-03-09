@@ -1,115 +1,120 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Who Liked You</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<title>Likes</title>
+
+<style>
 
 body{
 font-family:Arial;
 background:#f2f2f2;
 margin:0;
+padding-bottom:80px;
 text-align:center;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:20px;
-font-size:22px;
-}
-
-.container{
-max-width:500px;
-margin:auto;
-padding:20px;
-}
-
 .card{
+width:300px;
+margin:20px auto;
 background:white;
 border-radius:15px;
-padding:15px;
-margin-bottom:15px;
+overflow:hidden;
 box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
-img{
+.card img{
 width:100%;
-border-radius:10px;
+height:280px;
+object-fit:cover;
 }
 
-</style></head><body><div class="header">Who Liked You ❤️
+.info{
+padding:15px;
+}
 
-</div><div class="container" id="likes"></div><script>
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+font-size:22px;
+}
+
+.navbar a{
+text-decoration:none;
+color:black;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>❤️ Who liked you</h2>
+
+<div id="likes"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
-
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 }
 
 firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore()
+let db=firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(!user){
-
-window.location="login.html"
-return
-
-}
+if(!user) return
 
 let uid=user.uid
 
-db.collection("users").doc(uid).get().then(doc=>{
-
-let data=doc.data()
-
-if(!data.premium){
-
-alert("Premium required")
-
-window.location="premium.html"
-
-return
-
-}
-
-loadLikes(uid)
-
-})
-
-})
-
-function loadLikes(uid){
-
 db.collection("likes")
-
 .where("to","==",uid)
+.onSnapshot(snapshot=>{
 
-.get()
+let box=document.getElementById("likes")
 
-.then(snapshot=>{
-
-let html=""
+box.innerHTML=""
 
 snapshot.forEach(doc=>{
 
-let like=doc.data()
+let data=doc.data()
 
-db.collection("users").doc(like.from).get()
-
-.then(userDoc=>{
+db.collection("users").doc(data.from).get().then(userDoc=>{
 
 let u=userDoc.data()
 
-html+=`
+let card=document.createElement("div")
 
-<div class="card">
+card.className="card"
 
-<img src="${u.photo || 'https://via.placeholder.com/400'}">
+card.innerHTML=`
 
-<h2>${u.name}</h2>
+<img src="${u.photo}">
+
+<div class="info">
+
+<h3>${u.name}</h3>
 
 <p>${u.country}</p>
 
@@ -117,7 +122,7 @@ html+=`
 
 `
 
-document.getElementById("likes").innerHTML=html
+box.appendChild(card)
 
 })
 
@@ -125,6 +130,20 @@ document.getElementById("likes").innerHTML=html
 
 })
 
-}
+})
 
-</script></body></html>
+</script>
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
+<a href="profile.html">👤</a>
+
+</div>
+
+</body>
+</html>
