@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat</title><style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
 margin:0;
+background:#f2f2f2;
 }
 
 .header{
@@ -19,20 +12,21 @@ background:#ff4d6d;
 color:white;
 padding:15px;
 text-align:center;
+font-size:18px;
 }
 
-#messages{
-padding:20px;
-height:60vh;
+.chatbox{
+height:70vh;
 overflow-y:auto;
+padding:10px;
 }
 
 .msg{
 background:white;
 padding:10px;
-margin:10px;
 border-radius:10px;
-max-width:60%;
+margin:8px;
+max-width:70%;
 }
 
 .me{
@@ -41,175 +35,135 @@ color:white;
 margin-left:auto;
 }
 
-.input{
-position:fixed;
-bottom:60px;
-width:100%;
-display:flex;
-}
-
-input{
-flex:1;
-padding:10px;
-border:none;
-}
-
-button{
-padding:10px 20px;
-background:#ff4d6d;
-color:white;
-border:none;
-}
-
-.navbar{
+.inputbox{
 position:fixed;
 bottom:0;
 width:100%;
-background:white;
 display:flex;
-justify-content:space-around;
-padding:10px 0;
+background:white;
 border-top:1px solid #ddd;
-font-size:22px;
 }
 
-.navbar a{
-text-decoration:none;
+.inputbox input{
+flex:1;
+padding:12px;
+border:none;
+font-size:16px;
 }
 
-</style>
+.inputbox button{
+background:#ff4d6d;
+color:white;
+border:none;
+padding:12px 20px;
+font-size:16px;
+}
 
-</head>
-
-<body>
-
-<div class="header">💬 Chat</div>
-
-<div id="messages"></div>
-
-<div class="input">
-<input id="text" placeholder="Type message">
+</style></head><body><div class="header">💬 Chat</div><div id="chatbox" class="chatbox"></div><div class="inputbox">
+<input id="msg" placeholder="Type message...">
 <button onclick="send()">Send</button>
-</div>
-
-<div class="navbar">
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
-<a href="profile.html">👤</a>
-</div>
-
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
+</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
 if(!firebase.apps.length){
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 }
 
-const db = firebase.firestore()
-
+const db=firebase.firestore()
 
 const urlParams=new URLSearchParams(window.location.search)
+const otherId=urlParams.get("id")
 
-const otherUser=urlParams.get("user")
+let myId=""
+
+
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
+
 location.href="login.html"
 return
+
 }
 
-let current=user.uid
+myId=user.uid
 
-let chatId=[current,otherUser].sort().join("_")
+loadMessages()
 
+})
+
+
+
+function chatId(a,b){
+
+return a<b ? a+"_"+b : b+"_"+a
+
+}
+
+
+
+function send(){
+
+let text=document.getElementById("msg").value
+
+if(!text) return
+
+let cid=chatId(myId,otherId)
+
+db.collection("messages").add({
+
+chat:cid,
+from:myId,
+text:text,
+time:Date.now()
+
+})
+
+document.getElementById("msg").value=""
+
+}
+
+
+
+function loadMessages(){
+
+let cid=chatId(myId,otherId)
 
 db.collection("messages")
-
-.where("chat","==",chatId)
-
+.where("chat","==",cid)
 .orderBy("time")
-
 .onSnapshot(snapshot=>{
 
-let box=document.getElementById("messages")
-
-box.innerHTML=""
+let html=""
 
 snapshot.forEach(doc=>{
 
 let m=doc.data()
 
-let div=document.createElement("div")
+let cls=m.from===myId ? "msg me" : "msg"
 
-div.className="msg"
-
-if(m.from==current){
-
-div.classList.add("me")
-
-}
-
-div.innerText=m.text
-
-box.appendChild(div)
+html+=`<div class="${cls}">${m.text}</div>`
 
 })
 
-})
+document.getElementById("chatbox").innerHTML=html
 
-})
-
-
-function send(){
-
-let text=document.getElementById("text").value
-
-firebase.auth().onAuthStateChanged(user=>{
-
-let current=user.uid
-
-let chatId=[current,otherUser].sort().join("_")
-
-db.collection("messages").add({
-
-chat:chatId,
-
-from:current,
-
-to:otherUser,
-
-text:text,
-
-time:Date.now()
-
-})
-
-document.getElementById("text").value=""
+document.getElementById("chatbox").scrollTop=999999
 
 })
 
 }
 
-</script>
-
-</body>
+</script></body>
 </html>
