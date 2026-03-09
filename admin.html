@@ -1,53 +1,58 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin Panel</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin Dashboard</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
 margin:0;
 font-family:Arial;
 background:#f5f5f5;
-text-align:center;
 }
 
 .header{
 background:#111;
 color:white;
-padding:15px;
+padding:20px;
+text-align:center;
 font-size:22px;
 }
 
-.container{
-padding:30px;
+.stats{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:20px;
-max-width:600px;
+padding:30px;
+max-width:800px;
 margin:auto;
 }
 
-.box{
+.card{
 background:white;
 padding:30px;
 border-radius:15px;
 box-shadow:0 10px 20px rgba(0,0,0,0.15);
-cursor:pointer;
+text-align:center;
 }
 
-.box:hover{
-background:#ff4d6d;
-color:white;
+.number{
+font-size:35px;
+color:#ff4d6d;
+margin-top:10px;
 }
 
-</style></head><body><div class="header">Admin Panel
+</style></head><body><div class="header">Admin Dashboard
 
-</div><div class="container"><div class="box" onclick="backup()">Backup Database
-
-</div><div class="box" onclick="loadUsers()">View Users
-
-</div><div class="box" onclick="loadMatches()">View Matches
-
-</div><div class="box" onclick="loadGifts()">View Gifts
-
-</div></div><div id="result"></div><script>
+</div><div class="stats"><div class="card">
+Users
+<div id="users" class="number">0</div>
+</div><div class="card">
+Matches
+<div id="matches" class="number">0</div>
+</div><div class="card">
+Messages
+<div id="messages" class="number">0</div>
+</div><div class="card">
+Gifts
+<div id="gifts" class="number">0</div>
+</div></div><script>
 
 const firebaseConfig = {
 
@@ -74,98 +79,31 @@ return
 
 if(user.email !== ADMIN_EMAIL){
 
-document.body.innerHTML = "Access denied"
+document.body.innerHTML="Access denied"
+return
 
 }
+
+loadStats()
 
 })
 
-async function backup(){
-
-let collections = ["users","likes","matches","messages"]
-
-let data = {}
-
-for(let col of collections){
-
-let snap = await db.collection(col).get()
-
-data[col] = []
-
-snap.forEach(doc=>{
-
-data[col].push(doc.data())
-
-})
-
-}
-
-let blob = new Blob([JSON.stringify(data)],{type:"application/json"})
-
-let a = document.createElement("a")
-
-a.href = URL.createObjectURL(blob)
-
-a.download = "backup.json"
-
-a.click()
-
-}
-
-function loadUsers(){
+function loadStats(){
 
 db.collection("users").get().then(snap=>{
-
-let html="<h2>Users</h2>"
-
-snap.forEach(doc=>{
-
-let u=doc.data()
-
-html+= "<p>"+u.name+" - "+u.country+"</p>"
-
+document.getElementById("users").innerText=snap.size
 })
-
-document.getElementById("result").innerHTML=html
-
-})
-
-}
-
-function loadMatches(){
 
 db.collection("matches").get().then(snap=>{
-
-let html="<h2>Matches</h2>"
-
-snap.forEach(doc=>{
-
-html+= "<p>"+JSON.stringify(doc.data().users)+"</p>"
-
+document.getElementById("matches").innerText=snap.size
 })
 
-document.getElementById("result").innerHTML=html
-
+db.collection("messages").get().then(snap=>{
+document.getElementById("messages").innerText=snap.size
 })
-
-}
-
-function loadGifts(){
 
 db.collection("gifts").get().then(snap=>{
-
-let html="<h2>Gifts</h2>"
-
-snap.forEach(doc=>{
-
-let g=doc.data()
-
-html+= "<p>"+g.gift+"</p>"
-
-})
-
-document.getElementById("result").innerHTML=html
-
+document.getElementById("gifts").innerText=snap.size
 })
 
 }
