@@ -44,10 +44,6 @@ object-fit:cover;
 padding:20px;
 }
 
-.info h2{
-margin:10px 0;
-}
-
 .buttons{
 display:flex;
 justify-content:space-around;
@@ -100,7 +96,7 @@ color:#444;
 Discover
 </div>
 
-<div class="card" id="card">
+<div class="card">
 
 <img id="photo" src="https://randomuser.me/api/portraits/men/32.jpg">
 
@@ -117,46 +113,27 @@ Discover
 </div>
 
 <div class="navbar">
-
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="chat.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="profile.html">👤</a>
-
 </div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
 
-var firebaseConfig = {
-apiKey: "YOUR_API_KEY",
-authDomain: "YOUR_PROJECT.firebaseapp.com",
-projectId: "YOUR_PROJECT_ID"
-};
-
-firebase.initializeApp(firebaseConfig)
-
-var db = firebase.firestore()
-
 let users = [
 {
-id:"1",
 name:"Farhad",
 country:"UK • 25",
 photo:"https://randomuser.me/api/portraits/men/32.jpg"
 },
 {
-id:"2",
 name:"Sara",
 country:"Germany • 23",
 photo:"https://randomuser.me/api/portraits/women/44.jpg"
 },
 {
-id:"3",
 name:"John",
 country:"USA • 27",
 photo:"https://randomuser.me/api/portraits/men/65.jpg"
@@ -181,28 +158,7 @@ document.getElementById("country").innerText = u.country
 
 function like(){
 
-let currentUser = firebase.auth().currentUser
-
-let likedUser = users[index]
-
-db.collection("likes").add({
-
-from: currentUser ? currentUser.uid : "guest",
-to: likedUser.id,
-time: Date.now()
-
-})
-
-db.collection("notifications").add({
-
-to: likedUser.id,
-text:"❤️ Someone liked you",
-time:Date.now()
-
-})
-
 index++
-
 showUser()
 
 }
@@ -210,7 +166,6 @@ showUser()
 function dislike(){
 
 index++
-
 showUser()
 
 }
