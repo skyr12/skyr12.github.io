@@ -29,15 +29,15 @@ border-radius:10px;
 max-width:70%;
 }
 
+.msg img{
+max-width:200px;
+border-radius:10px;
+}
+
 .me{
 background:#ff4d6d;
 color:white;
 margin-left:auto;
-}
-
-.seen{
-font-size:12px;
-color:gray;
 }
 
 #sendBox{
@@ -58,8 +58,8 @@ border-radius:20px;
 }
 
 #sendBox button{
-margin-left:10px;
-padding:10px 20px;
+margin-left:5px;
+padding:10px;
 border:none;
 background:#ff4d6d;
 color:white;
@@ -95,8 +95,13 @@ color:black;
 <div id="messages"></div>
 
 <div id="sendBox">
+
 <input id="msgInput" placeholder="Write message...">
+
+<input type="file" id="photoInput">
+
 <button onclick="send()">Send</button>
+
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -161,33 +166,17 @@ div.classList.add("me")
 
 }
 
-div.innerHTML=data.text
+if(data.photo){
 
-if(data.from==currentUser){
-
-if(data.seen){
-
-div.innerHTML += "<div class='seen'>✓✓ Seen</div>"
+div.innerHTML="<img src='"+data.photo+"'>"
 
 }else{
 
-div.innerHTML += "<div class='seen'>✓ Sent</div>"
-
-}
+div.innerText=data.text
 
 }
 
 box.appendChild(div)
-
-if(data.to==currentUser && !data.seen){
-
-db.collection("messages").doc(doc.id).update({
-
-seen:true
-
-})
-
-}
 
 }
 
@@ -201,21 +190,47 @@ box.scrollTop=box.scrollHeight
 
 function send(){
 
-let input=document.getElementById("msgInput")
+let text=document.getElementById("msgInput").value
 
-if(input.value=="") return
+let photo=document.getElementById("photoInput").files[0]
+
+if(photo){
+
+let reader=new FileReader()
+
+reader.onload=function(e){
 
 db.collection("messages").add({
 
 from:currentUser,
 to:otherUser,
-text:input.value,
-time:Date.now(),
-seen:false
+photo:e.target.result,
+time:Date.now()
 
 })
 
-input.value=""
+}
+
+reader.readAsDataURL(photo)
+
+document.getElementById("photoInput").value=""
+
+}else{
+
+if(text=="") return
+
+db.collection("messages").add({
+
+from:currentUser,
+to:otherUser,
+text:text,
+time:Date.now()
+
+})
+
+document.getElementById("msgInput").value=""
+
+}
 
 }
 
