@@ -65,6 +65,11 @@ color:white;
 background:gold;
 }
 
+.boost{
+background:orange;
+color:white;
+}
+
 .logout{
 background:#ddd;
 }
@@ -105,6 +110,8 @@ text-decoration:none;
 <button class="save" onclick="save()">Save Profile</button>
 
 <button class="vip" onclick="vip()">Become VIP 👑</button>
+
+<button class="boost" onclick="boost()">Boost Profile 🔥</button>
 
 <button class="logout" onclick="logout()">Logout</button>
 
@@ -213,6 +220,25 @@ vip:true
 .then(()=>{
 
 alert("👑 You are now VIP")
+
+})
+
+}
+
+
+function boost(){
+
+let user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+boost:true
+
+})
+
+.then(()=>{
+
+alert("🔥 Your profile is boosted!")
 
 })
 
