@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Shop</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+margin:0;
+text-align:center;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+font-size:20px;
+}
+
+.gift{
+background:white;
+margin:15px;
+padding:20px;
+border-radius:15px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+button{
+padding:10px 20px;
+border:none;
+border-radius:20px;
+background:#ff4d6d;
+color:white;
+cursor:pointer;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+border-top:1px solid #ddd;
+font-size:22px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">🎁 Gift Shop</div>
+
+<div class="gift">
+
+<h2>🌹 Rose</h2>
+
+<p>Price: 10 coins</p>
+
+<button onclick="sendGift('🌹',10)">Send</button>
+
+</div>
+
+<div class="gift">
+
+<h2>🍫 Chocolate</h2>
+
+<p>Price: 20 coins</p>
+
+<button onclick="sendGift('🍫',20)">Send</button>
+
+</div>
+
+<div class="gift">
+
+<h2>💍 Ring</h2>
+
+<p>Price: 50 coins</p>
+
+<button onclick="sendGift('💍',50)">Send</button>
+
+</div>
+
+<div class="gift">
+
+<h2>💎 Diamond</h2>
+
+<p>Price: 100 coins</p>
+
+<button onclick="sendGift('💎',100)">Send</button>
+
+</div>
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+firebase.initializeApp(firebaseConfig)
+
+const db=firebase.firestore()
+
+
+function sendGift(gift,price){
+
+let user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).get()
+
+.then(doc=>{
+
+let coins=doc.data().coins || 0
+
+if(coins<price){
+
+alert("Not enough coins")
+
+return
+
+}
+
+db.collection("users").doc(user.uid).update({
+
+coins:coins-price
+
+})
+
+db.collection("gifts").add({
+
+from:user.uid,
+gift:gift,
+price:price,
+time:Date.now()
+
+})
+
+alert("Gift sent 🎁")
+
+})
+
+}
+
+</script>
+
+</body>
+
+</html>
