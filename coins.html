@@ -1,1 +1,90 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Buy Coins</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
+body{
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+margin:0;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+.packages{
+display:flex;
+flex-direction:column;
+gap:20px;
+margin-top:40px;
+max-width:400px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.package{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+cursor:pointer;
+}
+
+button{
+margin-top:10px;
+padding:10px 25px;
+background:#ff4d6d;
+color:white;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+</style></head><body><div class="header">Buy Coins
+
+</div><div class="packages"><div class="package"><h2>500 Coins</h2><p>$5</p><button onclick="buyCoins(500)">Buy</button>
+
+</div><div class="package"><h2>1200 Coins</h2><p>$10</p><button onclick="buyCoins(1200)">Buy</button>
+
+</div><div class="package"><h2>3000 Coins</h2><p>$20</p><button onclick="buyCoins(3000)">Buy</button>
+
+</div></div><script>
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
+
+}
+
+firebase.initializeApp(firebaseConfig)
+
+const db=firebase.firestore()
+
+function buyCoins(amount){
+
+let user=firebase.auth().currentUser
+
+let userRef=db.collection("users").doc(user.uid)
+
+userRef.get().then(doc=>{
+
+let current=doc.data().coins || 0
+
+userRef.update({
+
+coins:current+amount
+
+})
+
+alert("Coins added 💰")
+
+})
+
+}
+
+</script></body></html>
