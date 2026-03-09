@@ -56,28 +56,11 @@ cursor:pointer;
 margin:5px;
 }
 
-.save{
-background:#ff4d6d;
-color:white;
-}
-
-.vip{
-background:gold;
-}
-
-.boost{
-background:orange;
-color:white;
-}
-
-.coins{
-background:#00b894;
-color:white;
-}
-
-.logout{
-background:#ddd;
-}
+.save{background:#ff4d6d;color:white;}
+.vip{background:gold;}
+.boost{background:orange;color:white;}
+.coins{background:#00b894;color:white;}
+.logout{background:#ddd;}
 
 .navbar{
 position:fixed;
@@ -135,6 +118,7 @@ text-decoration:none;
 <a href="profile.html">👤</a>
 </div>
 
+
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -158,12 +142,12 @@ firebase.initializeApp(firebaseConfig);
 
 const db=firebase.firestore()
 
+
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
 
 location.href="login.html"
-
 return
 
 }
@@ -284,8 +268,24 @@ location.href="login.html"
 
 }
 
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat = position.coords.latitude
+let lng = position.coords.longitude
+
+let user = firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+lat: lat,
+lng: lng
+
+})
+
+})
+
 </script>
 
 </body>
-
 </html>
