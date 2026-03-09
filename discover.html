@@ -50,7 +50,17 @@ color:white;
 border:none;
 padding:10px 20px;
 border-radius:25px;
-margin:15px;
+margin:10px;
+cursor:pointer;
+}
+
+.super{
+background:#2979ff;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:25px;
+margin:10px;
 cursor:pointer;
 }
 
@@ -155,6 +165,12 @@ ${u.name} ${vip}
 
 </button>
 
+<button class="super" onclick="superLike('${id}')">
+
+⭐ Super Like
+
+</button>
+
 </div>
 
 `
@@ -172,7 +188,6 @@ function like(target){
 
 let user=firebase.auth().currentUser
 
-// ذخیره Like
 db.collection("likes").add({
 
 from:user.uid,
@@ -181,36 +196,32 @@ time:Date.now()
 
 })
 
-// بررسی Match
-db.collection("likes")
-.where("from","==",target)
-.where("to","==",user.uid)
-.get()
-
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-// ساخت Match
-db.collection("matches").add({
-
-user1:user.uid,
-user2:target,
-time:Date.now()
-
-})
-
-alert("🎉 It's a Match!")
-
-}
-
-else{
-
 alert("❤️ Liked")
 
 }
 
+
+function superLike(target){
+
+let user=firebase.auth().currentUser
+
+db.collection("superlikes").add({
+
+from:user.uid,
+to:target,
+time:Date.now()
+
 })
+
+db.collection("notifications").add({
+
+to:target,
+text:"⭐ Someone Super Liked you!",
+time:Date.now()
+
+})
+
+alert("⭐ Super Like sent!")
 
 }
 
