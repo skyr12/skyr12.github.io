@@ -3,50 +3,47 @@
 
 <head>
 
-<meta charset="UTF-8">
-<title>My Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile</title>
 
 <style>
 
 body{
 font-family:Arial;
 background:#f2f2f2;
-margin:0;
-padding-bottom:80px;
 text-align:center;
+margin:0;
 }
 
-.card{
-width:340px;
-margin:30px auto;
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+font-size:20px;
+}
+
+.box{
 background:white;
-border-radius:20px;
+width:300px;
+margin:30px auto;
 padding:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
-.card img{
-width:120px;
-height:120px;
-border-radius:50%;
-object-fit:cover;
-margin-bottom:10px;
-}
-
-input,textarea{
+input{
 width:100%;
 padding:10px;
-margin-top:10px;
-border-radius:10px;
+margin:10px 0;
+border-radius:8px;
 border:1px solid #ccc;
-font-size:14px;
 }
 
 button{
-margin-top:15px;
-padding:12px 25px;
+width:100%;
+padding:12px;
 border:none;
-border-radius:20px;
+border-radius:25px;
 background:#ff4d6d;
 color:white;
 font-size:16px;
@@ -56,19 +53,17 @@ cursor:pointer;
 .navbar{
 position:fixed;
 bottom:0;
-left:0;
-right:0;
+width:100%;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:12px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+padding:10px 0;
+border-top:1px solid #ddd;
 font-size:22px;
 }
 
 .navbar a{
 text-decoration:none;
-color:black;
 }
 
 </style>
@@ -77,27 +72,28 @@ color:black;
 
 <body>
 
-<h2>👤 My Profile</h2>
+<div class="header">👤 Profile</div>
 
-<div class="card">
+<div class="box">
 
-<img id="photo" src="https://i.imgur.com/3GvwNBf.png">
+<input id="name" placeholder="Name">
+<input id="age" placeholder="Age">
+<input id="country" placeholder="Country">
+<input id="photo" placeholder="Photo URL">
 
-<input type="text" id="photoUrl" placeholder="Photo URL">
-
-<input type="text" id="name" placeholder="Name">
-
-<input type="number" id="age" placeholder="Age">
-
-<input type="text" id="country" placeholder="Country">
-
-<textarea id="bio" placeholder="Bio"></textarea>
-
-<input type="text" id="interests" placeholder="Interests (Music,Travel,Sport)">
-
-<button onclick="saveProfile()">Save Profile</button>
+<button onclick="save()">Save Profile</button>
 
 </div>
+
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
+<a href="profile.html">👤</a>
+</div>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -106,82 +102,72 @@ color:black;
 <script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig);
 }
 
-firebase.initializeApp(firebaseConfig)
+const db = firebase.firestore();
 
-let db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(!user) return
+if(!user){
+location.href="login.html"
+return
+}
 
 db.collection("users").doc(user.uid).get().then(doc=>{
 
-if(doc.exists){
+let data=doc.data()
 
-let u = doc.data()
-
-document.getElementById("photo").src = u.photo
-document.getElementById("photoUrl").value = u.photo
-document.getElementById("name").value = u.name
-document.getElementById("age").value = u.age
-document.getElementById("country").value = u.country
-document.getElementById("bio").value = u.bio
-document.getElementById("interests").value = u.interests.join(",")
-
-}
+document.getElementById("name").value=data.name
+document.getElementById("age").value=data.age
+document.getElementById("country").value=data.country
+document.getElementById("photo").value=data.photo
 
 })
 
 })
 
-function saveProfile(){
 
-let user = firebase.auth().currentUser
+function save(){
 
-let photo = document.getElementById("photoUrl").value
-let name = document.getElementById("name").value
-let age = document.getElementById("age").value
-let country = document.getElementById("country").value
-let bio = document.getElementById("bio").value
-let interests = document.getElementById("interests").value.split(",")
+let user=firebase.auth().currentUser
 
-db.collection("users").doc(user.uid).set({
+let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let country=document.getElementById("country").value
+let photo=document.getElementById("photo").value
 
-photo:photo,
+
+db.collection("users").doc(user.uid).update({
+
 name:name,
 age:age,
 country:country,
-bio:bio,
-interests:interests
+photo:photo
 
 })
 
-document.getElementById("photo").src = photo
+.then(()=>{
 
-alert("Profile Saved")
+alert("Profile updated")
+
+})
 
 }
 
 </script>
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
-<a href="profile.html">👤</a>
-
-</div>
 
 </body>
 </html>
