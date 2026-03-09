@@ -10,29 +10,28 @@
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
+text-align:center;
 margin:0;
 padding-bottom:80px;
-text-align:center;
 }
 
-.card{
-width:300px;
-margin:20px auto;
+.user{
 background:white;
-border-radius:15px;
-overflow:hidden;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
-}
-
-.card img{
-width:100%;
-height:280px;
-object-fit:cover;
-}
-
-.info{
+width:320px;
+margin:15px auto;
 padding:15px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+display:flex;
+align-items:center;
+}
+
+.user img{
+width:60px;
+height:60px;
+border-radius:50%;
+margin-right:10px;
 }
 
 .navbar{
@@ -59,7 +58,7 @@ color:black;
 
 <body>
 
-<h2>❤️ Who liked you</h2>
+<h2>❤️ Who Liked You</h2>
 
 <div id="likes"></div>
 
@@ -80,49 +79,43 @@ appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 
 firebase.initializeApp(firebaseConfig)
 
-let db=firebase.firestore()
+let db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user) return
 
-let uid=user.uid
-
 db.collection("likes")
-.where("to","==",uid)
-.onSnapshot(snapshot=>{
-
-let box=document.getElementById("likes")
-
-box.innerHTML=""
+.where("to","==",user.uid)
+.get()
+.then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-let data=doc.data()
+let from = doc.data().from
 
-db.collection("users").doc(data.from).get().then(userDoc=>{
+db.collection("users").doc(from).get().then(userDoc=>{
 
 let u=userDoc.data()
 
-let card=document.createElement("div")
+let div=document.createElement("div")
 
-card.className="card"
+div.className="user"
 
-card.innerHTML=`
-
-<img src="${u.photo}">
-
-<div class="info">
-
-<h3>${u.name}</h3>
-
-<p>${u.country}</p>
-
-</div>
+div.innerHTML=
 
 `
+<img src="${u.photo}">
 
-box.appendChild(card)
+<div>
+
+<b>${u.name}</b><br>
+${u.country}
+
+</div>
+`
+
+document.getElementById("likes").appendChild(div)
 
 })
 
@@ -138,9 +131,9 @@ box.appendChild(card)
 
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
+<a href="likes.html">👁️</a>
+<a href="inbox.html">💬</a>
+<a href="wallet.html">💰</a>
 <a href="profile.html">👤</a>
 
 </div>
