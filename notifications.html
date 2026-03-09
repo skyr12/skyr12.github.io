@@ -19,14 +19,14 @@ background:#ff4d6d;
 color:white;
 padding:15px;
 text-align:center;
+font-size:20px;
 }
 
-.notice{
+.note{
 background:white;
-margin:15px;
+margin:10px;
 padding:15px;
 border-radius:10px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 .navbar{
@@ -41,10 +41,6 @@ border-top:1px solid #ddd;
 font-size:22px;
 }
 
-.navbar a{
-text-decoration:none;
-}
-
 </style>
 
 </head>
@@ -53,14 +49,13 @@ text-decoration:none;
 
 <div class="header">🔔 Notifications</div>
 
-<div id="list"></div>
+<div id="notes"></div>
 
 <div class="navbar">
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
+<a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 </div>
 
@@ -73,48 +68,50 @@ text-decoration:none;
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
 if(!firebase.apps.length){
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 }
 
-const db = firebase.firestore()
-
+const db=firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
+
 location.href="login.html"
 return
+
 }
 
+loadNotes(user.uid)
+
+})
+
+function loadNotes(uid){
+
 db.collection("notifications")
-
-.where("to","==",user.uid)
-
+.where("to","==",uid)
 .orderBy("time","desc")
-
 .onSnapshot(snapshot=>{
 
-let box=document.getElementById("list")
-
-box.innerHTML=""
+let html=""
 
 snapshot.forEach(doc=>{
 
 let n=doc.data()
 
-box.innerHTML+=`
+html+=`
 
-<div class="notice">
+<div class="note">
 
 ${n.text}
 
@@ -124,9 +121,11 @@ ${n.text}
 
 })
 
-})
+document.getElementById("notes").innerHTML=html
 
 })
+
+}
 
 </script>
 
