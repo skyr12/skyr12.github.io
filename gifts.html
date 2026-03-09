@@ -1,69 +1,60 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Send Gift</title>
 
 <style>
 
 body{
-margin:0;
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 text-align:center;
+margin:0;
 padding-bottom:80px;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:20px;
-font-size:22px;
+.container{
+width:350px;
+margin:40px auto;
 }
 
 .gift{
-width:90%;
-max-width:400px;
-margin:20px auto;
 background:white;
+margin:10px;
 padding:20px;
-border-radius:20px;
-box-shadow:0 5px 15px rgba(0,0,0,0.15);
-}
-
-.gift-icon{
-font-size:40px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
 
 button{
-padding:12px 20px;
+margin-top:10px;
+padding:10px 20px;
 border:none;
+border-radius:20px;
 background:#ff4d6d;
 color:white;
-border-radius:20px;
-font-size:16px;
+cursor:pointer;
 }
 
 .navbar{
 position:fixed;
 bottom:0;
 left:0;
-width:100%;
-height:65px;
+right:0;
 background:white;
 display:flex;
 justify-content:space-around;
-align-items:center;
-box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+font-size:22px;
 }
 
 .navbar a{
 text-decoration:none;
-font-size:24px;
-color:#444;
+color:black;
 }
 
 </style>
@@ -72,63 +63,96 @@ color:#444;
 
 <body>
 
-<div class="header">
-Send Gift 🎁
-</div>
+<h2>🎁 Send Gift</h2>
+
+<div class="container">
 
 <div class="gift">
 
-<div class="gift-icon">🌹</div>
+<h3>🌹 Rose</h3>
+<p>10 coins</p>
 
-<h3>Rose</h3>
-
-<p>Cost: 10 Coins</p>
-
-<button onclick="sendGift('Rose')">Send</button>
+<button onclick="sendGift('Rose',10)">Send</button>
 
 </div>
 
 <div class="gift">
 
-<div class="gift-icon">💎</div>
+<h3>💎 Diamond</h3>
+<p>50 coins</p>
 
-<h3>Diamond</h3>
-
-<p>Cost: 50 Coins</p>
-
-<button onclick="sendGift('Diamond')">Send</button>
+<button onclick="sendGift('Diamond',50)">Send</button>
 
 </div>
 
 <div class="gift">
 
-<div class="gift-icon">🔥</div>
+<h3>🚗 Car</h3>
+<p>200 coins</p>
 
-<h3>Heart</h3>
-
-<p>Cost: 25 Coins</p>
-
-<button onclick="sendGift('Heart')">Send</button>
+<button onclick="sendGift('Car',200)">Send</button>
 
 </div>
 
-<div class="navbar">
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="profile.html">👤</a>
+<div class="gift">
+
+<h3>👑 Crown</h3>
+<p>500 coins</p>
+
+<button onclick="sendGift('Crown',500)">Send</button>
+
 </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
 
-function sendGift(name){
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+}
 
-alert("You sent a "+name+" 🎁")
+firebase.initializeApp(firebaseConfig)
+
+let db = firebase.firestore()
+
+function sendGift(name,price){
+
+let user = firebase.auth().currentUser
+
+db.collection("gifts").add({
+
+from:user.uid,
+gift:name,
+coins:price,
+time:Date.now()
+
+})
+
+alert("Gift sent 🎁")
 
 }
 
 </script>
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="inbox.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="gift.html">🎁</a>
+<a href="profile.html">👤</a>
+
+</div>
 
 </body>
 </html>
