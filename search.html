@@ -1,49 +1,74 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Search</title>
+<title>Search Users</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial;
 background:#f2f2f2;
+padding-bottom:80px;
 text-align:center;
 }
 
-.card{
-width:320px;
-margin:20px auto;
-background:white;
-border-radius:20px;
+.header{
+background:#ff4d6d;
+color:white;
 padding:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
+font-size:22px;
 }
 
-.card img{
-width:100%;
-height:250px;
-object-fit:cover;
-border-radius:10px;
+.search-box{
+width:90%;
+max-width:400px;
+margin:20px auto;
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
 input{
+width:90%;
 padding:10px;
-margin:5px;
-width:120px;
+margin:10px 0;
+border-radius:10px;
+border:1px solid #ccc;
 }
 
-button{
-padding:10px 20px;
-border:none;
-border-radius:20px;
-background:#ff4d6d;
-color:white;
-cursor:pointer;
+.user{
+background:white;
+padding:15px;
+margin:10px auto;
+width:90%;
+max-width:400px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:65px;
+background:white;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+}
+
+.navbar a{
+text-decoration:none;
+font-size:24px;
+color:#444;
 }
 
 </style>
@@ -52,73 +77,75 @@ cursor:pointer;
 
 <body>
 
-<h2>Search Users</h2>
+<div class="header">
+Search Users 🔎
+</div>
 
-<input id="minAge" placeholder="Min Age">
-
-<input id="maxAge" placeholder="Max Age">
+<div class="search-box">
 
 <input id="country" placeholder="Country">
 
-<br>
+<input id="age" placeholder="Age">
 
 <button onclick="searchUsers()">Search</button>
 
+</div>
+
 <div id="results"></div>
 
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+</div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
 
-const firebaseConfig={
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
-}
+var firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID"
+
+};
 
 firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore()
+var db = firebase.firestore()
 
 function searchUsers(){
 
-let minAge=document.getElementById("minAge").value
-let maxAge=document.getElementById("maxAge").value
 let country=document.getElementById("country").value
 
-document.getElementById("results").innerHTML=""
+db.collection("users")
+.where("country","==",country)
+.get()
+.then(snapshot=>{
 
-db.collection("users").get().then(snapshot=>{
+let html=""
 
 snapshot.forEach(doc=>{
 
-let user=doc.data()
+let u=doc.data()
 
-if(user.age>=minAge && user.age<=maxAge && user.country==country){
+html+=`
+<div class="user">
 
-let div=document.createElement("div")
+<h3>${u.name}</h3>
 
-div.className="card"
+<p>${u.country}</p>
 
-div.innerHTML=`
-
-<img src="${user.photo}">
-
-<h3>${user.name}</h3>
-
-<p>${user.country}</p>
-
-<p>Age ${user.age}</p>
-
+</div>
 `
 
-document.getElementById("results").appendChild(div)
-
-}
-
 })
+
+document.getElementById("results").innerHTML=html
 
 })
 
@@ -127,5 +154,4 @@ document.getElementById("results").appendChild(div)
 </script>
 
 </body>
-
 </html>
