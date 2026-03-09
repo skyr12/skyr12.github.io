@@ -1,11 +1,20 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Buy Coins</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Coins</title>
+
+<style>
 
 body{
+margin:0;
 font-family:Arial;
 background:#f2f2f2;
 text-align:center;
-margin:0;
+padding-bottom:80px;
 }
 
 .header{
@@ -15,76 +24,112 @@ padding:20px;
 font-size:22px;
 }
 
-.packages{
-display:flex;
-flex-direction:column;
-gap:20px;
-margin-top:40px;
+.pack{
+width:90%;
 max-width:400px;
-margin-left:auto;
-margin-right:auto;
+margin:20px auto;
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
-.package{
-background:white;
-padding:25px;
-border-radius:15px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
-cursor:pointer;
+.price{
+font-size:24px;
+color:#ff4d6d;
 }
 
 button{
-margin-top:10px;
-padding:10px 25px;
+padding:12px 20px;
+border:none;
 background:#ff4d6d;
 color:white;
-border:none;
-border-radius:10px;
+border-radius:20px;
 font-size:16px;
 }
 
-</style></head><body><div class="header">Buy Coins
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:65px;
+background:white;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+}
 
-</div><div class="packages"><div class="package"><h2>500 Coins</h2><p>$5</p><button onclick="buyCoins(500)">Buy</button>
+.navbar a{
+text-decoration:none;
+font-size:24px;
+color:#444;
+}
 
-</div><div class="package"><h2>1200 Coins</h2><p>$10</p><button onclick="buyCoins(1200)">Buy</button>
+</style>
 
-</div><div class="package"><h2>3000 Coins</h2><p>$20</p><button onclick="buyCoins(3000)">Buy</button>
+</head>
 
-</div></div><script>
+<body>
 
-const firebaseConfig = {
+<div class="header">
+Buy Coins 🪙
+</div>
 
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
+<div class="pack">
+
+<h2>100 Coins</h2>
+
+<div class="price">$1.99</div>
+
+<br>
+
+<button onclick="buy(100)">Buy</button>
+
+</div>
+
+<div class="pack">
+
+<h2>500 Coins</h2>
+
+<div class="price">$6.99</div>
+
+<br>
+
+<button onclick="buy(500)">Buy</button>
+
+</div>
+
+<div class="pack">
+
+<h2>1000 Coins</h2>
+
+<div class="price">$12.99</div>
+
+<br>
+
+<button onclick="buy(1000)">Buy</button>
+
+</div>
+
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+</div>
+
+<script>
+
+function buy(amount){
+
+alert("You bought "+amount+" coins 🪙")
 
 }
 
-firebase.initializeApp(firebaseConfig)
+</script>
 
-const db=firebase.firestore()
-
-function buyCoins(amount){
-
-let user=firebase.auth().currentUser
-
-let userRef=db.collection("users").doc(user.uid)
-
-userRef.get().then(doc=>{
-
-let current=doc.data().coins || 0
-
-userRef.update({
-
-coins:current+amount
-
-})
-
-alert("Coins added 💰")
-
-})
-
-}
-
-</script></body></html>
+</body>
+</html>
