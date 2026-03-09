@@ -115,6 +115,9 @@ let db=firebase.firestore()
 
 let currentUser=null
 
+let params=new URLSearchParams(window.location.search)
+let otherUser=params.get("user")
+
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user) return
@@ -124,7 +127,6 @@ currentUser=user.uid
 loadMessages()
 
 })
-
 
 function loadMessages(){
 
@@ -138,6 +140,13 @@ box.innerHTML=""
 snapshot.forEach(doc=>{
 
 let data=doc.data()
+
+if(
+
+(data.from==currentUser && data.to==otherUser) ||
+(data.from==otherUser && data.to==currentUser)
+
+){
 
 let div=document.createElement("div")
 
@@ -153,6 +162,8 @@ div.innerText=data.text
 
 box.appendChild(div)
 
+}
+
 })
 
 box.scrollTop=box.scrollHeight
@@ -160,7 +171,6 @@ box.scrollTop=box.scrollHeight
 })
 
 }
-
 
 function send(){
 
@@ -171,6 +181,7 @@ if(input.value=="") return
 db.collection("messages").add({
 
 from:currentUser,
+to:otherUser,
 text:input.value,
 time:Date.now()
 
@@ -186,7 +197,7 @@ input.value=""
 
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
+<a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
