@@ -1,107 +1,130 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Who Liked You</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Who Liked You</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
 font-family:Arial;
-background:#f5f5f5;
+background:#f2f2f2;
+margin:0;
 text-align:center;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
 padding:20px;
 }
 
 .card{
 background:white;
-width:300px;
-margin:20px auto;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 5px 20px rgba(0,0,0,0.2);
+border-radius:15px;
+padding:15px;
+margin-bottom:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
-.card img{
+img{
 width:100%;
-height:250px;
-object-fit:cover;
+border-radius:10px;
 }
 
-.info{
-padding:10px;
-}
+</style></head><body><div class="header">Who Liked You ❤️
 
-</style>
-
-</head>
-
-<body>
-
-<h2>People Who Liked You</h2>
-
-<div id="list"></div>
-
-
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-<script>
+</div><div class="container" id="likes"></div><script>
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh"
 
-};
+}
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
-const db = firebase.firestore();
+const db=firebase.firestore()
 
-let currentUser="user1"
+firebase.auth().onAuthStateChanged(user=>{
 
+if(!user){
+
+window.location="login.html"
+return
+
+}
+
+let uid=user.uid
+
+db.collection("users").doc(uid).get().then(doc=>{
+
+let data=doc.data()
+
+if(!data.premium){
+
+alert("Premium required")
+
+window.location="premium.html"
+
+return
+
+}
+
+loadLikes(uid)
+
+})
+
+})
+
+function loadLikes(uid){
 
 db.collection("likes")
-.where("to","==",currentUser)
+
+.where("to","==",uid)
+
 .get()
+
 .then(snapshot=>{
+
+let html=""
 
 snapshot.forEach(doc=>{
 
 let like=doc.data()
 
-let card=document.createElement("div")
+db.collection("users").doc(like.from).get()
 
-card.className="card"
+.then(userDoc=>{
 
-card.innerHTML=`
+let u=userDoc.data()
 
-<img src="${like.photo}">
+html+=`
 
-<div class="info">
+<div class="card">
 
-<h3>${like.name}</h3>
+<img src="${u.photo || 'https://via.placeholder.com/400'}">
 
-<p>${like.country}</p>
+<h2>${u.name}</h2>
+
+<p>${u.country}</p>
 
 </div>
 
 `
 
-document.getElementById("list").appendChild(card)
+document.getElementById("likes").innerHTML=html
 
 })
 
 })
 
-</script>
+})
 
-</body>
+}
 
-</html>
+</script></body></html>
