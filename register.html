@@ -1,116 +1,140 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Nimeh Register</title>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f5f5f5;
+background:#f2f2f2;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+margin:0;
 }
 
 .box{
 background:white;
 padding:30px;
-border-radius:10px;
+border-radius:15px;
 width:300px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
 input{
 width:100%;
-padding:10px;
-margin:5px 0;
-border-radius:5px;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
 border:1px solid #ccc;
 }
 
 button{
 width:100%;
-padding:10px;
-background:red;
-color:white;
-border:none;
-border-radius:5px;
+padding:12px;
 margin-top:10px;
+border:none;
+border-radius:25px;
+background:#ff4d6d;
+color:white;
+font-size:16px;
+cursor:pointer;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="box">
 
-<h2>Create Account</h2>
+<h2>Register</h2>
 
 <input id="name" placeholder="Name">
 <input id="age" placeholder="Age">
-<input id="city" placeholder="City">
 <input id="country" placeholder="Country">
+<input id="photo" placeholder="Photo URL">
 <input id="email" placeholder="Email">
-<input id="password" placeholder="Password">
+<input id="password" type="password" placeholder="Password">
 
-<button onclick="register()">Register</button>
+<button onclick="register()">Create Account</button>
 
 </div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
 };
 
+if(!firebase.apps.length){
 firebase.initializeApp(firebaseConfig);
+}
 
 const db = firebase.firestore();
 
+
 function register(){
 
-let name=document.getElementById("name").value;
-let age=document.getElementById("age").value;
-let city=document.getElementById("city").value;
-let country=document.getElementById("country").value;
-let email=document.getElementById("email").value;
-let password=document.getElementById("password").value;
+let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let country=document.getElementById("country").value
+let photo=document.getElementById("photo").value
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
+
 
 firebase.auth().createUserWithEmailAndPassword(email,password)
 
-.then((userCredential)=>{
+.then(userCredential=>{
 
-let user=userCredential.user;
+let uid=userCredential.user.uid
 
-db.collection("users").doc(user.uid).set({
+db.collection("users").doc(uid).set({
+
 name:name,
 age:age,
-city:city,
 country:country,
-photo:"https://randomuser.me/api/portraits/men/50.jpg"
-});
-
-alert("Account created");
-
-window.location.href="discover.html";
+photo:photo,
+vip:false,
+boost:false
 
 })
 
-.catch((error)=>{
-alert(error.message);
-});
+.then(()=>{
+
+alert("Account created")
+
+window.location.href="discover.html"
+
+})
+
+})
+
+.catch(error=>{
+
+alert(error.message)
+
+})
 
 }
 
