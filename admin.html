@@ -1,124 +1,173 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Admin Panel</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin Panel</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
+margin:0;
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 text-align:center;
 }
 
-.card{
-width:320px;
-margin:20px auto;
-background:white;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
-padding:20px;
-}
-
-.card img{
-width:100%;
-height:200px;
-object-fit:cover;
-border-radius:10px;
-}
-
-button{
-padding:10px 20px;
-border:none;
-border-radius:20px;
-background:red;
+.header{
+background:#111;
 color:white;
-cursor:pointer;
-margin-top:10px;
+padding:15px;
+font-size:22px;
 }
 
-</style>
+.container{
+padding:30px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+max-width:600px;
+margin:auto;
+}
 
-</head>
+.box{
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.15);
+cursor:pointer;
+}
 
-<body>
+.box:hover{
+background:#ff4d6d;
+color:white;
+}
 
-<h2>Admin Panel</h2>
+</style></head><body><div class="header">Admin Panel
 
-<div id="users"></div>
+</div><div class="container"><div class="box" onclick="backup()">Backup Database
 
+</div><div class="box" onclick="loadUsers()">View Users
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</div><div class="box" onclick="loadMatches()">View Matches
 
-<script>
+</div><div class="box" onclick="loadGifts()">View Gifts
 
-const firebaseConfig={
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
+</div></div><div id="result"></div><script>
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh"
+
 }
 
 firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore()
+const db = firebase.firestore()
 
+const ADMIN_EMAIL = "YOUR_EMAIL@gmail.com"
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(!user){
+
+window.location="login.html"
+return
+
+}
+
+if(user.email !== ADMIN_EMAIL){
+
+document.body.innerHTML = "Access denied"
+
+}
+
+})
+
+async function backup(){
+
+let collections = ["users","likes","matches","messages"]
+
+let data = {}
+
+for(let col of collections){
+
+let snap = await db.collection(col).get()
+
+data[col] = []
+
+snap.forEach(doc=>{
+
+data[col].push(doc.data())
+
+})
+
+}
+
+let blob = new Blob([JSON.stringify(data)],{type:"application/json"})
+
+let a = document.createElement("a")
+
+a.href = URL.createObjectURL(blob)
+
+a.download = "backup.json"
+
+a.click()
+
+}
 
 function loadUsers(){
 
-db.collection("users").get().then(snapshot=>{
+db.collection("users").get().then(snap=>{
 
-snapshot.forEach(doc=>{
+let html="<h2>Users</h2>"
 
-let user=doc.data()
+snap.forEach(doc=>{
 
-let div=document.createElement("div")
+let u=doc.data()
 
-div.className="card"
-
-div.innerHTML=`
-
-<img src="${user.photo}">
-
-<h3>${user.name}</h3>
-
-<p>${user.city}</p>
-
-<button onclick="deleteUser('${doc.id}')">
-Delete User
-</button>
-
-`
-
-document.getElementById("users").appendChild(div)
+html+= "<p>"+u.name+" - "+u.country+"</p>"
 
 })
+
+document.getElementById("result").innerHTML=html
 
 })
 
 }
 
+function loadMatches(){
 
-function deleteUser(id){
+db.collection("matches").get().then(snap=>{
 
-db.collection("users").doc(id).delete()
+let html="<h2>Matches</h2>"
 
-alert("User Deleted")
+snap.forEach(doc=>{
 
-location.reload()
+html+= "<p>"+JSON.stringify(doc.data().users)+"</p>"
+
+})
+
+document.getElementById("result").innerHTML=html
+
+})
 
 }
 
+function loadGifts(){
 
-loadUsers()
+db.collection("gifts").get().then(snap=>{
 
-</script>
+let html="<h2>Gifts</h2>"
 
-</body>
+snap.forEach(doc=>{
 
-</html>
+let g=doc.data()
+
+html+= "<p>"+g.gift+"</p>"
+
+})
+
+document.getElementById("result").innerHTML=html
+
+})
+
+}
+
+</script></body></html>
