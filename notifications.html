@@ -1,90 +1,90 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Notifications</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Notifications</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
+margin:0;
 font-family:Arial;
-background:#f3f3f3;
+background:#f2f2f2;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
 text-align:center;
+font-size:20px;
 }
 
-.card{
+.list{
+padding:10px;
+}
 
+.item{
 background:white;
-width:320px;
-margin:auto;
-margin-top:20px;
-padding:20px;
-border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
-
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
 }
 
-</style>
+.time{
+font-size:12px;
+color:gray;
+margin-top:5px;
+}
 
-</head>
+</style></head><body><div class="header">Notifications
 
-<body>
+</div><div class="list" id="list"></div><script>
 
-<h2>Notifications</h2>
+const firebaseConfig = {
 
-<div id="notifications"></div>
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh"
 
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
-<script>
-
-const firebaseConfig={
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
 }
 
 firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore()
-
-let currentUser=null
+const db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
-currentUser=user
+if(!user){
 
-loadNotifications()
+window.location="login.html"
+return
+
+}
+
+loadNotifications(user.uid)
 
 })
 
-
-function loadNotifications(){
+function loadNotifications(uid){
 
 db.collection("notifications")
-.where("to","==",currentUser.uid)
-.get()
-.then(snapshot=>{
+.where("user","==",uid)
+.orderBy("time","desc")
+.onSnapshot(snapshot=>{
+
+let box=document.getElementById("list")
+box.innerHTML=""
 
 snapshot.forEach(doc=>{
 
-let data=doc.data()
+let n=doc.data()
 
 let div=document.createElement("div")
-
-div.className="card"
+div.className="item"
 
 div.innerHTML=`
-<p>${data.text}</p>
+<div>${n.text}</div>
+<div class="time">${new Date(n.time).toLocaleString()}</div>
 `
 
-document.getElementById("notifications").appendChild(div)
+box.appendChild(div)
 
 })
 
@@ -92,8 +92,4 @@ document.getElementById("notifications").appendChild(div)
 
 }
 
-</script>
-
-</body>
-
-</html>
+</script></body></html>
