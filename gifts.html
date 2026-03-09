@@ -1,1 +1,69 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Send Gift</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+font-size:22px;
+}
+
+.container{
+padding:20px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.gift{
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
+cursor:pointer;
+font-size:25px;
+}
+
+</style></head><body><div class="header">🎁 Send Gift
+
+</div><div class="container"><div class="gift" onclick="sendGift('🌹 Rose')">🌹 Rose</div><div class="gift" onclick="sendGift('❤️ Heart')">❤️ Heart</div><div class="gift" onclick="sendGift('⭐ Star')">⭐ Star</div><div class="gift" onclick="sendGift('💎 Diamond')">💎 Diamond</div></div><script>
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh"
+
+}
+
+firebase.initializeApp(firebaseConfig)
+
+const db = firebase.firestore()
+
+function sendGift(type){
+
+let user=firebase.auth().currentUser
+
+let to=new URLSearchParams(window.location.search).get("to")
+
+db.collection("gifts").add({
+
+from:user.uid,
+to:to,
+gift:type,
+time:Date.now()
+
+})
+
+alert("Gift sent 🎁")
+
+}
+
+</script></body></html>
