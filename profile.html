@@ -4,41 +4,44 @@
 <head>
 
 <meta charset="UTF-8">
-<title>Profile</title>
+<title>Chat</title>
 
 <style>
 
 body{
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 margin:0;
+text-align:center;
 padding-bottom:80px;
 }
 
-.card{
+#messages{
+height:400px;
+overflow:auto;
+padding:10px;
+}
+
+.msg{
 background:white;
-margin:20px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+margin:10px;
+padding:10px;
+border-radius:10px;
 }
 
 input{
-width:80%;
+width:70%;
 padding:10px;
-margin:10px;
 border-radius:8px;
 border:1px solid #ccc;
 }
 
 button{
-padding:12px 20px;
+padding:10px 15px;
 background:#ff4d6d;
 border:none;
 color:white;
-border-radius:10px;
-font-size:16px;
+border-radius:8px;
 }
 
 .navbar{
@@ -65,23 +68,12 @@ color:black;
 
 <body>
 
-<h2>👤 Profile</h2>
+<h2>💬 Chat</h2>
 
-<div class="card">
+<div id="messages"></div>
 
-<input id="name" placeholder="Your Name">
-
-<input id="age" placeholder="Age">
-
-<input id="country" placeholder="Country">
-
-<input id="photo" placeholder="Photo URL">
-
-<br>
-
-<button onclick="saveProfile()">Save Profile</button>
-
-</div>
+<input id="msg">
+<button onclick="send()">Send</button>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -105,30 +97,67 @@ firebase.initializeApp(firebaseConfig)
 
 let db=firebase.firestore()
 
-function saveProfile(){
+let chatUser=localStorage.getItem("chatUser")
 
-let user=firebase.auth().currentUser
+firebase.auth().onAuthStateChanged(user=>{
 
-if(!user){
-alert("Login first")
-return
+if(!user) return
+
+let current=user.uid
+
+db.collection("messages")
+.orderBy("time")
+.onSnapshot(snapshot=>{
+
+let box=document.getElementById("messages")
+
+box.innerHTML=""
+
+snapshot.forEach(doc=>{
+
+let m=doc.data()
+
+if(
+
+(m.from==current && m.to==chatUser) ||
+
+(m.from==chatUser && m.to==current)
+
+){
+
+let div=document.createElement("div")
+
+div.className="msg"
+
+div.innerText=m.text
+
+box.appendChild(div)
+
 }
-
-let name=document.getElementById("name").value
-let age=document.getElementById("age").value
-let country=document.getElementById("country").value
-let photo=document.getElementById("photo").value
-
-db.collection("users").doc(user.uid).set({
-
-name:name,
-age:age,
-country:country,
-photo:photo
 
 })
 
-alert("Profile Saved")
+})
+
+})
+
+
+function send(){
+
+let text=document.getElementById("msg").value
+
+let current=firebase.auth().currentUser.uid
+
+db.collection("messages").add({
+
+from:current,
+to:chatUser,
+text:text,
+time:Date.now()
+
+})
+
+document.getElementById("msg").value=""
 
 }
 
