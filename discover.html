@@ -4,6 +4,7 @@
 <head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Discover</title>
 
 <style>
@@ -13,37 +14,52 @@ font-family:Arial;
 background:#f2f2f2;
 margin:0;
 text-align:center;
-overflow:hidden;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+font-size:20px;
+}
+
+.container{
+padding:20px;
 }
 
 .card{
-width:320px;
-margin:40px auto;
 background:white;
-border-radius:20px;
+width:280px;
+margin:auto;
+margin-top:20px;
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-position:relative;
-touch-action:none;
 }
 
 .card img{
 width:100%;
-height:320px;
+height:220px;
 object-fit:cover;
 }
 
-.info{
-padding:15px;
+.card h3{
+margin:10px;
 }
 
-.name{
-font-size:22px;
-font-weight:bold;
+.card p{
+margin:5px;
+color:#666;
 }
 
-.distance{
-color:gray;
+.like{
+background:#ff4d6d;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:25px;
+margin:15px;
+cursor:pointer;
 }
 
 .navbar{
@@ -58,24 +74,36 @@ border-top:1px solid #ddd;
 font-size:22px;
 }
 
+.navbar a{
+text-decoration:none;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<h2>🔥 Discover</h2>
+<div class="header">🔥 Discover</div>
 
-<div id="card"></div>
+<div class="container">
+
+<div id="cards"></div>
+
+</div>
+
 
 <div class="navbar">
+
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="chat.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
+
 </div>
+
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -101,159 +129,105 @@ firebase.initializeApp(firebaseConfig)
 
 const db=firebase.firestore()
 
-let users=[]
-let index=0
-let startX=0
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
+
 location.href="login.html"
 return
+
 }
 
-loadUsers()
+loadUsers(user.uid)
 
 })
 
-function loadUsers(){
+
+
+function loadUsers(myId){
 
 db.collection("users")
 .orderBy("boost","desc")
 .get()
 .then(snapshot=>{
 
+let html=""
+
 snapshot.forEach(doc=>{
 
 let u=doc.data()
-u.id=doc.id
+let id=doc.id
 
-users.push(u)
+if(id===myId) return
 
-})
 
-showUser()
+let vip=u.vip ? "👑 VIP" : ""
 
-})
+let online=u.online ? "🟢 Online" : "⚫ Offline"
 
-}
 
-function showUser(){
+html+=`
 
-let u=users[index]
+<div class="card">
 
-if(!u){
+<img src="${u.photo}" onclick="openProfile('${id}')">
 
-document.getElementById("card").innerHTML="<h3>No more users</h3>"
+<h3 onclick="openProfile('${id}')">
 
-return
-}
+${u.name} ${vip}
 
-let vip=u.vip?"👑 ":""
+</h3>
 
-document.getElementById("card").innerHTML=
+<p>${u.country}</p>
 
-`<div class="card" id="swipeCard">
+<p>${online}</p>
 
-<img src="${u.photo}">
+<button class="like" onclick="like('${id}')">
 
-<div class="info">
+❤️ Like
 
-<div class="name">${vip}${u.name}, ${u.age}</div>
-
-<div>${u.country}</div>
+</button>
 
 </div>
 
-</div>`
-
-addSwipe()
-
-}
-
-function addSwipe(){
-
-let card=document.getElementById("swipeCard")
-
-card.addEventListener("touchstart",e=>{
-
-startX=e.touches[0].clientX
+`
 
 })
 
-card.addEventListener("touchend",e=>{
-
-let endX=e.changedTouches[0].clientX
-
-let diff=endX-startX
-
-if(diff>100){
-
-like()
-
-}
-
-if(diff<-100){
-
-skip()
-
-}
+document.getElementById("cards").innerHTML=html
 
 })
 
 }
 
-function like(){
 
-let currentUser=firebase.auth().currentUser.uid
-let likedUser=users[index].id
+
+function like(target){
+
+let user=firebase.auth().currentUser
 
 db.collection("likes").add({
 
-from:currentUser,
-to:likedUser,
+from:user.uid,
+to:target,
 time:Date.now()
 
 })
 
-db.collection("likes")
-.where("from","==",likedUser)
-.where("to","==",currentUser)
-.get()
-.then(snapshot=>{
+.then(()=>{
 
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-users:[currentUser,likedUser],
-time:Date.now()
+alert("❤️ Liked")
 
 })
-
-db.collection("notifications").add({
-
-to:likedUser,
-text:"❤️ It's a Match!",
-time:Date.now()
-
-})
-
-alert("❤️ It's a Match!")
 
 }
 
-})
 
-index++
-showUser()
 
-}
+function openProfile(id){
 
-function skip(){
-
-index++
-showUser()
+location.href="user.html?id="+id
 
 }
 
