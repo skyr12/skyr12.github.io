@@ -1,1 +1,73 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Game Center</title><style>
 
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
+}
+
+.container{
+padding:15px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.game{
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+cursor:pointer;
+}
+
+.game img{
+width:100%;
+height:110px;
+object-fit:cover;
+}
+
+.title{
+padding:10px;
+text-align:center;
+font-weight:bold;
+}
+
+</style></head><body><div class="header">🎮 Game Center
+
+</div><div class="container"><div class="game" onclick="openGame('roulette.html')">
+<img src="https://images.unsplash.com/photo-1596838132731-3301c3fd4317">
+<div class="title">Roulette</div>
+</div><div class="game" onclick="openGame('wheel.html')">
+<img src="https://images.unsplash.com/photo-1608889175123-7c52c2b3b8d5">
+<div class="title">Lucky Wheel</div>
+</div><div class="game" onclick="openGame('slots.html')">
+<img src="https://images.unsplash.com/photo-1596484552834-6a58f850e0a1">
+<div class="title">Slots</div>
+</div><div class="game" onclick="openGame('fruit.html')">
+<img src="https://images.unsplash.com/photo-1586201375761-83865001e31c">
+<div class="title">Fruit Game</div>
+</div><div class="game" onclick="openGame('quiz.html')">
+<img src="https://images.unsplash.com/photo-1584697964358-4f47c6df0b6c">
+<div class="title">Quiz</div>
+</div><div class="game" onclick="openGame('fishing.html')">
+<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+<div class="title">Fishing</div>
+</div></div><script>
+
+function openGame(page){
+
+window.location = page
+
+}
+
+</script></body></html>
