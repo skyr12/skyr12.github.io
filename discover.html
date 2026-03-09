@@ -5,62 +5,62 @@ body{
 margin:0;
 font-family:Arial;
 background:#f2f2f2;
+text-align:center;
 }
 
 .header{
 background:#ff4d6d;
 color:white;
 padding:15px;
-text-align:center;
 font-size:22px;
 }
 
-.container{
-padding:20px;
-max-width:500px;
-margin:auto;
-}
-
 .card{
+width:90%;
+max-width:400px;
+margin:40px auto;
 background:white;
-border-radius:15px;
+border-radius:20px;
 overflow:hidden;
-margin-bottom:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
+box-shadow:0 15px 30px rgba(0,0,0,0.2);
 }
 
 .card img{
 width:100%;
-height:300px;
+height:350px;
 object-fit:cover;
 }
 
 .info{
-padding:15px;
-text-align:center;
+padding:20px;
 }
 
-.name{
-font-size:22px;
-font-weight:bold;
+.buttons{
+margin-top:20px;
 }
 
-.status{
-margin-top:5px;
-font-size:14px;
+button{
+padding:15px 30px;
+font-size:20px;
+border:none;
+border-radius:50px;
+margin:10px;
+cursor:pointer;
 }
 
-.online{
-color:green;
+.like{
+background:#4CAF50;
+color:white;
 }
 
-.offline{
-color:gray;
+.nope{
+background:#ff4d6d;
+color:white;
 }
 
-</style></head><body><div class="header">Discover People
+</style></head><body><div class="header">Discover
 
-</div><div class="container" id="users"></div><script>
+</div><div id="card"></div><script>
 
 const firebaseConfig = {
 
@@ -73,6 +73,9 @@ projectId: "nimeh-gomsodeh"
 firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore()
+
+let users=[]
+let index=0
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -91,23 +94,31 @@ function loadUsers(){
 
 db.collection("users").get().then(snapshot=>{
 
-let html=""
-
 snapshot.forEach(doc=>{
 
-let u=doc.data()
+users.push({id:doc.id,...doc.data()})
 
-let statusText="Offline"
-let statusClass="offline"
+})
 
-if(u.online===true){
+showUser()
 
-statusText="Online"
-statusClass="online"
+})
 
 }
 
-html+=`
+function showUser(){
+
+if(index>=users.length){
+
+document.getElementById("card").innerHTML="No more users"
+
+return
+
+}
+
+let u=users[index]
+
+document.getElementById("card").innerHTML=`
 
 <div class="card">
 
@@ -115,21 +126,15 @@ html+=`
 
 <div class="info">
 
-<div class="name">
+<h2>${u.name} • ${u.age}</h2>
 
-${u.name} • ${u.age}
+<p>${u.country}</p>
 
-</div>
+<div class="buttons">
 
-<div>
+<button class="nope" onclick="dislike()">❌</button>
 
-${u.country}
-
-</div>
-
-<div class="status ${statusClass}">
-
-${statusText}
+<button class="like" onclick="like()">❤️</button>
 
 </div>
 
@@ -139,11 +144,33 @@ ${statusText}
 
 `
 
+}
+
+function like(){
+
+let currentUser=firebase.auth().currentUser
+
+let likedUser=users[index]
+
+db.collection("likes").add({
+
+from:currentUser.uid,
+to:likedUser.id,
+time:Date.now()
+
 })
 
-document.getElementById("users").innerHTML=html
+index++
 
-})
+showUser()
+
+}
+
+function dislike(){
+
+index++
+
+showUser()
 
 }
 
