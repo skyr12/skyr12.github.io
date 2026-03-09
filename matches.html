@@ -38,7 +38,6 @@ padding:10px;
 margin-bottom:15px;
 border-radius:15px;
 box-shadow:0 5px 15px rgba(0,0,0,0.15);
-cursor:pointer;
 }
 
 .match img{
@@ -46,7 +45,6 @@ width:60px;
 height:60px;
 border-radius:50%;
 margin-right:15px;
-object-fit:cover;
 }
 
 .match-name{
@@ -82,24 +80,7 @@ color:#444;
 Your Matches ❤️
 </div>
 
-<div class="match-list">
-
-<div class="match" onclick="openChat('Sara')">
-<img src="https://randomuser.me/api/portraits/women/44.jpg">
-<div class="match-name">Sara</div>
-</div>
-
-<div class="match" onclick="openChat('John')">
-<img src="https://randomuser.me/api/portraits/men/65.jpg">
-<div class="match-name">John</div>
-</div>
-
-<div class="match" onclick="openChat('Anna')">
-<img src="https://randomuser.me/api/portraits/women/68.jpg">
-<div class="match-name">Anna</div>
-</div>
-
-</div>
+<div id="matchList" class="match-list"></div>
 
 <div class="navbar">
 <a href="discover.html">🔥</a>
@@ -109,13 +90,60 @@ Your Matches ❤️
 <a href="profile.html">👤</a>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 <script>
 
-function openChat(name){
+var firebaseConfig = {
 
-alert("Open chat with " + name)
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID"
+
+};
+
+firebase.initializeApp(firebaseConfig)
+
+var db = firebase.firestore()
+
+let currentUser="user1"
+
+function loadMatches(){
+
+db.collection("matches")
+.where("user1","==",currentUser)
+.get()
+.then(snapshot=>{
+
+snapshot.forEach(doc=>{
+
+let data=doc.data()
+
+let div=document.createElement("div")
+div.className="match"
+
+div.innerHTML=`
+
+<img src="https://randomuser.me/api/portraits/men/32.jpg">
+
+<div class="match-name">
+
+Match with ${data.user2}
+
+</div>
+
+`
+
+document.getElementById("matchList").appendChild(div)
+
+})
+
+})
 
 }
+
+loadMatches()
 
 </script>
 
