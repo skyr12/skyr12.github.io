@@ -1,1 +1,120 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Wallet</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+font-size:22px;
+}
+
+.box{
+margin-top:60px;
+background:white;
+display:inline-block;
+padding:40px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+.coins{
+font-size:40px;
+color:#ff4d6d;
+margin:20px 0;
+}
+
+button{
+padding:12px 30px;
+border:none;
+border-radius:25px;
+background:#ff4d6d;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+</style></head><body><div class="header">💰 Wallet
+
+</div><div class="box"><h2>Your Coins</h2><div class="coins" id="coins">0</div><button onclick="getDaily()">Daily Reward</button>
+
+</div><script>
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh"
+
+}
+
+firebase.initializeApp(firebaseConfig)
+
+const db = firebase.firestore()
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(!user){
+
+window.location="login.html"
+return
+
+}
+
+loadWallet(user.uid)
+
+})
+
+function loadWallet(uid){
+
+db.collection("wallet").doc(uid).get()
+
+.then(doc=>{
+
+if(!doc.exists){
+
+db.collection("wallet").doc(uid).set({
+
+coins:100
+
+})
+
+document.getElementById("coins").innerText=100
+
+}
+
+else{
+
+document.getElementById("coins").innerText=doc.data().coins
+
+}
+
+})
+
+}
+
+function getDaily(){
+
+let user=firebase.auth().currentUser
+
+let ref=db.collection("wallet").doc(user.uid)
+
+ref.get().then(doc=>{
+
+let coins=doc.data().coins+10
+
+ref.update({coins:coins})
+
+document.getElementById("coins").innerText=coins
+
+})
+
+}
+
+</script></body></html>
