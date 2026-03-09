@@ -1,1 +1,111 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Select Language</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+padding-bottom:80px;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:20px;
+font-size:22px;
+}
+
+.language{
+background:white;
+margin:10px;
+padding:15px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+cursor:pointer;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:70px;
+background:white;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 15px rgba(0,0,0,0.2);
+}
+
+.navbar a{
+text-decoration:none;
+font-size:26px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+Select Language 🌍
+</div>
+
+<div class="language" onclick="setLang('English')">English</div>
+
+<div class="language" onclick="setLang('Arabic')">Arabic</div>
+
+<div class="language" onclick="setLang('Turkish')">Turkish</div>
+
+<div class="language" onclick="setLang('French')">French</div>
+
+<div class="language" onclick="setLang('Spanish')">Spanish</div>
+
+<div class="language" onclick="setLang('German')">German</div>
+
+<div class="language" onclick="setLang('Urdu')">Urdu</div>
+
+<div class="language" onclick="setLang('Indonesian')">Indonesian</div>
+
+<div class="language" onclick="setLang('Persian')">Persian</div>
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+
+<a href="matches.html">❤️</a>
+
+<a href="chat.html">💬</a>
+
+<a href="notifications.html">🔔</a>
+
+<a href="profile.html">👤</a>
+
+</div>
+
+<script>
+
+function setLang(lang){
+
+localStorage.setItem("language",lang)
+
+alert("Language set to "+lang)
+
+}
+
+</script>
+
+</body>
+
+</html>
