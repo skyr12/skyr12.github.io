@@ -13,8 +13,8 @@ body{
 margin:0;
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 padding-bottom:80px;
+text-align:center;
 }
 
 .header{
@@ -24,7 +24,7 @@ padding:20px;
 font-size:22px;
 }
 
-.profile-card{
+.profile-box{
 width:90%;
 max-width:400px;
 margin:30px auto;
@@ -34,11 +34,12 @@ border-radius:20px;
 box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
-.profile-card img{
+.profile-box img{
 width:120px;
 height:120px;
 border-radius:50%;
 object-fit:cover;
+margin-bottom:10px;
 }
 
 input{
@@ -50,10 +51,10 @@ border:1px solid #ccc;
 }
 
 button{
-padding:10px 25px;
-border:none;
+padding:12px 20px;
 background:#ff4d6d;
 color:white;
+border:none;
 border-radius:20px;
 }
 
@@ -86,21 +87,23 @@ color:#444;
 Your Profile 👤
 </div>
 
-<div class="profile-card">
+<div class="profile-box">
 
-<img src="https://randomuser.me/api/portraits/men/32.jpg">
-
-<br><br>
-
-<input placeholder="Your name">
-
-<input placeholder="Age">
-
-<input placeholder="Country">
+<img id="photoPreview" src="https://randomuser.me/api/portraits/men/32.jpg">
 
 <br>
 
-<button>Save Profile</button>
+<input type="file" id="photoInput">
+
+<input id="name" placeholder="Your name">
+
+<input id="age" placeholder="Age">
+
+<input id="country" placeholder="Country">
+
+<br>
+
+<button onclick="saveProfile()">Save Profile</button>
 
 </div>
 
@@ -111,6 +114,63 @@ Your Profile 👤
 <a href="notifications.html">🔔</a>
 <a href="profile.html">👤</a>
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+
+var firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID"
+
+};
+
+firebase.initializeApp(firebaseConfig)
+
+var db = firebase.firestore()
+
+let currentUser="user1"
+
+document.getElementById("photoInput").addEventListener("change",function(){
+
+let file=this.files[0]
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+document.getElementById("photoPreview").src=reader.result
+
+}
+
+reader.readAsDataURL(file)
+
+})
+
+function saveProfile(){
+
+let name=document.getElementById("name").value
+let age=document.getElementById("age").value
+let country=document.getElementById("country").value
+let photo=document.getElementById("photoPreview").src
+
+db.collection("users").doc(currentUser).set({
+
+name:name,
+age:age,
+country:country,
+photo:photo
+
+})
+
+alert("Profile Saved")
+
+}
+
+</script>
 
 </body>
 </html>
