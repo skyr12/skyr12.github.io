@@ -11,41 +11,68 @@
 body{
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 margin:0;
 padding-bottom:80px;
-overflow:hidden;
+text-align:center;
 }
 
 .card{
-width:320px;
-margin:80px auto;
+width:330px;
+margin:60px auto;
 background:white;
 border-radius:20px;
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-position:relative;
-transition:0.3s;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 .card img{
 width:100%;
-height:320px;
+height:340px;
 object-fit:cover;
 }
 
 .info{
-padding:20px;
+padding:15px;
+text-align:left;
 }
 
-button{
+.name{
+font-size:20px;
+font-weight:bold;
+}
+
+.bio{
+color:gray;
+font-size:14px;
+margin-top:5px;
+}
+
+.online{
+color:limegreen;
+font-size:14px;
+}
+
+.buttons{
+display:flex;
+justify-content:space-around;
+margin-top:10px;
+}
+
+.buttons button{
+padding:10px 20px;
+border:none;
+border-radius:20px;
+font-size:16px;
+cursor:pointer;
+}
+
+.pass{
+background:#ddd;
+}
+
+.like{
 background:#ff4d6d;
 color:white;
-border:none;
-padding:12px 30px;
-font-size:18px;
-border-radius:30px;
-cursor:pointer;
 }
 
 .navbar{
@@ -70,13 +97,11 @@ color:black;
 
 </head>
 
-
 <body>
 
 <h2>🔥 Discover</h2>
 
-<div id="users"></div>
-
+<div id="card"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -90,8 +115,7 @@ authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
-measurementId: "G-KTCV2B5R9L"
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 }
 
 firebase.initializeApp(firebaseConfig)
@@ -100,20 +124,18 @@ let db=firebase.firestore()
 
 let users=[]
 let index=0
-let startX=0
-
-const usersDiv=document.getElementById("users")
-
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user) return
 
+let uid=user.uid
+
 db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-if(doc.id !== user.uid){
+if(doc.id!==uid){
 
 let data=doc.data()
 
@@ -131,74 +153,89 @@ showUser()
 
 })
 
-
 function showUser(){
 
 if(index>=users.length){
 
-usersDiv.innerHTML="<h3>No more users</h3>"
+document.getElementById("card").innerHTML="<h3>No more users</h3>"
 
 return
 }
 
-let user=users[index]
+let u=users[index]
 
-usersDiv.innerHTML=
+let online=""
+
+if(u.online){
+
+online="🟢 Online"
+
+}
+
+document.getElementById("card").innerHTML=
 
 `
-<div class="card" id="card">
+<div class="card">
 
-<img src="${user.photo}">
+<img src="${u.photo}">
 
 <div class="info">
 
-<h3>${user.name}</h3>
-<p>${user.country}</p>
+<div class="name">${u.name}, ${u.age}</div>
 
-<button onclick="like()">❤️ Like</button>
+<div>${u.country}</div>
+
+<div class="online">${online}</div>
+
+<div class="bio">${u.bio}</div>
+
+<div class="buttons">
+
+<button class="pass" onclick="pass()">Pass</button>
+
+<button class="like" onclick="like()">Like</button>
+
+</div>
 
 </div>
 
 </div>
 `
 
-let card=document.getElementById("card")
-
-card.addEventListener("touchstart",e=>{
-startX=e.touches[0].clientX
-})
-
-card.addEventListener("touchend",e=>{
-
-let endX=e.changedTouches[0].clientX
-
-if(endX-startX>80){
-
-like()
-
 }
-
-if(startX-endX>80){
-
-pass()
-
-}
-
-})
-
-}
-
 
 function like(){
 
-let currentUser=firebase.auth().currentUser.uid
-let likedUser=users[index].id
+let current=firebase.auth().currentUser.uid
+
+let liked=users[index].id
 
 db.collection("likes").add({
 
-from:currentUser,
-to:likedUser,
+from:current,
+to:liked,
 time:Date.now()
+
+})
+
+db.collection("likes")
+.where("from","==",liked)
+.where("to","==",current)
+.get()
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+db.collection("matches").add({
+
+users:[current,liked],
+time:Date.now()
+
+})
+
+alert("❤️ It's a Match!")
+
+}
 
 })
 
@@ -206,7 +243,6 @@ index++
 showUser()
 
 }
-
 
 function pass(){
 
@@ -217,18 +253,16 @@ showUser()
 
 </script>
 
-
 <div class="navbar">
 
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
+<a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 
 </div>
-
 
 </body>
 </html>
