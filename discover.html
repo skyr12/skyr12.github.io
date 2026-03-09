@@ -14,15 +14,18 @@ background:#f2f2f2;
 text-align:center;
 margin:0;
 padding-bottom:80px;
+overflow:hidden;
 }
 
 .card{
 width:320px;
-margin:40px auto;
+margin:80px auto;
 background:white;
 border-radius:20px;
 overflow:hidden;
 box-shadow:0 10px 25px rgba(0,0,0,0.2);
+position:relative;
+transition:0.3s;
 }
 
 .card img{
@@ -79,7 +82,6 @@ color:black;
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-
 <script>
 
 const firebaseConfig = {
@@ -94,10 +96,11 @@ measurementId: "G-KTCV2B5R9L"
 
 firebase.initializeApp(firebaseConfig)
 
-let db = firebase.firestore()
+let db=firebase.firestore()
 
 let users=[]
 let index=0
+let startX=0
 
 const usersDiv=document.getElementById("users")
 
@@ -143,14 +146,13 @@ let user=users[index]
 usersDiv.innerHTML=
 
 `
-<div class="card">
+<div class="card" id="card">
 
 <img src="${user.photo}">
 
 <div class="info">
 
 <h3>${user.name}</h3>
-
 <p>${user.country}</p>
 
 <button onclick="like()">❤️ Like</button>
@@ -160,15 +162,37 @@ usersDiv.innerHTML=
 </div>
 `
 
+let card=document.getElementById("card")
+
+card.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX
+})
+
+card.addEventListener("touchend",e=>{
+
+let endX=e.changedTouches[0].clientX
+
+if(endX-startX>80){
+
+like()
+
 }
 
+if(startX-endX>80){
+
+pass()
+
+}
+
+})
+
+}
 
 
 function like(){
 
 let currentUser=firebase.auth().currentUser.uid
 let likedUser=users[index].id
-
 
 db.collection("likes").add({
 
@@ -178,37 +202,13 @@ time:Date.now()
 
 })
 
-
-db.collection("likes")
-.where("from","==",likedUser)
-.where("to","==",currentUser)
-.get()
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-users:[currentUser,likedUser],
-time:Date.now()
-
-})
-
-
-db.collection("notifications").add({
-
-to:likedUser,
-text:"❤️ It's a Match!",
-time:Date.now()
-
-})
-
-alert("❤️ It's a Match!")
+index++
+showUser()
 
 }
 
-})
 
+function pass(){
 
 index++
 showUser()
@@ -216,7 +216,6 @@ showUser()
 }
 
 </script>
-
 
 
 <div class="navbar">
