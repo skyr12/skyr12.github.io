@@ -78,39 +78,36 @@ color:black;
 
 </div>
 
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
 
 <script>
 
 const firebaseConfig = {
-
-apiKey: "YOUR_API_KEY",
-
-authDomain: "YOUR_DOMAIN",
-
-projectId: "YOUR_PROJECT_ID",
-
-storageBucket: "YOUR_BUCKET",
-
-messagingSenderId: "YOUR_ID",
-
-appId: "YOUR_APP"
-
+  apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+  authDomain: "nimeh-gomsodeh.firebaseapp.com",
+  projectId: "nimeh-gomsodeh",
+  storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+  messagingSenderId: "815930956932",
+  appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
+  measurementId: "G-KTCV2B5R9L"
 };
 
 firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore()
 
+
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
 
-alert("Login first")
+alert("Please login first")
+
+location.href="login.html"
 
 return
 
@@ -119,6 +116,7 @@ return
 loadMatches(user.uid)
 
 })
+
 
 function loadMatches(uid){
 
@@ -138,9 +136,11 @@ div.className="card"
 
 div.innerHTML=`
 
-<h3>New Match 🎉</h3>
+<h3>🎉 New Match</h3>
 
-<button onclick="location.href='chat.html'">Open Chat</button>
+<button onclick="location.href='chat.html'">
+Open Chat
+</button>
 
 `
 
