@@ -1,70 +1,66 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Premium</title>
 
 <style>
 
 body{
-margin:0;
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 text-align:center;
+margin:0;
 padding-bottom:80px;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:20px;
-font-size:22px;
-}
-
-.plan{
-width:90%;
-max-width:400px;
-margin:20px auto;
+.card{
+width:320px;
+margin:60px auto;
 background:white;
-padding:20px;
+padding:30px;
 border-radius:20px;
-box-shadow:0 5px 15px rgba(0,0,0,0.15);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-.price{
-font-size:28px;
+h2{
 color:#ff4d6d;
 }
 
+ul{
+text-align:left;
+margin-top:20px;
+}
+
 button{
-padding:12px 20px;
+margin-top:20px;
+padding:12px 25px;
 border:none;
+border-radius:20px;
 background:#ff4d6d;
 color:white;
-border-radius:20px;
 font-size:16px;
+cursor:pointer;
 }
 
 .navbar{
 position:fixed;
 bottom:0;
 left:0;
-width:100%;
-height:65px;
+right:0;
 background:white;
 display:flex;
 justify-content:space-around;
-align-items:center;
-box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+font-size:22px;
 }
 
 .navbar a{
 text-decoration:none;
-font-size:24px;
-color:#444;
+color:black;
 }
 
 </style>
@@ -73,46 +69,71 @@ color:#444;
 
 <body>
 
-<div class="header">
-Premium ⭐
-</div>
+<h2>💎 Premium</h2>
 
-<div class="plan">
+<div class="card">
 
-<h2>VIP Plan</h2>
+<h3>Unlock Premium</h3>
 
-<p>⭐ Unlimited Likes</p>
-<p>⭐ See who liked you</p>
-<p>⭐ Boost profile</p>
-<p>⭐ No ads</p>
+<ul>
 
-<div class="price">
-$9.99 / month
-</div>
+<li>🔥 Boost your profile</li>
+<li>👁️ See who liked you</li>
+<li>💬 Unlimited chat</li>
+<li>🌎 Global search</li>
+<li>⭐ Priority profile</li>
 
-<br>
+</ul>
 
-<button onclick="buy()">Buy Premium</button>
+<button onclick="activatePremium()">Activate Premium</button>
 
 </div>
 
-<div class="navbar">
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="profile.html">👤</a>
-</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
 <script>
 
-function buy(){
+const firebaseConfig = {
+apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain: "nimeh-gomsodeh.firebaseapp.com",
+projectId: "nimeh-gomsodeh",
+storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId: "815930956932",
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+}
 
-alert("Premium activated ⭐")
+firebase.initializeApp(firebaseConfig)
+
+let db = firebase.firestore()
+
+function activatePremium(){
+
+let user = firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+premium:true
+
+})
+
+alert("Premium Activated 💎")
 
 }
 
 </script>
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="inbox.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="premium.html">💎</a>
+<a href="profile.html">👤</a>
+
+</div>
 
 </body>
 </html>
