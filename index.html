@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
@@ -8,16 +8,19 @@
 
 <title>Nimeh Dating</title>
 
+<!-- PWA -->
 <link rel="manifest" href="manifest.json">
+
+<!-- Theme color -->
+<meta name="theme-color" content="#ff4d6d">
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#f3f3f3;
+background:#f2f2f2;
 text-align:center;
-padding-bottom:80px;
 }
 
 .header{
@@ -27,18 +30,17 @@ padding:20px;
 font-size:24px;
 }
 
-.box{
-margin:40px;
+.container{
+margin-top:40px;
 }
 
 button{
 padding:15px 25px;
 border:none;
 border-radius:30px;
-font-size:18px;
 background:#ff4d6d;
 color:white;
-margin:10px;
+font-size:18px;
 cursor:pointer;
 }
 
@@ -49,50 +51,16 @@ cursor:pointer;
 <body>
 
 <div class="header">
-
 Nimeh Dating ❤️
-
 </div>
 
-<div class="box">
+<div class="container">
 
 <button onclick="location.href='discover.html'">
 Start Discover 🔥
 </button>
 
-<br>
-
-<button id="installBtn" style="display:none">
-Install App 📱
-</button>
-
 </div>
-
-<script>
-
-let deferredPrompt
-
-window.addEventListener('beforeinstallprompt',(e)=>{
-
-e.preventDefault()
-
-deferredPrompt=e
-
-document.getElementById("installBtn").style.display="block"
-
-})
-
-document.getElementById("installBtn").addEventListener("click",async()=>{
-
-if(deferredPrompt){
-
-deferredPrompt.prompt()
-
-}
-
-})
-
-</script>
 
 </body>
 
