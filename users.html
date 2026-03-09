@@ -1,77 +1,168 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Users</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile</title><style>
 
 body{
-font-family:tahoma;
-background:#f4f4f4;
+font-family:Arial;
+background:#f2f2f2;
 text-align:center;
+margin:0;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+font-size:20px;
 }
 
 .card{
 background:white;
 width:300px;
 margin:auto;
-margin-top:20px;
+margin-top:30px;
 padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
-</style>
+.card img{
+width:200px;
+height:200px;
+object-fit:cover;
+border-radius:10px;
+}
 
-</head>
+button{
+background:#ff4d6d;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:25px;
+margin:8px;
+cursor:pointer;
+}
 
-<body>
+.gift{
+background:#9c27b0;
+}
 
-<h2>Users</h2>
+.navbar{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+border-top:1px solid #ddd;
+font-size:22px;
+}
 
-<div id="users"></div>
+.navbar a{
+text-decoration:none;
+}
 
-<script type="module">
+</style></head><body><div class="header">👤 User Profile</div><div class="card"><img id="photo"><h2 id="name"></h2><p id="country"></p><p id="online"></p><button onclick="likeUser()">❤️ Like</button>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+<a id="giftLink">
+<button class="gift">🎁 Send Gift</button>
+</a></div><div class="navbar"><a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="inbox.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
+<a href="profile.html">👤</a>
 
+</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
-measurementId: "G-KTCV2B5R9L"
+
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
+
 };
 
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig)
+}
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db=firebase.firestore()
 
+const urlParams=new URLSearchParams(window.location.search)
 
-const querySnapshot = await getDocs(collection(db,"users"));
+const userId=urlParams.get("id")
 
-querySnapshot.forEach((doc)=>{
+document.getElementById("giftLink").href="gift.html?id="+userId
 
-let user = doc.data()
+firebase.auth().onAuthStateChanged(user=>{
 
-document.getElementById("users").innerHTML += `
+if(!user){
 
-<div class="card">
-<h3>${user.name}</h3>
-<p>${user.city}</p>
-</div>
+location.href="login.html"
+return
 
-`
+}
+
+loadUser()
+
+saveVisitor(user.uid)
 
 })
 
-</script>
 
-</body>
+function loadUser(){
+
+db.collection("users").doc(userId).get()
+
+.then(doc=>{
+
+let u=doc.data()
+
+document.getElementById("photo").src=u.photo
+document.getElementById("name").innerText=u.name
+document.getElementById("country").innerText=u.country
+
+let online=u.online ? "🟢 Online" : "⚫ Offline"
+
+document.getElementById("online").innerText=online
+
+})
+
+}
+
+
+function likeUser(){
+
+let user=firebase.auth().currentUser
+
+db.collection("likes").add({
+
+from:user.uid,
+to:userId,
+time:Date.now()
+
+})
+
+alert("❤️ Liked")
+
+}
+
+
+function saveVisitor(visitorId){
+
+db.collection("visitors").add({
+
+profile:userId,
+visitor:visitorId,
+time:Date.now()
+
+})
+
+}
+
+</script></body>
 </html>
