@@ -13,12 +13,11 @@ font-family:Arial;
 background:#f2f2f2;
 margin:0;
 padding-bottom:80px;
-text-align:center;
 }
 
 .card{
-width:320px;
-margin:15px auto;
+width:340px;
+margin:10px auto;
 background:white;
 border-radius:15px;
 display:flex;
@@ -29,16 +28,25 @@ cursor:pointer;
 }
 
 .card img{
-width:60px;
-height:60px;
+width:55px;
+height:55px;
 border-radius:50%;
 object-fit:cover;
 margin-right:15px;
 }
 
+.text{
+text-align:left;
+}
+
 .name{
-font-size:18px;
 font-weight:bold;
+font-size:16px;
+}
+
+.last{
+font-size:14px;
+color:gray;
 }
 
 .navbar{
@@ -65,7 +73,7 @@ color:black;
 
 <body>
 
-<h2>💬 Chats</h2>
+<h2 style="text-align:center">💬 Chats</h2>
 
 <div id="inbox"></div>
 
@@ -99,6 +107,7 @@ db.collection("matches")
 .onSnapshot(snapshot=>{
 
 let box=document.getElementById("inbox")
+
 box.innerHTML=""
 
 snapshot.forEach(doc=>{
@@ -111,13 +120,32 @@ db.collection("users").doc(other).get().then(userDoc=>{
 
 let u=userDoc.data()
 
+db.collection("messages")
+.where("from","in",[uid,other])
+.orderBy("time","desc")
+.limit(1)
+.get()
+.then(msg=>{
+
+let last="No messages yet"
+
+msg.forEach(m=>{
+last=m.data().text
+})
+
 let card=document.createElement("div")
 card.className="card"
 
 card.innerHTML=`
 
 <img src="${u.photo}">
+
+<div class="text">
+
 <div class="name">${u.name}</div>
+<div class="last">${last}</div>
+
+</div>
 
 `
 
@@ -128,6 +156,8 @@ window.location="chat.html?user="+other
 }
 
 box.appendChild(card)
+
+})
 
 })
 
