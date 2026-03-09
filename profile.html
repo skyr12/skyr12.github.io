@@ -11,8 +11,8 @@
 body{
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 margin:0;
+text-align:center;
 }
 
 .header{
@@ -22,32 +22,51 @@ padding:15px;
 font-size:20px;
 }
 
-.box{
+.card{
 background:white;
-width:300px;
+width:320px;
 margin:30px auto;
 padding:20px;
 border-radius:15px;
 box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
+.card img{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:10px;
+}
+
 input{
-width:100%;
+width:90%;
 padding:10px;
-margin:10px 0;
+margin:10px;
 border-radius:8px;
 border:1px solid #ccc;
 }
 
 button{
-width:100%;
-padding:12px;
 border:none;
-border-radius:25px;
-background:#ff4d6d;
-color:white;
+padding:12px 20px;
+border-radius:30px;
 font-size:16px;
 cursor:pointer;
+margin:5px;
+}
+
+.save{
+background:#ff4d6d;
+color:white;
+}
+
+.vip{
+background:gold;
+}
+
+.logout{
+background:#ddd;
 }
 
 .navbar{
@@ -72,16 +91,22 @@ text-decoration:none;
 
 <body>
 
-<div class="header">👤 Profile</div>
+<div class="header">👤 My Profile</div>
 
-<div class="box">
+<div class="card">
+
+<img id="photoPreview">
 
 <input id="name" placeholder="Name">
 <input id="age" placeholder="Age">
 <input id="country" placeholder="Country">
 <input id="photo" placeholder="Photo URL">
 
-<button onclick="save()">Save Profile</button>
+<button class="save" onclick="save()">Save Profile</button>
+
+<button class="vip" onclick="vip()">Become VIP 👑</button>
+
+<button class="logout" onclick="logout()">Logout</button>
 
 </div>
 
@@ -116,24 +141,30 @@ if(!firebase.apps.length){
 firebase.initializeApp(firebaseConfig);
 }
 
-const db = firebase.firestore();
+const db=firebase.firestore()
 
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
+
 location.href="login.html"
+
 return
+
 }
 
-db.collection("users").doc(user.uid).get().then(doc=>{
+db.collection("users").doc(user.uid).get()
 
-let data=doc.data()
+.then(doc=>{
 
-document.getElementById("name").value=data.name
-document.getElementById("age").value=data.age
-document.getElementById("country").value=data.country
-document.getElementById("photo").value=data.photo
+let u=doc.data()
+
+document.getElementById("name").value=u.name
+document.getElementById("age").value=u.age
+document.getElementById("country").value=u.country
+document.getElementById("photo").value=u.photo
+document.getElementById("photoPreview").src=u.photo
 
 })
 
@@ -149,7 +180,6 @@ let age=document.getElementById("age").value
 let country=document.getElementById("country").value
 let photo=document.getElementById("photo").value
 
-
 db.collection("users").doc(user.uid).update({
 
 name:name,
@@ -161,7 +191,41 @@ photo:photo
 
 .then(()=>{
 
-alert("Profile updated")
+alert("Profile Updated")
+
+document.getElementById("photoPreview").src=photo
+
+})
+
+}
+
+
+function vip(){
+
+let user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+vip:true
+
+})
+
+.then(()=>{
+
+alert("👑 You are now VIP")
+
+})
+
+}
+
+
+function logout(){
+
+firebase.auth().signOut()
+
+.then(()=>{
+
+location.href="login.html"
 
 })
 
@@ -170,4 +234,5 @@ alert("Profile updated")
 </script>
 
 </body>
+
 </html>
