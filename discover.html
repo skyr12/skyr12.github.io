@@ -69,6 +69,11 @@ color:white;
 background:#ccc;
 }
 
+.super{
+background:#2196F3;
+color:white;
+}
+
 .navbar{
 position:fixed;
 bottom:0;
@@ -176,6 +181,8 @@ document.getElementById("card").innerHTML=
 
 <button class="pass" onclick="pass()">❌</button>
 
+<button class="super" onclick="superLike()">⭐</button>
+
 <button class="like" onclick="like()">❤️</button>
 
 </div>
@@ -212,6 +219,26 @@ showUser()
 
 }
 
+function superLike(){
+
+let currentUser=firebase.auth().currentUser.uid
+let likedUser=users[index].id
+
+db.collection("superlikes").add({
+
+from:currentUser,
+to:likedUser,
+time:Date.now()
+
+})
+
+alert("Super Like Sent ⭐")
+
+index++
+showUser()
+
+}
+
 </script>
 
 <div class="navbar">
@@ -219,8 +246,8 @@ showUser()
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
+<a href="wallet.html">💰</a>
+<a href="leaderboard.html">🏆</a>
 <a href="profile.html">👤</a>
 
 </div>
