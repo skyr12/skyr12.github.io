@@ -17,28 +17,19 @@ padding-bottom:80px;
 }
 
 .card{
+width:320px;
+margin:40px auto;
 background:white;
-margin:20px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+border-radius:20px;
+padding:30px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-input{
-width:80%;
-padding:10px;
-margin:10px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-button{
-padding:12px 20px;
-background:#ff4d6d;
-border:none;
-color:white;
-border-radius:10px;
-font-size:16px;
+img{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
 }
 
 .navbar{
@@ -63,23 +54,20 @@ color:black;
 
 </head>
 
+
 <body>
 
-<h2>👤 Profile</h2>
+<h2>👤 My Profile</h2>
 
 <div class="card">
 
-<input id="name" placeholder="Your Name">
+<img id="photo">
 
-<input id="age" placeholder="Age">
+<h3 id="name"></h3>
 
-<input id="country" placeholder="Country">
+<p id="country"></p>
 
-<input id="photo" placeholder="Photo URL">
-
-<br>
-
-<button onclick="saveProfile()">Save Profile</button>
+<p id="status"></p>
 
 </div>
 
@@ -105,20 +93,28 @@ firebase.initializeApp(firebaseConfig)
 
 let db=firebase.firestore()
 
-
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user) return
 
 let uid=user.uid
 
-db.collection("users").doc(uid).set({
+db.collection("users").doc(uid).update({
 
 online:true,
 lastSeen:Date.now()
 
-},{merge:true})
+})
 
+db.collection("users").doc(uid).get().then(doc=>{
+
+let data=doc.data()
+
+document.getElementById("photo").src=data.photo
+document.getElementById("name").innerText=data.name
+document.getElementById("country").innerText=data.country
+
+})
 
 window.addEventListener("beforeunload",function(){
 
@@ -132,35 +128,6 @@ lastSeen:Date.now()
 })
 
 })
-
-
-
-function saveProfile(){
-
-let user=firebase.auth().currentUser
-
-if(!user){
-alert("Login first")
-return
-}
-
-let name=document.getElementById("name").value
-let age=document.getElementById("age").value
-let country=document.getElementById("country").value
-let photo=document.getElementById("photo").value
-
-db.collection("users").doc(user.uid).set({
-
-name:name,
-age:age,
-country:country,
-photo:photo
-
-},{merge:true})
-
-alert("Profile Saved")
-
-}
 
 </script>
 
