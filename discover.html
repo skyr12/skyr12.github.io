@@ -2,6 +2,7 @@
 <html>
 
 <head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Discover</title>
@@ -86,6 +87,7 @@ text-decoration:none;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -119,6 +121,7 @@ appId:"YOUR_APP"
 }
 
 firebase.initializeApp(firebaseConfig)
+
 const db = firebase.firestore()
 
 let users=[]
@@ -126,7 +129,10 @@ let index=0
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(!user) location.href="login.html"
+if(!user){
+location.href="login.html"
+return
+}
 
 db.collection("users").get().then(snapshot=>{
 
@@ -139,9 +145,20 @@ id:doc.id,
 })
 })
 
-/* VIP ها اول */
+/* مرتب سازی کاربران */
+
 users.sort((a,b)=>{
-return (b.vip===true)-(a.vip===true)
+
+/* Boost اول */
+if(b.boost===true && a.boost!==true) return 1
+if(a.boost===true && b.boost!==true) return -1
+
+/* بعد VIP */
+if(b.vip===true && a.vip!==true) return 1
+if(a.vip===true && b.vip!==true) return -1
+
+return 0
+
 })
 
 showUser()
@@ -168,7 +185,9 @@ document.getElementById("card").innerHTML=`
 <div class="info">
 
 <div class="name">
-${u.name} ${u.vip ? "👑" : ""}, ${u.age}
+
+${u.boost ? "🔥 " : ""}${u.name} ${u.vip ? "👑" : ""}, ${u.age}
+
 </div>
 
 <div class="country">${u.country}</div>
@@ -192,8 +211,10 @@ ${u.name} ${u.vip ? "👑" : ""}, ${u.age}
 }
 
 function pass(){
+
 index++
 showUser()
+
 }
 
 function like(){
