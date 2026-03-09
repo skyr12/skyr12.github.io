@@ -11,22 +11,50 @@
 body{
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 margin:0;
-}
-
-h2{
-margin-top:20px;
+text-align:center;
+padding-bottom:80px;
 }
 
 .card{
 background:white;
-margin:20px auto;
+margin:20px;
 padding:20px;
-border-radius:12px;
-width:80%;
-max-width:400px;
+border-radius:15px;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+img{
+width:80px;
+height:80px;
+border-radius:50%;
+}
+
+button{
+padding:10px 15px;
+background:#ff4d6d;
+border:none;
+color:white;
+border-radius:8px;
+margin-top:10px;
+}
+
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:12px;
+box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+font-size:22px;
+}
+
+.navbar a{
+text-decoration:none;
+color:black;
 }
 
 </style>
@@ -39,8 +67,6 @@ box-shadow:0 5px 15px rgba(0,0,0,0.1);
 
 <div id="visitors"></div>
 
-
-<!-- Firebase -->
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -76,11 +102,24 @@ box.innerHTML=""
 
 snapshot.forEach(doc=>{
 
+let v=doc.data()
+
+db.collection("users").doc(v.viewer).get().then(u=>{
+
+let data=u.data()
+
 let div=document.createElement("div")
 
 div.className="card"
 
-div.innerText="Someone visited your profile 👀"
+div.innerHTML=
+
+`
+<img src="${data.photo}">
+<h3>${data.name}</h3>
+<p>${data.country}</p>
+<button onclick="openChat('${v.viewer}')">Open Chat</button>
+`
 
 box.appendChild(div)
 
@@ -90,31 +129,30 @@ box.appendChild(div)
 
 })
 
+})
+
+
+function openChat(id){
+
+localStorage.setItem("chatUser",id)
+
+location.href="chat.html"
+
+}
+
 </script>
 
 
-<!-- Bottom Menu -->
-
-<div style="
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:white;
-padding:15px;
-display:flex;
-justify-content:space-around;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
-">
+<div class="navbar">
 
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="chat.html">💬</a>
 <a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 
 </div>
-
 
 </body>
 </html>
