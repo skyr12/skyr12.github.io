@@ -13,7 +13,6 @@ body{
 margin:0;
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 padding-bottom:80px;
 }
 
@@ -21,16 +20,21 @@ padding-bottom:80px;
 background:#ff4d6d;
 color:white;
 padding:20px;
+text-align:center;
 font-size:22px;
 }
 
-.notification{
+.notification-list{
 width:90%;
 max-width:400px;
 margin:20px auto;
+}
+
+.notification{
 background:white;
 padding:15px;
-border-radius:15px;
+margin-bottom:10px;
+border-radius:12px;
 box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
@@ -63,13 +67,7 @@ color:#444;
 Notifications 🔔
 </div>
 
-<div class="notification">
-❤️ Someone liked you
-</div>
-
-<div class="notification">
-💬 New message received
-</div>
+<div id="notifications" class="notification-list"></div>
 
 <div class="navbar">
 <a href="discover.html">🔥</a>
@@ -78,6 +76,51 @@ Notifications 🔔
 <a href="notifications.html">🔔</a>
 <a href="profile.html">👤</a>
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+
+var firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID"
+
+};
+
+firebase.initializeApp(firebaseConfig)
+
+var db = firebase.firestore()
+
+let currentUser="user1"
+
+function loadNotifications(){
+
+db.collection("notifications")
+.orderBy("time","desc")
+.onSnapshot(snapshot=>{
+
+let html=""
+
+snapshot.forEach(doc=>{
+
+let data=doc.data()
+
+html+=`<div class="notification">${data.text}</div>`
+
+})
+
+document.getElementById("notifications").innerHTML=html
+
+})
+
+}
+
+loadNotifications()
+
+</script>
 
 </body>
 </html>
