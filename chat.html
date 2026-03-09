@@ -12,36 +12,53 @@ body{
 font-family:Arial;
 background:#f2f2f2;
 margin:0;
-text-align:center;
 padding-bottom:80px;
 }
 
 #messages{
-height:400px;
+height:70vh;
 overflow:auto;
-padding:10px;
+padding:20px;
 }
 
 .msg{
 background:white;
+padding:10px;
 margin:10px;
-padding:10px;
 border-radius:10px;
+max-width:70%;
 }
 
-input{
-width:70%;
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-button{
-padding:10px 15px;
+.me{
 background:#ff4d6d;
-border:none;
 color:white;
-border-radius:8px;
+margin-left:auto;
+}
+
+#sendBox{
+position:fixed;
+bottom:60px;
+left:0;
+right:0;
+display:flex;
+background:white;
+padding:10px;
+}
+
+#sendBox input{
+flex:1;
+padding:10px;
+border:1px solid #ccc;
+border-radius:20px;
+}
+
+#sendBox button{
+margin-left:10px;
+padding:10px 20px;
+border:none;
+background:#ff4d6d;
+color:white;
+border-radius:20px;
 }
 
 .navbar{
@@ -68,18 +85,18 @@ color:black;
 
 <body>
 
-<h2>💬 Chat</h2>
+<h2 style="text-align:center">💬 Chat</h2>
 
 <div id="messages"></div>
 
-<input id="msg">
+<div id="sendBox">
+<input id="msgInput" placeholder="Write message...">
 <button onclick="send()">Send</button>
-
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
 
 <script>
 
@@ -89,80 +106,81 @@ authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
-measurementId: "G-KTCV2B5R9L"
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 }
 
 firebase.initializeApp(firebaseConfig)
 
 let db=firebase.firestore()
 
-let chatUser=localStorage.getItem("chatUser")
+let currentUser=null
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user) return
 
-let current=user.uid
+currentUser=user.uid
+
+loadMessages()
+
+})
+
+
+function loadMessages(){
 
 db.collection("messages")
 .orderBy("time")
 .onSnapshot(snapshot=>{
 
 let box=document.getElementById("messages")
-
 box.innerHTML=""
 
 snapshot.forEach(doc=>{
 
-let m=doc.data()
-
-if(
-
-(m.from==current && m.to==chatUser) ||
-
-(m.from==chatUser && m.to==current)
-
-){
+let data=doc.data()
 
 let div=document.createElement("div")
 
 div.className="msg"
 
-div.innerText=m.text
+if(data.from==currentUser){
 
-box.appendChild(div)
+div.classList.add("me")
 
 }
 
-})
+div.innerText=data.text
+
+box.appendChild(div)
 
 })
 
+box.scrollTop=box.scrollHeight
+
 })
+
+}
 
 
 function send(){
 
-let text=document.getElementById("msg").value
+let input=document.getElementById("msgInput")
 
-let current=firebase.auth().currentUser.uid
+if(input.value=="") return
 
 db.collection("messages").add({
 
-from:current,
-to:chatUser,
-text:text,
+from:currentUser,
+text:input.value,
 time:Date.now()
 
 })
 
-document.getElementById("msg").value=""
+input.value=""
 
 }
 
 </script>
-
 
 <div class="navbar">
 
@@ -174,7 +192,6 @@ document.getElementById("msg").value=""
 <a href="profile.html">👤</a>
 
 </div>
-
 
 </body>
 </html>
