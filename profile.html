@@ -70,6 +70,11 @@ background:orange;
 color:white;
 }
 
+.coins{
+background:#00b894;
+color:white;
+}
+
 .logout{
 background:#ddd;
 }
@@ -102,6 +107,8 @@ text-decoration:none;
 
 <img id="photoPreview">
 
+<h3 id="coinBox">💰 Coins: 0</h3>
+
 <input id="name" placeholder="Name">
 <input id="age" placeholder="Age">
 <input id="country" placeholder="Country">
@@ -112,6 +119,8 @@ text-decoration:none;
 <button class="vip" onclick="vip()">Become VIP 👑</button>
 
 <button class="boost" onclick="boost()">Boost Profile 🔥</button>
+
+<button class="coins" onclick="addCoins()">💰 Add Coins</button>
 
 <button class="logout" onclick="logout()">Logout</button>
 
@@ -125,7 +134,6 @@ text-decoration:none;
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 </div>
-
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -150,7 +158,6 @@ firebase.initializeApp(firebaseConfig);
 
 const db=firebase.firestore()
 
-
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
@@ -173,10 +180,13 @@ document.getElementById("country").value=u.country
 document.getElementById("photo").value=u.photo
 document.getElementById("photoPreview").src=u.photo
 
-})
+if(u.coins){
+document.getElementById("coinBox").innerText="💰 Coins: "+u.coins
+}
 
 })
 
+})
 
 function save(){
 
@@ -206,7 +216,6 @@ document.getElementById("photoPreview").src=photo
 
 }
 
-
 function vip(){
 
 let user=firebase.auth().currentUser
@@ -224,7 +233,6 @@ alert("👑 You are now VIP")
 })
 
 }
-
 
 function boost(){
 
@@ -244,6 +252,25 @@ alert("🔥 Your profile is boosted!")
 
 }
 
+function addCoins(){
+
+let user=firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+coins:firebase.firestore.FieldValue.increment(100)
+
+})
+
+.then(()=>{
+
+alert("💰 100 Coins added")
+
+location.reload()
+
+})
+
+}
 
 function logout(){
 
