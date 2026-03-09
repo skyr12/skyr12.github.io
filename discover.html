@@ -5,88 +5,82 @@ body{
 margin:0;
 font-family:Arial;
 background:#f2f2f2;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
+}
+
+.container{
+padding:20px;
+max-width:500px;
+margin:auto;
 }
 
 .card{
-width:340px;
 background:white;
-border-radius:20px;
+border-radius:15px;
 overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
+margin-bottom:20px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
-.photo{
+.card img{
 width:100%;
-height:350px;
+height:300px;
 object-fit:cover;
 }
 
 .info{
-padding:20px;
+padding:15px;
 text-align:center;
 }
 
 .name{
-font-size:24px;
+font-size:22px;
 font-weight:bold;
 }
 
-.meta{
-color:#666;
+.status{
 margin-top:5px;
+font-size:14px;
 }
 
-.actions{
-display:flex;
-justify-content:space-around;
-padding:20px;
+.online{
+color:green;
 }
 
-button{
-padding:12px 25px;
-border:none;
-border-radius:30px;
-font-size:18px;
-cursor:pointer;
+.offline{
+color:gray;
 }
 
-.like{
-background:#ff4d6d;
-color:white;
-}
+</style></head><body><div class="header">Discover People
 
-.skip{
-background:#ddd;
-}
-
-</style></head><body><div class="card"><img id="photo" class="photo"><div class="info"><div id="name" class="name"></div>
-<div id="meta" class="meta"></div></div><div class="actions"><button class="skip" onclick="next()">❌ Skip</button>
-<button class="like" onclick="like()">❤️ Like</button>
-
-</div></div><script>
+</div><div class="container" id="users"></div><script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh"
+
 }
 
 firebase.initializeApp(firebaseConfig)
 
 const db = firebase.firestore()
 
-let users=[]
-let index=0
-
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
+
 window.location="login.html"
 return
+
 }
 
 loadUsers()
@@ -95,92 +89,59 @@ loadUsers()
 
 function loadUsers(){
 
-db.collection("users").get()
+db.collection("users").get().then(snapshot=>{
 
-.then(snapshot=>{
-
-users=[]
+let html=""
 
 snapshot.forEach(doc=>{
 
-users.push({
-id:doc.id,
-...doc.data()
-})
+let u=doc.data()
 
-})
+let statusText="Offline"
+let statusClass="offline"
 
-showUser()
+if(u.online===true){
 
-})
-
-}
-
-function showUser(){
-
-if(users.length==0)return
-
-let user=users[index]
-
-document.getElementById("photo").src=user.photo
-document.getElementById("name").innerText=user.name
-document.getElementById("meta").innerText=user.country+" • "+user.age
+statusText="Online"
+statusClass="online"
 
 }
 
-function next(){
+html+=`
 
-index++
+<div class="card">
 
-if(index>=users.length){
+<img src="${u.photo || 'https://via.placeholder.com/400'}">
 
-alert("No more users")
-return
+<div class="info">
 
-}
+<div class="name">
 
-showUser()
+${u.name} • ${u.age}
 
-}
+</div>
 
-function like(){
+<div>
 
-let currentUser=firebase.auth().currentUser
-let likedUser=users[index]
+${u.country}
 
-db.collection("likes").add({
-from:currentUser.uid,
-to:likedUser.id,
-time:Date.now()
-})
+</div>
 
-checkMatch(currentUser.uid, likedUser.id)
+<div class="status ${statusClass}">
 
-next()
+${statusText}
 
-}
+</div>
 
-function checkMatch(user1,user2){
+</div>
 
-db.collection("likes")
-.where("from","==",user2)
-.where("to","==",user1)
-.get()
+</div>
 
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-users:[user1,user2],
-time:Date.now()
+`
 
 })
 
-alert("It's a Match ❤️")
-
-}
+document.getElementById("users").innerHTML=html
 
 })
 
