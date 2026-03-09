@@ -3,7 +3,7 @@
 
 <head>
 
-<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matches</title>
 
 <style>
@@ -11,50 +11,58 @@
 body{
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 margin:0;
-padding-bottom:80px;
+text-align:center;
 }
 
-.card{
-background:white;
-margin:20px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-img{
-width:80px;
-height:80px;
-border-radius:50%;
-}
-
-button{
-padding:10px 15px;
+.header{
 background:#ff4d6d;
-border:none;
 color:white;
-border-radius:8px;
-margin-top:10px;
+padding:15px;
+font-size:20px;
+}
+
+.user{
+background:white;
+margin:15px;
+padding:10px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.user img{
+width:60px;
+height:60px;
+border-radius:50%;
+margin-right:10px;
+}
+
+.open{
+background:#ff4d6d;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:15px;
+cursor:pointer;
 }
 
 .navbar{
 position:fixed;
 bottom:0;
-left:0;
-right:0;
+width:100%;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:12px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+padding:10px 0;
+border-top:1px solid #ddd;
 font-size:22px;
 }
 
 .navbar a{
 text-decoration:none;
-color:black;
 }
 
 </style>
@@ -63,9 +71,18 @@ color:black;
 
 <body>
 
-<h2>❤️ Your Matches</h2>
+<div class="header">❤️ Matches</div>
 
-<div id="matches"></div>
+<div id="list"></div>
+
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
+<a href="profile.html">👤</a>
+</div>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -75,55 +92,75 @@ color:black;
 <script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
-measurementId: "G-KTCV2B5R9L"
+appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig);
 }
 
-firebase.initializeApp(firebaseConfig)
+const db = firebase.firestore();
 
-let db=firebase.firestore()
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(!user) return
+if(!user){
+location.href="login.html"
+return
+}
 
-db.collection("matches").onSnapshot(snapshot=>{
+db.collection("matches").get()
 
-let box=document.getElementById("matches")
-
-box.innerHTML=""
+.then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-let m=doc.data()
+let users=doc.data().users
 
-if(m.users.includes(user.uid)){
+if(users.includes(user.uid)){
 
-let other=m.users.find(id=>id!==user.uid)
+let other=users.find(u=>u!==user.uid)
 
-db.collection("users").doc(other).get().then(u=>{
+db.collection("users").doc(other).get()
 
-let data=u.data()
+.then(userDoc=>{
 
-let div=document.createElement("div")
+let u=userDoc.data()
 
-div.className="card"
+document.getElementById("list").innerHTML += `
 
-div.innerHTML=
+<div class="user">
+
+<div style="display:flex;align-items:center">
+
+<img src="${u.photo}">
+
+<div>
+
+<b>${u.name}</b><br>
+
+${u.country}
+
+</div>
+
+</div>
+
+<button class="open" onclick="chat('${other}')">
+
+Chat
+
+</button>
+
+</div>
 
 `
-<img src="${data.photo}">
-<h3>${data.name}</h3>
-<p>${data.country}</p>
-<button onclick="openChat('${other}')">Chat</button>
-`
-
-box.appendChild(div)
 
 })
 
@@ -136,28 +173,13 @@ box.appendChild(div)
 })
 
 
-function openChat(id){
+function chat(id){
 
-localStorage.setItem("chatUser",id)
-
-location.href="chat.html"
+window.location.href="chat.html?user="+id
 
 }
 
 </script>
-
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
-<a href="profile.html">👤</a>
-
-</div>
-
 
 </body>
 </html>
