@@ -3,35 +3,38 @@
 
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Video Call</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#000;
-text-align:center;
+background:#111;
 color:white;
+text-align:center;
+margin:0;
+}
+
+.header{
+background:#ff4d6d;
+padding:15px;
+font-size:20px;
 }
 
 video{
 width:90%;
-max-width:500px;
 margin-top:20px;
-border-radius:20px;
+border-radius:10px;
 }
 
 button{
-padding:12px 20px;
+margin-top:20px;
+padding:12px 25px;
+border:none;
+border-radius:25px;
 background:#ff4d6d;
 color:white;
-border:none;
-border-radius:20px;
 font-size:16px;
-cursor:pointer;
-margin-top:20px;
 }
 
 </style>
@@ -40,27 +43,29 @@ margin-top:20px;
 
 <body>
 
-<h2>Video Call</h2>
+<div class="header">🎥 Video Call</div>
 
 <video id="localVideo" autoplay muted></video>
 
 <br>
 
-<button onclick="startCall()">
-Start Camera
-</button>
-
+<button onclick="startCall()">Start Camera</button>
 
 <script>
 
-async function startCall(){
+let video=document.getElementById("localVideo")
 
-const stream = await navigator.mediaDevices.getUserMedia({
+function startCall(){
+
+navigator.mediaDevices.getUserMedia({
 video:true,
 audio:true
 })
+.then(stream=>{
 
-document.getElementById("localVideo").srcObject=stream
+video.srcObject=stream
+
+})
 
 }
 
