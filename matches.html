@@ -22,30 +22,34 @@ padding:15px;
 font-size:20px;
 }
 
-.user{
+.container{
+padding:20px;
+}
+
+.card{
 background:white;
-margin:15px;
-padding:10px;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
+width:260px;
+margin:auto;
+margin-top:20px;
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+padding:15px;
 }
 
-.user img{
-width:60px;
-height:60px;
+.card img{
+width:100px;
+height:100px;
 border-radius:50%;
-margin-right:10px;
+object-fit:cover;
 }
 
-.open{
+.chat{
 background:#ff4d6d;
 color:white;
 border:none;
-padding:8px 15px;
-border-radius:15px;
+padding:10px 20px;
+border-radius:20px;
+margin-top:10px;
 cursor:pointer;
 }
 
@@ -73,16 +77,24 @@ text-decoration:none;
 
 <div class="header">❤️ Matches</div>
 
-<div id="list"></div>
+<div class="container">
+
+<div id="matches"></div>
+
+</div>
+
 
 <div class="navbar">
+
 <a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="chat.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
+
 </div>
+
 
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -93,68 +105,99 @@ text-decoration:none;
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
 if(!firebase.apps.length){
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 }
 
-const db = firebase.firestore();
+const db=firebase.firestore()
 
 
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
+
 location.href="login.html"
 return
+
 }
 
-db.collection("matches").get()
+loadMatches(user.uid)
+
+})
+
+
+
+function loadMatches(myId){
+
+db.collection("likes")
+.where("from","==",myId)
+.get()
 
 .then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-let users=doc.data().users
+let liked=doc.data().to
 
-if(users.includes(user.uid)){
+checkMatch(myId,liked)
 
-let other=users.find(u=>u!==user.uid)
+})
 
-db.collection("users").doc(other).get()
+})
 
-.then(userDoc=>{
+}
 
-let u=userDoc.data()
 
-document.getElementById("list").innerHTML += `
 
-<div class="user">
+function checkMatch(myId,otherId){
 
-<div style="display:flex;align-items:center">
+db.collection("likes")
+.where("from","==",otherId)
+.where("to","==",myId)
+.get()
+
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+showMatch(otherId)
+
+}
+
+})
+
+}
+
+
+
+function showMatch(uid){
+
+db.collection("users").doc(uid).get()
+
+.then(doc=>{
+
+let u=doc.data()
+
+let html=`
+
+<div class="card">
 
 <img src="${u.photo}">
 
-<div>
+<h3>${u.name}</h3>
 
-<b>${u.name}</b><br>
+<button class="chat" onclick="chat('${uid}')">
 
-${u.country}
-
-</div>
-
-</div>
-
-<button class="open" onclick="chat('${other}')">
-
-Chat
+💬 Chat
 
 </button>
 
@@ -162,20 +205,17 @@ Chat
 
 `
 
+document.getElementById("matches").innerHTML+=html
+
 })
 
 }
 
-})
-
-})
-
-})
 
 
-function chat(id){
+function chat(uid){
 
-window.location.href="chat.html?user="+id
+location.href="chat.html?id="+uid
 
 }
 
