@@ -11,28 +11,28 @@
 body{
 font-family:Arial;
 background:#f2f2f2;
+text-align:center;
 margin:0;
 padding-bottom:80px;
-text-align:center;
 }
 
 .card{
-width:330px;
-margin:60px auto;
+width:320px;
+margin:40px auto;
 background:white;
 border-radius:20px;
 overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.25);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 .card img{
 width:100%;
-height:340px;
+height:320px;
 object-fit:cover;
 }
 
 .info{
-padding:15px;
+padding:20px;
 text-align:left;
 }
 
@@ -43,36 +43,30 @@ font-weight:bold;
 
 .bio{
 color:gray;
-font-size:14px;
 margin-top:5px;
-}
-
-.online{
-color:limegreen;
-font-size:14px;
 }
 
 .buttons{
 display:flex;
 justify-content:space-around;
-margin-top:10px;
+margin-top:15px;
 }
 
-.buttons button{
-padding:10px 20px;
+button{
 border:none;
+padding:10px 20px;
 border-radius:20px;
 font-size:16px;
 cursor:pointer;
 }
 
-.pass{
-background:#ddd;
-}
-
 .like{
 background:#ff4d6d;
 color:white;
+}
+
+.pass{
+background:#ccc;
 }
 
 .navbar{
@@ -120,7 +114,7 @@ appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
 
 firebase.initializeApp(firebaseConfig)
 
-let db=firebase.firestore()
+let db = firebase.firestore()
 
 let users=[]
 let index=0
@@ -129,19 +123,15 @@ firebase.auth().onAuthStateChanged(user=>{
 
 if(!user) return
 
-let uid=user.uid
-
 db.collection("users").get().then(snapshot=>{
 
 snapshot.forEach(doc=>{
 
-if(doc.id!==uid){
+if(doc.id!==user.uid){
 
-let data=doc.data()
-
-data.id=doc.id
-
-users.push(data)
+let u=doc.data()
+u.id=doc.id
+users.push(u)
 
 }
 
@@ -157,20 +147,13 @@ function showUser(){
 
 if(index>=users.length){
 
-document.getElementById("card").innerHTML="<h3>No more users</h3>"
+document.getElementById("card").innerHTML="No more users"
 
 return
+
 }
 
 let u=users[index]
-
-let online=""
-
-if(u.online){
-
-online="🟢 Online"
-
-}
 
 document.getElementById("card").innerHTML=
 
@@ -185,15 +168,15 @@ document.getElementById("card").innerHTML=
 
 <div>${u.country}</div>
 
-<div class="online">${online}</div>
-
 <div class="bio">${u.bio}</div>
+
+<div class="bio">📍 5 km away</div>
 
 <div class="buttons">
 
-<button class="pass" onclick="pass()">Pass</button>
+<button class="pass" onclick="pass()">❌</button>
 
-<button class="like" onclick="like()">Like</button>
+<button class="like" onclick="like()">❤️</button>
 
 </div>
 
@@ -204,47 +187,25 @@ document.getElementById("card").innerHTML=
 
 }
 
-function like(){
-
-let current=firebase.auth().currentUser.uid
-
-let liked=users[index].id
-
-db.collection("likes").add({
-
-from:current,
-to:liked,
-time:Date.now()
-
-})
-
-db.collection("likes")
-.where("from","==",liked)
-.where("to","==",current)
-.get()
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-users:[current,liked],
-time:Date.now()
-
-})
-
-alert("❤️ It's a Match!")
-
-}
-
-})
+function pass(){
 
 index++
 showUser()
 
 }
 
-function pass(){
+function like(){
+
+let currentUser=firebase.auth().currentUser.uid
+let likedUser=users[index].id
+
+db.collection("likes").add({
+
+from:currentUser,
+to:likedUser,
+time:Date.now()
+
+})
 
 index++
 showUser()
