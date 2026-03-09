@@ -3,7 +3,7 @@
 
 <head>
 
-<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat</title>
 
 <style>
@@ -12,13 +12,19 @@ body{
 font-family:Arial;
 background:#f2f2f2;
 margin:0;
-padding-bottom:80px;
+}
+
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+text-align:center;
 }
 
 #messages{
-height:70vh;
-overflow:auto;
 padding:20px;
+height:60vh;
+overflow-y:auto;
 }
 
 .msg{
@@ -26,12 +32,7 @@ background:white;
 padding:10px;
 margin:10px;
 border-radius:10px;
-max-width:70%;
-}
-
-.msg img{
-max-width:200px;
-border-radius:10px;
+max-width:60%;
 }
 
 .me{
@@ -40,48 +41,40 @@ color:white;
 margin-left:auto;
 }
 
-#sendBox{
+.input{
 position:fixed;
 bottom:60px;
-left:0;
-right:0;
+width:100%;
 display:flex;
-background:white;
-padding:10px;
 }
 
-#sendBox input{
+input{
 flex:1;
 padding:10px;
-border:1px solid #ccc;
-border-radius:20px;
+border:none;
 }
 
-#sendBox button{
-margin-left:5px;
-padding:10px;
-border:none;
+button{
+padding:10px 20px;
 background:#ff4d6d;
 color:white;
-border-radius:20px;
+border:none;
 }
 
 .navbar{
 position:fixed;
 bottom:0;
-left:0;
-right:0;
+width:100%;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:12px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+padding:10px 0;
+border-top:1px solid #ddd;
 font-size:22px;
 }
 
 .navbar a{
 text-decoration:none;
-color:black;
 }
 
 </style>
@@ -90,19 +83,24 @@ color:black;
 
 <body>
 
-<h2 style="text-align:center">💬 Chat</h2>
+<div class="header">💬 Chat</div>
 
 <div id="messages"></div>
 
-<div id="sendBox">
-
-<input id="msgInput" placeholder="Write message...">
-
-<input type="file" id="photoInput">
-
+<div class="input">
+<input id="text" placeholder="Type message">
 <button onclick="send()">Send</button>
-
 </div>
+
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
+<a href="profile.html">👤</a>
+</div>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -111,141 +109,107 @@ color:black;
 <script>
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain: "nimeh-gomsodeh.firebaseapp.com",
 projectId: "nimeh-gomsodeh",
 storageBucket: "nimeh-gomsodeh.firebasestorage.app",
 messagingSenderId: "815930956932",
 appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig);
 }
 
-firebase.initializeApp(firebaseConfig)
+const db = firebase.firestore()
 
-let db=firebase.firestore()
 
-let currentUser=null
+const urlParams=new URLSearchParams(window.location.search)
 
-let params=new URLSearchParams(window.location.search)
-let otherUser=params.get("user")
+const otherUser=urlParams.get("user")
 
 firebase.auth().onAuthStateChanged(user=>{
 
-if(!user) return
+if(!user){
+location.href="login.html"
+return
+}
 
-currentUser=user.uid
+let current=user.uid
 
-loadMessages()
+let chatId=[current,otherUser].sort().join("_")
 
-})
-
-function loadMessages(){
 
 db.collection("messages")
+
+.where("chat","==",chatId)
+
 .orderBy("time")
+
 .onSnapshot(snapshot=>{
 
 let box=document.getElementById("messages")
+
 box.innerHTML=""
 
 snapshot.forEach(doc=>{
 
-let data=doc.data()
-
-if(
-(data.from==currentUser && data.to==otherUser) ||
-(data.from==otherUser && data.to==currentUser)
-){
+let m=doc.data()
 
 let div=document.createElement("div")
 
 div.className="msg"
 
-if(data.from==currentUser){
+if(m.from==current){
 
 div.classList.add("me")
 
 }
 
-if(data.photo){
-
-div.innerHTML="<img src='"+data.photo+"'>"
-
-}else{
-
-div.innerText=data.text
-
-}
+div.innerText=m.text
 
 box.appendChild(div)
 
-}
+})
 
 })
 
-box.scrollTop=box.scrollHeight
-
 })
 
-}
 
 function send(){
 
-let text=document.getElementById("msgInput").value
+let text=document.getElementById("text").value
 
-let photo=document.getElementById("photoInput").files[0]
+firebase.auth().onAuthStateChanged(user=>{
 
-if(photo){
+let current=user.uid
 
-let reader=new FileReader()
-
-reader.onload=function(e){
+let chatId=[current,otherUser].sort().join("_")
 
 db.collection("messages").add({
 
-from:currentUser,
+chat:chatId,
+
+from:current,
+
 to:otherUser,
-photo:e.target.result,
-time:Date.now()
 
-})
-
-}
-
-reader.readAsDataURL(photo)
-
-document.getElementById("photoInput").value=""
-
-}else{
-
-if(text=="") return
-
-db.collection("messages").add({
-
-from:currentUser,
-to:otherUser,
 text:text,
+
 time:Date.now()
 
 })
 
-document.getElementById("msgInput").value=""
+document.getElementById("text").value=""
 
-}
+})
 
 }
 
 </script>
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
-<a href="profile.html">👤</a>
-
-</div>
 
 </body>
 </html>
