@@ -1,106 +1,115 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Boost Profile</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Boost Profile</title>
+
+<style>
 
 body{
+margin:0;
 font-family:Arial;
 background:#f2f2f2;
 text-align:center;
-margin:0;
+padding-bottom:80px;
 }
 
 .header{
 background:#ff4d6d;
 color:white;
 padding:20px;
-font-size:24px;
+font-size:22px;
 }
 
-.packages{
-margin-top:40px;
-display:flex;
-flex-direction:column;
-gap:20px;
+.boost-box{
+width:90%;
 max-width:400px;
-margin-left:auto;
-margin-right:auto;
+margin:30px auto;
+background:white;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
-.package{
-background:white;
-padding:25px;
-border-radius:15px;
-box-shadow:0 10px 20px rgba(0,0,0,0.2);
+.price{
+font-size:26px;
+color:#ff4d6d;
 }
 
 button{
-margin-top:10px;
-padding:12px 30px;
+padding:12px 20px;
+border:none;
 background:#ff4d6d;
 color:white;
-border:none;
-border-radius:10px;
+border-radius:20px;
 font-size:16px;
 }
 
-</style></head><body><div class="header">🚀 Boost Profile
+.navbar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:65px;
+background:white;
+display:flex;
+justify-content:space-around;
+align-items:center;
+box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+}
 
-</div><div class="packages"><div class="package"><h2>30 Minutes Boost</h2><p>200 Coins</p><button onclick="buyBoost(30)">Boost</button>
+.navbar a{
+text-decoration:none;
+font-size:24px;
+color:#444;
+}
 
-</div><div class="package"><h2>1 Hour Boost</h2><p>300 Coins</p><button onclick="buyBoost(60)">Boost</button>
+</style>
 
-</div><div class="package"><h2>24 Hours Boost</h2><p>1000 Coins</p><button onclick="buyBoost(1440)">Boost</button>
+</head>
 
-</div></div><script>
+<body>
 
-const firebaseConfig = {
+<div class="header">
+Boost Profile 🚀
+</div>
 
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh"
+<div class="boost-box">
+
+<h2>Get More Matches</h2>
+
+<p>Your profile will appear first for other users.</p>
+
+<div class="price">
+30 Minutes Boost
+</div>
+
+<br>
+
+<button onclick="boost()">Boost Now</button>
+
+</div>
+
+<div class="navbar">
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="chat.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="profile.html">👤</a>
+</div>
+
+<script>
+
+function boost(){
+
+alert("Your profile is boosted 🚀")
 
 }
 
-firebase.initializeApp(firebaseConfig)
+</script>
 
-const db=firebase.firestore()
-
-function buyBoost(minutes){
-
-let user=firebase.auth().currentUser
-
-let ref=db.collection("users").doc(user.uid)
-
-ref.get().then(doc=>{
-
-let coins=doc.data().coins || 0
-
-let price=200
-
-if(minutes==60) price=300
-
-if(minutes==1440) price=1000
-
-if(coins < price){
-
-alert("Not enough coins")
-
-return
-
-}
-
-let boostTime = Date.now() + (minutes*60*1000)
-
-ref.update({
-
-coins:coins-price,
-boostUntil:boostTime
-
-})
-
-alert("Boost activated 🚀")
-
-})
-
-}
-
-</script></body></html>
+</body>
+</html>
