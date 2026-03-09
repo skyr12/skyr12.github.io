@@ -4,29 +4,41 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nimeh</title>
+<title>Nimeh Dating</title>
 
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.png">
 
 <style>
 
 body{
+margin:0;
 font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+padding-bottom:80px;
+}
+
+.header{
 background:#ff4d6d;
 color:white;
-text-align:center;
-padding-top:100px;
+padding:20px;
+font-size:24px;
+}
+
+.box{
+margin:40px;
 }
 
 button{
 padding:15px 25px;
-margin:10px;
 border:none;
 border-radius:30px;
-font-size:16px;
+font-size:18px;
+background:#ff4d6d;
+color:white;
+margin:10px;
 cursor:pointer;
 }
 
@@ -36,46 +48,49 @@ cursor:pointer;
 
 <body>
 
-<h1>NIMEH</h1>
+<div class="header">
 
-<p>Where people meet</p>
+Nimeh Dating ❤️
 
-<button onclick="notify()">Test Notification</button>
+</div>
 
+<div class="box">
+
+<button onclick="location.href='discover.html'">
+Start Discover 🔥
+</button>
+
+<br>
+
+<button id="installBtn" style="display:none">
+Install App 📱
+</button>
+
+</div>
 
 <script>
 
-function notify(){
+let deferredPrompt
 
-if(Notification.permission==="granted"){
+window.addEventListener('beforeinstallprompt',(e)=>{
 
-new Notification("Nimeh",{
+e.preventDefault()
 
-body:"You have a new match ❤️"
+deferredPrompt=e
 
-})
-
-}
-
-else{
-
-Notification.requestPermission().then(p=>{
-
-if(p==="granted"){
-
-new Notification("Nimeh",{
-
-body:"Notifications enabled 🔔"
+document.getElementById("installBtn").style.display="block"
 
 })
+
+document.getElementById("installBtn").addEventListener("click",async()=>{
+
+if(deferredPrompt){
+
+deferredPrompt.prompt()
 
 }
 
 })
-
-}
-
-}
 
 </script>
 
