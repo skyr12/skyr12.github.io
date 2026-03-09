@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
@@ -24,18 +25,18 @@ text-align:center;
 font-size:22px;
 }
 
-.notification-list{
-width:90%;
-max-width:400px;
-margin:20px auto;
-}
-
 .notification{
 background:white;
+margin:10px;
 padding:15px;
-margin-bottom:10px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.15);
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.time{
+font-size:12px;
+color:gray;
+margin-top:5px;
 }
 
 .navbar{
@@ -43,18 +44,17 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-height:65px;
+height:70px;
 background:white;
 display:flex;
 justify-content:space-around;
 align-items:center;
-box-shadow:0 -5px 15px rgba(0,0,0,0.15);
+box-shadow:0 -5px 15px rgba(0,0,0,0.2);
 }
 
 .navbar a{
 text-decoration:none;
-font-size:24px;
-color:#444;
+font-size:26px;
 }
 
 </style>
@@ -67,60 +67,40 @@ color:#444;
 Notifications 🔔
 </div>
 
-<div id="notifications" class="notification-list"></div>
-
-<div class="navbar">
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="profile.html">👤</a>
+<div class="notification">
+❤️ Sara liked your profile
+<div class="time">2 min ago</div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<div class="notification">
+💬 New message from John
+<div class="time">5 min ago</div>
+</div>
 
-<script>
+<div class="notification">
+🎁 You received a Rose gift
+<div class="time">10 min ago</div>
+</div>
 
-var firebaseConfig = {
+<div class="notification">
+🚀 Your profile is boosted
+<div class="time">20 min ago</div>
+</div>
 
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID"
+<div class="navbar">
 
-};
+<a href="discover.html">🔥</a>
 
-firebase.initializeApp(firebaseConfig)
+<a href="matches.html">❤️</a>
 
-var db = firebase.firestore()
+<a href="chat.html">💬</a>
 
-let currentUser="user1"
+<a href="notifications.html">🔔</a>
 
-function loadNotifications(){
+<a href="profile.html">👤</a>
 
-db.collection("notifications")
-.orderBy("time","desc")
-.onSnapshot(snapshot=>{
-
-let html=""
-
-snapshot.forEach(doc=>{
-
-let data=doc.data()
-
-html+=`<div class="notification">${data.text}</div>`
-
-})
-
-document.getElementById("notifications").innerHTML=html
-
-})
-
-}
-
-loadNotifications()
-
-</script>
+</div>
 
 </body>
+
 </html>
