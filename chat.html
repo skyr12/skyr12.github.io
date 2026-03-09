@@ -13,7 +13,6 @@ body{
 margin:0;
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
 padding-bottom:80px;
 }
 
@@ -21,33 +20,50 @@ padding-bottom:80px;
 background:#ff4d6d;
 color:white;
 padding:20px;
+text-align:center;
 font-size:22px;
 }
 
-.chat-box{
+.chat-container{
 width:90%;
 max-width:400px;
-margin:30px auto;
+margin:20px auto;
 background:white;
 border-radius:20px;
 padding:20px;
 box-shadow:0 5px 15px rgba(0,0,0,0.15);
 }
 
-textarea{
-width:100%;
-height:80px;
-border-radius:10px;
+.messages{
+height:250px;
+overflow-y:auto;
+border:1px solid #eee;
 padding:10px;
+margin-bottom:10px;
+}
+
+.message{
+background:#ff4d6d;
+color:white;
+padding:8px 12px;
+border-radius:10px;
+margin:5px 0;
+display:inline-block;
+}
+
+input{
+width:70%;
+padding:10px;
+border-radius:10px;
+border:1px solid #ccc;
 }
 
 button{
-margin-top:10px;
 padding:10px 20px;
-border:none;
 background:#ff4d6d;
 color:white;
-border-radius:20px;
+border:none;
+border-radius:10px;
 }
 
 .navbar{
@@ -79,13 +95,13 @@ color:#444;
 Chat 💬
 </div>
 
-<div class="chat-box">
+<div class="chat-container">
 
-<textarea placeholder="Type message"></textarea>
+<div id="messages" class="messages"></div>
 
-<br>
+<input id="messageInput" placeholder="Type message">
 
-<button>Send</button>
+<button onclick="sendMessage()">Send</button>
 
 </div>
 
@@ -96,6 +112,67 @@ Chat 💬
 <a href="notifications.html">🔔</a>
 <a href="profile.html">👤</a>
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+
+var firebaseConfig = {
+
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID"
+
+};
+
+firebase.initializeApp(firebaseConfig)
+
+var db = firebase.firestore()
+
+let currentUser="user1"
+
+function sendMessage(){
+
+let text=document.getElementById("messageInput").value
+
+db.collection("messages").add({
+
+user:currentUser,
+text:text,
+time:Date.now()
+
+})
+
+document.getElementById("messageInput").value=""
+
+}
+
+function loadMessages(){
+
+db.collection("messages")
+.orderBy("time")
+.onSnapshot(snapshot=>{
+
+let html=""
+
+snapshot.forEach(doc=>{
+
+let data=doc.data()
+
+html+=`<div class="message">${data.user}: ${data.text}</div>`
+
+})
+
+document.getElementById("messages").innerHTML=html
+
+})
+
+}
+
+loadMessages()
+
+</script>
 
 </body>
 </html>
