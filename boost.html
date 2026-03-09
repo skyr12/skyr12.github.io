@@ -1,100 +1,106 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Boost Profile</title>
-
-<style>
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Boost Profile</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
 
 body{
 font-family:Arial;
 background:#f2f2f2;
 text-align:center;
+margin:0;
 }
 
-.card{
-width:320px;
-margin:60px auto;
+.header{
+background:#ff4d6d;
+color:white;
+padding:20px;
+font-size:24px;
+}
+
+.packages{
+margin-top:40px;
+display:flex;
+flex-direction:column;
+gap:20px;
+max-width:400px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.package{
 background:white;
-padding:30px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+padding:25px;
+border-radius:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
 }
 
 button{
-padding:15px 25px;
-border:none;
-border-radius:30px;
+margin-top:10px;
+padding:12px 30px;
 background:#ff4d6d;
 color:white;
-font-size:18px;
-cursor:pointer;
+border:none;
+border-radius:10px;
+font-size:16px;
 }
 
-</style>
+</style></head><body><div class="header">🚀 Boost Profile
 
-</head>
+</div><div class="packages"><div class="package"><h2>30 Minutes Boost</h2><p>200 Coins</p><button onclick="buyBoost(30)">Boost</button>
 
-<body>
+</div><div class="package"><h2>1 Hour Boost</h2><p>300 Coins</p><button onclick="buyBoost(60)">Boost</button>
 
-<div class="card">
+</div><div class="package"><h2>24 Hours Boost</h2><p>1000 Coins</p><button onclick="buyBoost(1440)">Boost</button>
 
-<h2>Boost Your Profile</h2>
+</div></div><script>
 
-<p>Be seen by more people for 1 hour</p>
+const firebaseConfig = {
 
-<button onclick="boostProfile()">
-⭐ Activate Boost
-</button>
-
-</div>
-
-
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
-<script>
-
-const firebaseConfig={
 apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
 authDomain:"nimeh-gomsodeh.firebaseapp.com",
 projectId:"nimeh-gomsodeh"
+
 }
 
 firebase.initializeApp(firebaseConfig)
 
 const db=firebase.firestore()
 
-let currentUser=null
+function buyBoost(minutes){
 
-firebase.auth().onAuthStateChanged(user=>{
+let user=firebase.auth().currentUser
 
-currentUser=user
+let ref=db.collection("users").doc(user.uid)
 
-})
+ref.get().then(doc=>{
 
+let coins=doc.data().coins || 0
 
-function boostProfile(){
+let price=200
 
-let endTime=Date.now()+3600000
+if(minutes==60) price=300
 
-db.collection("boosts").add({
+if(minutes==1440) price=1000
 
-user:currentUser.uid,
-end:endTime
+if(coins < price){
 
-})
+alert("Not enough coins")
 
-alert("Boost Activated!")
+return
 
 }
 
-</script>
+let boostTime = Date.now() + (minutes*60*1000)
 
-</body>
+ref.update({
 
-</html>
+coins:coins-price,
+boostUntil:boostTime
+
+})
+
+alert("Boost activated 🚀")
+
+})
+
+}
+
+</script></body></html>
