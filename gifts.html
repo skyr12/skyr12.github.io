@@ -1,158 +1,107 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-<title>Send Gift</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Gift</title><style>
 
 body{
 font-family:Arial;
-background:#f5f5f5;
+background:#f2f2f2;
 text-align:center;
 margin:0;
-padding-bottom:80px;
 }
 
-.container{
-width:350px;
-margin:40px auto;
+.header{
+background:#ff4d6d;
+color:white;
+padding:15px;
+font-size:20px;
 }
 
-.gift{
+.card{
 background:white;
-margin:10px;
+width:300px;
+margin:auto;
+margin-top:30px;
 padding:20px;
 border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
 
 button{
-margin-top:10px;
-padding:10px 20px;
-border:none;
-border-radius:20px;
 background:#ff4d6d;
 color:white;
+border:none;
+padding:10px 20px;
+border-radius:25px;
+margin:10px;
 cursor:pointer;
+font-size:16px;
 }
 
-.navbar{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:12px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
-font-size:22px;
-}
+</style></head><body><div class="header">🎁 Send Gift</div><div class="card"><h3>Choose a Gift</h3><button onclick="sendGift('rose',10)">🌹 Rose (10 coins)</button>
 
-.navbar a{
-text-decoration:none;
-color:black;
-}
+<button onclick="sendGift('diamond',50)">💎 Diamond (50 coins)</button>
 
-</style>
+<button onclick="sendGift('crown',100)">👑 Crown (100 coins)</button>
 
-</head>
-
-<body>
-
-<h2>🎁 Send Gift</h2>
-
-<div class="container">
-
-<div class="gift">
-
-<h3>🌹 Rose</h3>
-<p>10 coins</p>
-
-<button onclick="sendGift('Rose',10)">Send</button>
-
-</div>
-
-<div class="gift">
-
-<h3>💎 Diamond</h3>
-<p>50 coins</p>
-
-<button onclick="sendGift('Diamond',50)">Send</button>
-
-</div>
-
-<div class="gift">
-
-<h3>🚗 Car</h3>
-<p>200 coins</p>
-
-<button onclick="sendGift('Car',200)">Send</button>
-
-</div>
-
-<div class="gift">
-
-<h3>👑 Crown</h3>
-<p>500 coins</p>
-
-<button onclick="sendGift('Crown',500)">Send</button>
-
-</div>
-
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
+</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
 
 const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-}
+
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
 
 firebase.initializeApp(firebaseConfig)
 
-let db = firebase.firestore()
+const db=firebase.firestore()
 
-function sendGift(name,price){
+const urlParams=new URLSearchParams(window.location.search)
 
-let user = firebase.auth().currentUser
+const target=urlParams.get("id")
+
+function sendGift(type,cost){
+
+let user=firebase.auth().currentUser
+
+let ref=db.collection("users").doc(user.uid)
+
+ref.get().then(doc=>{
+
+let coins=doc.data().coins || 0
+
+if(coins < cost){
+
+alert("Not enough coins")
+
+return
+
+}
+
+ref.update({
+
+coins:coins-cost
+
+})
 
 db.collection("gifts").add({
 
 from:user.uid,
-gift:name,
-coins:price,
+to:target,
+type:type,
+cost:cost,
 time:Date.now()
 
 })
 
-alert("Gift sent 🎁")
+alert("🎁 Gift sent!")
+
+})
 
 }
 
-</script>
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="gift.html">🎁</a>
-<a href="profile.html">👤</a>
-
-</div>
-
-</body>
+</script></body>
 </html>
