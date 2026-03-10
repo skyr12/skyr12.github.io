@@ -17,7 +17,7 @@ font-size:20px;
 
 .card{
 background:white;
-width:300px;
+width:320px;
 margin:auto;
 margin-top:30px;
 padding:20px;
@@ -42,6 +42,14 @@ margin:8px;
 cursor:pointer;
 }
 
+#gallery img{
+width:70px;
+height:70px;
+border-radius:10px;
+margin:4px;
+object-fit:cover;
+}
+
 .navbar{
 position:fixed;
 bottom:0;
@@ -64,7 +72,11 @@ text-decoration:none;
 
 <button onclick="addCoins()">💰 Add Coins</button>
 
-</div><div class="navbar"><a href="discover.html">🔥</a>
+<br><br>
+
+<input type="file" id="file"><button onclick="uploadPhoto()">📸 Upload Photo</button>
+
+<h3>📸 My Photos</h3><div id="gallery"></div></div><div class="navbar"><a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
@@ -105,7 +117,10 @@ setOnline()
 
 saveLocation()
 
+loadPhotos()
+
 })
+
 
 function loadProfile(user){
 
@@ -122,6 +137,7 @@ document.getElementById("country").innerText=u.country
 })
 
 }
+
 
 function boost(){
 
@@ -141,6 +157,7 @@ alert("🔥 Your profile is boosted!")
 
 }
 
+
 function addCoins(){
 
 let user=firebase.auth().currentUser
@@ -158,6 +175,76 @@ alert("💰 100 coins added!")
 })
 
 }
+
+
+function uploadPhoto(){
+
+let file=document.getElementById("file").files[0]
+
+if(!file){
+
+alert("Choose a photo")
+return
+
+}
+
+let user=firebase.auth().currentUser
+
+let reader=new FileReader()
+
+reader.onload=function(){
+
+db.collection("photos").add({
+
+user:user.uid,
+photo:reader.result,
+time:Date.now()
+
+})
+
+.then(()=>{
+
+alert("📸 Photo uploaded!")
+
+loadPhotos()
+
+})
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
+
+function loadPhotos(){
+
+let user=firebase.auth().currentUser
+
+db.collection("photos")
+.where("user","==",user.uid)
+.get()
+
+.then(snapshot=>{
+
+let html=""
+
+snapshot.forEach(doc=>{
+
+let p=doc.data()
+
+html+=`
+<img src="${p.photo}">
+`
+
+})
+
+document.getElementById("gallery").innerHTML=html
+
+})
+
+}
+
 
 function saveLocation(){
 
@@ -178,6 +265,7 @@ lng:lng
 })
 
 }
+
 
 function setOnline(){
 
