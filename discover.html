@@ -20,63 +20,49 @@ margin-top:20px;
 }
 
 .card{
-
 width:320px;
-height:420px;
+height:430px;
 margin:auto;
 margin-top:30px;
 background:white;
 border-radius:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
 overflow:hidden;
-
 }
 
 .card img{
-
 width:100%;
 height:300px;
 object-fit:cover;
-
 }
 
 .info{
-
 padding:15px;
-
 }
 
 .buttons{
-
 margin-top:20px;
-
 }
 
 button{
-
 padding:12px 25px;
 border:none;
 border-radius:25px;
 font-size:18px;
 margin:10px;
-
+cursor:pointer;
 }
 
 .like{
-
 background:#ff4d6d;
 color:white;
-
 }
 
 .skip{
-
 background:#ddd;
-
 }
 
 .navbar{
-
 position:fixed;
 bottom:0;
 width:100%;
@@ -86,7 +72,6 @@ justify-content:space-around;
 padding:10px 0;
 border-top:1px solid #ddd;
 font-size:22px;
-
 }
 
 .navbar a{
@@ -96,7 +81,6 @@ text-decoration:none;
 </style>
 
 </head>
-
 
 <body>
 
@@ -175,6 +159,8 @@ db.collection("users").get()
 
 .then(snapshot=>{
 
+users=[]
+
 snapshot.forEach(doc=>{
 
 let data=doc.data()
@@ -243,11 +229,37 @@ let likedUser = users[index].id
 
 db.collection("likes").add({
 
-from:myId,
-to:likedUser,
+from: myId,
+to: likedUser,
+time: Date.now()
+
+})
+
+
+db.collection("likes")
+
+.where("from","==",likedUser)
+.where("to","==",myId)
+
+.get()
+
+.then(snapshot=>{
+
+if(!snapshot.empty){
+
+db.collection("matches").add({
+
+users:[myId,likedUser],
 time:Date.now()
 
 })
+
+alert("❤️ It's a Match!")
+
+}
+
+})
+
 
 index++
 
@@ -256,7 +268,6 @@ showUser()
 }
 
 </script>
-
 
 </body>
 </html>
