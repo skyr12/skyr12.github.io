@@ -51,6 +51,7 @@ width:100%;
 display:flex;
 background:white;
 padding:10px;
+gap:10px;
 }
 
 input{
@@ -61,12 +62,12 @@ border:1px solid #ccc;
 }
 
 button{
-margin-left:10px;
 padding:10px 15px;
 border:none;
 background:#ff4d6d;
 color:white;
 border-radius:20px;
+cursor:pointer;
 }
 
 .navbar{
@@ -105,6 +106,8 @@ text-decoration:none;
 
 <button onclick="send()">Send</button>
 
+<button onclick="startCall()">🎥 Video Call</button>
+
 </div>
 
 
@@ -123,6 +126,7 @@ text-decoration:none;
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 
 <script>
 
@@ -146,7 +150,6 @@ let otherId=""
 let chatId=""
 
 
-
 firebase.auth().onAuthStateChanged(user=>{
 
 if(!user){
@@ -167,7 +170,6 @@ chatId=[myId,otherId].sort().join("_")
 loadMessages()
 
 })
-
 
 
 function loadMessages(){
@@ -205,7 +207,6 @@ document.getElementById("messages").innerHTML=html
 }
 
 
-
 function send(){
 
 let text=document.getElementById("msg").value
@@ -223,6 +224,13 @@ time:Date.now()
 })
 
 document.getElementById("msg").value=""
+
+}
+
+
+function startCall(){
+
+location.href="video.html?id="+otherId
 
 }
 
