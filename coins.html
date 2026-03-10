@@ -1,135 +1,167 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Coins</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat</title><style>
 
 body{
-margin:0;
 font-family:Arial;
 background:#f2f2f2;
-text-align:center;
-padding-bottom:80px;
+margin:0;
 }
 
 .header{
 background:#ff4d6d;
 color:white;
-padding:20px;
-font-size:22px;
+padding:15px;
+text-align:center;
+font-size:20px;
 }
 
-.pack{
-width:90%;
-max-width:400px;
-margin:20px auto;
+#messages{
+height:70vh;
+overflow-y:auto;
+padding:10px;
+}
+
+.msg{
 background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 15px rgba(0,0,0,0.15);
+padding:10px;
+margin:5px;
+border-radius:10px;
+width:60%;
 }
 
-.price{
-font-size:24px;
-color:#ff4d6d;
-}
-
-button{
-padding:12px 20px;
-border:none;
+.me{
 background:#ff4d6d;
 color:white;
-border-radius:20px;
-font-size:16px;
+margin-left:auto;
 }
 
-.navbar{
+.input{
 position:fixed;
 bottom:0;
-left:0;
 width:100%;
-height:65px;
 background:white;
+padding:10px;
 display:flex;
-justify-content:space-around;
-align-items:center;
-box-shadow:0 -5px 15px rgba(0,0,0,0.15);
 }
 
-.navbar a{
-text-decoration:none;
-font-size:24px;
-color:#444;
+.input input{
+flex:1;
+padding:10px;
+border-radius:20px;
+border:1px solid #ccc;
 }
 
-</style>
+.input button{
+background:#ff4d6d;
+color:white;
+border:none;
+padding:10px 20px;
+margin-left:5px;
+border-radius:20px;
+}
 
-</head>
+</style></head><body><div class="header">💬 Chat</div><div id="messages"></div><div class="input"><input id="text" placeholder="Type message..."><button onclick="send()">Send</button>
 
-<body>
+</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
 
-<div class="header">
-Buy Coins 🪙
-</div>
+const firebaseConfig = {
 
-<div class="pack">
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
-<h2>100 Coins</h2>
+};
 
-<div class="price">$1.99</div>
+firebase.initializeApp(firebaseConfig)
 
-<br>
+const db=firebase.firestore()
 
-<button onclick="buy(100)">Buy</button>
+const urlParams=new URLSearchParams(window.location.search)
 
-</div>
+const otherId=urlParams.get("id")
 
-<div class="pack">
+let myId=""
 
-<h2>500 Coins</h2>
+firebase.auth().onAuthStateChanged(user=>{
 
-<div class="price">$6.99</div>
+if(!user){
 
-<br>
-
-<button onclick="buy(500)">Buy</button>
-
-</div>
-
-<div class="pack">
-
-<h2>1000 Coins</h2>
-
-<div class="price">$12.99</div>
-
-<br>
-
-<button onclick="buy(1000)">Buy</button>
-
-</div>
-
-<div class="navbar">
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="profile.html">👤</a>
-</div>
-
-<script>
-
-function buy(amount){
-
-alert("You bought "+amount+" coins 🪙")
+location.href="login.html"
+return
 
 }
 
-</script>
+myId=user.uid
 
-</body>
+loadMessages()
+
+})
+
+
+function loadMessages(){
+
+db.collection("messages")
+.orderBy("time")
+.onSnapshot(snapshot=>{
+
+let html=""
+
+snapshot.forEach(doc=>{
+
+let m=doc.data()
+
+if(
+
+(m.from===myId && m.to===otherId) ||
+
+(m.from===otherId && m.to===myId)
+
+){
+
+let cls = m.from===myId ? "msg me" : "msg"
+
+html+=`
+
+<div class="${cls}">
+
+${m.text}
+
+</div>
+
+`
+
+}
+
+})
+
+document.getElementById("messages").innerHTML=html
+
+})
+
+}
+
+
+function send(){
+
+let text=document.getElementById("text").value
+
+if(!text) return
+
+db.collection("messages").add({
+
+from:myId,
+to:otherId,
+text:text,
+time:Date.now()
+
+})
+
+document.getElementById("text").value=""
+
+}
+
+</script></body>
 </html>
