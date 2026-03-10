@@ -324,6 +324,38 @@ return Math.round(d)
 
 }
 
+
+
+let startX = 0
+
+document.addEventListener("touchstart",function(e){
+
+startX = e.touches[0].clientX
+
+})
+
+
+
+document.addEventListener("touchend",function(e){
+
+let endX = e.changedTouches[0].clientX
+
+let diff = endX - startX
+
+if(diff > 80){
+
+like()
+
+}
+
+if(diff < -80){
+
+skip()
+
+}
+
+})
+
 </script>
 
 </body>
