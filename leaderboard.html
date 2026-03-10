@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leaderboard</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard</title><style>
 
 body{
 font-family:Arial;
@@ -24,23 +17,26 @@ font-size:20px;
 
 .user{
 background:white;
-margin:15px;
+width:320px;
+margin:auto;
+margin-top:15px;
 padding:15px;
 border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 display:flex;
 align-items:center;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 .user img{
 width:60px;
 height:60px;
 border-radius:50%;
-margin-right:10px;
+object-fit:cover;
+margin-right:15px;
 }
 
 .rank{
-font-size:20px;
+font-size:22px;
 margin-right:10px;
 }
 
@@ -60,65 +56,47 @@ font-size:22px;
 text-decoration:none;
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div class="header">🏆 Leaderboard</div>
-
-<div id="list"></div>
-
-<div class="navbar">
-<a href="discover.html">🔥</a>
+</style></head><body><div class="header">🏆 Leaderboard</div><div id="list"></div><div class="navbar"><a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
-<a href="chat.html">💬</a>
+<a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
-</div>
 
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
+</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
-if(!firebase.apps.length){
-firebase.initializeApp(firebaseConfig);
-}
+firebase.initializeApp(firebaseConfig)
 
-const db=firebase.firestore()
+const db = firebase.firestore()
 
+function loadLeaderboard(){
 
 db.collection("users")
-
-.orderBy("boost","desc")
-
+.orderBy("coins","desc")
+.limit(20)
 .get()
 
 .then(snapshot=>{
 
+let html=""
 let rank=1
 
 snapshot.forEach(doc=>{
 
 let u=doc.data()
 
-document.getElementById("list").innerHTML+=`
+html+=`
 
 <div class="user">
 
@@ -128,9 +106,9 @@ document.getElementById("list").innerHTML+=`
 
 <div>
 
-<b>${u.name} ${u.vip ? "👑" : ""}</b><br>
+<h3>${u.name}</h3>
 
-${u.country}
+<p>💰 ${u.coins || 0} coins</p>
 
 </div>
 
@@ -142,10 +120,13 @@ rank++
 
 })
 
+document.getElementById("list").innerHTML=html
+
 })
 
-</script>
+}
 
-</body>
+loadLeaderboard()
 
+</script></body>
 </html>
