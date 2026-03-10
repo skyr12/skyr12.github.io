@@ -21,51 +21,40 @@ margin-top:20px;
 
 .card{
 width:320px;
-height:470px;
 margin:auto;
 margin-top:30px;
 background:white;
 border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
 overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 .card img{
 width:100%;
-height:300px;
+height:320px;
 object-fit:cover;
 }
 
 .info{
-padding:15px;
+padding:20px;
 }
 
 .buttons{
-margin-top:20px;
+margin-top:10px;
 }
 
 button{
-padding:12px 20px;
 border:none;
-border-radius:25px;
+padding:12px 20px;
+border-radius:30px;
+margin:5px;
 font-size:16px;
-margin:6px;
 cursor:pointer;
 }
 
-.like{
-background:#ff4d6d;
-color:white;
-}
-
-.skip{
-background:#ddd;
-}
-
-.super{
-background:#3b82f6;
-color:white;
-}
+.skip{background:#ddd}
+.like{background:#ff4d6d;color:white}
+.super{background:#3b82f6;color:white}
 
 .navbar{
 position:fixed;
@@ -83,9 +72,15 @@ font-size:22px;
 text-decoration:none;
 }
 
+.online{
+color:green;
+font-size:14px;
+}
+
 </style>
 
 </head>
+
 
 <body>
 
@@ -97,7 +92,7 @@ text-decoration:none;
 
 <button class="skip" onclick="skip()">❌ Skip</button>
 
-<button class="super" onclick="superLike()">⭐ Super Like</button>
+<button class="super" onclick="superLike()">⭐ Super</button>
 
 <button class="like" onclick="like()">❤️ Like</button>
 
@@ -134,9 +129,7 @@ appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
-if(!firebase.apps.length){
 firebase.initializeApp(firebaseConfig)
-}
 
 const db = firebase.firestore()
 
@@ -145,6 +138,7 @@ let index=0
 let myId=""
 let myLat=0
 let myLng=0
+
 
 
 firebase.auth().onAuthStateChanged(user=>{
@@ -158,14 +152,15 @@ return
 
 myId=user.uid
 
-getMyLocation()
+getLocation()
 
 loadUsers()
 
 })
 
 
-function getMyLocation(){
+
+function getLocation(){
 
 navigator.geolocation.getCurrentPosition(function(position){
 
@@ -177,9 +172,14 @@ myLng = position.coords.longitude
 }
 
 
+
 function loadUsers(){
 
-db.collection("users").get()
+db.collection("users")
+
+.orderBy("boost","desc")
+
+.get()
 
 .then(snapshot=>{
 
@@ -206,6 +206,7 @@ showUser()
 }
 
 
+
 function showUser(){
 
 if(index>=users.length){
@@ -217,7 +218,7 @@ return
 
 let u = users[index]
 
-let km = ""
+let km=""
 
 if(u.lat && u.lng){
 
@@ -225,7 +226,15 @@ km = distance(myLat,myLng,u.lat,u.lng)
 
 }
 
-document.getElementById("card").innerHTML = `
+let online=""
+
+if(u.online){
+
+online="<span class='online'>🟢 Online</span>"
+
+}
+
+document.getElementById("card").innerHTML=`
 
 <div class="card">
 
@@ -239,6 +248,8 @@ document.getElementById("card").innerHTML = `
 
 <p>${km} km away</p>
 
+<p>${online}</p>
+
 </div>
 
 </div>
@@ -246,6 +257,7 @@ document.getElementById("card").innerHTML = `
 `
 
 }
+
 
 
 function skip(){
@@ -257,21 +269,65 @@ showUser()
 }
 
 
+
 function like(){
 
-let likedUser = users[index].id
+let likedUser=users[index].id
 
 db.collection("likes").add({
 
-from: myId,
-to: likedUser,
-time: Date.now()
+from:myId,
+to:likedUser,
+time:Date.now()
 
 })
+
+checkMatch(likedUser)
+
+index++
+
+showUser()
+
+}
+
+
+
+function superLike(){
+
+let likedUser=users[index].id
+
+db.collection("superlikes").add({
+
+from:myId,
+to:likedUser,
+time:Date.now()
+
+})
+
+db.collection("notifications").add({
+
+to:likedUser,
+text:"⭐ Someone Super Liked you!",
+time:Date.now()
+
+})
+
+alert("⭐ Super Like sent!")
+
+index++
+
+showUser()
+
+}
+
+
+
+function checkMatch(likedUser){
 
 db.collection("likes")
 
 .where("from","==",likedUser)
+
 .where("to","==",myId)
 
 .get()
@@ -293,40 +349,8 @@ alert("❤️ It's a Match!")
 
 })
 
-index++
-
-showUser()
-
 }
 
-
-function superLike(){
-
-let likedUser = users[index].id
-
-db.collection("superlikes").add({
-
-from: myId,
-to: likedUser,
-time: Date.now()
-
-})
-
-db.collection("notifications").add({
-
-to: likedUser,
-text:"⭐ Someone Super Liked you!",
-time: Date.now()
-
-})
-
-alert("⭐ Super Like sent!")
-
-index++
-
-showUser()
-
-}
 
 
 function distance(lat1, lon1, lat2, lon2){
@@ -337,47 +361,39 @@ var dLat = (lat2-lat1) * Math.PI/180
 var dLon = (lon2-lon1) * Math.PI/180
 
 var a =
-Math.sin(dLat/2) * Math.sin(dLat/2) +
-Math.cos(lat1*Math.PI/180) *
-Math.cos(lat2*Math.PI/180) *
-Math.sin(dLon/2) *
-Math.sin(dLon/2)
+Math.sin(dLat/2)*Math.sin(dLat/2)+
+Math.cos(lat1*Math.PI/180)*
+Math.cos(lat2*Math.PI/180)*
+Math.sin(dLon/2)*Math.sin(dLon/2)
 
-var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+var c = 2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
 
-var d = R * c
+var d = R*c
 
 return Math.round(d)
 
 }
 
 
-let startX = 0
+
+let startX=0
 
 document.addEventListener("touchstart",function(e){
 
-startX = e.touches[0].clientX
+startX=e.touches[0].clientX
 
 })
 
 
+
 document.addEventListener("touchend",function(e){
 
-let endX = e.changedTouches[0].clientX
+let endX=e.changedTouches[0].clientX
 
-let diff = endX - startX
+let diff=endX-startX
 
-if(diff > 80){
-
-like()
-
-}
-
-if(diff < -80){
-
-skip()
-
-}
+if(diff>80){like()}
+if(diff<-80){skip()}
 
 })
 
