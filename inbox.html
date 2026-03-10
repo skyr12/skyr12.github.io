@@ -3,76 +3,65 @@
 
 <head>
 
-<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inbox</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 margin:0;
-padding-bottom:80px;
 }
 
-.card{
-width:340px;
-margin:10px auto;
+h2{
+text-align:center;
+margin-top:20px;
+}
+
+#chats{
+padding:20px;
+}
+
+.chat{
+
 background:white;
 border-radius:15px;
+padding:15px;
+margin-bottom:10px;
 display:flex;
 align-items:center;
-padding:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.15);
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 cursor:pointer;
+
 }
 
-.card img{
-width:55px;
-height:55px;
+.chat img{
+
+width:60px;
+height:60px;
 border-radius:50%;
 object-fit:cover;
 margin-right:15px;
-}
 
-.text{
-flex:1;
-}
-
-.name{
-font-weight:bold;
-font-size:16px;
-}
-
-.last{
-font-size:14px;
-color:gray;
-}
-
-.online{
-width:10px;
-height:10px;
-background:limegreen;
-border-radius:50%;
-margin-left:auto;
 }
 
 .navbar{
+
 position:fixed;
 bottom:0;
-left:0;
-right:0;
+width:100%;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:12px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
+padding:10px 0;
+border-top:1px solid #ddd;
 font-size:22px;
+
 }
 
 .navbar a{
 text-decoration:none;
-color:black;
 }
 
 </style>
@@ -81,96 +70,9 @@ color:black;
 
 <body>
 
-<h2 style="text-align:center">💬 Chats</h2>
+<h2>💬 Inbox</h2>
 
-<div id="inbox"></div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
-
-const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-}
-
-firebase.initializeApp(firebaseConfig)
-
-let db=firebase.firestore()
-
-firebase.auth().onAuthStateChanged(user=>{
-
-if(!user) return
-
-let uid=user.uid
-
-db.collection("matches")
-.where("users","array-contains",uid)
-.onSnapshot(snapshot=>{
-
-let box=document.getElementById("inbox")
-
-box.innerHTML=""
-
-snapshot.forEach(doc=>{
-
-let data=doc.data()
-
-let other=data.users.find(id=>id!==uid)
-
-db.collection("users").doc(other).get().then(userDoc=>{
-
-let u=userDoc.data()
-
-let card=document.createElement("div")
-card.className="card"
-
-let onlineIcon=""
-
-if(u.online){
-
-onlineIcon='<div class="online"></div>'
-
-}
-
-card.innerHTML=`
-
-<img src="${u.photo}">
-
-<div class="text">
-
-<div class="name">${u.name}</div>
-<div class="last">${u.country}</div>
-
-</div>
-
-${onlineIcon}
-
-`
-
-card.onclick=function(){
-
-window.location="chat.html?user="+other
-
-}
-
-box.appendChild(card)
-
-})
-
-})
-
-})
-
-})
-
-</script>
+<div id="chats"></div>
 
 <div class="navbar">
 
@@ -182,6 +84,103 @@ box.appendChild(card)
 <a href="profile.html">👤</a>
 
 </div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+authDomain:"nimeh-gomsodeh.firebaseapp.com",
+projectId:"nimeh-gomsodeh",
+storageBucket:"nimeh-gomsodeh.firebasestorage.app",
+messagingSenderId:"815930956932",
+appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
+
+};
+
+if(!firebase.apps.length){
+firebase.initializeApp(firebaseConfig)
+}
+
+const db=firebase.firestore()
+
+let myId=""
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(!user){
+
+location.href="login.html"
+return
+
+}
+
+myId=user.uid
+
+loadChats()
+
+})
+
+
+function loadChats(){
+
+db.collection("matches")
+
+.onSnapshot(snapshot=>{
+
+let html=""
+
+snapshot.forEach(doc=>{
+
+let m=doc.data()
+
+if(m.users.includes(myId)){
+
+let otherId = m.users.find(id=>id!==myId)
+
+db.collection("users").doc(otherId).get()
+
+.then(userDoc=>{
+
+let u=userDoc.data()
+
+html+=`
+
+<div class="chat" onclick="openChat('${otherId}')">
+
+<img src="${u.photo}">
+
+<h3>${u.name}</h3>
+
+</div>
+
+`
+
+document.getElementById("chats").innerHTML=html
+
+})
+
+}
+
+})
+
+})
+
+}
+
+
+function openChat(id){
+
+window.location.href="chat.html?id="+id
+
+}
+
+</script>
 
 </body>
 </html>
