@@ -1,30 +1,39 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leaderboard</title><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard</title>
+
+<style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 margin:0;
 text-align:center;
 }
 
-.header{
+header{
 background:#ff4d6d;
 color:white;
 padding:15px;
-font-size:20px;
+}
+
+.list{
+padding:20px;
 }
 
 .user{
 background:white;
-width:320px;
-margin:auto;
-margin-top:15px;
+margin:10px;
 padding:15px;
 border-radius:15px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
 display:flex;
 align-items:center;
+gap:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .user img{
@@ -32,12 +41,11 @@ width:60px;
 height:60px;
 border-radius:50%;
 object-fit:cover;
-margin-right:15px;
 }
 
 .rank{
-font-size:22px;
-margin-right:10px;
+font-size:20px;
+font-weight:bold;
 }
 
 .navbar{
@@ -56,14 +64,38 @@ font-size:22px;
 text-decoration:none;
 }
 
-</style></head><body><div class="header">🏆 Leaderboard</div><div id="list"></div><div class="navbar"><a href="discover.html">🔥</a>
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+🏆 Leaderboard
+
+</header>
+
+<div id="users" class="list"></div>
+
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 
-</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
 
@@ -78,19 +110,25 @@ appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 firebase.initializeApp(firebaseConfig)
 
-const db = firebase.firestore()
+const db=firebase.firestore()
 
-function loadLeaderboard(){
+
+
+function loadUsers(){
 
 db.collection("users")
+
 .orderBy("coins","desc")
+
 .limit(20)
+
 .get()
 
 .then(snapshot=>{
 
-let html=""
 let rank=1
+
+let html=""
 
 snapshot.forEach(doc=>{
 
@@ -106,9 +144,9 @@ html+=`
 
 <div>
 
-<h3>${u.name}</h3>
+<div>${u.name}</div>
 
-<p>💰 ${u.coins || 0} coins</p>
+<div>💰 ${u.coins || 0} coins</div>
 
 </div>
 
@@ -120,13 +158,15 @@ rank++
 
 })
 
-document.getElementById("list").innerHTML=html
+document.getElementById("users").innerHTML=html
 
 })
 
 }
 
-loadLeaderboard()
+loadUsers()
 
-</script></body>
+</script>
+
+</body>
 </html>
