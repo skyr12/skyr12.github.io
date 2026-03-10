@@ -15,53 +15,48 @@ padding:15px;
 font-size:20px;
 }
 
-.container{
-padding:20px;
-}
-
-.card{
+#card{
+width:320px;
+height:420px;
 background:white;
-width:280px;
 margin:auto;
-margin-top:20px;
-border-radius:15px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
+margin-top:30px;
+border-radius:20px;
+box-shadow:0 5px 25px rgba(0,0,0,0.2);
 overflow:hidden;
+position:relative;
 }
 
-.card img{
+#card img{
 width:100%;
-height:220px;
+height:300px;
 object-fit:cover;
 }
 
-.card h3{
-margin:10px;
+.info{
+padding:15px;
 }
 
-.card p{
-margin:5px;
-color:#666;
+.buttons{
+margin-top:20px;
+}
+
+button{
+border:none;
+padding:12px 20px;
+margin:10px;
+border-radius:30px;
+font-size:16px;
+cursor:pointer;
 }
 
 .like{
 background:#ff4d6d;
 color:white;
-border:none;
-padding:10px 20px;
-border-radius:25px;
-margin:10px;
-cursor:pointer;
 }
 
-.super{
-background:#2979ff;
-color:white;
-border:none;
-padding:10px 20px;
-border-radius:25px;
-margin:10px;
-cursor:pointer;
+.skip{
+background:#ccc;
 }
 
 .navbar{
@@ -80,7 +75,11 @@ font-size:22px;
 text-decoration:none;
 }
 
-</style></head><body><div class="header">🔥 Discover</div><div class="container"><div id="cards"></div></div><div class="navbar"><a href="discover.html">🔥</a>
+</style></head><body><div class="header">🔥 Discover</div><div id="card"><img id="photo"><div class="info"><h2 id="name"></h2><p id="country"></p></div></div><div class="buttons"><button class="skip" onclick="skip()">❌ Skip</button>
+
+<button class="like" onclick="like()">❤️ Like</button>
+
+</div><div class="navbar"><a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
@@ -100,12 +99,12 @@ appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
-if(!firebase.apps.length){
 firebase.initializeApp(firebaseConfig)
-}
 
 const db=firebase.firestore()
 
+let users=[]
+let index=0
 let myId=""
 
 firebase.auth().onAuthStateChanged(user=>{
@@ -126,109 +125,80 @@ loadUsers()
 
 function loadUsers(){
 
-db.collection("users")
-.get()
+db.collection("users").get()
+
 .then(snapshot=>{
 
-let html=""
+users=[]
 
 snapshot.forEach(doc=>{
 
 let u=doc.data()
-let id=doc.id
 
-if(id===myId) return
+u.id=doc.id
 
-let vip=u.vip ? "👑 VIP" : ""
+if(u.id!==myId){
 
-let online=u.online ? "🟢 Online" : "⚫ Offline"
+users.push(u)
 
-html+=`
-
-<div class="card">
-
-<img src="${u.photo}" onclick="openProfile('${id}')">
-
-<h3 onclick="openProfile('${id}')">
-
-${u.name} ${vip}
-
-</h3>
-
-<p>${u.country}</p>
-
-<p>${online}</p>
-
-<button class="like" onclick="like('${id}')">
-
-❤️ Like
-
-</button>
-
-<button class="super" onclick="superLike('${id}')">
-
-⭐ Super Like
-
-</button>
-
-</div>
-
-`
+}
 
 })
 
-document.getElementById("cards").innerHTML=html
+showUser()
 
 })
 
 }
 
 
-function like(target){
+function showUser(){
 
-let user=firebase.auth().currentUser
+let user=users[index]
+
+if(!user){
+
+document.getElementById("card").innerHTML="<h2>No more users</h2>"
+
+return
+
+}
+
+document.getElementById("photo").src=user.photo
+document.getElementById("name").innerText=user.name
+document.getElementById("country").innerText=user.country
+
+}
+
+
+function like(){
+
+let currentUser=firebase.auth().currentUser.uid
+
+let likedUser=users[index].id
 
 db.collection("likes").add({
 
-from:user.uid,
-to:target,
+from:currentUser,
+to:likedUser,
 time:Date.now()
 
 })
 
 alert("❤️ Liked")
 
-}
+index++
 
-
-function superLike(target){
-
-let user=firebase.auth().currentUser
-
-db.collection("superlikes").add({
-
-from:user.uid,
-to:target,
-time:Date.now()
-
-})
-
-db.collection("notifications").add({
-
-to:target,
-text:"⭐ Someone Super Liked you!",
-time:Date.now()
-
-})
-
-alert("⭐ Super Like sent!")
+showUser()
 
 }
 
 
-function openProfile(id){
+function skip(){
 
-location.href="user.html?id="+id
+index++
+
+showUser()
 
 }
 
