@@ -37,6 +37,7 @@ background:#ff4d6d;
 color:white;
 border-radius:20px;
 margin-top:10px;
+cursor:pointer;
 }
 
 .navbar{
@@ -92,9 +93,12 @@ text-decoration:none;
 </div>
 
 
+
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+
 
 <script>
 
@@ -113,7 +117,9 @@ if(!firebase.apps.length){
 firebase.initializeApp(firebaseConfig)
 }
 
-const db=firebase.firestore()
+const db = firebase.firestore()
+
+
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -128,7 +134,10 @@ loadProfile(user.uid)
 
 setOnline(user.uid)
 
+saveLocation()
+
 })
+
 
 
 function loadProfile(id){
@@ -137,32 +146,21 @@ db.collection("users").doc(id).get()
 
 .then(doc=>{
 
-let u=doc.data()
+let u = doc.data()
 
-document.getElementById("photo").src=u.photo
-document.getElementById("name").innerText=u.name
-document.getElementById("city").innerText=u.city
-
-})
-
-}
-
-
-function setOnline(id){
-
-db.collection("users").doc(id).update({
-
-online:true,
-lastActive:Date.now()
+document.getElementById("photo").src = u.photo
+document.getElementById("name").innerText = u.name
+document.getElementById("city").innerText = u.city
 
 })
 
 }
+
 
 
 function boost(){
 
-let user=firebase.auth().currentUser
+let user = firebase.auth().currentUser
 
 db.collection("users").doc(user.uid).update({
 
@@ -172,7 +170,44 @@ boost:true
 
 .then(()=>{
 
-alert("🔥 Profile boosted!")
+alert("🔥 Your profile is boosted!")
+
+})
+
+}
+
+
+
+function setOnline(){
+
+let user = firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+online:true,
+lastActive:Date.now()
+
+})
+
+}
+
+
+
+function saveLocation(){
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat = position.coords.latitude
+let lng = position.coords.longitude
+
+let user = firebase.auth().currentUser
+
+db.collection("users").doc(user.uid).update({
+
+lat: lat,
+lng: lng
+
+})
 
 })
 
