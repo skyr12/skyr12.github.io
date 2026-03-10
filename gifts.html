@@ -1,48 +1,121 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Send Gift</title><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Gift</title>
+
+<style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 text-align:center;
 margin:0;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:15px;
-font-size:20px;
+h2{
+margin-top:20px;
 }
 
-.card{
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+padding:20px;
+}
+
+.gift{
 background:white;
-width:300px;
-margin:auto;
-margin-top:30px;
 padding:20px;
 border-radius:15px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
-}
-
-button{
-background:#ff4d6d;
-color:white;
-border:none;
-padding:10px 20px;
-border-radius:25px;
-margin:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
 cursor:pointer;
-font-size:16px;
 }
 
-</style></head><body><div class="header">🎁 Send Gift</div><div class="card"><h3>Choose a Gift</h3><button onclick="sendGift('rose',10)">🌹 Rose (10 coins)</button>
+.gift img{
+width:60px;
+}
 
-<button onclick="sendGift('diamond',50)">💎 Diamond (50 coins)</button>
+.price{
+color:#ff4d6d;
+margin-top:10px;
+}
 
-<button onclick="sendGift('crown',100)">👑 Crown (100 coins)</button>
+.navbar{
+position:fixed;
+bottom:0;
+width:100%;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+border-top:1px solid #ddd;
+font-size:22px;
+}
 
-</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
+.navbar a{
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>🎁 Send Gift</h2>
+
+<div id="coins"></div>
+
+<div class="grid">
+
+<div class="gift" onclick="sendGift(10)">
+<img src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png">
+<p>🌹 Rose</p>
+<p class="price">10 Coins</p>
+</div>
+
+<div class="gift" onclick="sendGift(50)">
+<img src="https://cdn-icons-png.flaticon.com/512/616/616554.png">
+<p>🐻 Teddy</p>
+<p class="price">50 Coins</p>
+</div>
+
+<div class="gift" onclick="sendGift(100)">
+<img src="https://cdn-icons-png.flaticon.com/512/3468/3468377.png">
+<p>💎 Diamond</p>
+<p class="price">100 Coins</p>
+</div>
+
+<div class="gift" onclick="sendGift(500)">
+<img src="https://cdn-icons-png.flaticon.com/512/833/833472.png">
+<p>🚗 Car</p>
+<p class="price">500 Coins</p>
+</div>
+
+</div>
+
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
+<a href="matches.html">❤️</a>
+<a href="inbox.html">💬</a>
+<a href="notifications.html">🔔</a>
+<a href="visitors.html">👁️</a>
+<a href="profile.html">👤</a>
+
+</div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
 
@@ -59,21 +132,54 @@ firebase.initializeApp(firebaseConfig)
 
 const db=firebase.firestore()
 
-const urlParams=new URLSearchParams(window.location.search)
+let myId=""
+let receiver=""
+let myCoins=0
 
-const target=urlParams.get("id")
 
-function sendGift(type,cost){
 
-let user=firebase.auth().currentUser
+firebase.auth().onAuthStateChanged(user=>{
 
-let ref=db.collection("users").doc(user.uid)
+if(!user){
 
-ref.get().then(doc=>{
+location.href="login.html"
+return
 
-let coins=doc.data().coins || 0
+}
 
-if(coins < cost){
+myId=user.uid
+
+const params=new URLSearchParams(window.location.search)
+
+receiver=params.get("id")
+
+loadCoins()
+
+})
+
+
+
+function loadCoins(){
+
+db.collection("users").doc(myId).get()
+
+.then(doc=>{
+
+let u=doc.data()
+
+myCoins=u.coins || 0
+
+document.getElementById("coins").innerHTML="💰 Coins: "+myCoins
+
+})
+
+}
+
+
+
+function sendGift(price){
+
+if(myCoins<price){
 
 alert("Not enough coins")
 
@@ -81,27 +187,30 @@ return
 
 }
 
-ref.update({
+myCoins-=price
 
-coins:coins-cost
+db.collection("users").doc(myId).update({
+
+coins:myCoins
 
 })
 
 db.collection("gifts").add({
 
-from:user.uid,
-to:target,
-type:type,
-cost:cost,
+from:myId,
+to:receiver,
+price:price,
 time:Date.now()
 
 })
 
 alert("🎁 Gift sent!")
 
-})
+loadCoins()
 
 }
 
-</script></body>
+</script>
+
+</body>
 </html>
