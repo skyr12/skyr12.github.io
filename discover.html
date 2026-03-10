@@ -1,65 +1,82 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discover</title><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover</title>
+
+<style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 margin:0;
 text-align:center;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:15px;
-font-size:20px;
-}
-
-#card{
-width:320px;
-height:420px;
-background:white;
-margin:auto;
-margin-top:30px;
-border-radius:20px;
-box-shadow:0 5px 25px rgba(0,0,0,0.2);
-overflow:hidden;
-position:relative;
-}
-
-#card img{
-width:100%;
-height:300px;
-object-fit:cover;
-}
-
-.info{
-padding:15px;
-}
-
-.buttons{
+h2{
 margin-top:20px;
 }
 
+.card{
+
+width:320px;
+height:420px;
+margin:auto;
+margin-top:30px;
+background:white;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+overflow:hidden;
+
+}
+
+.card img{
+
+width:100%;
+height:300px;
+object-fit:cover;
+
+}
+
+.info{
+
+padding:15px;
+
+}
+
+.buttons{
+
+margin-top:20px;
+
+}
+
 button{
+
+padding:12px 25px;
 border:none;
-padding:12px 20px;
+border-radius:25px;
+font-size:18px;
 margin:10px;
-border-radius:30px;
-font-size:16px;
-cursor:pointer;
+
 }
 
 .like{
+
 background:#ff4d6d;
 color:white;
+
 }
 
 .skip{
-background:#ccc;
+
+background:#ddd;
+
 }
 
 .navbar{
+
 position:fixed;
 bottom:0;
 width:100%;
@@ -69,24 +86,50 @@ justify-content:space-around;
 padding:10px 0;
 border-top:1px solid #ddd;
 font-size:22px;
+
 }
 
 .navbar a{
 text-decoration:none;
 }
 
-</style></head><body><div class="header">🔥 Discover</div><div id="card"><img id="photo"><div class="info"><h2 id="name"></h2><p id="country"></p></div></div><div class="buttons"><button class="skip" onclick="skip()">❌ Skip</button>
+</style>
 
+</head>
+
+
+<body>
+
+<h2>🔥 Discover</h2>
+
+<div id="card"></div>
+
+<div class="buttons">
+
+<button class="skip" onclick="skip()">❌ Skip</button>
 <button class="like" onclick="like()">❤️ Like</button>
 
-</div><div class="navbar"><a href="discover.html">🔥</a>
+</div>
+
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
+<a href="chat.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 
-</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+
+<script>
 
 const firebaseConfig = {
 
@@ -99,13 +142,16 @@ appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
+if(!firebase.apps.length){
 firebase.initializeApp(firebaseConfig)
+}
 
-const db=firebase.firestore()
+const db = firebase.firestore()
 
 let users=[]
 let index=0
 let myId=""
+
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -129,17 +175,15 @@ db.collection("users").get()
 
 .then(snapshot=>{
 
-users=[]
-
 snapshot.forEach(doc=>{
 
-let u=doc.data()
+let data=doc.data()
 
-u.id=doc.id
+data.id=doc.id
 
-if(u.id!==myId){
+if(data.id!==myId){
 
-users.push(u)
+users.push(data)
 
 }
 
@@ -154,42 +198,32 @@ showUser()
 
 function showUser(){
 
-let user=users[index]
+if(index>=users.length){
 
-if(!user){
-
-document.getElementById("card").innerHTML="<h2>No more users</h2>"
-
+document.getElementById("card").innerHTML="<h3>No more users</h3>"
 return
 
 }
 
-document.getElementById("photo").src=user.photo
-document.getElementById("name").innerText=user.name
-document.getElementById("country").innerText=user.country
+let u = users[index]
 
-}
+document.getElementById("card").innerHTML = `
 
+<div class="card">
 
-function like(){
+<img src="${u.photo}">
 
-let currentUser=firebase.auth().currentUser.uid
+<div class="info">
 
-let likedUser=users[index].id
+<h3>${u.name}</h3>
 
-db.collection("likes").add({
+<p>${u.age} • ${u.city}</p>
 
-from:currentUser,
-to:likedUser,
-time:Date.now()
+</div>
 
-})
+</div>
 
-alert("❤️ Liked")
-
-index++
-
-showUser()
+`
 
 }
 
@@ -202,5 +236,27 @@ showUser()
 
 }
 
-</script></body>
+
+function like(){
+
+let likedUser = users[index].id
+
+db.collection("likes").add({
+
+from:myId,
+to:likedUser,
+time:Date.now()
+
+})
+
+index++
+
+showUser()
+
+}
+
+</script>
+
+
+</body>
 </html>
