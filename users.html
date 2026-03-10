@@ -17,7 +17,7 @@ font-size:20px;
 
 .card{
 background:white;
-width:300px;
+width:320px;
 margin:auto;
 margin-top:30px;
 padding:20px;
@@ -46,6 +46,14 @@ cursor:pointer;
 background:#9c27b0;
 }
 
+#gallery img{
+width:80px;
+height:80px;
+margin:5px;
+border-radius:10px;
+object-fit:cover;
+}
+
 .navbar{
 position:fixed;
 bottom:0;
@@ -66,7 +74,7 @@ text-decoration:none;
 
 <a id="giftLink">
 <button class="gift">🎁 Send Gift</button>
-</a></div><div class="navbar"><a href="discover.html">🔥</a>
+</a><h3>📸 Photos</h3><div id="gallery"></div></div><div class="navbar"><a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
@@ -110,6 +118,8 @@ return
 loadUser()
 
 saveVisitor(user.uid)
+
+loadPhotos()
 
 })
 
@@ -159,6 +169,33 @@ db.collection("visitors").add({
 profile:userId,
 visitor:visitorId,
 time:Date.now()
+
+})
+
+}
+
+
+function loadPhotos(){
+
+db.collection("photos")
+.where("user","==",userId)
+.get()
+
+.then(snapshot=>{
+
+let html=""
+
+snapshot.forEach(doc=>{
+
+let p=doc.data()
+
+html+=`
+<img src="${p.photo}">
+`
+
+})
+
+document.getElementById("gallery").innerHTML=html
 
 })
 
