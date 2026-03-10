@@ -1,56 +1,46 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profile</title><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile</title>
+
+<style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
-text-align:center;
+background:#f5f5f5;
 margin:0;
-}
-
-.header{
-background:#ff4d6d;
-color:white;
-padding:15px;
-font-size:20px;
+text-align:center;
 }
 
 .card{
 background:white;
-width:320px;
-margin:auto;
-margin-top:30px;
+margin:20px;
 padding:20px;
 border-radius:15px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-.card img{
+img{
 width:120px;
 height:120px;
-border-radius:100px;
+border-radius:50%;
 object-fit:cover;
 }
 
 button{
+padding:10px 20px;
+border:none;
 background:#ff4d6d;
 color:white;
-border:none;
-padding:10px 20px;
-border-radius:25px;
-margin:8px;
-cursor:pointer;
-}
-
-#gallery img{
-width:70px;
-height:70px;
-border-radius:10px;
-margin:4px;
-object-fit:cover;
+border-radius:20px;
+margin-top:10px;
 }
 
 .navbar{
+
 position:fixed;
 bottom:0;
 width:100%;
@@ -60,30 +50,53 @@ justify-content:space-around;
 padding:10px 0;
 border-top:1px solid #ddd;
 font-size:22px;
+
 }
 
 .navbar a{
 text-decoration:none;
 }
 
-</style></head><body><div class="header">👤 Profile</div><div class="card"><img id="photo"><h2 id="name"></h2><p id="country"></p><a href="premium.html">
-<button>💎 Premium</button>
-</a><button onclick="boost()">🔥 Boost</button>
+</style>
 
-<button onclick="addCoins()">💰 Add Coins</button>
+</head>
 
-<br><br>
+<body>
 
-<input type="file" id="file"><button onclick="uploadPhoto()">📸 Upload Photo</button>
+<h2>👤 Profile</h2>
 
-<h3>📸 My Photos</h3><div id="gallery"></div></div><div class="navbar"><a href="discover.html">🔥</a>
+<div class="card">
+
+<img id="photo">
+
+<h3 id="name"></h3>
+
+<p id="city"></p>
+
+<p id="status"></p>
+
+<button onclick="boost()">🔥 Boost Profile</button>
+
+</div>
+
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 
-</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
 
@@ -111,20 +124,16 @@ return
 
 }
 
-loadProfile(user)
+loadProfile(user.uid)
 
-setOnline()
-
-saveLocation()
-
-loadPhotos()
+setOnline(user.uid)
 
 })
 
 
-function loadProfile(user){
+function loadProfile(id){
 
-db.collection("users").doc(user.uid).get()
+db.collection("users").doc(id).get()
 
 .then(doc=>{
 
@@ -132,7 +141,19 @@ let u=doc.data()
 
 document.getElementById("photo").src=u.photo
 document.getElementById("name").innerText=u.name
-document.getElementById("country").innerText=u.country
+document.getElementById("city").innerText=u.city
+
+})
+
+}
+
+
+function setOnline(id){
+
+db.collection("users").doc(id).update({
+
+online:true,
+lastActive:Date.now()
 
 })
 
@@ -151,134 +172,13 @@ boost:true
 
 .then(()=>{
 
-alert("🔥 Your profile is boosted!")
+alert("🔥 Profile boosted!")
 
 })
 
 }
 
+</script>
 
-function addCoins(){
-
-let user=firebase.auth().currentUser
-
-db.collection("users").doc(user.uid).update({
-
-coins:firebase.firestore.FieldValue.increment(100)
-
-})
-
-.then(()=>{
-
-alert("💰 100 coins added!")
-
-})
-
-}
-
-
-function uploadPhoto(){
-
-let file=document.getElementById("file").files[0]
-
-if(!file){
-
-alert("Choose a photo")
-return
-
-}
-
-let user=firebase.auth().currentUser
-
-let reader=new FileReader()
-
-reader.onload=function(){
-
-db.collection("photos").add({
-
-user:user.uid,
-photo:reader.result,
-time:Date.now()
-
-})
-
-.then(()=>{
-
-alert("📸 Photo uploaded!")
-
-loadPhotos()
-
-})
-
-}
-
-reader.readAsDataURL(file)
-
-}
-
-
-function loadPhotos(){
-
-let user=firebase.auth().currentUser
-
-db.collection("photos")
-.where("user","==",user.uid)
-.get()
-
-.then(snapshot=>{
-
-let html=""
-
-snapshot.forEach(doc=>{
-
-let p=doc.data()
-
-html+=`
-<img src="${p.photo}">
-`
-
-})
-
-document.getElementById("gallery").innerHTML=html
-
-})
-
-}
-
-
-function saveLocation(){
-
-navigator.geolocation.getCurrentPosition(function(position){
-
-let lat=position.coords.latitude
-let lng=position.coords.longitude
-
-let user=firebase.auth().currentUser
-
-db.collection("users").doc(user.uid).update({
-
-lat:lat,
-lng:lng
-
-})
-
-})
-
-}
-
-
-function setOnline(){
-
-let user=firebase.auth().currentUser
-
-db.collection("users").doc(user.uid).update({
-
-online:true,
-lastActive:Date.now()
-
-})
-
-}
-
-</script></body>
+</body>
 </html>
