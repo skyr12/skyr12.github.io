@@ -1,28 +1,30 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium</title><style>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium</title>
+
+<style>
 
 body{
 font-family:Arial;
-background:#f2f2f2;
+background:#f5f5f5;
 text-align:center;
 margin:0;
 }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:15px;
-font-size:20px;
+h2{
+margin-top:30px;
 }
 
-.card{
+.box{
 background:white;
-width:300px;
-margin:auto;
-margin-top:30px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 5px 20px rgba(0,0,0,0.1);
+margin:20px;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 button{
@@ -30,10 +32,14 @@ background:#ff4d6d;
 color:white;
 border:none;
 padding:12px 25px;
-border-radius:25px;
-font-size:16px;
-margin-top:20px;
+border-radius:30px;
+font-size:18px;
 cursor:pointer;
+}
+
+.features{
+text-align:left;
+margin-top:15px;
 }
 
 .navbar{
@@ -48,20 +54,57 @@ border-top:1px solid #ddd;
 font-size:22px;
 }
 
-</style></head><body><div class="header">💎 Premium</div><div class="card"><h2>Upgrade to Premium</h2><p>⭐ See who liked you</p>
-<p>👁 See profile visitors</p>
-<p>🔥 Unlimited Boost</p>
-<p>⭐ Unlimited Super Likes</p>
-<p>👑 VIP Badge</p><button onclick="buyPremium()">Upgrade Now</button>
+.navbar a{
+text-decoration:none;
+}
 
-</div><div class="navbar"><a href="discover.html">🔥</a>
+</style>
+
+</head>
+
+<body>
+
+<h2>💎 Nimeh Premium</h2>
+
+<div class="box">
+
+<h3>Unlock Premium</h3>
+
+<div class="features">
+
+<p>⭐ See who liked you</p>
+<p>🔥 Boost profile</p>
+<p>🌍 Global search</p>
+<p>⭐ Unlimited Super Likes</p>
+<p>👁️ See profile visitors</p>
+
+</div>
+
+<br>
+
+<button onclick="buyPremium()">Upgrade</button>
+
+</div>
+
+
+<div class="navbar">
+
+<a href="discover.html">🔥</a>
 <a href="matches.html">❤️</a>
 <a href="inbox.html">💬</a>
 <a href="notifications.html">🔔</a>
 <a href="visitors.html">👁️</a>
 <a href="profile.html">👤</a>
 
-</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
+</div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
 
 const firebaseConfig = {
 
@@ -78,23 +121,40 @@ firebase.initializeApp(firebaseConfig)
 
 const db=firebase.firestore()
 
+let myId=""
+
+
+firebase.auth().onAuthStateChanged(user=>{
+
+if(!user){
+
+location.href="login.html"
+return
+
+}
+
+myId=user.uid
+
+})
+
+
 function buyPremium(){
 
-let user=firebase.auth().currentUser
+db.collection("users").doc(myId).update({
 
-db.collection("users").doc(user.uid).update({
-
-vip:true
+premium:true
 
 })
 
 .then(()=>{
 
-alert("💎 You are now Premium!")
+alert("💎 Premium activated!")
 
 })
 
 }
 
-</script></body>
+</script>
+
+</body>
 </html>
