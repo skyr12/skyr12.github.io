@@ -10,44 +10,45 @@
 
 body{
 font-family:Arial;
-background:#f5f5f5;
 margin:0;
+background:#f5f5f5;
 }
 
-h2{
+header{
+background:#ff4d6d;
+color:white;
+padding:15px;
 text-align:center;
-margin-top:20px;
 }
 
-#chats{
-padding:20px;
+.list{
+padding:10px;
 }
 
 .chat{
-
 background:white;
-border-radius:15px;
 padding:15px;
-margin-bottom:10px;
+margin:10px;
+border-radius:15px;
 display:flex;
 align-items:center;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+gap:15px;
 cursor:pointer;
-
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 .chat img{
-
-width:60px;
-height:60px;
+width:50px;
+height:50px;
 border-radius:50%;
 object-fit:cover;
-margin-right:15px;
+}
 
+.name{
+font-weight:bold;
 }
 
 .navbar{
-
 position:fixed;
 bottom:0;
 width:100%;
@@ -57,7 +58,6 @@ justify-content:space-around;
 padding:10px 0;
 border-top:1px solid #ddd;
 font-size:22px;
-
 }
 
 .navbar a{
@@ -70,9 +70,13 @@ text-decoration:none;
 
 <body>
 
-<h2>💬 Inbox</h2>
+<header>
 
-<div id="chats"></div>
+💬 Inbox
+
+</header>
+
+<div id="list" class="list"></div>
 
 <div class="navbar">
 
@@ -103,13 +107,13 @@ appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
 
 };
 
-if(!firebase.apps.length){
 firebase.initializeApp(firebaseConfig)
-}
 
 const db=firebase.firestore()
 
 let myId=""
+
+
 
 firebase.auth().onAuthStateChanged(user=>{
 
@@ -127,43 +131,60 @@ loadChats()
 })
 
 
+
 function loadChats(){
 
-db.collection("matches")
+db.collection("messages")
 
-.onSnapshot(snapshot=>{
+.orderBy("time","desc")
 
-let html=""
+.get()
+
+.then(snapshot=>{
+
+let chats={}
 
 snapshot.forEach(doc=>{
 
 let m=doc.data()
 
-if(m.users.includes(myId)){
+if(m.from===myId || m.to===myId){
 
-let otherId = m.users.find(id=>id!==myId)
+let other=m.from===myId ? m.to : m.from
 
-db.collection("users").doc(otherId).get()
+if(!chats[other]){
+
+chats[other]=true
+
+db.collection("users").doc(other).get()
 
 .then(userDoc=>{
 
 let u=userDoc.data()
 
-html+=`
+let html=`
 
-<div class="chat" onclick="openChat('${otherId}')">
+<div class="chat" onclick="openChat('${other}')">
 
 <img src="${u.photo}">
 
-<h3>${u.name}</h3>
+<div>
+
+<div class="name">${u.name}</div>
+
+<div>Open chat</div>
+
+</div>
 
 </div>
 
 `
 
-document.getElementById("chats").innerHTML=html
+document.getElementById("list").innerHTML+=html
 
 })
+
+}
 
 }
 
@@ -174,9 +195,10 @@ document.getElementById("chats").innerHTML=html
 }
 
 
-function openChat(id){
 
-window.location.href="chat.html?id="+id
+function openChat(userId){
+
+location.href="chat.html?id="+userId
 
 }
 
