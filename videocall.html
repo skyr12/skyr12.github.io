@@ -1,76 +1,69 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<title>Video Call</title>
-
-<style>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Call</title><style>
 
 body{
-font-family:Arial;
-background:#111;
-color:white;
-text-align:center;
 margin:0;
+background:black;
+text-align:center;
+color:white;
+font-family:Arial;
 }
 
 .header{
 background:#ff4d6d;
-padding:15px;
-font-size:20px;
+padding:10px;
+font-size:18px;
 }
 
 video{
 width:90%;
-margin-top:20px;
+margin-top:10px;
 border-radius:10px;
 }
 
 button{
-margin-top:20px;
-padding:12px 25px;
-border:none;
-border-radius:25px;
 background:#ff4d6d;
 color:white;
+border:none;
+padding:12px 20px;
+margin:10px;
+border-radius:25px;
 font-size:16px;
 }
 
-</style>
+</style></head><body><div class="header">🎥 Video Call</div><video id="localVideo" autoplay muted></video>
 
-</head>
+<video id="remoteVideo" autoplay></video>
 
-<body>
+<br><button onclick="startCall()">Start Camera</button>
 
-<div class="header">🎥 Video Call</div>
-
-<video id="localVideo" autoplay muted></video>
-
-<br>
-
-<button onclick="startCall()">Start Camera</button>
+<button onclick="endCall()">End</button>
 
 <script>
 
-let video=document.getElementById("localVideo")
+let localStream
 
-function startCall(){
+async function startCall(){
 
-navigator.mediaDevices.getUserMedia({
+localStream = await navigator.mediaDevices.getUserMedia({
+
 video:true,
 audio:true
-})
-.then(stream=>{
-
-video.srcObject=stream
 
 })
+
+document.getElementById("localVideo").srcObject = localStream
 
 }
 
-</script>
 
-</body>
+function endCall(){
 
+localStream.getTracks().forEach(track=>track.stop())
+
+alert("Call ended")
+
+}
+
+</script></body>
 </html>
