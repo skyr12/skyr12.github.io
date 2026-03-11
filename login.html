@@ -15,7 +15,7 @@
         }
 
         body {
-            background: linear-gradient(145deg, #f9f3f0 0%, #ffe9e4 100%);
+            background: #fef9f7;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -23,35 +23,237 @@
             padding: 1rem;
         }
 
-        .container {
+        .login-container {
+            max-width: 400px;
             width: 100%;
-            max-width: 1000px;
             background: white;
-            border-radius: 2.5rem;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: flex;
-            flex-wrap: wrap;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+            padding: 2.5rem 2rem;
+            transition: all 0.3s;
         }
 
-        /* بخش تصویر */
-        .image-section {
-            flex: 1 1 40%;
-            background: linear-gradient(145deg, #ff9a8b, #ff6a88);
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: #e3636b;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .tabs {
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 2rem;
-            min-height: 300px;
+            gap: 2rem;
+            border-bottom: 1px solid #f0eae7;
+            margin-bottom: 2rem;
         }
 
-        .image-section img {
-            max-width: 100%;
-            width: 300px;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        .tab {
+            padding-bottom: 0.8rem;
+            color: #aaa;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
         }
 
-        /* بخش فرم */
-        .form-section {
-            flex: 1 1 60%;
-            padding: 3rem 2
+        .tab.active {
+            color: #e3636b;
+            border-bottom: 2px solid #e3636b;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4a4a4a;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid #f0e0da;
+            border-radius: 3rem;
+            font-size: 1rem;
+            background: #fefaf8;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e3636b;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(227, 99, 107, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 3rem;
+            background: #e3636b;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .btn:hover {
+            background: #d14f57;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(227, 99, 107, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #e3636b;
+            color: #e3636b;
+        }
+
+        .btn-outline:hover {
+            background: #e3636b;
+            color: white;
+        }
+
+        .divider {
+            text-align: center;
+            color: #ccc;
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #f0e0da;
+        }
+
+        .divider::before { right: 0; }
+        .divider::after { left: 0; }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a {
+            color: #e3636b;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <h1>نیمه گمشده</h1>
+            <p>پیدا کردن نفهمیده‌ترین اتفاق</p>
+        </div>
+
+        <div class="tabs">
+            <span class="tab active" id="loginTab" onclick="switchTab('login')">ورود</span>
+            <span class="tab" id="registerTab" onclick="switchTab('register')">ثبت‌نام</span>
+        </div>
+
+        <!-- فرم ورود -->
+        <div id="loginForm">
+            <div class="form-group">
+                <label>ایمیل</label>
+                <input type="email" placeholder="example@email.com">
+            </div>
+            <div class="form-group">
+                <label>رمز عبور</label>
+                <input type="password" placeholder="********">
+            </div>
+            <button class="btn">ورود</button>
+            <div style="text-align: left;">
+                <a href="#" style="color: #e3636b; font-size: 0.85rem; text-decoration: none;">رمز عبور را فراموش کردید؟</a>
+            </div>
+        </div>
+
+        <!-- فرم ثبت‌نام (پیش‌فرض مخفی) -->
+        <div id="registerForm" style="display: none;">
+            <div class="form-group">
+                <label>نام کامل</label>
+                <input type="text" placeholder="مثال: سارا محمدی">
+            </div>
+            <div class="form-group">
+                <label>ایمیل</label>
+                <input type="email" placeholder="example@email.com">
+            </div>
+            <div class="form-group">
+                <label>رمز عبور</label>
+                <input type="password" placeholder="حداقل ۶ کاراکتر">
+            </div>
+            <div class="form-group">
+                <label>تکرار رمز عبور</label>
+                <input type="password" placeholder="">
+            </div>
+            <button class="btn">ثبت‌نام</button>
+        </div>
+
+        <div class="divider">یا</div>
+
+        <button class="btn btn-outline">ادامه با گوگل</button>
+
+        <div class="footer-links">
+            <span>با ورود یا ثبت‌نام، <a href="#">قوانین</a> را می‌پذیرید.</span>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
