@@ -367,4 +367,152 @@
         
         // دریافت آیدی چت
         function getChatId(uid1, uid2) {
-            return
+            return [uid1, uid2].sort().join('_');
+        }
+        
+        // فرمت زمان
+        function formatTime(timestamp) {
+            if (!timestamp) return '';
+            
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            
+            return `${hours}:${minutes}`;
+        }
+        
+        // ارسال پیام
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (!text || !currentUser) return;
+            
+            const chatId = getChatId(currentUser.uid, chatUserId);
+            
+            db.collection('messages').add({
+                chatId: chatId,
+                from: currentUser.uid,
+                to: chatUserId,
+                text: text,
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                read: false
+            })
+            .then(() => {
+                input.value = '';
+                
+                // آپدیت آخرین پیام در matches
+                db.collection('matches')
+                    .where('users', 'array-contains', currentUser.uid)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.forEach(doc => {
+                            const match = doc.data();
+                            if (match.users.includes(chatUserId)) {
+                                doc.ref.update({
+                                    lastMessage: text,
+                                    lastMessageTime: firebase.firestore.FieldValue.serverTimestamp()
+                                });
+                            }
+                        });
+                    });
+            });
+        }
+        
+        // مارک پیام‌ها به عنوان خوانده شده
+        function markMessagesAsRead() {
+            db.collection('messages')
+                .where('chatId', '==', getChatId(currentUser.uid, chatUserId))
+                .where('to', '==', currentUser.uid)
+                .where('read', '==', false)
+                .get()
+                .then(snapshot => {
+                    snapshot.forEach(doc => {
+                        doc.ref.update({ read: true });
+                    });
+                });
+        }
+        
+        // تایپ کردن
+        document.getElementById('messageInput').addEventListener('input', () => {
+            if (!currentUser) return;
+            
+            if (!isTyping) {
+                isTyping = true;
+                // ارسال سیگنال تایپ به Firebase
+            }
+            
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                isTyping = false;
+                // توقف سیگنال تایپ
+            }, 1000);
+        });
+        
+        // اینتر زدن
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // باز کردن مودال هدیه
+        function openGiftModal() {
+            document.getElementById('giftModal').classList.add('active');
+        }
+        
+        function closeGiftModal() {
+            document.getElementById('giftModal').classList.remove('active');
+        }
+        
+        // ارسال هدیه در چت
+        function sendGift(emoji, price) {
+            if (!currentUser) {
+                showToast('لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
+            
+            if (userCoins < price) {
+                showToast('سکه کافی ندارید!', 'error');
+                closeGiftModal();
+                return;
+            }
+            
+            userCoins -= price;
+            
+            // بروزرسانی سکه
+            db.collection('users').doc(currentUser.uid).update({
+                coins: userCoins
+            });
+            
+            // ارسال پیام هدیه
+            const chatId = getChatId(currentUser.uid, chatUserId);
+            db.collection('messages').add({
+                chatId: chatId,
+                from: currentUser.uid,
+                to: chatUserId,
+                text: `هدیه ${emoji} ارسال کرد 🎁`,
+                gift: emoji,
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                read: false
+            });
+            
+            closeGiftModal();
+            showToast(`✅ هدیه ${emoji} ارسال شد!`);
+        }
+        
+        // لود اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChatUser();
+            if (currentUser) {
+                loadMessages();
+            }
+        });
+        
+        // پاکسازی شنونده
+        window.addEventListener('beforeunload', () => {
+            if (unsubscribeMessages) {
+                unsubscribeMessages();
+            }
+        });
+    </script>
+</body>
+</html>
