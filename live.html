@@ -26,57 +26,69 @@
         .live-info {
             position: absolute;
             top: 20px;
+            right: 20px;
             left: 20px;
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
             align-items: center;
         }
         
+        .host-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 8px 15px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
         .host-avatar {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            border: 3px solid white;
+            border: 2px solid white;
         }
         
         .viewer-stats {
             background: rgba(0,0,0,0.5);
             padding: 8px 15px;
-            border-radius: 20px;
+            border-radius: 30px;
             display: flex;
             align-items: center;
             gap: 8px;
+            backdrop-filter: blur(10px);
         }
         
         .gift-bar {
             position: absolute;
             bottom: 20px;
+            left: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.7);
-            padding: 10px 20px;
-            border-radius: 30px;
             display: flex;
-            gap: 15px;
+            gap: 10px;
+            justify-content: center;
         }
         
-        .gift-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+        .gift-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border: none;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+            color: white;
+            font-size: 24px;
             cursor: pointer;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
         
-        .gift-icon:hover {
+        .gift-btn:hover {
             transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
         }
         
-        .comments {
+        .comments-section {
             padding: 20px;
             height: 30vh;
             overflow-y: auto;
@@ -86,6 +98,12 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .comment-avatar {
@@ -94,11 +112,21 @@
             border-radius: 50%;
         }
         
-        .comment-text {
+        .comment-content {
             background: #333;
             padding: 8px 15px;
             border-radius: 20px;
             max-width: 80%;
+        }
+        
+        .comment-name {
+            font-size: 12px;
+            color: #ff8a5c;
+            margin-bottom: 3px;
+        }
+        
+        .comment-text {
+            font-size: 14px;
         }
         
         .comment-input {
@@ -110,6 +138,7 @@
             background: #222;
             display: flex;
             gap: 10px;
+            border-top: 1px solid #333;
         }
         
         .comment-input input {
@@ -119,6 +148,11 @@
             border-radius: 25px;
             background: #333;
             color: white;
+            font-size: 14px;
+        }
+        
+        .comment-input input:focus {
+            outline: 2px solid #ff4d6d;
         }
         
         .send-btn {
@@ -130,49 +164,82 @@
             color: white;
             font-size: 20px;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .gift-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            animation: floatUp 2s ease-out forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -150%) scale(2);
+            }
         }
     </style>
 </head>
 <body class="live-container">
     <div class="live-video">
         <div class="live-info">
-            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="host-avatar">
-            <div>
-                <strong>الناز شاکردوست</strong>
-                <div style="font-size: 12px;">🎤 گفتگو</div>
+            <div class="host-info">
+                <img src="https://randomuser.me/api/portraits/women/1.jpg" class="host-avatar">
+                <div>
+                    <strong>الناز شاکردوست</strong>
+                    <div style="font-size: 12px;">🎤 گفتگو</div>
+                </div>
             </div>
             <div class="viewer-stats">
                 <span>👥</span>
-                <span>۲,۳۴۵</span>
+                <span id="viewerCount">۲,۳۴۵</span>
             </div>
         </div>
         
+        <div style="font-size: 100px;">🎤</div>
+        
         <div class="gift-bar">
-            <div class="gift-icon" onclick="sendGift('🌹')">🌹</div>
-            <div class="gift-icon" onclick="sendGift('💍')">💍</div>
-            <div class="gift-icon" onclick="sendGift('🚗')">🚗</div>
-            <div class="gift-icon" onclick="sendGift('🏰')">🏰</div>
-            <div class="gift-icon" onclick="location.href='gifts.html'">➕</div>
+            <button class="gift-btn" onclick="sendGift('🌹', 10)">🌹</button>
+            <button class="gift-btn" onclick="sendGift('💍', 50)">💍</button>
+            <button class="gift-btn" onclick="sendGift('🚗', 100)">🚗</button>
+            <button class="gift-btn" onclick="sendGift('🏰', 500)">🏰</button>
+            <button class="gift-btn" onclick="location.href='gifts.html'">➕</button>
         </div>
     </div>
     
-    <div class="comments" id="comments">
+    <div class="comments-section" id="comments">
         <div class="comment">
             <img src="https://randomuser.me/api/portraits/men/1.jpg" class="comment-avatar">
-            <div class="comment-text">
-                <strong>علی: </strong> عالی بود 👏
+            <div class="comment-content">
+                <div class="comment-name">علی رضایی</div>
+                <div class="comment-text">عالی بود 👏</div>
             </div>
         </div>
         <div class="comment">
             <img src="https://randomuser.me/api/portraits/women/2.jpg" class="comment-avatar">
-            <div class="comment-text">
-                <strong>سارا: </strong> ❤️❤️❤️
+            <div class="comment-content">
+                <div class="comment-name">سارا محمدی</div>
+                <div class="comment-text">❤️❤️❤️</div>
             </div>
         </div>
         <div class="comment">
             <img src="https://randomuser.me/api/portraits/men/2.jpg" class="comment-avatar">
-            <div class="comment-text">
-                <strong>رضا: </strong> یه آهنگ بخون
+            <div class="comment-content">
+                <div class="comment-name">رضا کریمی</div>
+                <div class="comment-text">یه آهنگ بخون لطفاً</div>
             </div>
         </div>
     </div>
@@ -189,33 +256,99 @@
         <a href="gifts.html" class="nav-item">🎁</a>
         <a href="profile.html" class="nav-item">👤</a>
     </div>
-    
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
+
     <script>
-        function sendGift(gift) {
-            alert(`هدیه ${gift} ارسال شد!`);
+        let viewerCount = 2345;
+        let comments = [];
+        
+        // ارسال هدیه
+        function sendGift(emoji, price) {
+            if (!currentUser) {
+                showToast('لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
+            
+            if (userCoins < price) {
+                showToast('سکه کافی ندارید!', 'error');
+                return;
+            }
+            
+            userCoins -= price;
+            
+            // انیمیشن هدیه
+            const animation = document.createElement('div');
+            animation.className = 'gift-animation';
+            animation.textContent = emoji;
+            document.querySelector('.live-video').appendChild(animation);
+            
+            setTimeout(() => animation.remove(), 2000);
+            
+            // افزایش تعداد بینندگان (فیک)
+            viewerCount += Math.floor(Math.random() * 10);
+            document.getElementById('viewerCount').textContent = viewerCount.toLocaleString();
+            
+            // پیام در چت
+            addComment('شما', `هدیه ${emoji} ارسال کرد`, true);
+            
+            showToast(`هدیه ${emoji} ارسال شد!`);
         }
         
+        // ارسال کامنت
         function sendComment() {
             const input = document.getElementById('commentInput');
-            const text = input.value;
-            if (text.trim()) {
-                const comments = document.getElementById('comments');
-                comments.innerHTML += `
-                    <div class="comment">
-                        <img src="https://randomuser.me/api/portraits/men/3.jpg" class="comment-avatar">
-                        <div class="comment-text">
-                            <strong>شما: </strong> ${text}
-                        </div>
-                    </div>
-                `;
-                input.value = '';
-                comments.scrollTop = comments.scrollHeight;
-            }
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            addComment('شما', text);
+            input.value = '';
         }
         
+        // افزودن کامنت
+        function addComment(name, text, isSystem = false) {
+            const commentsDiv = document.getElementById('comments');
+            const comment = document.createElement('div');
+            comment.className = 'comment';
+            
+            if (isSystem) {
+                comment.innerHTML = `
+                    <div class="comment-avatar" style="background: linear-gradient(135deg, #ff4d6d, #ff8a5c); display: flex; align-items: center; justify-content: center; color: white;">🎁</div>
+                    <div class="comment-content" style="background: #ff4d6d20;">
+                        <div class="comment-name">سیستم</div>
+                        <div class="comment-text">${text}</div>
+                    </div>
+                `;
+            } else {
+                comment.innerHTML = `
+                    <img src="https://randomuser.me/api/portraits/men/3.jpg" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-name">${name}</div>
+                        <div class="comment-text">${text}</div>
+                    </div>
+                `;
+            }
+            
+            commentsDiv.appendChild(comment);
+            commentsDiv.scrollTop = commentsDiv.scrollHeight;
+        }
+        
+        // اینتر زدن
         document.getElementById('commentInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendComment();
         });
+        
+        // شبیه‌سازی افزایش بیننده
+        setInterval(() => {
+            viewerCount += Math.floor(Math.random() * 3);
+            document.getElementById('viewerCount').textContent = viewerCount.toLocaleString();
+        }, 5000);
     </script>
 </body>
 </html>
