@@ -3,596 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پروفایل | همدم</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>پروفایل | نیمه گمشده</title>
+    <link href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Vazir, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .back-btn {
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
         .profile-header {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            height: 200px;
-            position: relative;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-        }
-        
-        .profile-avatar-container {
-            position: absolute;
-            bottom: -60px;
-            left: 50%;
-            transform: translateX(-50%);
             text-align: center;
+            margin-bottom: 1.5rem;
         }
-        
-        .profile-avatar {
-            width: 120px;
-            height: 120px;
+
+        .avatar {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            border: 4px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             object-fit: cover;
+            border: 3px solid #10b981;
         }
-        
-        .edit-avatar {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 35px;
-            height: 35px;
-            background: #ff4d6d;
-            border-radius: 50%;
+
+        .name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-top: 0.5rem;
+        }
+
+        .location {
+            color: #6b7280;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            cursor: pointer;
-            border: 3px solid white;
+            gap: 0.3rem;
         }
-        
-        .profile-name {
-            margin-top: 70px;
-            text-align: center;
-        }
-        
-        .profile-stats {
+
+        .stats {
             display: flex;
-            justify-content: space-around;
-            background: white;
-            margin: 20px 15px;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
         }
-        
+
         .stat-item {
             text-align: center;
         }
-        
+
         .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff4d6d;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #999;
-            margin-top: 5px;
-        }
-        
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px;
-        }
-        
-        .menu-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255,77,109,0.2);
-        }
-        
-        .menu-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-        
-        .settings-section {
-            background: white;
-            border-radius: 20px;
-            margin: 15px;
-            padding: 15px;
-        }
-        
-        .settings-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-        }
-        
-        .settings-item:last-child {
-            border-bottom: none;
-        }
-        
-        .settings-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .settings-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        
-        .badge {
-            background: #ff4d6d;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-        }
-        
-        .logout-btn {
-            background: #fee2e2;
-            color: #ef4444;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 30px;
-            font-size: 16px;
+            font-size: 1.3rem;
             font-weight: 600;
-            cursor: pointer;
-            margin: 15px;
-            width: calc(100% - 30px);
-            transition: all 0.3s ease;
+            color: #10b981;
         }
-        
-        .logout-btn:hover {
-            background: #ef4444;
-            color: white;
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.8rem;
         }
-        
-        /* مودال ویرایش */
-        .edit-modal {
-            display: none;
+
+        .section {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .bio {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .interests {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .interest {
+            background: #f3f4f6;
+            color: #4b5563;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .bottom-nav {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .edit-modal.active {
-            display: flex;
-        }
-        
-        .edit-modal-content {
             background: white;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 30px;
-            padding: 25px;
-            max-height: 80vh;
-            overflow-y: auto;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            border-top: 1px solid #eef2f6;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+        }
+
+        .nav-item.active {
+            color: #10b981;
         }
     </style>
 </head>
 <body>
-    <!-- هدر -->
-    <div class="header">
-        <div class="logo">
-            <span>👤</span>
-            پروفایل من
-        </div>
-        <div class="wallet" onclick="location.href='wallet.html'">
-            <span>🪙</span>
-            <span class="user-coins">۰</span>
-        </div>
-    </div>
+    <header class="header">
+        <span class="back-btn" onclick="history.back()">←</span>
+        <h2>پروفایل من</h2>
+    </header>
 
-    <!-- تب‌ها -->
-    <div class="tabs">
-        <div class="tab" onclick="location.href='index.html'">خانه</div>
-        <div class="tab" onclick="location.href='discover.html'">اکتشاف</div>
-        <div class="tab" onclick="location.href='live.html'">لایو</div>
-        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
-        <div class="tab active" onclick="location.href='profile.html'">پروفایل</div>
-    </div>
+    <div class="container">
+        <div class="profile-header">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="avatar">
+            <div class="name">سارا محمدی</div>
+            <div class="location">📍 تهران • ۲۴ ساله</div>
+        </div>
 
-    <!-- هدر پروفایل -->
-    <div class="profile-header">
-        <div class="profile-avatar-container">
-            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-avatar" id="profileAvatar">
-            <div class="edit-avatar" onclick="openEditAvatarModal()">📷</div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">۱۲۸</div>
+                <div class="stat-label">لایک</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">۴۵</div>
+                <div class="stat-label">تطابق</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">۱٫۲k</div>
+                <div class="stat-label">بازدید</div>
+            </div>
         </div>
-    </div>
 
-    <!-- نام کاربر -->
-    <div class="profile-name">
-        <h2 id="profileName">سارا محمدی</h2>
-        <p style="color: #666;" id="profileLocation">📍 تهران</p>
-        <div style="margin-top: 10px;">
-            <span class="badge" id="profileVip">عضو عادی</span>
+        <div class="section">
+            <div class="section-title">درباره من</div>
+            <div class="bio">
+                ✨ عاشق موسیقی، سفر و ماجراجویی<br>
+                📸 عکاس آماتور<br>
+                ☕ قهوه و کتاب فلسفی
+            </div>
         </div>
-    </div>
 
-    <!-- آمار پروفایل -->
-    <div class="profile-stats">
-        <div class="stat-item">
-            <div class="stat-number" id="statsLikes">۱۲۸</div>
-            <div class="stat-label">لایک</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number" id="statsMatches">۴۵</div>
-            <div class="stat-label">تطابق</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number" id="statsViews">۲,۳۴۱</div>
-            <div class="stat-label">بازدید</div>
-        </div>
-    </div>
-
-    <!-- درباره من -->
-    <div style="background: white; margin: 15px; padding: 20px; border-radius: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3>درباره من</h3>
-            <button class="btn btn-secondary" style="padding: 8px 20px;" onclick="openEditBioModal()">ویرایش</button>
-        </div>
-        <p style="color: #666; line-height: 1.6;" id="profileBio">
-            عاشق موسیقی، سفر و تکنولوژی ❤️ دنبال دوستای جدید برای ماجراجویی
-        </p>
-        
-        <div class="interests" style="margin-top: 15px;" id="profileInterests">
-            <span class="interest-tag">🎵 موسیقی</span>
-            <span class="interest-tag">✈️ سفر</span>
-            <span class="interest-tag">📚 کتاب</span>
-            <span class="interest-tag">🎮 بازی</span>
-        </div>
-    </div>
-
-    <!-- منوی سریع -->
-    <div class="menu-grid">
-        <div class="menu-card" onclick="location.href='wallet.html'">
-            <div class="menu-icon">💰</div>
-            <div>کیف پول</div>
-        </div>
-        <div class="menu-card" onclick="location.href='vip.html'">
-            <div class="menu-icon">👑</div>
-            <div>اشتراک VIP</div>
-        </div>
-        <div class="menu-card" onclick="location.href='matches.html'">
-            <div class="menu-icon">❤️</div>
-            <div>تطابق‌ها</div>
-        </div>
-        <div class="menu-card" onclick="location.href='notifications.html'">
-            <div class="menu-icon">🔔</div>
-            <div>اعلان‌ها</div>
-        </div>
-    </div>
-
-    <!-- تنظیمات -->
-    <div class="settings-section">
-        <h3 style="margin-bottom: 15px;">تنظیمات</h3>
-        
-        <div class="settings-item" onclick="openEditProfileModal()">
-            <div class="settings-left">
-                <div class="settings-icon">✏️</div>
-                <div>ویرایش پروفایل</div>
-            </div>
-            <span>➤</span>
-        </div>
-        
-        <div class="settings-item" onclick="location.href='notifications.html'">
-            <div class="settings-left">
-                <div class="settings-icon">🔔</div>
-                <div>اعلان‌ها</div>
-            </div>
-            <span>➤</span>
-        </div>
-        
-        <div class="settings-item" onclick="location.href='privacy.html'">
-            <div class="settings-left">
-                <div class="settings-icon">🔒</div>
-                <div>حریم خصوصی</div>
-            </div>
-            <span>➤</span>
-        </div>
-        
-        <div class="settings-item" onclick="location.href='help.html'">
-            <div class="settings-left">
-                <div class="settings-icon">❓</div>
-                <div>پشتیبانی</div>
-            </div>
-            <span>➤</span>
-        </div>
-        
-        <div class="settings-item" onclick="location.href='about.html'">
-            <div class="settings-left">
-                <div class="settings-icon">ℹ️</div>
-                <div>درباره ما</div>
-            </div>
-            <span>➤</span>
-        </div>
-    </div>
-
-    <!-- دکمه خروج -->
-    <button class="logout-btn" onclick="logout()">
-        🚪 خروج از حساب
-    </button>
-
-    <!-- مودال ویرایش پروفایل -->
-    <div class="edit-modal" id="editProfileModal">
-        <div class="edit-modal-content">
-            <h3 style="margin-bottom: 20px;">✏️ ویرایش پروفایل</h3>
-            
-            <div class="form-group">
-                <label>نام و نام خانوادگی</label>
-                <input type="text" class="form-control" id="editName" value="سارا محمدی">
-            </div>
-            
-            <div class="form-group">
-                <label>شهر</label>
-                <input type="text" class="form-control" id="editCity" value="تهران">
-            </div>
-            
-            <div class="form-group">
-                <label>سن</label>
-                <input type="number" class="form-control" id="editAge" value="۲۴">
-            </div>
-            
-            <div class="form-group">
-                <label>شغل</label>
-                <input type="text" class="form-control" id="editJob" value="طراح گرافیک">
-            </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="btn btn-secondary" style="flex: 1;" onclick="closeEditProfileModal()">انصراف</button>
-                <button class="btn btn-primary" style="flex: 1;" onclick="saveProfile()">ذخیره</button>
+        <div class="section">
+            <div class="section-title">علاقه‌مندی‌ها</div>
+            <div class="interests">
+                <span class="interest">🎵 موسیقی</span>
+                <span class="interest">✈️ سفر</span>
+                <span class="interest">📚 کتاب</span>
+                <span class="interest">☕ قهوه</span>
+                <span class="interest">📸 عکاسی</span>
             </div>
         </div>
     </div>
 
-    <!-- مودال ویرایش بیوگرافی -->
-    <div class="edit-modal" id="editBioModal">
-        <div class="edit-modal-content">
-            <h3 style="margin-bottom: 20px;">📝 ویرایش بیوگرافی</h3>
-            
-            <div class="form-group">
-                <label>درباره من</label>
-                <textarea class="form-control" id="editBio" rows="5">عاشق موسیقی، سفر و تکنولوژی ❤️ دنبال دوستای جدید برای ماجراجویی</textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>علاقه‌مندی‌ها (با کاما جدا کنید)</label>
-                <input type="text" class="form-control" id="editInterests" value="🎵 موسیقی,✈️ سفر,📚 کتاب,🎮 بازی">
-            </div>
-            
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button class="btn btn-secondary" style="flex: 1;" onclick="closeEditBioModal()">انصراف</button>
-                <button class="btn btn-primary" style="flex: 1;" onclick="saveBio()">ذخیره</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- مودال ویرایش عکس -->
-    <div class="edit-modal" id="editAvatarModal">
-        <div class="edit-modal-content">
-            <h3 style="margin-bottom: 20px;">📷 تغییر عکس پروفایل</h3>
-            
-            <div style="text-align: center; margin: 20px 0;">
-                <img src="https://randomuser.me/api/portraits/women/1.jpg" style="width: 150px; height: 150px; border-radius: 50%; border: 3px solid #ff4d6d;">
-            </div>
-            
-            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-            
-            <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="document.getElementById('avatarInput').click()">
-                انتخاب عکس جدید
-            </button>
-            
-            <button class="btn btn-secondary" style="width: 100%;" onclick="closeEditAvatarModal()">
-                انصراف
-            </button>
-        </div>
-    </div>
-
-    <!-- نوار پایین -->
-    <div class="navbar">
+    <nav class="bottom-nav">
         <a href="index.html" class="nav-item">🏠</a>
-        <a href="discover.html" class="nav-item">🔥</a>
-        <a href="live.html" class="nav-item">🎥</a>
-        <a href="gifts.html" class="nav-item">🎁</a>
+        <a href="discover.html" class="nav-item">🔍</a>
+        <a href="matches.html" class="nav-item">❤️</a>
         <a href="profile.html" class="nav-item active">👤</a>
-    </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
-    <script src="assets/script.js"></script>
+    </nav>
 
     <script>
-        // لود اطلاعات پروفایل
-        function loadProfile() {
-            if (!currentUser) return;
-            
-            db.collection('users').doc(currentUser.uid).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        
-                        document.getElementById('profileName').textContent = data.name || 'کاربر';
-                        document.getElementById('profileLocation').textContent = `📍 ${data.city || 'تهران'}`;
-                        document.getElementById('profileBio').textContent = data.bio || 'عاشق موسیقی، سفر و تکنولوژی ❤️';
-                        
-                        if (data.photo) {
-                            document.getElementById('profileAvatar').src = data.photo;
-                        }
-                        
-                        if (data.vip) {
-                            const vipText = {
-                                silver: 'VIP نقره‌ای',
-                                gold: 'VIP طلایی',
-                                diamond: 'VIP الماسی'
-                            };
-                            document.getElementById('profileVip').textContent = vipText[data.vip] || 'عضو عادی';
-                            document.getElementById('profileVip').style.background = data.vip === 'gold' ? '#ffd700' : '#ff4d6d';
-                        }
-                        
-                        // لود آمار
-                        loadStats();
-                    }
-                });
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
         }
-        
-        // لود آمار
-        function loadStats() {
-            if (!currentUser) return;
-            
-            // تعداد لایک‌ها
-            db.collection('likes').where('to', '==', currentUser.uid).get()
-                .then(snapshot => {
-                    document.getElementById('statsLikes').textContent = snapshot.size;
-                });
-            
-            // تعداد تطابق‌ها
-            db.collection('matches').where('users', 'array-contains', currentUser.uid).get()
-                .then(snapshot => {
-                    document.getElementById('statsMatches').textContent = snapshot.size;
-                });
-            
-            // تعداد بازدیدها (از visitors collection)
-            db.collection('visitors').where('profileId', '==', currentUser.uid).get()
-                .then(snapshot => {
-                    document.getElementById('statsViews').textContent = snapshot.size.toLocaleString('fa-IR');
-                });
-        }
-        
-        // مودال‌ها
-        function openEditProfileModal() {
-            document.getElementById('editProfileModal').classList.add('active');
-            
-            // پر کردن مقادیر فعلی
-            document.getElementById('editName').value = document.getElementById('profileName').textContent;
-            document.getElementById('editCity').value = document.getElementById('profileLocation').textContent.replace('📍 ', '');
-        }
-        
-        function closeEditProfileModal() {
-            document.getElementById('editProfileModal').classList.remove('active');
-        }
-        
-        function openEditBioModal() {
-            document.getElementById('editBioModal').classList.add('active');
-            document.getElementById('editBio').value = document.getElementById('profileBio').textContent;
-        }
-        
-        function closeEditBioModal() {
-            document.getElementById('editBioModal').classList.remove('active');
-        }
-        
-        function openEditAvatarModal() {
-            document.getElementById('editAvatarModal').classList.add('active');
-        }
-        
-        function closeEditAvatarModal() {
-            document.getElementById('editAvatarModal').classList.remove('active');
-        }
-        
-        // ذخیره پروفایل
-        function saveProfile() {
-            const updates = {
-                name: document.getElementById('editName').value,
-                city: document.getElementById('editCity').value,
-                age: document.getElementById('editAge').value,
-                job: document.getElementById('editJob').value
-            };
-            
-            db.collection('users').doc(currentUser.uid).update(updates)
-                .then(() => {
-                    showToast('✅ پروفایل با موفقیت به‌روزرسانی شد');
-                    closeEditProfileModal();
-                    loadProfile();
-                });
-        }
-        
-        // ذخیره بیوگرافی
-        function saveBio() {
-            const bio = document.getElementById('editBio').value;
-            const interests = document.getElementById('editInterests').value.split(',').map(i => i.trim());
-            
-            db.collection('users').doc(currentUser.uid).update({
-                bio: bio,
-                interests: interests
-            }).then(() => {
-                showToast('✅ بیوگرافی به‌روزرسانی شد');
-                closeEditBioModal();
-                loadProfile();
-            });
-        }
-        
-        // آپلود عکس
-        document.getElementById('avatarInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const storageRef = storage.ref();
-            const photoRef = storageRef.child(`users/${currentUser.uid}/profile.jpg`);
-            
-            showToast('در حال آپلود عکس...');
-            
-            photoRef.put(file)
-                .then(() => photoRef.getDownloadURL())
-                .then(url => {
-                    return db.collection('users').doc(currentUser.uid).update({
-                        photo: url
-                    });
-                })
-                .then(() => {
-                    document.getElementById('profileAvatar').src = URL.createObjectURL(file);
-                    showToast('✅ عکس پروفایل آپلود شد');
-                    closeEditAvatarModal();
-                })
-                .catch(error => {
-                    showToast('❌ خطا در آپلود عکس', 'error');
-                });
-        });
-        
-        // خروج
-        function logout() {
-            auth.signOut()
-                .then(() => {
-                    location.href = 'login.html';
-                });
-        }
-        
-        // لود اولیه
-        document.addEventListener('DOMContentLoaded', () => {
-            if (currentUser) {
-                loadProfile();
-            }
-        });
     </script>
 </body>
 </html>
