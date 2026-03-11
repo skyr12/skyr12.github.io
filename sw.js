@@ -1,9 +1,37 @@
-self.addEventListener("install", function(event){
+const CACHE_NAME = 'nim-e-gomshodeh-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/login.html',
+  '/profile.html',
+  '/chat.html',
+  '/manifest.json'
+];
 
-console.log("Service Worker Installed")
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
 
-})
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
 
-self.addEventListener("fetch", function(event){
-
-})
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
