@@ -3,521 +3,596 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ديسکاور | نیمه گمشده</title>
+    <title>پروفایل | همدم</title>
+    <link rel="stylesheet" href="assets/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background: #f5f5f5;
-            min-height: 100vh;
-            padding-bottom: 70px;
-        }
-
-        /* هدر */
-        .header {
+        .profile-header {
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
-        }
-
-        /* کانتینر اصلی */
-        .discover-container {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-
-        /* کارت پروفایل */
-        .profile-card {
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            animation: slideIn 0.5s ease;
+            height: 200px;
             position: relative;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
         }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* عکس کاربر */
-        .profile-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-bottom: 3px solid #ff4d6d;
-        }
-
-        /* اطلاعات کاربر */
-        .profile-info {
-            padding: 20px;
-        }
-
-        .name-age {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .name {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .age {
-            font-size: 20px;
-            color: #ff4d6d;
-            background: #ffe5e9;
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-
-        .location {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #666;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        .bio {
-            color: #444;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 15px;
-        }
-
-        /* علاقه‌مندی‌ها */
-        .interests {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .interest-tag {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            color: #ff4d6d;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        /* دکمه‌های اقدام */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .action-btn {
-            flex: 1;
-            height: 60px;
-            border: none;
-            border-radius: 30px;
-            font-size: 28px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .dislike-btn {
-            background: white;
-            color: #ff4d6d;
-            border: 2px solid #ff4d6d;
-        }
-
-        .dislike-btn:hover {
-            background: #ff4d6d;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .like-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-        }
-
-        .like-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
-        }
-
-        .superlike-btn {
-            background: linear-gradient(135deg, #4a90e2, #357abd);
-            color: white;
-        }
-
-        /* لودینگ */
-        .loading {
+        
+        .profile-avatar-container {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            padding: 50px;
         }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f0f0f0;
-            border-top: 4px solid #ff4d6d;
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            object-fit: cover;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* خطا */
-        .error-state {
-            text-align: center;
-            padding: 40px;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .error-emoji {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-
-        .retry-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-        /* نوار پایین */
-        .navbar {
-            position: fixed;
+        
+        .edit-avatar {
+            position: absolute;
             bottom: 0;
-            left: 0;
             right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid #ddd;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .nav-item {
-            text-decoration: none;
-            font-size: 24px;
-            width: 50px;
-            height: 50px;
+            width: 35px;
+            height: 35px;
+            background: #ff4d6d;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            color: #666;
+            color: white;
+            cursor: pointer;
+            border: 3px solid white;
         }
-
-        .nav-item.active {
-            background: #ff4d6d20;
+        
+        .profile-name {
+            margin-top: 70px;
+            text-align: center;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            background: white;
+            margin: 20px 15px;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
             color: #ff4d6d;
         }
-
-        /* حالت خالی */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 25px;
+        
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
         }
-
-        .empty-emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 15px;
+        }
+        
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,77,109,0.2);
+        }
+        
+        .menu-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .settings-section {
+            background: white;
+            border-radius: 20px;
+            margin: 15px;
+            padding: 15px;
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .badge {
+            background: #ff4d6d;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+        
+        .logout-btn {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 15px;
+            width: calc(100% - 30px);
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #ef4444;
+            color: white;
+        }
+        
+        /* مودال ویرایش */
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .edit-modal.active {
+            display: flex;
+        }
+        
+        .edit-modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 30px;
+            padding: 25px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
+    <!-- هدر -->
     <div class="header">
-        🔥 ديسکاور
-    </div>
-
-    <div class="discover-container" id="discoverContainer">
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>در حال پیدا کردن کاربران جدید...</p>
+        <div class="logo">
+            <span>👤</span>
+            پروفایل من
+        </div>
+        <div class="wallet" onclick="location.href='wallet.html'">
+            <span>🪙</span>
+            <span class="user-coins">۰</span>
         </div>
     </div>
 
+    <!-- تب‌ها -->
+    <div class="tabs">
+        <div class="tab" onclick="location.href='index.html'">خانه</div>
+        <div class="tab" onclick="location.href='discover.html'">اکتشاف</div>
+        <div class="tab" onclick="location.href='live.html'">لایو</div>
+        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
+        <div class="tab active" onclick="location.href='profile.html'">پروفایل</div>
+    </div>
+
+    <!-- هدر پروفایل -->
+    <div class="profile-header">
+        <div class="profile-avatar-container">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-avatar" id="profileAvatar">
+            <div class="edit-avatar" onclick="openEditAvatarModal()">📷</div>
+        </div>
+    </div>
+
+    <!-- نام کاربر -->
+    <div class="profile-name">
+        <h2 id="profileName">سارا محمدی</h2>
+        <p style="color: #666;" id="profileLocation">📍 تهران</p>
+        <div style="margin-top: 10px;">
+            <span class="badge" id="profileVip">عضو عادی</span>
+        </div>
+    </div>
+
+    <!-- آمار پروفایل -->
+    <div class="profile-stats">
+        <div class="stat-item">
+            <div class="stat-number" id="statsLikes">۱۲۸</div>
+            <div class="stat-label">لایک</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="statsMatches">۴۵</div>
+            <div class="stat-label">تطابق</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="statsViews">۲,۳۴۱</div>
+            <div class="stat-label">بازدید</div>
+        </div>
+    </div>
+
+    <!-- درباره من -->
+    <div style="background: white; margin: 15px; padding: 20px; border-radius: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3>درباره من</h3>
+            <button class="btn btn-secondary" style="padding: 8px 20px;" onclick="openEditBioModal()">ویرایش</button>
+        </div>
+        <p style="color: #666; line-height: 1.6;" id="profileBio">
+            عاشق موسیقی، سفر و تکنولوژی ❤️ دنبال دوستای جدید برای ماجراجویی
+        </p>
+        
+        <div class="interests" style="margin-top: 15px;" id="profileInterests">
+            <span class="interest-tag">🎵 موسیقی</span>
+            <span class="interest-tag">✈️ سفر</span>
+            <span class="interest-tag">📚 کتاب</span>
+            <span class="interest-tag">🎮 بازی</span>
+        </div>
+    </div>
+
+    <!-- منوی سریع -->
+    <div class="menu-grid">
+        <div class="menu-card" onclick="location.href='wallet.html'">
+            <div class="menu-icon">💰</div>
+            <div>کیف پول</div>
+        </div>
+        <div class="menu-card" onclick="location.href='vip.html'">
+            <div class="menu-icon">👑</div>
+            <div>اشتراک VIP</div>
+        </div>
+        <div class="menu-card" onclick="location.href='matches.html'">
+            <div class="menu-icon">❤️</div>
+            <div>تطابق‌ها</div>
+        </div>
+        <div class="menu-card" onclick="location.href='notifications.html'">
+            <div class="menu-icon">🔔</div>
+            <div>اعلان‌ها</div>
+        </div>
+    </div>
+
+    <!-- تنظیمات -->
+    <div class="settings-section">
+        <h3 style="margin-bottom: 15px;">تنظیمات</h3>
+        
+        <div class="settings-item" onclick="openEditProfileModal()">
+            <div class="settings-left">
+                <div class="settings-icon">✏️</div>
+                <div>ویرایش پروفایل</div>
+            </div>
+            <span>➤</span>
+        </div>
+        
+        <div class="settings-item" onclick="location.href='notifications.html'">
+            <div class="settings-left">
+                <div class="settings-icon">🔔</div>
+                <div>اعلان‌ها</div>
+            </div>
+            <span>➤</span>
+        </div>
+        
+        <div class="settings-item" onclick="location.href='privacy.html'">
+            <div class="settings-left">
+                <div class="settings-icon">🔒</div>
+                <div>حریم خصوصی</div>
+            </div>
+            <span>➤</span>
+        </div>
+        
+        <div class="settings-item" onclick="location.href='help.html'">
+            <div class="settings-left">
+                <div class="settings-icon">❓</div>
+                <div>پشتیبانی</div>
+            </div>
+            <span>➤</span>
+        </div>
+        
+        <div class="settings-item" onclick="location.href='about.html'">
+            <div class="settings-left">
+                <div class="settings-icon">ℹ️</div>
+                <div>درباره ما</div>
+            </div>
+            <span>➤</span>
+        </div>
+    </div>
+
+    <!-- دکمه خروج -->
+    <button class="logout-btn" onclick="logout()">
+        🚪 خروج از حساب
+    </button>
+
+    <!-- مودال ویرایش پروفایل -->
+    <div class="edit-modal" id="editProfileModal">
+        <div class="edit-modal-content">
+            <h3 style="margin-bottom: 20px;">✏️ ویرایش پروفایل</h3>
+            
+            <div class="form-group">
+                <label>نام و نام خانوادگی</label>
+                <input type="text" class="form-control" id="editName" value="سارا محمدی">
+            </div>
+            
+            <div class="form-group">
+                <label>شهر</label>
+                <input type="text" class="form-control" id="editCity" value="تهران">
+            </div>
+            
+            <div class="form-group">
+                <label>سن</label>
+                <input type="number" class="form-control" id="editAge" value="۲۴">
+            </div>
+            
+            <div class="form-group">
+                <label>شغل</label>
+                <input type="text" class="form-control" id="editJob" value="طراح گرافیک">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="closeEditProfileModal()">انصراف</button>
+                <button class="btn btn-primary" style="flex: 1;" onclick="saveProfile()">ذخیره</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال ویرایش بیوگرافی -->
+    <div class="edit-modal" id="editBioModal">
+        <div class="edit-modal-content">
+            <h3 style="margin-bottom: 20px;">📝 ویرایش بیوگرافی</h3>
+            
+            <div class="form-group">
+                <label>درباره من</label>
+                <textarea class="form-control" id="editBio" rows="5">عاشق موسیقی، سفر و تکنولوژی ❤️ دنبال دوستای جدید برای ماجراجویی</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>علاقه‌مندی‌ها (با کاما جدا کنید)</label>
+                <input type="text" class="form-control" id="editInterests" value="🎵 موسیقی,✈️ سفر,📚 کتاب,🎮 بازی">
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="closeEditBioModal()">انصراف</button>
+                <button class="btn btn-primary" style="flex: 1;" onclick="saveBio()">ذخیره</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال ویرایش عکس -->
+    <div class="edit-modal" id="editAvatarModal">
+        <div class="edit-modal-content">
+            <h3 style="margin-bottom: 20px;">📷 تغییر عکس پروفایل</h3>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="https://randomuser.me/api/portraits/women/1.jpg" style="width: 150px; height: 150px; border-radius: 50%; border: 3px solid #ff4d6d;">
+            </div>
+            
+            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+            
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="document.getElementById('avatarInput').click()">
+                انتخاب عکس جدید
+            </button>
+            
+            <button class="btn btn-secondary" style="width: 100%;" onclick="closeEditAvatarModal()">
+                انصراف
+            </button>
+        </div>
+    </div>
+
+    <!-- نوار پایین -->
     <div class="navbar">
-        <a href="discover.html" class="nav-item active">🔥</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="inbox.html" class="nav-item">💬</a>
-        <a href="notifications.html" class="nav-item">🔔</a>
-        <a href="visitors.html" class="nav-item">👁️</a>
-        <a href="profile.html" class="nav-item">👤</a>
+        <a href="index.html" class="nav-item">🏠</a>
+        <a href="discover.html" class="nav-item">🔥</a>
+        <a href="live.html" class="nav-item">🎥</a>
+        <a href="gifts.html" class="nav-item">🎁</a>
+        <a href="profile.html" class="nav-item active">👤</a>
     </div>
 
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
 
     <script>
-        // تنظیمات Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-        };
-
-        // راه‌اندازی Firebase
-        try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-                console.log("✅ Firebase راه‌اندازی شد");
-            }
-        } catch (error) {
-            console.error("❌ خطا در راه‌اندازی Firebase:", error);
-        }
-
-        const db = firebase.firestore();
-        let currentUser = null;
-        let currentIndex = 0;
-        let users = [];
-
-        // بررسی احراز هویت
-        firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                console.log("❌ کاربر وارد نشده، انتقال به صفحه login");
-                location.href = "login.html";
-                return;
-            }
-
-            console.log("✅ کاربر وارد شد:", user.uid);
-            currentUser = user;
-            loadDiscoverUsers();
-        });
-
-        // بارگذاری کاربران
-        function loadDiscoverUsers() {
-            console.log("📥 در حال بارگذاری کاربران...");
+        // لود اطلاعات پروفایل
+        function loadProfile() {
+            if (!currentUser) return;
             
-            // نمایش لودینگ
-            document.getElementById('discoverContainer').innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>در حال پیدا کردن کاربران جدید...</p>
-                </div>
-            `;
-
-            // دریافت کاربران از Firebase
-            db.collection("users")
-                .where("uid", "!=", currentUser.uid) // غیر از خود کاربر
-                .limit(10)
-                .get()
-                .then(snapshot => {
-                    console.log("📊 تعداد کاربران دریافت شده:", snapshot.size);
-                    
-                    if (snapshot.empty) {
-                        showEmptyState();
-                        return;
+            db.collection('users').doc(currentUser.uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        document.getElementById('profileName').textContent = data.name || 'کاربر';
+                        document.getElementById('profileLocation').textContent = `📍 ${data.city || 'تهران'}`;
+                        document.getElementById('profileBio').textContent = data.bio || 'عاشق موسیقی، سفر و تکنولوژی ❤️';
+                        
+                        if (data.photo) {
+                            document.getElementById('profileAvatar').src = data.photo;
+                        }
+                        
+                        if (data.vip) {
+                            const vipText = {
+                                silver: 'VIP نقره‌ای',
+                                gold: 'VIP طلایی',
+                                diamond: 'VIP الماسی'
+                            };
+                            document.getElementById('profileVip').textContent = vipText[data.vip] || 'عضو عادی';
+                            document.getElementById('profileVip').style.background = data.vip === 'gold' ? '#ffd700' : '#ff4d6d';
+                        }
+                        
+                        // لود آمار
+                        loadStats();
                     }
-
-                    users = [];
-                    snapshot.forEach(doc => {
-                        users.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
+                });
+        }
+        
+        // لود آمار
+        function loadStats() {
+            if (!currentUser) return;
+            
+            // تعداد لایک‌ها
+            db.collection('likes').where('to', '==', currentUser.uid).get()
+                .then(snapshot => {
+                    document.getElementById('statsLikes').textContent = snapshot.size;
+                });
+            
+            // تعداد تطابق‌ها
+            db.collection('matches').where('users', 'array-contains', currentUser.uid).get()
+                .then(snapshot => {
+                    document.getElementById('statsMatches').textContent = snapshot.size;
+                });
+            
+            // تعداد بازدیدها (از visitors collection)
+            db.collection('visitors').where('profileId', '==', currentUser.uid).get()
+                .then(snapshot => {
+                    document.getElementById('statsViews').textContent = snapshot.size.toLocaleString('fa-IR');
+                });
+        }
+        
+        // مودال‌ها
+        function openEditProfileModal() {
+            document.getElementById('editProfileModal').classList.add('active');
+            
+            // پر کردن مقادیر فعلی
+            document.getElementById('editName').value = document.getElementById('profileName').textContent;
+            document.getElementById('editCity').value = document.getElementById('profileLocation').textContent.replace('📍 ', '');
+        }
+        
+        function closeEditProfileModal() {
+            document.getElementById('editProfileModal').classList.remove('active');
+        }
+        
+        function openEditBioModal() {
+            document.getElementById('editBioModal').classList.add('active');
+            document.getElementById('editBio').value = document.getElementById('profileBio').textContent;
+        }
+        
+        function closeEditBioModal() {
+            document.getElementById('editBioModal').classList.remove('active');
+        }
+        
+        function openEditAvatarModal() {
+            document.getElementById('editAvatarModal').classList.add('active');
+        }
+        
+        function closeEditAvatarModal() {
+            document.getElementById('editAvatarModal').classList.remove('active');
+        }
+        
+        // ذخیره پروفایل
+        function saveProfile() {
+            const updates = {
+                name: document.getElementById('editName').value,
+                city: document.getElementById('editCity').value,
+                age: document.getElementById('editAge').value,
+                job: document.getElementById('editJob').value
+            };
+            
+            db.collection('users').doc(currentUser.uid).update(updates)
+                .then(() => {
+                    showToast('✅ پروفایل با موفقیت به‌روزرسانی شد');
+                    closeEditProfileModal();
+                    loadProfile();
+                });
+        }
+        
+        // ذخیره بیوگرافی
+        function saveBio() {
+            const bio = document.getElementById('editBio').value;
+            const interests = document.getElementById('editInterests').value.split(',').map(i => i.trim());
+            
+            db.collection('users').doc(currentUser.uid).update({
+                bio: bio,
+                interests: interests
+            }).then(() => {
+                showToast('✅ بیوگرافی به‌روزرسانی شد');
+                closeEditBioModal();
+                loadProfile();
+            });
+        }
+        
+        // آپلود عکس
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const storageRef = storage.ref();
+            const photoRef = storageRef.child(`users/${currentUser.uid}/profile.jpg`);
+            
+            showToast('در حال آپلود عکس...');
+            
+            photoRef.put(file)
+                .then(() => photoRef.getDownloadURL())
+                .then(url => {
+                    return db.collection('users').doc(currentUser.uid).update({
+                        photo: url
                     });
-
-                    console.log("👥 کاربران:", users);
-                    showNextUser();
+                })
+                .then(() => {
+                    document.getElementById('profileAvatar').src = URL.createObjectURL(file);
+                    showToast('✅ عکس پروفایل آپلود شد');
+                    closeEditAvatarModal();
                 })
                 .catch(error => {
-                    console.error("❌ خطا در دریافت کاربران:", error);
-                    showError(error.message);
+                    showToast('❌ خطا در آپلود عکس', 'error');
+                });
+        });
+        
+        // خروج
+        function logout() {
+            auth.signOut()
+                .then(() => {
+                    location.href = 'login.html';
                 });
         }
-
-        // نمایش کاربر بعدی
-        function showNextUser() {
-            if (currentIndex >= users.length) {
-                showEmptyState();
-                return;
+        
+        // لود اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            if (currentUser) {
+                loadProfile();
             }
-
-            const user = users[currentIndex];
-            console.log("👤 نمایش کاربر:", user.name);
-
-            // سن تصادفی (برای تست)
-            const age = Math.floor(Math.random() * (35 - 18) + 18);
-            
-            // عکس پیش‌فرض اگر نبود
-            const photoUrl = user.photo || `https://ui-avatars.com/api/?name=${user.name || 'User'}&size=400&background=ff4d6d&color=fff`;
-
-            const html = `
-                <div class="profile-card">
-                    <img src="${photoUrl}" class="profile-image" alt="${user.name}" onerror="this.src='https://ui-avatars.com/api/?name=User&size=400&background=ff4d6d&color=fff'">
-                    
-                    <div class="profile-info">
-                        <div class="name-age">
-                            <span class="name">${user.name || 'کاربر'}</span>
-                            <span class="age">${age}</span>
-                        </div>
-                        
-                        <div class="location">
-                            <span>📍</span>
-                            <span>${user.city || 'تهران'}</span>
-                        </div>
-                        
-                        <div class="bio">
-                            ${user.bio || 'عاشق سفر، موسیقی و تکنولوژی | دنبال دوستان جدید برای ماجراجویی'}
-                        </div>
-                        
-                        <div class="interests">
-                            <span class="interest-tag">🎵 موسیقی</span>
-                            <span class="interest-tag">✈️ سفر</span>
-                            <span class="interest-tag">📚 کتاب</span>
-                            <span class="interest-tag">🎮 بازی</span>
-                        </div>
-                        
-                        <div class="action-buttons">
-                            <button class="action-btn dislike-btn" onclick="handleAction('dislike', '${user.id}')">✕</button>
-                            <button class="action-btn like-btn" onclick="handleAction('like', '${user.id}')">❤️</button>
-                            <button class="action-btn superlike-btn" onclick="handleAction('superlike', '${user.id}')">⭐</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('discoverContainer').innerHTML = html;
-        }
-
-        // مدیریت اقدامات (لایک/دیسلایک)
-        function handleAction(action, userId) {
-            console.log(`🎯 ${action} روی کاربر ${userId}`);
-
-            // ذخیره در Firebase
-            db.collection(action + 's').add({
-                from: currentUser.uid,
-                to: userId,
-                time: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                console.log("✅ ذخیره شد");
-                
-                // بررسی تطابق (اگر لایک بود)
-                if (action === 'like') {
-                    checkMatch(userId);
-                }
-
-                // رفتن به کاربر بعدی
-                currentIndex++;
-                showNextUser();
-            })
-            .catch(error => {
-                console.error("❌ خطا:", error);
-                // حتی با خطا هم برو بعدی
-                currentIndex++;
-                showNextUser();
-            });
-        }
-
-        // بررسی تطابق
-        function checkMatch(userId) {
-            db.collection("likes")
-                .where("from", "==", userId)
-                .where("to", "==", currentUser.uid)
-                .get()
-                .then(snapshot => {
-                    if (!snapshot.empty) {
-                        // تطابق وجود داره
-                        db.collection("matches").add({
-                            users: [currentUser.uid, userId],
-                            time: firebase.firestore.FieldValue.serverTimestamp()
-                        })
-                        .then(() => {
-                            alert("💕 تطابق جدید! باهم صحبت کنید.");
-                        });
-                    }
-                });
-        }
-
-        // نمایش حالت خالی
-        function showEmptyState() {
-            document.getElementById('discoverContainer').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-emoji">😢</div>
-                    <h3>کاربری پیدا نشد</h3>
-                    <p>بعداً دوباره امتحان کن</p>
-                    <button class="retry-btn" onclick="loadDiscoverUsers()">تلاش مجدد</button>
-                </div>
-            `;
-        }
-
-        // نمایش خطا
-        function showError(message) {
-            document.getElementById('discoverContainer').innerHTML = `
-                <div class="error-state">
-                    <div class="error-emoji">❌</div>
-                    <h3>خطا در بارگذاری</h3>
-                    <p>${message || 'لطفاً دوباره تلاش کنید'}</p>
-                    <button class="retry-btn" onclick="location.reload()">تلاش مجدد</button>
-                </div>
-            `;
-        }
-
-        // برای تست: اضافه کردن کاربر تستی
-        window.addTestUser = function() {
-            db.collection("users").add({
-                name: "سارا احمدی",
-                city: "تهران",
-                bio: "عاشق سفر و عکاسی 📸",
-                photo: "https://randomuser.me/api/portraits/women/1.jpg",
-                uid: "test" + Date.now()
-            })
-            .then(() => {
-                console.log("✅ کاربر تستی اضافه شد");
-                loadDiscoverUsers();
-            });
-        };
-
-        console.log("🚀 صفحه دیسکاور آماده است");
+        });
     </script>
-
-    <!-- دکمه تست (برای اضافه کردن کاربر) -->
-    <div style="position: fixed; bottom: 80px; right: 10px; z-index: 1000;">
-        <button onclick="addTestUser()" style="background: #ff4d6d; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer;">➕</button>
-    </div>
 </body>
 </html>
