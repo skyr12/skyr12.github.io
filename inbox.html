@@ -1,316 +1,194 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>پیام‌ها | نیمه گمشده</title>
+    <title>همدم | صفحه اصلی</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding-bottom: 80px;
         }
 
-        /* هدر اصلی با افکت شیشه‌ای */
         .header {
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
-            padding: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(255, 77, 109, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 600px;
-            margin: 0 auto;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .header h1 {
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .header h1 i {
-            font-style: normal;
-            font-size: 28px;
-        }
-
-        .header-stats {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            backdrop-filter: blur(5px);
-        }
-
-        /* کانتینر اصلی چت‌ها */
-        #list {
-            max-width: 600px;
-            margin: 16px auto;
-            padding: 0 16px;
-        }
-
-        /* کارت چت */
-        .chat-card {
-            background: white;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            animation: slideIn 0.3s ease;
-            position: relative;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .chat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.15);
-        }
-
-        .chat-card::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            border-radius: 0 4px 4px 0;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .chat-card.unread::after {
-            opacity: 1;
-        }
-
-        /* آواتار کاربر */
-        .avatar {
-            position: relative;
-        }
-
-        .avatar img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .online-status {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 12px;
-            height: 12px;
-            background: #4caf50;
-            border-radius: 50%;
-            border: 2px solid white;
-        }
-
-        .offline-status {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 12px;
-            height: 12px;
-            background: #9e9e9e;
-            border-radius: 50%;
-            border: 2px solid white;
-        }
-
-        /* اطلاعات چت */
-        .chat-info {
-            flex: 1;
-        }
-
-        .chat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-
-        .name {
-            font-weight: 700;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .time {
-            font-size: 12px;
-            color: #999;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .last-message {
-            font-size: 14px;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .message-text {
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 180px;
-        }
-
-        /* نشانگر پیام خوانده نشده */
-        .unread-badge {
-            background: #ff4d6d;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            min-width: 20px;
-            height: 20px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 6px;
-            box-shadow: 0 2px 5px rgba(255, 77, 109, 0.3);
-        }
-
-        /* حالت خالی */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            margin-top: 40px;
-        }
-
-        .empty-emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .empty-state h3 {
-            font-size: 24px;
-            color: #333;
+            font-size: 48px;
             margin-bottom: 10px;
         }
 
-        .empty-state p {
-            color: #999;
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            padding: 30px;
+        }
+
+        .name-age {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .age {
+            font-size: 24px;
+            color: #ff4d6d;
+            background: #ffe5e9;
+            padding: 5px 20px;
+            border-radius: 40px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
             font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .bio {
+            color: #444;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 20px;
+        }
+
+        .interests {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
             margin-bottom: 30px;
         }
 
-        .find-people-btn {
+        .interest {
+            background: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            height: 70px;
+            border: none;
+            border-radius: 40px;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .like-btn {
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-            transition: all 0.3s ease;
         }
 
-        .find-people-btn:hover {
+        .like-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
+            box-shadow: 0 10px 25px rgba(255,77,109,0.4);
         }
 
-        /* لودینگ */
-        .loading {
-            text-align: center;
-            padding: 40px;
+        .dislike-btn {
+            background: white;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
         }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f0f0f0;
-            border-top: 4px solid #ff4d6d;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+        .dislike-btn:hover {
+            background: #ff4d6d;
+            color: white;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* نوار پایین */
         .navbar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
-            z-index: 1000;
+            padding: 15px 0;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
         }
 
         .nav-item {
             text-decoration: none;
-            font-size: 24px;
-            width: 50px;
-            height: 50px;
+            font-size: 28px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.3s ease;
             color: #666;
-            position: relative;
+            transition: all 0.3s ease;
         }
 
         .nav-item.active {
@@ -318,317 +196,61 @@
             color: #ff4d6d;
             transform: translateY(-5px);
         }
-
-        .nav-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #ff4d6d;
-            color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            min-width: 18px;
-            text-align: center;
-        }
-
-        /* پیام جدید */
-        .typing-indicator {
-            color: #4caf50;
-            font-size: 12px;
-            font-style: italic;
-        }
-
-        /* به روز رسانی */
-        .update-toast {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            z-index: 1000;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                top: 60px;
-                opacity: 0;
-            }
-            to {
-                top: 80px;
-                opacity: 1;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="header-content">
-            <h1>
-                <i>💬</i>
-                پیام‌ها
-            </h1>
-            <div class="header-stats" id="chatStats">
-                <span id="totalChats">0</span> چت فعال
+        <h1>❤️ همدم</h1>
+        <p>پیدا کن، عاشق شو، زندگی کن</p>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-image">
+            
+            <div class="profile-info">
+                <div class="name-age">
+                    <span class="name">سارا محمدی</span>
+                    <span class="age">۲۴</span>
+                </div>
+                
+                <div class="location">
+                    <span>📍</span>
+                    <span>تهران، ۳ کیلومتری شما</span>
+                </div>
+                
+                <div class="bio">
+                    ✨ عاشق موسیقی، سفر و ماجراجویی<br>
+                    📸 عکاس آماتور<br>
+                    ☕ عاشق قهوه و کتاب
+                </div>
+                
+                <div class="interests">
+                    <span class="interest">🎵 موسیقی</span>
+                    <span class="interest">✈️ سفر</span>
+                    <span class="interest">📚 کتاب</span>
+                    <span class="interest">🎮 بازی</span>
+                    <span class="interest">☕ قهوه</span>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn dislike-btn" onclick="next()">✕</button>
+                    <button class="action-btn like-btn" onclick="next()">❤️</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="list">
-        <div class="loading">
-            <div class="spinner"></div>
-            <p style="color: #666;">در حال بارگذاری پیام‌ها...</p>
-        </div>
-    </div>
-
     <div class="navbar">
+        <a href="index.html" class="nav-item active">🏠</a>
         <a href="discover.html" class="nav-item">🔥</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="inbox.html" class="nav-item active">💬</a>
-        <a href="notifications.html" class="nav-item">🔔</a>
-        <a href="visitors.html" class="nav-item">👁️</a>
         <a href="profile.html" class="nav-item">👤</a>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        let myId = "";
-        let unsubscribeChats = null;
-
-        // تابع تبدیل زمان به متن نسبی
-        function timeAgo(timestamp) {
-            if (!timestamp) return '';
-
-            const now = new Date();
-            const past = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            const diff = Math.floor((now - past) / 1000);
-
-            if (diff < 60) return 'لحظاتی پیش';
-            if (diff < 3600) return `${Math.floor(diff / 60)} دقیقه پیش`;
-            if (diff < 86400) return `${Math.floor(diff / 3600)} ساعت پیش`;
-            if (diff < 604800) return `${Math.floor(diff / 86400)} روز پیش`;
-            
-            return past.toLocaleDateString('fa-IR');
+        function next() {
+            location.reload();
         }
-
-        // تابع تشخیص وضعیت آنلاین
-        function getStatusBadge(isOnline) {
-            return isOnline ? 
-                '<span class="online-status"></span>' : 
-                '<span class="offline-status"></span>';
-        }
-
-        // بررسی احراز هویت
-        firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                location.href = "login.html";
-                return;
-            }
-
-            myId = user.uid;
-            loadChats();
-        });
-
-        // بارگذاری چت‌ها با real-time updates
-        function loadChats() {
-            if (unsubscribeChats) {
-                unsubscribeChats();
-            }
-
-            // دریافت آخرین پیام‌ها
-            unsubscribeChats = db.collection("messages")
-                .orderBy("time", "desc")
-                .onSnapshot(snapshot => {
-                    let chatsMap = new Map();
-                    let processedUsers = new Set();
-
-                    snapshot.docChanges().forEach(change => {
-                        let m = change.doc.data();
-                        
-                        if (m.from === myId || m.to === myId) {
-                            let otherId = m.from === myId ? m.to : m.from;
-                            
-                            if (!processedUsers.has(otherId)) {
-                                processedUsers.add(otherId);
-                                loadUserInfo(otherId, m, change.doc.id);
-                            }
-                        }
-                    });
-
-                    // اگر هیچ چتی وجود نداشت
-                    if (processedUsers.size === 0) {
-                        showEmptyState();
-                    }
-
-                    // بروزرسانی آمار
-                    document.getElementById('totalChats').textContent = processedUsers.size;
-                }, error => {
-                    console.error("خطا در دریافت پیام‌ها:", error);
-                    showError();
-                });
-        }
-
-        // بارگذاری اطلاعات کاربر
-        function loadUserInfo(userId, lastMessage, messageId) {
-            db.collection("users").doc(userId).get()
-                .then(userDoc => {
-                    if (userDoc.exists) {
-                        let user = userDoc.data();
-                        
-                        // بررسی وضعیت آنلاین
-                        let isOnline = false; // می‌توانید از real-time presence استفاده کنید
-                        
-                        // دریافت تعداد پیام‌های خوانده نشده
-                        getUnreadCount(userId).then(unreadCount => {
-                            addChatToList(userId, user, lastMessage, isOnline, unreadCount);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error("خطا در دریافت اطلاعات کاربر:", error);
-                });
-        }
-
-        // دریافت تعداد پیام‌های خوانده نشده
-        async function getUnreadCount(otherId) {
-            try {
-                const snapshot = await db.collection("messages")
-                    .where("from", "==", otherId)
-                    .where("to", "==", myId)
-                    .where("read", "==", false)
-                    .get();
-                
-                return snapshot.size;
-            } catch (error) {
-                console.error("خطا در دریافت تعداد پیام‌ها:", error);
-                return 0;
-            }
-        }
-
-        // افزودن چت به لیست
-        function addChatToList(userId, user, lastMessage, isOnline, unreadCount) {
-            let listElement = document.getElementById('list');
-            
-            // حذف لودینگ و empty state
-            if (listElement.innerHTML.includes('loading') || listElement.innerHTML.includes('empty-state')) {
-                listElement.innerHTML = '';
-            }
-
-            let time = lastMessage.time ? timeAgo(lastMessage.time) : '';
-            let messageText = lastMessage.text || 'پیامی ارسال نشده';
-            
-            // کوتاه کردن متن پیام
-            if (messageText.length > 30) {
-                messageText = messageText.substring(0, 30) + '...';
-            }
-
-            let chatHtml = `
-                <div class="chat-card ${unreadCount > 0 ? 'unread' : ''}" onclick="openChat('${userId}', '${user.name}')">
-                    <div class="avatar">
-                        <img src="${user.photo || 'https://via.placeholder.com/150'}" alt="${user.name}" onerror="this.src='https://via.placeholder.com/150'">
-                        ${getStatusBadge(isOnline)}
-                    </div>
-                    <div class="chat-info">
-                        <div class="chat-header">
-                            <span class="name">${user.name || 'کاربر'}</span>
-                            <span class="time">${time}</span>
-                        </div>
-                        <div class="last-message">
-                            <span class="message-text">${messageText}</span>
-                            ${unreadCount > 0 ? `<span class="unread-badge">${unreadCount}</span>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            listElement.innerHTML += chatHtml;
-            
-            // مرتب‌سازی براساس آخرین پیام
-            sortChats();
-        }
-
-        // مرتب‌سازی چت‌ها
-        function sortChats() {
-            let list = document.getElementById('list');
-            let items = Array.from(list.children);
-            
-            items.sort((a, b) => {
-                // می‌توانید براساس زمان آخرین پیام مرتب کنید
-                return 0;
-            });
-            
-            list.innerHTML = '';
-            items.forEach(item => list.appendChild(item));
-        }
-
-        // نمایش حالت خالی
-        function showEmptyState() {
-            document.getElementById('list').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-emoji">💬</div>
-                    <h3>پیامی وجود ندارد</h3>
-                    <p>با دیگران آشنا شوید و گفتگو را شروع کنید</p>
-                    <button class="find-people-btn" onclick="location.href='discover.html'">
-                        پیدا کردن دوستان جدید
-                    </button>
-                </div>
-            `;
-        }
-
-        // نمایش خطا
-        function showError() {
-            document.getElementById('list').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-emoji">❌</div>
-                    <h3>خطا در بارگذاری</h3>
-                    <p>لطفاً اتصال اینترنت خود را بررسی کنید</p>
-                    <button class="find-people-btn" onclick="location.reload()">
-                        تلاش مجدد
-                    </button>
-                </div>
-            `;
-        }
-
-        // باز کردن چت
-        window.openChat = function(userId, userName) {
-            // ذخیره اطلاعات کاربر در localStorage
-            localStorage.setItem('chatWithId', userId);
-            localStorage.setItem('chatWithName', userName);
-            location.href = `chat.html?id=${userId}`;
-        };
-
-        // پاکسازی شنونده هنگام خروج
-        window.addEventListener('beforeunload', () => {
-            if (unsubscribeChats) {
-                unsubscribeChats();
-            }
-        });
-
-        // بروزرسانی خودکار هر 30 ثانیه
-        setInterval(() => {
-            if (myId) {
-                loadChats();
-            }
-        }, 30000);
     </script>
 </body>
 </html>
