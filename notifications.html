@@ -2,473 +2,442 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>اعلان‌ها | نیمه گمشده</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اعلان‌ها | همدم</title>
+    <link rel="stylesheet" href="assets/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding-bottom: 70px;
-        }
-
-        /* هدر اصلی */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header h1 span {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            font-size: 14px;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        /* کانتینر اصلی اعلان‌ها */
-        #notifications {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* کارت اعلان */
         .notification-card {
             background: white;
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            margin: 15px;
+            padding: 15px;
             display: flex;
             align-items: center;
             gap: 15px;
+            cursor: pointer;
             transition: all 0.3s ease;
-            animation: slideIn 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             position: relative;
-            overflow: hidden;
         }
-
-        .notification-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        
+        .notification-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 25px rgba(255,77,109,0.15);
         }
-
+        
         .notification-card.unread {
-            background: #f8f9ff;
+            background: #fff5f5;
+            border-right: 4px solid #ff4d6d;
         }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* آیکون اعلان */
+        
         .notification-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #667eea20, #764ba220);
             border-radius: 50%;
+            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
         }
-
-        /* محتوای اعلان */
+        
         .notification-content {
             flex: 1;
         }
-
-        .notification-text {
-            font-size: 15px;
-            color: #333;
-            line-height: 1.5;
-            margin-bottom: 6px;
+        
+        .notification-title {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
-
+        
+        .notification-text {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
         .notification-time {
-            font-size: 12px;
+            font-size: 11px;
             color: #999;
             display: flex;
             align-items: center;
             gap: 5px;
         }
-
-        .notification-time i {
-            font-style: normal;
-            font-size: 14px;
+        
+        .notification-actions {
+            display: flex;
+            gap: 10px;
         }
-
-        /* دکمه حذف */
-        .delete-btn {
-            width: 32px;
-            height: 32px;
+        
+        .action-icon {
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
-            border: none;
-            background: #fee2e2;
-            color: #ef4444;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            cursor: pointer;
             transition: all 0.3s ease;
-            opacity: 0;
-            transform: scale(0.8);
         }
-
-        .notification-card:hover .delete-btn {
-            opacity: 1;
-            transform: scale(1);
+        
+        .action-icon.delete {
+            background: #fee2e2;
+            color: #ef4444;
         }
-
-        .delete-btn:hover {
+        
+        .action-icon.delete:hover {
             background: #ef4444;
             color: white;
         }
-
-        /* حالت خالی بودن اعلان‌ها */
-        .empty-state {
+        
+        .empty-notifications {
             text-align: center;
-            padding: 50px 20px;
+            padding: 60px 20px;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            margin: 15px;
         }
-
-        .empty-state .emoji {
-            font-size: 64px;
-            margin-bottom: 16px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .empty-state h3 {
-            font-size: 20px;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .empty-state p {
-            color: #999;
-            font-size: 14px;
-        }
-
-        /* نوار پایین */
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            font-size: 24px;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            color: #666;
-            position: relative;
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, #667eea20, #764ba220);
-            color: #667eea;
-            transform: translateY(-5px);
-        }
-
-        .nav-item:hover {
-            background: #f0f0f0;
-        }
-
-        /* نشانگر اعلان جدید */
-        .badge {
+        
+        .notification-badge {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #ef4444;
+            top: 10px;
+            left: 10px;
+            background: #ff4d6d;
             color: white;
             font-size: 10px;
             padding: 2px 6px;
             border-radius: 10px;
-            min-width: 18px;
-            text-align: center;
         }
-
-        /* لودینگ */
-        .loading {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* دیتا پیکر */
-        .time-ago {
+        
+        .filter-buttons {
             display: flex;
-            align-items: center;
-            gap: 4px;
+            gap: 10px;
+            margin: 15px;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
         }
     </style>
 </head>
 <body>
+    <!-- هدر -->
     <div class="header">
-        <h1>
-            🔔 اعلان‌ها
-            <span id="unreadCount">0</span>
-        </h1>
-    </div>
-
-    <div id="notifications">
-        <div class="loading">
-            <div class="spinner"></div>
-            <p style="color: white;">در حال بارگذاری...</p>
+        <div class="logo">
+            <span>🔔</span>
+            اعلان‌ها
+        </div>
+        <div class="wallet" onclick="location.href='wallet.html'">
+            <span>🪙</span>
+            <span class="user-coins">۰</span>
         </div>
     </div>
 
-    <div class="navbar">
-        <a href="discover.html" class="nav-item">🔥</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="inbox.html" class="nav-item">💬</a>
-        <a href="notifications.html" class="nav-item active">🔔</a>
-        <a href="visitors.html" class="nav-item">👁️</a>
-        <a href="profile.html" class="nav-item">👤</a>
+    <!-- تب‌ها -->
+    <div class="tabs">
+        <div class="tab" onclick="location.href='index.html'">خانه</div>
+        <div class="tab" onclick="location.href='discover.html'">اکتشاف</div>
+        <div class="tab" onclick="location.href='live.html'">لایو</div>
+        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
+        <div class="tab active" onclick="location.href='profile.html'">پروفایل</div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- فیلترها -->
+    <div class="filter-buttons">
+        <button class="filter-btn active" onclick="filterNotifications('all')">همه</button>
+        <button class="filter-btn" onclick="filterNotifications('unread')">خوانده نشده</button>
+        <button class="filter-btn" onclick="filterNotifications('likes')">لایک‌ها</button>
+        <button class="filter-btn" onclick="filterNotifications('matches')">تطابق‌ها</button>
+    </div>
+
+    <!-- لیست اعلان‌ها -->
+    <div id="notificationsList">
+        <!-- با JS لود میشه -->
+    </div>
+
+    <!-- دکمه پاک کردن همه -->
+    <button class="btn btn-secondary" style="margin: 15px; width: calc(100% - 30px);" onclick="clearAllNotifications()">
+        پاک کردن همه اعلان‌ها
+    </button>
+
+    <!-- نوار پایین -->
+    <div class="navbar">
+        <a href="index.html" class="nav-item">🏠</a>
+        <a href="discover.html" class="nav-item">🔥</a>
+        <a href="live.html" class="nav-item">🎥</a>
+        <a href="gifts.html" class="nav-item">🎁</a>
+        <a href="profile.html" class="nav-item active">👤</a>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
-        const db = firebase.firestore();
-        let myId = "";
-        let notificationsRef = null;
-
-        // تابع تبدیل زمان به متن نسبی
-        function timeAgo(timestamp) {
-            if (!timestamp) return 'همین الان';
-            
-            const now = new Date();
-            const past = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            const diff = Math.floor((now - past) / 1000); // اختلاف به ثانیه
-
-            if (diff < 60) return 'همین الان';
-            if (diff < 3600) return `${Math.floor(diff / 60)} دقیقه پیش`;
-            if (diff < 86400) return `${Math.floor(diff / 3600)} ساعت پیش`;
-            if (diff < 2592000) return `${Math.floor(diff / 86400)} روز پیش`;
-            return `${Math.floor(diff / 2592000)} ماه پیش`;
-        }
-
-        // انتخاب آیکون مناسب برای نوع اعلان
-        function getNotificationIcon(type) {
-            const icons = {
-                'like': '❤️',
-                'match': '💕',
-                'message': '💬',
-                'visit': '👁️',
-                'default': '🔔'
-            };
-            return icons[type] || icons.default;
-        }
-
-        // بررسی وضعیت احراز هویت
-        firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                location.href = "login.html";
+        let allNotifications = [];
+        let currentFilter = 'all';
+        let unsubscribeNotifications = null;
+        
+        // لود اعلان‌ها
+        function loadNotifications() {
+            if (!currentUser) {
+                useSampleNotifications();
                 return;
             }
-
-            myId = user.uid;
-            loadNotifications();
-        });
-
-        // بارگذاری اعلان‌ها
-        function loadNotifications() {
-            if (notificationsRef) {
-                notificationsRef(); // لغو شنونده قبلی
+            
+            if (unsubscribeNotifications) {
+                unsubscribeNotifications();
             }
-
-            notificationsRef = db.collection("notifications")
-                .where("to", "==", myId)
-                .orderBy("time", "desc")
+            
+            unsubscribeNotifications = db.collection('notifications')
+                .where('userId', '==', currentUser.uid)
+                .orderBy('time', 'desc')
                 .onSnapshot(snapshot => {
-                    let html = "";
-                    let unreadCount = 0;
-
-                    if (snapshot.empty) {
-                        html = `
-                            <div class="empty-state">
-                                <div class="emoji">📭</div>
-                                <h3>هیچ اعلانی ندارید</h3>
-                                <p>اعلان‌های شما اینجا نمایش داده می‌شوند</p>
-                            </div>
-                        `;
-                    } else {
-                        snapshot.forEach(doc => {
-                            let n = doc.data();
-                            let notificationId = doc.id;
-                            
-                            // بررسی خوانده شده یا نشده
-                            if (!n.read) {
-                                unreadCount++;
-                            }
-
-                            // تشخیص نوع اعلان
-                            let type = n.type || 'default';
-                            let icon = getNotificationIcon(type);
-
-                            html += `
-                                <div class="notification-card ${!n.read ? 'unread' : ''}" data-id="${notificationId}">
-                                    <div class="notification-icon">${icon}</div>
-                                    <div class="notification-content">
-                                        <div class="notification-text">${n.text || 'اعلان جدید'}</div>
-                                        <div class="notification-time">
-                                            <i>⏱️</i>
-                                            <span class="time-ago">${timeAgo(n.time)}</span>
-                                        </div>
-                                    </div>
-                                    <button class="delete-btn" onclick="deleteNotification('${notificationId}')">✕</button>
-                                </div>
-                            `;
-                        });
-                    }
-
-                    // بروزرسانی تعداد اعلان‌های خوانده نشده
-                    document.getElementById('unreadCount').textContent = unreadCount > 0 ? unreadCount : '0';
+                    allNotifications = [];
                     
-                    // نمایش اعلان‌ها
-                    document.getElementById('notifications').innerHTML = html;
-
-                    // علامت زدن اعلان‌ها به عنوان خوانده شده
-                    markAsRead(snapshot);
+                    snapshot.forEach(doc => {
+                        allNotifications.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    displayNotifications();
+                    updateNotificationBadge();
                 }, error => {
-                    console.error("خطا در دریافت اعلان‌ها:", error);
-                    document.getElementById('notifications').innerHTML = `
-                        <div class="empty-state">
-                            <div class="emoji">❌</div>
-                            <h3>خطا در بارگذاری</h3>
-                            <p>لطفاً دوباره تلاش کنید</p>
-                        </div>
-                    `;
+                    console.error('Error loading notifications:', error);
+                    useSampleNotifications();
                 });
         }
-
-        // علامت زدن اعلان‌ها به عنوان خوانده شده
-        function markAsRead(snapshot) {
-            const batch = db.batch();
-            let hasUnread = false;
-
-            snapshot.forEach(doc => {
-                if (!doc.data().read) {
-                    hasUnread = true;
-                    batch.update(doc.ref, { read: true });
+        
+        // استفاده از نمونه
+        function useSampleNotifications() {
+            allNotifications = [
+                {
+                    id: '1',
+                    type: 'like',
+                    icon: '❤️',
+                    title: 'لایک جدید',
+                    text: 'علی رضایی به شما لایک داد',
+                    time: new Date(Date.now() - 1800000),
+                    read: false
+                },
+                {
+                    id: '2',
+                    type: 'match',
+                    icon: '💕',
+                    title: 'تطابق جدید',
+                    text: 'شما و سارا محمدی یک تطابق دارید',
+                    time: new Date(Date.now() - 86400000),
+                    read: true
+                },
+                {
+                    id: '3',
+                    type: 'gift',
+                    icon: '🎁',
+                    title: 'هدیه دریافت کردید',
+                    text: 'مریم کریمی برای شما گل رز فرستاد',
+                    time: new Date(Date.now() - 172800000),
+                    read: false
+                },
+                {
+                    id: '4',
+                    type: 'visit',
+                    icon: '👁️',
+                    title: 'بازدید پروفایل',
+                    text: 'رضا احمدی از پروفایل شما بازدید کرد',
+                    time: new Date(Date.now() - 259200000),
+                    read: true
+                },
+                {
+                    id: '5',
+                    type: 'system',
+                    icon: '🔔',
+                    title: 'اعلان سیستم',
+                    text: 'به جمع همدم خوش آمدید',
+                    time: new Date(Date.now() - 604800000),
+                    read: true
+                }
+            ];
+            
+            displayNotifications();
+        }
+        
+        // نمایش اعلان‌ها
+        function displayNotifications() {
+            let filtered = allNotifications;
+            
+            if (currentFilter === 'unread') {
+                filtered = allNotifications.filter(n => !n.read);
+            } else if (currentFilter === 'likes') {
+                filtered = allNotifications.filter(n => n.type === 'like');
+            } else if (currentFilter === 'matches') {
+                filtered = allNotifications.filter(n => n.type === 'match');
+            }
+            
+            if (filtered.length === 0) {
+                showEmptyNotifications();
+                return;
+            }
+            
+            let html = '';
+            
+            filtered.forEach(notification => {
+                const timeAgo = notification.time ? timeAgo(notification.time) : 'جدید';
+                
+                html += `
+                    <div class="notification-card ${!notification.read ? 'unread' : ''}" onclick="markAsRead('${notification.id}')">
+                        <div class="notification-icon">${notification.icon || '🔔'}</div>
+                        <div class="notification-content">
+                            <div class="notification-title">${notification.title}</div>
+                            <div class="notification-text">${notification.text}</div>
+                            <div class="notification-time">
+                                <span>🕒</span>
+                                <span>${timeAgo}</span>
+                            </div>
+                        </div>
+                        <div class="notification-actions">
+                            <div class="action-icon delete" onclick="deleteNotification('${notification.id}', event)">✕</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('notificationsList').innerHTML = html;
+        }
+        
+        // نمایش حالت خالی
+        function showEmptyNotifications() {
+            let message = 'هیچ اعلانی وجود ندارد';
+            if (currentFilter === 'unread') message = 'اعلان خوانده نشده‌ای ندارید';
+            if (currentFilter === 'likes') message = 'لایک جدیدی ندارید';
+            if (currentFilter === 'matches') message = 'تطابق جدیدی ندارید';
+            
+            document.getElementById('notificationsList').innerHTML = `
+                <div class="empty-notifications">
+                    <div class="empty-emoji">📭</div>
+                    <h3 style="margin-bottom: 10px;">${message}</h3>
+                    <p style="color: #666;">به زودی اینجا به روز میشه</p>
+                </div>
+            `;
+        }
+        
+        // فیلتر اعلان‌ها
+        function filterNotifications(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displayNotifications();
+        }
+        
+        // مارک به عنوان خوانده شده
+        function markAsRead(notificationId) {
+            const notification = allNotifications.find(n => n.id === notificationId);
+            if (notification && !notification.read) {
+                notification.read = true;
+                
+                if (currentUser) {
+                    db.collection('notifications').doc(notificationId).update({
+                        read: true
+                    });
+                }
+                
+                displayNotifications();
+                updateNotificationBadge();
+            }
+        }
+        
+        // حذف اعلان
+        function deleteNotification(notificationId, event) {
+            event.stopPropagation();
+            
+            if (confirm('آیا از حذف این اعلان اطمینان دارید؟')) {
+                allNotifications = allNotifications.filter(n => n.id !== notificationId);
+                
+                if (currentUser) {
+                    db.collection('notifications').doc(notificationId).delete();
+                }
+                
+                displayNotifications();
+                updateNotificationBadge();
+                showToast('✅ اعلان حذف شد');
+            }
+        }
+        
+        // پاک کردن همه اعلان‌ها
+        function clearAllNotifications() {
+            if (confirm('آیا از پاک کردن همه اعلان‌ها اطمینان دارید؟')) {
+                allNotifications = [];
+                
+                if (currentUser) {
+                    // حذف همه از Firebase
+                    allNotifications.forEach(n => {
+                        db.collection('notifications').doc(n.id).delete();
+                    });
+                }
+                
+                displayNotifications();
+                updateNotificationBadge();
+                showToast('✅ همه اعلان‌ها پاک شدند');
+            }
+        }
+        
+        // بروزرسانی نشانگر اعلان
+        function updateNotificationBadge() {
+            const unreadCount = allNotifications.filter(n => !n.read).length;
+            
+            // بروزرسانی در localStorage برای نمایش در منو
+            localStorage.setItem('notificationBadge', unreadCount);
+            
+            // بروزرسانی در منوی پایین (اگه badge داریم)
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.textContent.includes('🔔')) {
+                    if (unreadCount > 0) {
+                        let badge = item.querySelector('.nav-badge');
+                        if (!badge) {
+                            badge = document.createElement('span');
+                            badge.className = 'nav-badge';
+                            item.appendChild(badge);
+                        }
+                        badge.textContent = unreadCount;
+                    } else {
+                        const badge = item.querySelector('.nav-badge');
+                        if (badge) badge.remove();
+                    }
                 }
             });
-
-            if (hasUnread) {
-                batch.commit().catch(error => {
-                    console.error("خطا در بروزرسانی وضعیت خوانده شده:", error);
-                });
-            }
         }
-
-        // حذف اعلان
-        window.deleteNotification = function(notificationId) {
-            if (confirm('آیا از حذف این اعلان اطمینان دارید؟')) {
-                db.collection("notifications").doc(notificationId).delete()
-                    .then(() => {
-                        console.log("اعلان با موفقیت حذف شد");
-                    })
-                    .catch(error => {
-                        console.error("خطا در حذف اعلان:", error);
-                        alert("خطا در حذف اعلان. لطفاً دوباره تلاش کنید.");
-                    });
+        
+        // لود اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNotifications();
+        });
+        
+        // پاکسازی شنونده
+        window.addEventListener('beforeunload', () => {
+            if (unsubscribeNotifications) {
+                unsubscribeNotifications();
             }
-        };
-
-        // بروزرسانی خودکار زمان اعلان‌ها هر دقیقه
-        setInterval(() => {
-            const timeElements = document.querySelectorAll('.time-ago');
-            timeElements.forEach(el => {
-                // اینجا می‌توانید منطق بروزرسانی زمان را اضافه کنید
-            });
-        }, 60000);
+        });
     </script>
 </body>
 </html>
