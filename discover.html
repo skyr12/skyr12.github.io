@@ -1,403 +1,1112 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fa" dir="rtl">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>کشف کاربران | دیسکاور مدرن</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Vazir', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discover</title>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-<style>
+        /* انیمیشن پس‌زمینه */
+        .bg-bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
 
-body{
-font-family:Arial;
-background:#f5f5f5;
-margin:0;
-text-align:center;
-}
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: rise 10s infinite ease-in;
+        }
 
-h2{
-margin-top:20px;
-}
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
 
-.card{
-width:320px;
-margin:auto;
-margin-top:30px;
-background:white;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
+        /* هدر اصلی */
+        .main-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-.card img{
-width:100%;
-height:320px;
-object-fit:cover;
-}
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
 
-.info{
-padding:20px;
-}
+        .header-content h2 {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.buttons{
-margin-top:10px;
-}
+        .header-content h2 span {
+            animation: pulse 2s infinite;
+        }
 
-button{
-border:none;
-padding:12px 20px;
-border-radius:30px;
-margin:5px;
-font-size:16px;
-cursor:pointer;
-}
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
 
-.skip{background:#ddd}
-.like{background:#ff4d6d;color:white}
-.super{background:#3b82f6;color:white}
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.navbar{
-position:fixed;
-bottom:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-border-top:1px solid #ddd;
-font-size:22px;
-}
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
 
-.navbar a{
-text-decoration:none;
-}
+        /* کارت اصلی */
+        .card-container {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            margin: 20px auto;
+            min-height: 600px;
+            z-index: 10;
+        }
 
-.online{
-color:green;
-font-size:14px;
-}
+        .card {
+            position: absolute;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+        }
 
-</style>
+        .card:active {
+            cursor: grabbing;
+        }
 
+        .card-image {
+            width: 100%;
+            height: 450px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            z-index: 2;
+        }
+
+        .online-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            color: #4CAF50;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 2;
+        }
+
+        .online-badge::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .card-info {
+            padding: 25px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            color: white;
+        }
+
+        .card-info h3 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-info .age {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-info .location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card-info .distance {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        /* دکمه‌های اکشن */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .action-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn.skip {
+            background: white;
+            color: #ff4d4d;
+        }
+
+        .action-btn.skip:hover {
+            background: #ff4d4d;
+            color: white;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .action-btn.super {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            width: 75px;
+            height: 75px;
+            font-size: 32px;
+        }
+
+        .action-btn.super:hover {
+            transform: scale(1.1) rotate(360deg);
+            box-shadow: 0 0 30px #3b82f6;
+        }
+
+        .action-btn.like {
+            background: linear-gradient(135deg, #ff4d6d, #ff1e4d);
+            color: white;
+        }
+
+        .action-btn.like:hover {
+            transform: scale(1.1) rotate(-90deg);
+            box-shadow: 0 0 30px #ff4d6d;
+        }
+
+        .action-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* اندیکاتور سوآیپ */
+        .swipe-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: white;
+            width: 30px;
+            border-radius: 10px;
+        }
+
+        /* مودال فیلتر */
+        .filter-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .filter-modal.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .filter-modal h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .filter-option {
+            margin-bottom: 20px;
+        }
+
+        .filter-option label {
+            display: block;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .filter-option input[type="range"] {
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 5px;
+            -webkit-appearance: none;
+        }
+
+        .filter-option input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .apply-filter {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .apply-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        /* مودال موفقیت */
+        .match-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #ff4d6d, #ff1e4d);
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(255, 77, 109, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: white;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .match-modal.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .match-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: heartbeat 1s ease infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .match-title {
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .match-names {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .match-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .match-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .match-btn.primary {
+            background: white;
+            color: #ff4d6d;
+        }
+
+        .match-btn.secondary {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* نوار پایین */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 100;
+        }
+
+        .nav-item {
+            color: #666;
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* نوتیفیکیشن */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 200;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .notification.success .notification-icon {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .notification.error .notification-icon {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        /* حالت خالی */
+        .empty-state {
+            text-align: center;
+            color: white;
+            padding: 50px 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .refresh-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
-
-
 <body>
-
-<h2>🔥 Discover</h2>
-
-<div id="card"></div>
-
-<div class="buttons">
-
-<button class="skip" onclick="skip()">❌ Skip</button>
-
-<button class="super" onclick="superLike()">⭐ Super</button>
-
-<button class="like" onclick="like()">❤️ Like</button>
-
-</div>
-
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
-<a href="profile.html">👤</a>
-
-</div>
-
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-
-<script>
-
-const firebaseConfig = {
-
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh",
-storageBucket:"nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId:"815930956932",
-appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
-
-};
-
-firebase.initializeApp(firebaseConfig)
-
-const db = firebase.firestore()
-
-let users=[]
-let index=0
-let myId=""
-let myLat=0
-let myLng=0
-
-
-
-firebase.auth().onAuthStateChanged(user=>{
-
-if(!user){
-
-location.href="login.html"
-return
-
-}
-
-myId=user.uid
-
-getLocation()
-
-loadUsers()
-
-})
-
-
-
-function getLocation(){
-
-navigator.geolocation.getCurrentPosition(function(position){
-
-myLat = position.coords.latitude
-myLng = position.coords.longitude
-
-})
-
-}
-
-
-
-function loadUsers(){
-
-db.collection("users")
-
-.orderBy("boost","desc")
-
-.get()
-
-.then(snapshot=>{
-
-users=[]
-
-snapshot.forEach(doc=>{
-
-let data=doc.data()
-
-data.id=doc.id
-
-if(data.id!==myId){
-
-users.push(data)
-
-}
-
-})
-
-showUser()
-
-})
-
-}
-
-
-
-function showUser(){
-
-if(index>=users.length){
-
-document.getElementById("card").innerHTML="<h3>No more users</h3>"
-return
-
-}
-
-let u = users[index]
-
-let km=""
-
-if(u.lat && u.lng){
-
-km = distance(myLat,myLng,u.lat,u.lng)
-
-}
-
-let online=""
-
-if(u.online){
-
-online="<span class='online'>🟢 Online</span>"
-
-}
-
-document.getElementById("card").innerHTML=`
-
-<div class="card">
-
-<img src="${u.photo}">
-
-<div class="info">
-
-<h3>${u.name}</h3>
-
-<p>${u.age} • ${u.city}</p>
-
-<p>${km} km away</p>
-
-<p>${online}</p>
-
-</div>
-
-</div>
-
-`
-
-}
-
-
-
-function skip(){
-
-index++
-
-showUser()
-
-}
-
-
-
-function like(){
-
-let likedUser=users[index].id
-
-db.collection("likes").add({
-
-from:myId,
-to:likedUser,
-time:Date.now()
-
-})
-
-checkMatch(likedUser)
-
-index++
-
-showUser()
-
-}
-
-
-
-function superLike(){
-
-let likedUser=users[index].id
-
-db.collection("superlikes").add({
-
-from:myId,
-to:likedUser,
-time:Date.now()
-
-})
-
-db.collection("notifications").add({
-
-to:likedUser,
-text:"⭐ Someone Super Liked you!",
-time:Date.now()
-
-})
-
-alert("⭐ Super Like sent!")
-
-index++
-
-showUser()
-
-}
-
-
-
-function checkMatch(likedUser){
-
-db.collection("likes")
-
-.where("from","==",likedUser)
-
-.where("to","==",myId)
-
-.get()
-
-.then(snapshot=>{
-
-if(!snapshot.empty){
-
-db.collection("matches").add({
-
-users:[myId,likedUser],
-time:Date.now()
-
-})
-
-alert("❤️ It's a Match!")
-
-}
-
-})
-
-}
-
-
-
-function distance(lat1, lon1, lat2, lon2){
-
-var R = 6371
-
-var dLat = (lat2-lat1) * Math.PI/180
-var dLon = (lon2-lon1) * Math.PI/180
-
-var a =
-Math.sin(dLat/2)*Math.sin(dLat/2)+
-Math.cos(lat1*Math.PI/180)*
-Math.cos(lat2*Math.PI/180)*
-Math.sin(dLon/2)*Math.sin(dLon/2)
-
-var c = 2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
-
-var d = R*c
-
-return Math.round(d)
-
-}
-
-
-
-let startX=0
-
-document.addEventListener("touchstart",function(e){
-
-startX=e.touches[0].clientX
-
-})
-
-
-
-document.addEventListener("touchend",function(e){
-
-let endX=e.changedTouches[0].clientX
-
-let diff=endX-startX
-
-if(diff>80){like()}
-if(diff<-80){skip()}
-
-})
-
-</script>
-
-</body>
-</html>
+    <!-- حباب‌های پس‌زمینه -->
+    <div class="bg-bubbles" id="bubbles"></div>
+
+    <!-- هدر اصلی -->
+    <header class="main-header">
+        <div class="header-content">
+            <h2>
+                <span>🔥</span>
+                دیسکاور
+            </h2>
+            <div class="filter-btn" onclick="toggleFilterModal()">
+                ⚙️
+            </div>
+        </div>
+    </header>
+
+    <!-- نوتیفیکیشن -->
+    <div class="notification" id="notification">
+        <div class="notification-icon" id="notificationIcon">✓</div>
+        <span id="notificationMessage"></span>
+    </div>
+
+    <!-- کارت اصلی -->
+    <div class="card-container" id="cardContainer">
+        <div class="card" id="mainCard">
+            <div class="card-image" id="cardImage">
+                <img src="" alt="user photo" id="userPhoto">
+                <div class="card-badge" id="boostBadge" style="display: none;">⭐ ویژه</div>
+                <div class="online-badge" id="onlineBadge" style="display: none;">آنلاین</div>
+            </div>
+            <div class="card-info" id="cardInfo">
+                <h3>
+                    <span id="userName"></span>
+                    <span class="age" id="userAge"></span>
+                </h3>
+                <div class="location">
+                    <span>📍</span>
+                    <span id="userCity"></span>
+                </div>
+                <div class="distance" id="userDistance"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- اندیکاتور سوآیپ -->
+    <div class="swipe-indicator" id="swipeIndicator">
+        <div class="indicator active"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+    </div>
+
+    <!-- دکمه‌های اکشن -->
+    <div class="action-buttons">
+        <button class="action-btn skip" onclick="handleAction('skip')" id="skipBtn">❌</button>
+        <button class="action-btn super" onclick="handleAction('super')" id="superBtn">⭐</button>
+        <button class="action-btn like" onclick="handleAction('like')" id="likeBtn">❤️</button>
+    </div>
+
+    <!-- نوار پایین -->
+    <nav class="bottom-nav">
+        <a href="discover.html" class="nav-item active">🔥</a>
+        <a href="matches.html" class="nav-item">❤️</a>
+        <a href="inbox.html" class="nav-item">💬</a>
+        <a href="notifications.html" class="nav-item">🔔</a>
+        <a href="visitors.html" class="nav-item">👁️</a>
+        <a href="profile.html" class="nav-item">👤</a>
+    </nav>
+
+    <!-- مودال فیلتر -->
+    <div class="overlay" id="filterOverlay" onclick="toggleFilterModal()"></div>
+    <div class="filter-modal" id="filterModal">
+        <h3>فیلتر جستجو</h3>
+        <div class="filter-option">
+            <label>فاصله: <span id="distanceValue">۵۰</span> کیلومتر</label>
+            <input type="range" id="distanceFilter" min="1" max="100" value="50" oninput="updateDistanceValue(this.value)">
+        </div>
+        <div class="filter-option">
+            <label>سن: <span id="ageValue">۱۸-۳۵</span></label>
+            <input type="range" id="ageMinFilter" min="18" max="60" value="18" onchange="updateAgeRange()">
+            <input type="range" id="ageMaxFilter" min="18" max="60" value="35" onchange="updateAgeRange()">
+        </div>
+        <div class="filter-option">
+            <label>مرتب‌سازی بر اساس:</label>
+            <select id="sortFilter" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd;">
+                <option value="boost">کاربران ویژه</option>
+                <option value="distance">نزدیک‌ترین</option>
+                <option value="age">جوان‌ترین</option>
+            </select>
+        </div>
+        <button class="apply-filter" onclick="applyFilters()">اعمال فیلتر</button>
+    </div>
+
+    <!-- مودال مچ -->
+    <div class="overlay" id="matchOverlay" onclick="closeMatchModal()"></div>
+    <div class="match-modal" id="matchModal">
+        <div class="match-icon">💕</div>
+        <div class="match-title">مچ شدید!</div>
+        <div class="match-names" id="matchNames"></div>
+        <div class="match-buttons">
+            <button class="match-btn primary" onclick="startChat()">شروع چت</button>
+            <button class="match-btn secondary" onclick="closeMatchModal()">ادامه</button>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+            authDomain: "nimeh-gomsodeh.firebaseapp.com",
+            projectId: "nimeh-gomsodeh",
+            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+            messagingSenderId: "815930956932",
+            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Variables
+        let users = [];
+        let index = 0;
+        let myId = "";
+        let myLat = 0;
+        let myLng = 0;
+        let currentUser = null;
+        let isDragging = false;
+        let startX = 0;
+        let currentX = 0;
+        let filters = {
+            maxDistance: 50,
+            minAge: 18,
+            maxAge: 35,
+            sortBy: 'boost'
+        };
+
+        // Create background bubbles
+        function createBubbles() {
+            const bubblesContainer = document.getElementById('bubbles');
+            for (let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.width = `${Math.random() * 60 + 20}px`;
+                bubble.style.height = bubble.style.width;
+                bubble.style.animationDelay = `${Math.random() * 10}s`;
+                bubble.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+
+        // Check Authentication
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                location.href = "login.html";
+                return;
+            }
+
+            currentUser = user;
+            myId = user.uid;
+            
+            getLocation();
+            loadUsers();
+            createBubbles();
+            setupSwipe();
+        });
+
+        // Get user location
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        myLat = position.coords.latitude;
+                        myLng = position.coords.longitude;
+                        
+                        // Save location to Firebase
+                        db.collection("users").doc(myId).update({
+                            lat: myLat,
+                            lng: myLng
+                        }).catch(error => console.log("Location not updated"));
+                    },
+                    function(error) {
+                        console.log("Location error:", error);
+                        showNotification("لطفاً موقعیت مکانی را فعال کنید", "error");
+                    }
+                );
+            }
+        }
+
+        // Load users from Firebase
+        function loadUsers() {
+            let query = db.collection("users");
+            
+            // Apply sorting
+            if (filters.sortBy === 'boost') {
+                query = query.orderBy("boost", "desc");
+            }
+            
+            query.get()
+                .then(snapshot => {
+                    users = [];
+                    snapshot.forEach(doc => {
+                        let data = doc.data();
+                        data.id = doc.id;
+                        
+                        if (data.id !== myId) {
+                            // Apply age filter
+                            if (data.age >= filters.minAge && data.age <= filters.maxAge) {
+                                users.push(data);
+                            }
+                        }
+                    });
+
+                    // Apply distance filter and sorting
+                    if (myLat && myLng) {
+                        users = users.filter(user => {
+                            if (user.lat && user.lng) {
+                                const dist = calculateDistance(myLat, myLng, user.lat, user.lng);
+                                user.distance = dist;
+                                return dist <= filters.maxDistance;
+                            }
+                            return true;
+                        });
+
+                        if (filters.sortBy === 'distance') {
+                            users.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
+                        } else if (filters.sortBy === 'age') {
+                            users.sort((a, b) => (a.age || 0) - (b.age || 0));
+                        }
+                    }
+
+                    index = 0;
+                    showUser();
+                    updateSwipeIndicator();
+                })
+                .catch(error => {
+                    console.error("Error loading users:", error);
+                    showNotification("خطا در بارگذاری کاربران", "error");
+                });
+        }
+
+        // Show current user
+        function showUser() {
+            const cardContainer = document.getElementById('mainCard');
+            
+            if (index >= users.length) {
+                document.getElementById('cardContainer').innerHTML = `
+                    <div class="empty-state">
+                        <h3>😢 کاربری یافت نشد</h3>
+                        <p>همه کاربران رو دیدی! بعداً دوباره امتحان کن</p>
+                        <button class="refresh-btn" onclick="refreshUsers()">🔄 بارگذاری مجدد</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let u = users[index];
+
+            // Calculate distance
+            let distanceText = "";
+            if (u.lat && u.lng && myLat && myLng) {
+                let dist = calculateDistance(myLat, myLng, u.lat, u.lng);
+                distanceText = `${dist} کیلومتر فاصله`;
+            } else {
+                distanceText = "موقعیت نامشخص";
+            }
+
+            // Update UI
+            document.getElementById('userPhoto').src = u.photo || 'https://via.placeholder.com/400x400?text=User';
+            document.getElementById('userName').textContent = u.name || 'کاربر';
+            document.getElementById('userAge').textContent = u.age || '??';
+            document.getElementById('userCity').textContent = u.city || 'نامشخص';
+            document.getElementById('userDistance').textContent = `📍 ${distanceText}`;
+
+            // Show boost badge
+            if (u.boost) {
+                document.getElementById('boostBadge').style.display = 'block';
+            } else {
+                document.getElementById('boostBadge').style.display = 'none';
+            }
+
+            // Show online badge
+            if (u.online) {
+                document.getElementById('onlineBadge').style.display = 'flex';
+            } else {
+                document.getElementById('onlineBadge').style.display = 'none';
+            }
+
+            // Add animation
+            cardContainer.style.animation = 'none';
+            cardContainer.offsetHeight;
+            cardContainer.style.animation = 'fadeInUp 0.5s ease';
+        }
+
+        // Calculate distance between two coordinates
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return Math.round(R * c);
+        }
+
+        // Handle actions
+        function handleAction(action) {
+            if (index >= users.length) return;
+
+            const currentUser = users[index];
+            
+            switch(action) {
+                case 'skip':
+                    animateCard('left');
+                    break;
+                case 'like':
+                    animateCard('right');
+                    likeUser(currentUser);
+                    break;
+                case 'super':
+                    animateCard('up');
+                    superLikeUser(currentUser);
+                    break;
+            }
+
+            index++;
+            setTimeout(() => {
+                showUser();
+                updateSwipeIndicator();
+            }, 300);
+        }
+
+        // Like user
+        function likeUser(user) {
+            db.collection("likes").add({
+                from: myId,
+                to: user.id,
+                time: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                checkMatch(user.id);
+                showNotification("لایک ثبت شد", "success");
+            })
+            .catch(error => {
+                console.error("Error liking user:", error);
+                showNotification("خطا در ثبت لایک", "error");
+            });
+        }
+
+        // Super like user
+        function superLikeUser(user) {
+            db.collection("superlikes").add({
+                from: myId,
+                to: user.id,
+                time: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                return db.collection("notifications").add({
+                    to: user.id,
+                    type: "superlike",
+                    text: "⭐ یک نفر به شما سوپر لایک داده است!",
+                    time: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(() => {
+                showNotification("⭐ سوپر لایک ارسال شد!", "success");
+            })
+            .catch(error => {
+                console.error("Error super liking user:", error);
+                showNotification("خطا در ثبت سوپر لایک", "error");
+            });
+        }
+
+        // Check for match
+        function checkMatch(likedUserId) {
+            db.collection("likes")
+                .where("from", "==", likedUserId)
+                .where("to", "==", myId)
+                .get()
+                .then(snapshot => {
+                    if (!snapshot.empty) {
+                        // It's a match!
+                        return db.collection("matches").add({
+                            users: [myId, likedUserId],
+                            time: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastMessage: null
+                        });
+                    }
+                })
+                .then(matchDoc => {
+                    if (matchDoc) {
+                        showMatchModal(users[index-1].name);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error checking match:", error);
+                });
+        }
+
+        // Animate card
+        function animateCard(direction) {
+            const card = document.getElementById('mainCard');
+            card.style.transition = 'all 0.3s ease';
+            
+            switch(direction) {
+                case 'left':
+                    card.style.transform = 'translateX(-200px) rotate(-20deg)';
+                    card.style.opacity = '0';
+                    break;
+                case 'right':
+                    card.style.transform = 'translateX(200px) rotate(20deg)';
+                    card.style.opacity = '0';
+                    break;
+                case 'up':
+                    card.style.transform = 'translateY(-200px) scale(0.8)';
+                    card.style.opacity = '0';
+                    break;
+            }
+
+            setTimeout(() => {
+                card.style.transition = 'none';
+                card.style.transform = 'none';
+                card.style.opacity = '1';
+            }, 300);
+        }
+
+        // Setup swipe
+        function setupSwipe() {
+            const card = document.getElementById('mainCard');
+            
+            card.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                currentX = startX;
+                card.style.transition = 'none';
+            });
+
+            card.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                
+                currentX = e.touches[0].clientX;
+                const diff = currentX - startX;
+                const rotate = diff * 0.1;
+                
+                card.style.transform = `translateX(${diff}px) rotate(${rotate}deg)`;
+                card.style.opacity = 1 - Math.abs(diff) / 500;
+            });
+
+            card.addEventListener('touchend', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                
+                const diff = currentX - startX;
+                card.style.transition = 'all 0.3s ease';
+                
+                if (Math.abs(diff) > 100) {
+                    if (diff > 0) {
+                        handleAction('like');
+                    } else {
+                        handleAction('skip');
+                    }
+                } else {
+                    card.style.transform = 'none';
+                    card.style.opacity = '1';
+                }
+            });
+        }
+
+        // Update swipe indicator
+        function updateSwipeIndicator() {
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((ind, i) => {
+                if (i === index % indicators.length) {
+                    ind.classList.add('active');
+                } else {
+                    ind.classList.remove('active');
+                }
+            });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const icon = document.getElementById('notificationIcon');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            notification.className = `notification ${type}`;
+            icon.innerHTML = type === 'success' ? '✓' : '✗';
+            messageEl.textContent = message;
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show match modal
+        function showMatchModal(userName) {
+            const modal = document.getElementById('
