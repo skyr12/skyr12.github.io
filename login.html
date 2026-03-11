@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ورود | همدم</title>
-    <link rel="stylesheet" href="assets/style.css">
     <style>
-        .auth-container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -14,7 +20,7 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .auth-box {
             background: white;
             border-radius: 30px;
@@ -24,27 +30,45 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             animation: slideUp 0.5s ease;
         }
-        
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .auth-header {
             text-align: center;
             margin-bottom: 30px;
         }
-        
+
         .auth-header .logo {
-            font-size: 48px;
+            font-size: 64px;
             margin-bottom: 10px;
+            animation: pulse 2s infinite;
         }
-        
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
         .auth-header h2 {
             color: #333;
             margin-bottom: 5px;
+            font-size: 28px;
         }
-        
+
         .auth-header p {
             color: #666;
             font-size: 14px;
         }
-        
+
         .auth-tabs {
             display: flex;
             gap: 10px;
@@ -53,7 +77,7 @@
             padding: 5px;
             border-radius: 15px;
         }
-        
+
         .auth-tab {
             flex: 1;
             text-align: center;
@@ -63,49 +87,50 @@
             transition: all 0.3s ease;
             font-weight: 600;
         }
-        
+
         .auth-tab.active {
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
         }
-        
+
         .auth-form {
             display: none;
         }
-        
+
         .auth-form.active {
             display: block;
             animation: fadeIn 0.3s ease;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
             color: #333;
             font-weight: 500;
         }
-        
+
         .input-group {
             position: relative;
         }
-        
+
         .input-icon {
             position: absolute;
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #999;
+            font-size: 18px;
         }
-        
+
         .form-control {
             width: 100%;
             padding: 15px 15px 15px 45px;
@@ -114,12 +139,13 @@
             font-size: 14px;
             transition: all 0.3s ease;
         }
-        
+
         .form-control:focus {
             outline: none;
             border-color: #ff4d6d;
+            box-shadow: 0 0 0 3px rgba(255,77,109,0.1);
         }
-        
+
         .auth-btn {
             width: 100%;
             padding: 15px;
@@ -133,18 +159,23 @@
             transition: all 0.3s ease;
             margin-top: 10px;
         }
-        
-        .auth-btn:hover {
+
+        .auth-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255,77,109,0.3);
         }
-        
+
+        .auth-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .auth-divider {
             text-align: center;
             margin: 20px 0;
             position: relative;
         }
-        
+
         .auth-divider::before {
             content: '';
             position: absolute;
@@ -155,7 +186,7 @@
             background: #eee;
             z-index: 1;
         }
-        
+
         .auth-divider span {
             background: white;
             padding: 0 15px;
@@ -164,41 +195,7 @@
             position: relative;
             z-index: 2;
         }
-        
-        .social-login {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .social-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #eee;
-            border-radius: 15px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 20px;
-        }
-        
-        .social-btn:hover {
-            border-color: #ff4d6d;
-            transform: translateY(-2px);
-        }
-        
-        .auth-footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .auth-footer a {
-            color: #ff4d6d;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
+
         .error-message {
             background: #fee2e2;
             color: #ef4444;
@@ -207,33 +204,20 @@
             margin-bottom: 20px;
             font-size: 14px;
             display: none;
+            text-align: center;
         }
-        
+
         .error-message.show {
             display: block;
             animation: shake 0.3s ease;
         }
-        
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
-        
-        .success-message {
-            background: #4caf5020;
-            color: #4caf50;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-        }
-        
-        .success-message.show {
-            display: block;
-        }
-        
+
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -244,129 +228,161 @@
             animation: spin 1s linear infinite;
             margin-left: 10px;
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .demo-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ff4d6d;
+            border-radius: 10px;
+            background: white;
+            color: #ff4d6d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .demo-btn:hover {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 12px;
+            z-index: 1000;
+        }
+
+        .status-connected {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .status-disconnected {
+            color: #f44336;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-box">
-            <div class="auth-header">
-                <div class="logo">❤️</div>
-                <h2>به همدم خوش آمدید</h2>
-                <p>برای ادامه وارد شوید یا ثبت نام کنید</p>
+    <div class="firebase-status" id="firebaseStatus">
+        🔄 بررسی اتصال Firebase...
+    </div>
+
+    <div class="auth-box">
+        <div class="auth-header">
+            <div class="logo">❤️</div>
+            <h2>به همدم خوش آمدید</h2>
+            <p>برای ادامه وارد شوید یا ثبت نام کنید</p>
+        </div>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchTab('login')">ورود</div>
+            <div class="auth-tab" onclick="switchTab('register')">ثبت نام</div>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <!-- فرم ورود -->
+        <div class="auth-form active" id="loginForm">
+            <div class="form-group">
+                <label>ایمیل</label>
+                <div class="input-group">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="example@email.com" value="vlmira021@gmail.com">
+                </div>
             </div>
             
-            <!-- تب‌های ورود/ثبت نام -->
-            <div class="auth-tabs">
-                <div class="auth-tab active" onclick="switchAuthTab('login')">ورود</div>
-                <div class="auth-tab" onclick="switchAuthTab('register')">ثبت نام</div>
+            <div class="form-group">
+                <label>رمز عبور</label>
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" class="form-control" id="loginPassword" placeholder="********">
+                </div>
             </div>
             
-            <!-- پیام خطا -->
-            <div class="error-message" id="errorMessage"></div>
-            
-            <!-- پیام موفقیت -->
-            <div class="success-message" id="successMessage"></div>
-            
-            <!-- فرم ورود -->
-            <div class="auth-form active" id="loginForm">
-                <form onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>ایمیل</label>
-                        <div class="input-group">
-                            <span class="input-icon">✉️</span>
-                            <input type="email" class="form-control" id="loginEmail" placeholder="example@email.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>رمز عبور</label>
-                        <div class="input-group">
-                            <span class="input-icon">🔒</span>
-                            <input type="password" class="form-control" id="loginPassword" placeholder="********" required>
-                        </div>
-                    </div>
-                    
-                    <div style="text-align: left; margin-bottom: 15px;">
-                        <a href="#" style="color: #ff4d6d; text-decoration: none; font-size: 13px;">رمز عبور را فراموش کردید؟</a>
-                    </div>
-                    
-                    <button type="submit" class="auth-btn" id="loginBtn">
-                        <span>ورود</span>
-                        <span class="loading-spinner" style="display: none;"></span>
-                    </button>
-                </form>
+            <div style="text-align: left; margin-bottom: 15px;">
+                <a href="#" style="color: #ff4d6d; text-decoration: none; font-size: 13px;">رمز عبور را فراموش کردید؟</a>
             </div>
             
-            <!-- فرم ثبت نام -->
-            <div class="auth-form" id="registerForm">
-                <form onsubmit="handleRegister(event)">
-                    <div class="form-group">
-                        <label>نام و نام خانوادگی</label>
-                        <div class="input-group">
-                            <span class="input-icon">👤</span>
-                            <input type="text" class="form-control" id="registerName" placeholder="سارا محمدی" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>ایمیل</label>
-                        <div class="input-group">
-                            <span class="input-icon">✉️</span>
-                            <input type="email" class="form-control" id="registerEmail" placeholder="example@email.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>رمز عبور</label>
-                        <div class="input-group">
-                            <span class="input-icon">🔒</span>
-                            <input type="password" class="form-control" id="registerPassword" placeholder="حداقل ۶ کاراکتر" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>تکرار رمز عبور</label>
-                        <div class="input-group">
-                            <span class="input-icon">🔒</span>
-                            <input type="password" class="form-control" id="registerConfirmPassword" placeholder="********" required>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="auth-btn" id="registerBtn">
-                        <span>ثبت نام</span>
-                        <span class="loading-spinner" style="display: none;"></span>
-                    </button>
-                </form>
+            <button class="auth-btn" id="loginBtn" onclick="handleLogin()">
+                <span>ورود</span>
+                <span class="loading-spinner" style="display: none;"></span>
+            </button>
+        </div>
+        
+        <!-- فرم ثبت نام -->
+        <div class="auth-form" id="registerForm">
+            <div class="form-group">
+                <label>نام و نام خانوادگی</label>
+                <div class="input-group">
+                    <span class="input-icon">👤</span>
+                    <input type="text" class="form-control" id="registerName" placeholder="سارا محمدی">
+                </div>
             </div>
             
-            <!-- ورود با شبکه‌های اجتماعی -->
-            <div class="auth-divider">
-                <span>یا</span>
+            <div class="form-group">
+                <label>ایمیل</label>
+                <div class="input-group">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" class="form-control" id="registerEmail" placeholder="example@email.com">
+                </div>
             </div>
             
-            <div class="social-login">
-                <button class="social-btn" onclick="handleGoogleLogin()">🇬</button>
-                <button class="social-btn" onclick="handleFacebookLogin()">🇫</button>
-                <button class="social-btn" onclick="handlePhoneLogin()">📱</button>
+            <div class="form-group">
+                <label>رمز عبور</label>
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" class="form-control" id="registerPassword" placeholder="حداقل ۶ کاراکتر">
+                </div>
             </div>
             
-            <div class="auth-footer">
-                <p>با ورود یا ثبت نام، <a href="#">قوانین و مقررات</a> را می‌پذیرید</p>
+            <div class="form-group">
+                <label>تکرار رمز عبور</label>
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" class="form-control" id="registerConfirm" placeholder="********">
+                </div>
             </div>
+            
+            <button class="auth-btn" id="registerBtn" onclick="handleRegister()">
+                <span>ثبت نام</span>
+                <span class="loading-spinner" style="display: none;"></span>
+            </button>
+        </div>
+        
+        <div class="auth-divider">
+            <span>یا</span>
+        </div>
+        
+        <div class="demo-buttons">
+            <button class="demo-btn" onclick="demoLogin('admin')">دمو ادمین</button>
+            <button class="demo-btn" onclick="demoLogin('user')">دمو کاربر</button>
         </div>
     </div>
-    
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    
+
     <script>
-        // Firebase Config
+        // ==================== تنظیمات Firebase ====================
         const firebaseConfig = {
             apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
             authDomain: "nimeh-gomsodeh.firebaseapp.com",
@@ -375,36 +391,60 @@
             messagingSenderId: "815930956932",
             appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
         };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        
-        // Check if user is already logged in
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                console.log("✅ User already logged in:", user.email);
-                // Redirect to main page
-                window.location.href = 'index.html';
-            }
-        });
-        
-        // Switch between login and register tabs
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+
+        // ==================== بررسی اتصال Firebase ====================
+        function checkFirebaseConnection() {
+            const statusDiv = document.getElementById('firebaseStatus');
             
-            if (tab === 'login') {
-                document.querySelector('.auth-tab').classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-            } else {
-                document.querySelectorAll('.auth-tab')[1].classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
+            try {
+                // راه‌اندازی Firebase
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                
+                const auth = firebase.auth();
+                const db = firebase.firestore();
+                
+                // تست اتصال
+                db.collection('test').doc('test').get()
+                    .then(() => {
+                        statusDiv.innerHTML = '✅ <span class="status-connected">اتصال Firebase برقرار است</span>';
+                        statusDiv.style.background = '#e8f5e8';
+                    })
+                    .catch(error => {
+                        statusDiv.innerHTML = '❌ <span class="status-disconnected">خطا در اتصال به Firebase</span>';
+                        statusDiv.style.background = '#fee2e2';
+                        console.error('Firebase connection error:', error);
+                    });
+                    
+            } catch (error) {
+                statusDiv.innerHTML = '❌ <span class="status-disconnected">خطا در راه‌اندازی Firebase</span>';
+                statusDiv.style.background = '#fee2e2';
+                console.error('Firebase init error:', error);
             }
         }
-        
-        // Show error message
+
+        // اجرای بررسی اتصال
+        setTimeout(checkFirebaseConnection, 1000);
+
+        // ==================== متغیرهای عمومی ====================
+        let currentUser = null;
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ==================== بررسی وضعیت کاربر ====================
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                console.log('✅ کاربر وارد شده:', user.email);
+                currentUser = user;
+                // انتقال به صفحه اصلی
+                window.location.href = 'index.html';
+            } else {
+                console.log('❌ کاربر خارج شده');
+            }
+        });
+
+        // ==================== توابع کمکی ====================
         function showError(message) {
             const errorDiv = document.getElementById('errorMessage');
             errorDiv.textContent = message;
@@ -414,102 +454,115 @@
                 errorDiv.classList.remove('show');
             }, 5000);
         }
-        
-        // Show success message
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.textContent = message;
-            successDiv.classList.add('show');
+
+        function showLoading(buttonId, show) {
+            const btn = document.getElementById(buttonId);
+            const span = btn.querySelector('span:first-child');
+            const spinner = btn.querySelector('.loading-spinner');
             
-            setTimeout(() => {
-                successDiv.classList.remove('show');
-            }, 5000);
+            if (show) {
+                btn.disabled = true;
+                span.style.display = 'none';
+                spinner.style.display = 'inline-block';
+            } else {
+                btn.disabled = false;
+                span.style.display = 'inline';
+                spinner.style.display = 'none';
+            }
         }
-        
-        // Handle login
-        function handleLogin(event) {
-            event.preventDefault();
+
+        // ==================== تغییر تب ====================
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
             
+            if (tab === 'login') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+        }
+
+        // ==================== ورود ====================
+        function handleLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-            const btn = document.getElementById('loginBtn');
             
-            // Show loading
-            btn.disabled = true;
-            btn.querySelector('span:first-child').style.display = 'none';
-            btn.querySelector('.loading-spinner').style.display = 'inline-block';
+            if (!email || !password) {
+                showError('لطفاً ایمیل و رمز عبور را وارد کنید');
+                return;
+            }
+            
+            showLoading('loginBtn', true);
             
             auth.signInWithEmailAndPassword(email, password)
                 .then(userCredential => {
-                    console.log("✅ Login successful:", userCredential.user.email);
+                    console.log('✅ ورود موفق:', userCredential.user.email);
                     
-                    // Update last login
+                    // به‌روزرسانی آخرین ورود
                     db.collection('users').doc(userCredential.user.uid).update({
                         lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
                         online: true
-                    });
+                    }).catch(err => console.log('خطا در به‌روزرسانی:', err));
                     
-                    // Redirect to main page
+                    // انتقال به صفحه اصلی
                     window.location.href = 'index.html';
                 })
                 .catch(error => {
-                    console.error("❌ Login error:", error);
+                    console.error('❌ خطای ورود:', error);
                     
-                    let errorMessage = 'خطا در ورود';
+                    let message = 'خطا در ورود';
                     if (error.code === 'auth/user-not-found') {
-                        errorMessage = 'کاربری با این ایمیل یافت نشد';
+                        message = 'کاربری با این ایمیل یافت نشد';
                     } else if (error.code === 'auth/wrong-password') {
-                        errorMessage = 'رمز عبور اشتباه است';
+                        message = 'رمز عبور اشتباه است';
                     } else if (error.code === 'auth/invalid-email') {
-                        errorMessage = 'ایمیل نامعتبر است';
+                        message = 'ایمیل نامعتبر است';
+                    } else if (error.code === 'auth/too-many-requests') {
+                        message = 'تلاش بیش از حد، لطفاً بعداً امتحان کنید';
                     }
                     
-                    showError(errorMessage);
-                    
-                    // Hide loading
-                    btn.disabled = false;
-                    btn.querySelector('span:first-child').style.display = 'inline';
-                    btn.querySelector('.loading-spinner').style.display = 'none';
+                    showError(message);
+                    showLoading('loginBtn', false);
                 });
         }
-        
-        // Handle register
-        function handleRegister(event) {
-            event.preventDefault();
-            
+
+        // ==================== ثبت نام ====================
+        function handleRegister() {
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            const btn = document.getElementById('registerBtn');
+            const confirm = document.getElementById('registerConfirm').value;
             
-            // Check passwords match
-            if (password !== confirmPassword) {
+            if (!name || !email || !password || !confirm) {
+                showError('لطفاً همه فیلدها را پر کنید');
+                return;
+            }
+            
+            if (password !== confirm) {
                 showError('رمز عبور و تکرار آن یکسان نیستند');
                 return;
             }
             
-            // Check password length
             if (password.length < 6) {
                 showError('رمز عبور باید حداقل ۶ کاراکتر باشد');
                 return;
             }
             
-            // Show loading
-            btn.disabled = true;
-            btn.querySelector('span:first-child').style.display = 'none';
-            btn.querySelector('.loading-spinner').style.display = 'inline-block';
+            showLoading('registerBtn', true);
             
             auth.createUserWithEmailAndPassword(email, password)
                 .then(userCredential => {
-                    console.log("✅ Registration successful:", userCredential.user.email);
+                    console.log('✅ ثبت نام موفق:', userCredential.user.email);
                     
-                    // Create user profile in Firestore
+                    // ایجاد پروفایل کاربر
                     return db.collection('users').doc(userCredential.user.uid).set({
                         name: name,
                         email: email,
                         photo: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=200&background=ff4d6d&color=fff`,
-                        coins: 100, // Welcome bonus
+                        coins: 100,
                         vip: 'none',
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                         lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
@@ -517,101 +570,80 @@
                     });
                 })
                 .then(() => {
-                    showSuccess('✅ ثبت نام با موفقیت انجام شد');
-                    
-                    // Redirect to main page after 1 second
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
-                })
-                .catch(error => {
-                    console.error("❌ Registration error:", error);
-                    
-                    let errorMessage = 'خطا در ثبت نام';
-                    if (error.code === 'auth/email-already-in-use') {
-                        errorMessage = 'این ایمیل قبلاً ثبت نام کرده است';
-                    } else if (error.code === 'auth/invalid-email') {
-                        errorMessage = 'ایمیل نامعتبر است';
-                    }
-                    
-                    showError(errorMessage);
-                    
-                    // Hide loading
-                    btn.disabled = false;
-                    btn.querySelector('span:first-child').style.display = 'inline';
-                    btn.querySelector('.loading-spinner').style.display = 'none';
-                });
-        }
-        
-        // Google login
-        function handleGoogleLogin() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            
-            auth.signInWithPopup(provider)
-                .then(result => {
-                    console.log("✅ Google login successful:", result.user.email);
-                    
-                    // Check if user exists in Firestore
-                    return db.collection('users').doc(result.user.uid).get()
-                        .then(doc => {
-                            if (!doc.exists) {
-                                // Create new user
-                                return db.collection('users').doc(result.user.uid).set({
-                                    name: result.user.displayName,
-                                    email: result.user.email,
-                                    photo: result.user.photoURL,
-                                    coins: 100,
-                                    vip: 'none',
-                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                                    online: true
-                                });
-                            } else {
-                                // Update last login
-                                return db.collection('users').doc(result.user.uid).update({
-                                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                                    online: true
-                                });
-                            }
-                        });
-                })
-                .then(() => {
+                    // انتقال به صفحه اصلی
                     window.location.href = 'index.html';
                 })
                 .catch(error => {
-                    console.error("❌ Google login error:", error);
-                    showError('خطا در ورود با گوگل');
+                    console.error('❌ خطای ثبت نام:', error);
+                    
+                    let message = 'خطا در ثبت نام';
+                    if (error.code === 'auth/email-already-in-use') {
+                        message = 'این ایمیل قبلاً ثبت نام کرده است';
+                    } else if (error.code === 'auth/invalid-email') {
+                        message = 'ایمیل نامعتبر است';
+                    }
+                    
+                    showError(message);
+                    showLoading('registerBtn', false);
                 });
         }
-        
-        // Facebook login (simulated)
-        function handleFacebookLogin() {
-            showError('ورود با فیسبوک به زودی فعال می‌شود');
-        }
-        
-        // Phone login (simulated)
-        function handlePhoneLogin() {
-            showError('ورود با شماره تلفن به زودی فعال می‌شود');
-        }
-        
-        // Demo accounts for testing
-        window.demoLogin = function(role) {
-            if (role === 'user') {
-                document.getElementById('loginEmail').value = 'user@hamdam.com';
-                document.getElementById('loginPassword').value = '123456';
-            } else if (role === 'admin') {
-                document.getElementById('loginEmail').value = 'admin@hamdam.com';
-                document.getElementById('loginPassword').value = 'admin123';
+
+        // ==================== دمو ====================
+        function demoLogin(role) {
+            showLoading('loginBtn', true);
+            
+            let email, password;
+            
+            if (role === 'admin') {
+                email = 'admin@hamdam.com';
+                password = 'admin123';
+            } else {
+                email = 'user@hamdam.com';
+                password = '123456';
             }
             
-            handleLogin(new Event('submit'));
-        };
+            // تلاش برای ورود
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    console.log('✅ ورود دمو موفق');
+                    window.location.href = 'index.html';
+                })
+                .catch(error => {
+                    console.log('کاربر دمو وجود ندارد، در حال ساخت...');
+                    
+                    // اگر کاربر نبود، بساز
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .then(userCredential => {
+                            return db.collection('users').doc(userCredential.user.uid).set({
+                                name: role === 'admin' ? 'مدیر سیستم' : 'کاربر دمو',
+                                email: email,
+                                photo: `https://ui-avatars.com/api/?name=${role === 'admin' ? 'Admin' : 'User'}&size=200&background=ff4d6d&color=fff`,
+                                coins: role === 'admin' ? 10000 : 500,
+                                vip: role === 'admin' ? 'diamond' : 'none',
+                                role: role,
+                                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                                online: true
+                            });
+                        })
+                        .then(() => {
+                            window.location.href = 'index.html';
+                        })
+                        .catch(error => {
+                            showError('خطا در ساخت کاربر دمو');
+                            showLoading('loginBtn', false);
+                        });
+                });
+        }
+
+        // ==================== Event Listeners ====================
+        document.getElementById('loginEmail').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+        
+        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
     </script>
-    
-    <!-- Demo buttons (remove in production) -->
-    <div style="position: fixed; bottom: 20px; left: 20px; display: flex; gap: 10px;">
-        <button onclick="demoLogin('user')" style="background: #4caf50; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">دمو کاربر</button>
-        <button onclick="demoLogin('admin')" style="background: #ff4d6d; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">دمو ادمین</button>
-    </div>
 </body>
 </html>
