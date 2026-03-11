@@ -1,193 +1,410 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fa" dir="rtl">
 <head>
-
-<meta charset="UTF-8">
-<title>Wallet</title>
-
-<style>
-
-body{
-font-family:Arial;
-background:#f5f5f5;
-text-align:center;
-margin:0;
-padding-bottom:80px;
-}
-
-.card{
-width:320px;
-margin:50px auto;
-background:white;
-padding:30px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
-}
-
-h2{
-color:#ff4d6d;
-}
-
-.balance{
-font-size:26px;
-margin:20px;
-}
-
-.pack{
-background:#eee;
-padding:15px;
-margin:10px;
-border-radius:15px;
-}
-
-button{
-margin-top:10px;
-padding:10px 20px;
-border:none;
-border-radius:20px;
-background:#ff4d6d;
-color:white;
-cursor:pointer;
-}
-
-.navbar{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:12px;
-box-shadow:0 -2px 10px rgba(0,0,0,0.1);
-font-size:22px;
-}
-
-.navbar a{
-text-decoration:none;
-color:black;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کیف پول | همدم</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+        
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .transaction-details h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .transaction-details p {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .transaction-amount {
+            font-weight: bold;
+        }
+        
+        .transaction-amount.positive {
+            color: #4caf50;
+        }
+        
+        .transaction-amount.negative {
+            color: #ff4d6d;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .payment-method {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            padding: 15px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover {
+            border-color: #ff4d6d;
+            transform: translateY(-2px);
+        }
+        
+        .payment-method.active {
+            border-color: #ff4d6d;
+            background: #ff4d6d10;
+        }
+        
+        .payment-method img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
-
 <body>
+    <!-- هدر -->
+    <div class="header">
+        <div class="logo">
+            <span>💰</span>
+            کیف پول
+        </div>
+        <div class="wallet" onclick="location.href='wallet.html'">
+            <span>🪙</span>
+            <span class="user-coins">۰</span>
+        </div>
+    </div>
 
-<h2>💰 Coins Wallet</h2>
+    <!-- تب‌ها -->
+    <div class="tabs">
+        <div class="tab" onclick="location.href='index.html'">خانه</div>
+        <div class="tab" onclick="location.href='discover.html'">اکتشاف</div>
+        <div class="tab" onclick="location.href='live.html'">لایو</div>
+        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
+        <div class="tab active" onclick="location.href='profile.html'">پروفایل</div>
+    </div>
 
-<div class="card">
+    <!-- موجودی فعلی -->
+    <div style="background: white; margin: 15px; padding: 25px; border-radius: 20px; text-align: center;">
+        <div style="font-size: 14px; color: #666; margin-bottom: 10px;">موجودی کیف پول</div>
+        <div style="font-size: 48px; font-weight: bold; color: #ff4d6d;" class="user-coins">۰</div>
+        <div style="font-size: 16px; color: #999; margin-bottom: 20px;">سکه</div>
+        
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary" style="flex: 1;" onclick="showPaymentModal()">شارژ کیف پول</button>
+            <button class="btn btn-secondary" style="flex: 1;" onclick="location.href='vip.html'">خرید اشتراک</button>
+        </div>
+    </div>
 
-<div class="balance">
+    <!-- پکیج‌های شارژ -->
+    <h3 style="color: white; padding: 15px 15px 5px;">📦 پکیج‌های شارژ</h3>
+    
+    <div class="coin-package popular" onclick="selectPackage(100)">
+        <span class="popular-badge">پرفروش</span>
+        <div>
+            <strong style="font-size: 18px;">۱۰۰ سکه</strong>
+        </div>
+        <div style="color: #ff4d6d;">۱۰,۰۰۰ تومان</div>
+    </div>
+    
+    <div class="coin-package" onclick="selectPackage(500)">
+        <div>
+            <strong style="font-size: 18px;">۵۰۰ سکه</strong>
+            <span style="color: #4caf50; font-size: 12px; margin-right: 10px;">+۵۰ جایزه</span>
+        </div>
+        <div style="color: #ff4d6d;">۴۵,۰۰۰ تومان</div>
+    </div>
+    
+    <div class="coin-package" onclick="selectPackage(1000)">
+        <div>
+            <strong style="font-size: 18px;">۱,۰۰۰ سکه</strong>
+            <span style="color: #4caf50; font-size: 12px; margin-right: 10px;">+۲۰۰ جایزه</span>
+        </div>
+        <div style="color: #ff4d6d;">۸۰,۰۰۰ تومان</div>
+    </div>
+    
+    <div class="coin-package" onclick="selectPackage(5000)">
+        <div>
+            <strong style="font-size: 18px;">۵,۰۰۰ سکه</strong>
+            <span style="color: #4caf50; font-size: 12px; margin-right: 10px;">+۱,۰۰۰ جایزه</span>
+        </div>
+        <div style="color: #ff4d6d;">۳۵۰,۰۰۰ تومان</div>
+    </div>
 
-Coins: <span id="coins">0</span>
+    <!-- تاریخچه تراکنش‌ها -->
+    <h3 style="color: white; padding: 15px 15px 5px;">📊 تاریخچه تراکنش‌ها</h3>
+    
+    <div style="background: white; margin: 15px; border-radius: 20px; padding: 15px;" id="transactionsList">
+        <div class="transaction-item">
+            <div class="transaction-info">
+                <div class="transaction-icon">🪙</div>
+                <div class="transaction-details">
+                    <h4>شارژ کیف پول</h4>
+                    <p>۱۴۰۳/۱۲/۲۵</p>
+                </div>
+            </div>
+            <div class="transaction-amount positive">+۵۰۰</div>
+        </div>
+        
+        <div class="transaction-item">
+            <div class="transaction-info">
+                <div class="transaction-icon">🎁</div>
+                <div class="transaction-details">
+                    <h4>خرید هدیه 🌹</h4>
+                    <p>۱۴۰۳/۱۲/۲۴</p>
+                </div>
+            </div>
+            <div class="transaction-amount negative">-۱۰</div>
+        </div>
+        
+        <div class="transaction-item">
+            <div class="transaction-info">
+                <div class="transaction-icon">⭐</div>
+                <div class="transaction-details">
+                    <h4>سوپرلایک</h4>
+                    <p>۱۴۰۳/۱۲/۲۳</p>
+                </div>
+            </div>
+            <div class="transaction-amount negative">-۵۰</div>
+        </div>
+    </div>
 
-</div>
+    <!-- مودال پرداخت -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>شارژ کیف پول</h3>
+                <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 48px; color: #ff4d6d;" id="selectedCoins">۱۰۰</div>
+                <div style="font-size: 24px;" id="selectedPrice">۱۰,۰۰۰ تومان</div>
+            </div>
+            
+            <h4 style="margin-bottom: 15px;">روش پرداخت:</h4>
+            
+            <div class="payment-methods">
+                <div class="payment-method active" onclick="selectPaymentMethod('zarinpal')">
+                    <img src="https://www.zarinpal.com/assets/images/logo/logo.svg" alt="زرین‌پال" style="width: 40px; height: 40px;">
+                    <div>زرین‌پال</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('idpay')">
+                    <img src="https://idpay.ir/static/img/logo.png" alt="آیدی پی" style="width: 40px; height: 40px;">
+                    <div>آیدی پی</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod('card')">
+                    <div style="font-size: 30px;">💳</div>
+                    <div>کارت به کارت</div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="processPayment()">
+                پرداخت
+            </button>
+        </div>
+    </div>
 
-<div class="pack">
+    <!-- نوار پایین -->
+    <div class="navbar">
+        <a href="index.html" class="nav-item">🏠</a>
+        <a href="discover.html" class="nav-item">🔥</a>
+        <a href="live.html" class="nav-item">🎥</a>
+        <a href="gifts.html" class="nav-item">🎁</a>
+        <a href="profile.html" class="nav-item active">👤</a>
+    </div>
 
-100 Coins
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
 
-<br>
-
-<button onclick="buyCoins(100)">Buy</button>
-
-</div>
-
-<div class="pack">
-
-500 Coins
-
-<br>
-
-<button onclick="buyCoins(500)">Buy</button>
-
-</div>
-
-<div class="pack">
-
-1000 Coins
-
-<br>
-
-<button onclick="buyCoins(1000)">Buy</button>
-
-</div>
-
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<script>
-
-const firebaseConfig = {
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh",
-storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId: "815930956932",
-appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-}
-
-firebase.initializeApp(firebaseConfig)
-
-let db = firebase.firestore()
-
-firebase.auth().onAuthStateChanged(user=>{
-
-if(!user) return
-
-db.collection("users").doc(user.uid).get().then(doc=>{
-
-let u=doc.data()
-
-if(!u.coins) u.coins=0
-
-document.getElementById("coins").innerText=u.coins
-
-})
-
-})
-
-function buyCoins(amount){
-
-let user=firebase.auth().currentUser
-
-db.collection("users").doc(user.uid).get().then(doc=>{
-
-let coins=doc.data().coins || 0
-
-coins+=amount
-
-db.collection("users").doc(user.uid).update({
-
-coins:coins
-
-})
-
-document.getElementById("coins").innerText=coins
-
-alert("Coins Added 💰")
-
-})
-
-}
-
-</script>
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="wallet.html">💰</a>
-<a href="profile.html">👤</a>
-
-</div>
-
+    <script>
+        let selectedPackage = 100;
+        let selectedMethod = 'zarinpal';
+        
+        // انتخاب پکیج
+        function selectPackage(coins) {
+            selectedPackage = coins;
+            
+            const prices = {
+                100: 10000,
+                500: 45000,
+                1000: 80000,
+                5000: 350000
+            };
+            
+            document.getElementById('selectedCoins').textContent = coins;
+            document.getElementById('selectedPrice').textContent = prices[coins].toLocaleString() + ' تومان';
+            
+            showPaymentModal();
+        }
+        
+        // نمایش مودال پرداخت
+        function showPaymentModal() {
+            document.getElementById('paymentModal').classList.add('active');
+        }
+        
+        // بستن مودال پرداخت
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+        
+        // انتخاب روش پرداخت
+        function selectPaymentMethod(method) {
+            selectedMethod = method;
+            
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            event.currentTarget.classList.add('active');
+        }
+        
+        // پردازش پرداخت
+        function processPayment() {
+            if (!currentUser) {
+                showToast('لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
+            
+            showToast('در حال اتصال به درگاه پرداخت...');
+            
+            // شبیه‌سازی پرداخت موفق
+            setTimeout(() => {
+                // اضافه کردن سکه
+                userCoins += selectedPackage;
+                
+                // بروزرسانی در Firebase
+                db.collection('users').doc(currentUser.uid).update({
+                    coins: userCoins
+                });
+                
+                // ثبت تراکنش
+                db.collection('transactions').add({
+                    userId: currentUser.uid,
+                    type: 'charge',
+                    amount: selectedPackage,
+                    price: getPrice(selectedPackage),
+                    method: selectedMethod,
+                    time: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // بروزرسانی نمایش
+                document.querySelectorAll('.user-coins').forEach(el => {
+                    el.textContent = userCoins.toLocaleString('fa-IR');
+                });
+                
+                closePaymentModal();
+                showToast(`✅ ${selectedPackage} سکه به کیف پول اضافه شد!`);
+            }, 2000);
+        }
+        
+        // دریافت قیمت
+        function getPrice(coins) {
+            const prices = {
+                100: 10000,
+                500: 45000,
+                1000: 80000,
+                5000: 350000
+            };
+            return prices[coins];
+        }
+        
+        // لود تراکنش‌ها
+        function loadTransactions() {
+            if (!currentUser) return;
+            
+            db.collection('transactions')
+                .where('userId', '==', currentUser.uid)
+                .orderBy('time', 'desc')
+                .limit(10)
+                .get()
+                .then(snapshot => {
+                    let html = '';
+                    
+                    snapshot.forEach(doc => {
+                        const t = doc.data();
+                        const date = t.time ? new Date(t.time.toDate()).toLocaleDateString('fa-IR') : '۱۴۰۳/۱۲/۲۵';
+                        
+                        if (t.type === 'charge') {
+                            html += `
+                                <div class="transaction-item">
+                                    <div class="transaction-info">
+                                        <div class="transaction-icon">🪙</div>
+                                        <div class="transaction-details">
+                                            <h4>شارژ کیف پول</h4>
+                                            <p>${date}</p>
+                                        </div>
+                                    </div>
+                                    <div class="transaction-amount positive">+${t.amount}</div>
+                                </div>
+                            `;
+                        } else if (t.type === 'gift_purchase') {
+                            html += `
+                                <div class="transaction-item">
+                                    <div class="transaction-info">
+                                        <div class="transaction-icon">🎁</div>
+                                        <div class="transaction-details">
+                                            <h4>خرید هدیه ${t.gift}</h4>
+                                            <p>${date}</p>
+                                        </div>
+                                    </div>
+                                    <div class="transaction-amount negative">-${t.price}</div>
+                                </div>
+                            `;
+                        }
+                    });
+                    
+                    if (snapshot.empty) {
+                        html = `
+                            <div style="text-align: center; padding: 30px; color: #999;">
+                                تراکنشی وجود ندارد
+                            </div>
+                        `;
+                    }
+                    
+                    document.getElementById('transactionsList').innerHTML = html;
+                });
+        }
+        
+        // لود اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            if (currentUser) {
+                loadTransactions();
+            }
+        });
+    </script>
 </body>
 </html>
