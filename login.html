@@ -1,288 +1,89 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود | همدم</title>
+    <title>ورود به همدم</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: #ff4d6d;
+            font-family: Arial, Helvetica, sans-serif;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-
-        .auth-box {
+        .login-box {
             background: white;
-            border-radius: 30px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .auth-header {
+            width: 300px;
+            padding: 30px;
+            border-radius: 20px;
             text-align: center;
-            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-
-        .auth-header .logo {
-            font-size: 64px;
-            margin-bottom: 10px;
-        }
-
-        .auth-header h2 {
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .auth-header p {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .form-group {
+        h1 {
+            color: #ff4d6d;
             margin-bottom: 20px;
         }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #eee;
-            border-radius: 15px;
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
             font-size: 14px;
         }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #ff4d6d;
-        }
-
-        .auth-btn {
+        button {
             width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 15px;
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .auth-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,77,109,0.3);
-        }
-
-        .demo-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .demo-btn {
-            flex: 1;
             padding: 12px;
-            border: 2px solid #ff4d6d;
-            border-radius: 15px;
-            background: white;
-            color: #ff4d6d;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .demo-btn:hover {
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
             background: #ff4d6d;
             color: white;
+            font-size: 16px;
+            cursor: pointer;
         }
-
-        .error-message {
-            background: #fee2e2;
-            color: #ef4444;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
+        button:hover {
+            background: #ff3355;
         }
-
-        .error-message.show {
-            display: block;
+        .demo {
+            background: white;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
         }
-
-        .success-message {
-            background: #e8f5e8;
-            color: #4caf50;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        .test-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px dashed #eee;
+        .demo:hover {
+            background: #ff4d6d;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="auth-box">
-        <div class="auth-header">
-            <div class="logo">❤️</div>
-            <h2>به همدم خوش آمدید</h2>
-            <p>برای تست، از دمو استفاده کنید</p>
-        </div>
+    <div class="login-box">
+        <h1>❤️ همدم</h1>
+        <p>ورود به حساب کاربری</p>
         
-        <div class="error-message" id="errorMessage"></div>
-        <div class="success-message" id="successMessage"></div>
+        <input type="text" id="email" placeholder="ایمیل" value="test@test.com">
+        <input type="password" id="pass" placeholder="رمز عبور" value="123456">
         
-        <!-- فرم ورود ساده -->
-        <div class="form-group">
-            <label>ایمیل</label>
-            <input type="email" class="form-control" id="email" value="test@test.com">
-        </div>
-        
-        <div class="form-group">
-            <label>رمز عبور</label>
-            <input type="password" class="form-control" id="password" value="123456">
-        </div>
-        
-        <button class="auth-btn" onclick="handleTestLogin()">ورود تستی</button>
-        
-        <div class="demo-buttons">
-            <button class="demo-btn" onclick="demoLogin('admin')">دمو ادمین</button>
-            <button class="demo-btn" onclick="demoLogin('user')">دمو کاربر</button>
-        </div>
-        
-        <div class="test-section">
-            <button class="demo-btn" style="width:100%; margin-bottom:10px;" onclick="testConnection()">🔄 تست اتصال</button>
-            <button class="demo-btn" style="width:100%;" onclick="goToIndex()">🏠 رفتن به صفحه اصلی</button>
-        </div>
+        <button onclick="login()">ورود</button>
+        <button class="demo" onclick="demo()">ورود به عنوان مهمان</button>
     </div>
 
     <script>
-        // ==================== داده‌های تستی ====================
-        const testUsers = {
-            'admin@hamdam.com': {
-                password: 'admin123',
-                name: 'مدیر سیستم',
-                role: 'admin'
-            },
-            'user@hamdam.com': {
-                password: '123456',
-                name: 'کاربر تستی',
-                role: 'user'
-            },
-            'test@test.com': {
-                password: '123456',
-                name: 'کاربر نمونه',
-                role: 'user'
-            }
-        };
-
-        // ==================== توابع ====================
-        function showError(msg) {
-            document.getElementById('errorMessage').textContent = msg;
-            document.getElementById('errorMessage').classList.add('show');
-            setTimeout(() => {
-                document.getElementById('errorMessage').classList.remove('show');
-            }, 3000);
-        }
-
-        function showSuccess(msg) {
-            document.getElementById('successMessage').textContent = msg;
-            document.getElementById('successMessage').classList.add('show');
-            setTimeout(() => {
-                document.getElementById('successMessage').classList.remove('show');
-            }, 3000);
-        }
-
-        function handleTestLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        function login() {
+            let email = document.getElementById('email').value;
+            let pass = document.getElementById('pass').value;
             
-            // چک کردن اطلاعات در localStorage
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            
-            if (users[email] && users[email].password === password) {
-                showSuccess('✅ ورود موفق!');
-                localStorage.setItem('currentUser', JSON.stringify(users[email]));
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            } else if (testUsers[email] && testUsers[email].password === password) {
-                showSuccess('✅ ورود موفق!');
-                localStorage.setItem('currentUser', JSON.stringify({
-                    email: email,
-                    name: testUsers[email].name,
-                    role: testUsers[email].role
-                }));
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            } else {
-                showError('❌ ایمیل یا رمز عبور اشتباه است');
-            }
-        }
-
-        function demoLogin(role) {
-            let email, name;
-            
-            if (role === 'admin') {
-                email = 'admin@hamdam.com';
-                name = 'مدیر سیستم';
-            } else {
-                email = 'user@hamdam.com';
-                name = 'کاربر تستی';
-            }
-            
-            showSuccess('✅ ورود با دمو');
-            localStorage.setItem('currentUser', JSON.stringify({
-                email: email,
-                name: name,
-                role: role
-            }));
-            
-            setTimeout(() => {
+            if(email && pass) {
                 window.location.href = 'index.html';
-            }, 1000);
+            } else {
+                alert('لطفاً ایمیل و رمز عبور را وارد کنید');
+            }
         }
-
-        function testConnection() {
-            showSuccess('✅ اتصال اینترنت برقرار است');
-            console.log('🌐 اینترنت فعال است');
-        }
-
-        function goToIndex() {
+        
+        function demo() {
             window.location.href = 'index.html';
         }
-
-        // چک کردن localStorage
-        console.log('💾 localStorage:', localStorage);
     </script>
 </body>
 </html>
