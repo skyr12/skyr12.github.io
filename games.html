@@ -2,844 +2,247 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Game Center | نیمه گمشده</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رولت | همدم</title>
+    <link rel="stylesheet" href="../assets/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .game-container {
+            background: linear-gradient(135deg, #1a472a, #2d5a3a);
             min-height: 100vh;
-            padding-bottom: 70px;
-        }
-
-        /* هدر اصلی */
-        .header {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
             padding: 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(255, 77, 109, 0.3);
+            text-align: center;
         }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header h1 i {
-            font-style: normal;
-            font-size: 28px;
-        }
-
-        /* کارت سکه */
-        .coins-card {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .coins-card:hover {
-            transform: scale(1.05);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .coins-icon {
-            font-size: 20px;
-        }
-
-        .coins-amount {
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        /* نوار جستجو */
-        .search-bar {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
-        .search-container {
-            background: white;
-            border-radius: 30px;
-            padding: 5px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .search-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .search-btn:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-        }
-
-        /* دسته‌بندی بازی‌ها */
-        .categories {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .categories::-webkit-scrollbar {
-            display: none;
-        }
-
-        .category-btn {
-            background: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .category-btn.active {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-        }
-
-        .category-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.2);
-        }
-
-        /* بنر ویژه */
-        .featured-banner {
-            max-width: 1200px;
+        
+        .roulette-wheel {
+            width: 300px;
+            height: 300px;
             margin: 30px auto;
-            padding: 0 20px;
+            position: relative;
         }
-
-        .banner-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ff4d6d 0deg 45deg,
+                #4a90e2 45deg 90deg,
+                #4caf50 90deg 135deg,
+                #ffd700 135deg 180deg,
+                #ff4d6d 180deg 225deg,
+                #4a90e2 225deg 270deg,
+                #4caf50 270deg 315deg,
+                #ffd700 315deg 360deg
+            );
+            border: 5px solid gold;
+            box-shadow: 0 0 30px rgba(255,215,0,0.5);
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.15, 1);
+        }
+        
+        .wheel.spinning {
+            transform: rotate(1440deg);
+        }
+        
+        .pointer {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid gold;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        .bet-panel {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 30px;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            padding: 20px;
+            margin: 20px;
         }
-
-        .banner-info h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
+        
+        .bet-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
         }
-
-        .banner-info p {
-            opacity: 0.9;
-            margin-bottom: 20px;
-        }
-
-        .play-now-btn {
+        
+        .bet-btn {
             background: white;
-            color: #667eea;
             border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 18px;
+            padding: 15px;
+            border-radius: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
-        .play-now-btn:hover {
+        
+        .bet-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        /* بخش بازی‌های ویژه */
-        .section-title {
-            max-width: 1200px;
-            margin: 40px auto 20px;
-            padding: 0 20px;
-            color: white;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* گرید بازی‌ها */
-        .games-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        /* کارت بازی */
-        .game-card {
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .game-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.3);
-        }
-
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .game-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .game-image {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            transition: all 0.3s ease;
-        }
-
-        .game-card:hover .game-image {
-            transform: scale(1.05);
-        }
-
-        .game-content {
-            padding: 15px;
-        }
-
-        .game-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .game-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .game-badge {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            color: #ff4d6d;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .game-stats {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .game-stat {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #666;
-            font-size: 13px;
-        }
-
-        .game-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-
-        .game-price {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ff4d6d;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .game-players {
-            color: #4caf50;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* بازی‌های در حال اجرا */
-        .live-games {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .live-scroll {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 0;
-            scrollbar-width: none;
-        }
-
-        .live-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .live-item {
-            min-width: 200px;
-            background: white;
-            border-radius: 20px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .live-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-        }
-
-        .live-info h4 {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .live-info p {
-            font-size: 12px;
-            color: #4caf50;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* نوار پایین */
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            font-size: 24px;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            color: #666;
-            position: relative;
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            color: #ff4d6d;
-            transform: translateY(-5px);
-        }
-
-        .nav-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
             background: #ff4d6d;
             color: white;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            min-width: 18px;
-            text-align: center;
         }
-
-        /* لودینگ */
-        .loading {
-            text-align: center;
-            padding: 50px;
+        
+        .color-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
         }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
+        
+        .color-btn.red {
+            background: #ff4d6d;
+            color: white;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        .color-btn.black {
+            background: #333;
+            color: white;
+        }
+        
+        .color-btn.green {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .result-box {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-content">
-            <h1>
-                <i>🎮</i>
-                Game Center
-            </h1>
-            <div class="coins-card" onclick="showCoinShop()">
-                <span class="coins-icon">🪙</span>
-                <span class="coins-amount" id="userCoins">1,250</span>
-            </div>
+    <div class="game-container">
+        <h1 style="margin-bottom: 20px;">🎰 رولت</h1>
+        
+        <div class="wallet" style="background: rgba(255,255,255,0.2); margin: 0 auto 20px; width: fit-content;">
+            <span>🪙</span>
+            <span id="gameCoins">۱,۰۰۰</span>
         </div>
-    </div>
-
-    <div class="search-bar">
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="🔍 جستجوی بازی..." id="searchInput" onkeyup="searchGames()">
-            <button class="search-btn" onclick="searchGames()">جستجو</button>
+        
+        <div class="roulette-wheel">
+            <div class="wheel" id="wheel"></div>
+            <div class="pointer"></div>
         </div>
-    </div>
-
-    <div class="categories">
-        <button class="category-btn active" onclick="filterGames('all')">همه بازی‌ها</button>
-        <button class="category-btn" onclick="filterGames('casino')">🎰 کازینو</button>
-        <button class="category-btn" onclick="filterGames('puzzle')">🧩 پازل</button>
-        <button class="category-btn" onclick="filterGames('action')">⚡ اکشن</button>
-        <button class="category-btn" onclick="filterGames('strategy')">♟️ استراتژی</button>
-        <button class="category-btn" onclick="filterGames('sport')">⚽ ورزشی</button>
-    </div>
-
-    <div class="featured-banner">
-        <div class="banner-card">
-            <div class="banner-info">
-                <h2>🎰 جکپات ۱۰۰ میلیونی</h2>
-                <p>این هفته، یک نفر برنده بزرگ می‌شود!</p>
-                <button class="play-now-btn" onclick="openGame('jackpot.html')">شرکت در مسابقه</button>
+        
+        <div class="bet-panel">
+            <h3>💰 مبلغ شرط</h3>
+            <div class="bet-buttons">
+                <button class="bet-btn" onclick="setBet(10)">۱۰</button>
+                <button class="bet-btn" onclick="setBet(50)">۵۰</button>
+                <button class="bet-btn" onclick="setBet(100)">۱۰۰</button>
+                <button class="bet-btn" onclick="setBet(500)">۵۰۰</button>
+                <button class="bet-btn" onclick="setBet(1000)">۱,۰۰۰</button>
+                <button class="bet-btn" onclick="setBet(5000)">۵,۰۰۰</button>
             </div>
-            <div style="font-size: 80px;">🏆</div>
-        </div>
-    </div>
-
-    <div class="section-title">
-        <span>🔥</span>
-        بازی‌های محبوب
-    </div>
-
-    <div class="games-grid" id="gamesGrid">
-        <!-- بازی‌ها با جاوااسکریپت لود می‌شوند -->
-    </div>
-
-    <div class="section-title">
-        <span>🆕</span>
-        بازی‌های جدید
-    </div>
-
-    <div class="games-grid" id="newGamesGrid"></div>
-
-    <div class="live-games">
-        <div class="section-title">
-            <span>🎥</span>
-            در حال بازی
-        </div>
-        <div class="live-scroll" id="liveGames">
-            <div class="live-item">
-                <div class="live-avatar">👤</div>
-                <div class="live-info">
-                    <h4>علی رضایی</h4>
-                    <p>🔴 Roulette</p>
-                </div>
-            </div>
-            <div class="live-item">
-                <div class="live-avatar">👤</div>
-                <div class="live-info">
-                    <h4>سارا محمدی</h4>
-                    <p>🟢 Slots</p>
-                </div>
-            </div>
-            <div class="live-item">
-                <div class="live-avatar">👤</div>
-                <div class="live-info">
-                    <h4>رضا کریمی</h4>
-                    <p>🟡 Poker</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="navbar">
-        <a href="discover.html" class="nav-item">🔥</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="inbox.html" class="nav-item">💬</a>
-        <a href="games.html" class="nav-item active">🎮</a>
-        <a href="profile.html" class="nav-item">👤</a>
-    </div>
-
-    <!-- مودال خرید سکه -->
-    <div class="modal" id="coinShopModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
-        <div style="background: white; width: 90%; max-width: 400px; border-radius: 30px; padding: 25px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 style="font-size: 22px;">خرید سکه</h3>
-                <span style="font-size: 30px; cursor: pointer;" onclick="closeModal()">&times;</span>
-            </div>
-            <div style="display: grid; gap: 15px;">
-                <div style="background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20); padding: 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="buyCoins(100)">
-                    <span style="font-size: 18px; font-weight: bold;">۱۰۰ سکه</span>
-                    <span style="color: #ff4d6d; font-weight: bold;">۱۰,۰۰۰ تومان</span>
-                </div>
-                <div style="background: linear-gradient(135deg, #667eea20, #764ba220); padding: 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="buyCoins(500)">
-                    <span style="font-size: 18px; font-weight: bold;">۵۰۰ سکه</span>
-                    <span style="color: #667eea; font-weight: bold;">۴۵,۰۰۰ تومان</span>
-                </div>
-                <div style="background: linear-gradient(135deg, #4caf5020, #8bc34a20); padding: 20px; border-radius: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;" onclick="buyCoins(1000)">
-                    <span style="font-size: 18px; font-weight: bold;">۱۰۰۰ سکه</span>
-                    <span style="color: #4caf50; font-weight: bold;">۸۰,۰۰۰ تومان</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // داده‌های بازی‌ها
-        const games = [
-            {
-                id: 1,
-                name: "Roulette",
-                category: "casino",
-                image: "https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400",
-                players: 1243,
-                prize: "۵۰ میلیون",
-                price: 100,
-                type: "popular"
-            },
-            {
-                id: 2,
-                name: "Lucky Wheel",
-                category: "casino",
-                image: "https://images.unsplash.com/photo-1608889175123-7c52c2b3b8d5?w=400",
-                players: 892,
-                prize: "۱۰ میلیون",
-                price: 50,
-                type: "popular"
-            },
-            {
-                id: 3,
-                name: "Slots",
-                category: "casino",
-                image: "https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400",
-                players: 2156,
-                prize: "۱۰۰ میلیون",
-                price: 200,
-                type: "popular"
-            },
-            {
-                id: 4,
-                name: "Fruit Game",
-                category: "casino",
-                image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
-                players: 567,
-                prize: "۵ میلیون",
-                price: 25,
-                type: "new"
-            },
-            {
-                id: 5,
-                name: "Quiz Challenge",
-                category: "puzzle",
-                image: "https://images.unsplash.com/photo-1584697964358-4f47c6df0b6c?w=400",
-                players: 432,
-                prize: "۲ میلیون",
-                price: 30,
-                type: "popular"
-            },
-            {
-                id: 6,
-                name: "Fishing Master",
-                category: "action",
-                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400",
-                players: 789,
-                prize: "۳ میلیون",
-                price: 40,
-                type: "new"
-            },
-            {
-                id: 7,
-                name: "Poker Night",
-                category: "casino",
-                image: "https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=400",
-                players: 654,
-                prize: "۲۰ میلیون",
-                price: 150,
-                type: "popular"
-            },
-            {
-                id: 8,
-                name: "Chess Master",
-                category: "strategy",
-                image: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=400",
-                players: 321,
-                prize: "۱ میلیون",
-                price: 20,
-                type: "new"
-            }
-        ];
-
-        let userCoins = 1250;
-
-        // بارگذاری بازی‌ها
-        function loadGames() {
-            const popularGames = games.filter(g => g.type === "popular");
-            const newGames = games.filter(g => g.type === "new");
-
-            document.getElementById('gamesGrid').innerHTML = popularGames.map(game => createGameCard(game)).join('');
-            document.getElementById('newGamesGrid').innerHTML = newGames.map(game => createGameCard(game)).join('');
-        }
-
-        // ساخت کارت بازی
-        function createGameCard(game) {
-            return `
-                <div class="game-card" onclick="openGame('${game.name.toLowerCase()}.html')">
-                    <img src="${game.image}" class="game-image" alt="${game.name}">
-                    <div class="game-content">
-                        <div class="game-header">
-                            <span class="game-title">${game.name}</span>
-                            <span class="game-badge">${game.category === 'casino' ? '🎰' : game.category === 'puzzle' ? '🧩' : '🎮'}</span>
-                        </div>
-                        <div class="game-stats">
-                            <span class="game-stat">
-                                <span>👥</span>
-                                ${game.players.toLocaleString()}
-                            </span>
-                            <span class="game-stat">
-                                <span>🏆</span>
-                                ${game.prize}
-                            </span>
-                        </div>
-                        <div class="game-footer">
-                            <span class="game-price">
-                                <span>🪙</span>
-                                ${game.price}
-                            </span>
-                            <span class="game-players">
-                                <span>🟢</span>
-                                ${Math.floor(game.players / 10)} آنلاین
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // جستجوی بازی
-        function searchGames() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filteredGames = games.filter(game => 
-                game.name.toLowerCase().includes(searchTerm)
-            );
             
-            document.getElementById('gamesGrid').innerHTML = filteredGames.map(game => createGameCard(game)).join('');
+            <p>شرط فعلی: <span id="currentBet">۱۰</span> سکه</p>
+            
+            <h3 style="margin: 20px 0 10px;">🎨 رنگ</h3>
+            <div style="display: flex; gap: 10px;">
+                <button class="color-btn red" style="flex: 1;" onclick="placeBet('red')">قرمز</button>
+                <button class="color-btn black" style="flex: 1;" onclick="placeBet('black')">مشکی</button>
+                <button class="color-btn green" style="flex: 1;" onclick="placeBet('green')">سبز</button>
+            </div>
+        </div>
+        
+        <div class="result-box" id="result">
+            آماده شروع بازی
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%;" onclick="spinWheel()">
+            چرخوندن (🎡)
+        </button>
+    </div>
+    
+    <script>
+        let coins = 1000;
+        let currentBet = 10;
+        let selectedColor = null;
+        let isSpinning = false;
+        
+        function setBet(amount) {
+            currentBet = amount;
+            document.getElementById('currentBet').textContent = amount.toLocaleString('fa-IR');
         }
-
-        // فیلتر براساس دسته‌بندی
-        function filterGames(category) {
-            // به‌روزرسانی کلاس active
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-
-            // فیلتر بازی‌ها
-            const filteredGames = category === 'all' ? games : games.filter(g => g.category === category);
-            document.getElementById('gamesGrid').innerHTML = filteredGames.map(game => createGameCard(game)).join('');
+        
+        function placeBet(color) {
+            if (isSpinning) return;
+            
+            selectedColor = color;
+            document.getElementById('result').innerHTML = `شرط روی ${color === 'red' ? 'قرمز' : color === 'black' ? 'مشکی' : 'سبز'} با مبلغ ${currentBet} سکه`;
         }
-
-        // باز کردن بازی
-        function openGame(page) {
-            if (userCoins >= 50) {
-                userCoins -= 50;
-                document.getElementById('userCoins').textContent = userCoins.toLocaleString();
-                window.location = page;
-            } else {
-                alert('❌ سکه کافی ندارید! لطفاً سکه خریداری کنید.');
+        
+        function spinWheel() {
+            if (!selectedColor) {
+                alert('لطفاً ابتدا یک رنگ انتخاب کنید');
+                return;
             }
-        }
-
-        // نمایش فروشگاه سکه
-        function showCoinShop() {
-            document.getElementById('coinShopModal').style.display = 'flex';
-        }
-
-        // خرید سکه
-        function buyCoins(amount) {
-            userCoins += amount;
-            document.getElementById('userCoins').textContent = userCoins.toLocaleString();
-            closeModal();
-            alert(`✅ ${amount} سکه به کیف پول شما اضافه شد!`);
-        }
-
-        // بستن مودال
-        function closeModal() {
-            document.getElementById('coinShopModal').style.display = 'none';
-        }
-
-        // بازی‌های ویژه روز
-        function loadDailyGames() {
-            const dailyBonus = document.createElement('div');
-            dailyBonus.className = 'daily-bonus';
-            dailyBonus.innerHTML = `
-                <div style="background: linear-gradient(135deg, #4caf50, #8bc34a); color: white; padding: 20px; border-radius: 20px; margin: 20px auto; max-width: 1200px; display: flex; align-items: center; justify-content: space-between;">
-                    <div>
-                        <h3 style="font-size: 24px;">🎁 جایزه روزانه</h3>
-                        <p>هر روز ۱۰۰ سکه رایگان دریافت کن!</p>
-                    </div>
-                    <button style="background: white; color: #4caf50; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer;" onclick="claimDailyBonus()">دریافت جایزه</button>
-                </div>
-            `;
-            document.querySelector('.featured-banner').after(dailyBonus);
-        }
-
-        // دریافت جایزه روزانه
-        function claimDailyBonus() {
-            const lastClaim = localStorage.getItem('lastDailyBonus');
-            const today = new Date().toDateString();
-
-            if (lastClaim !== today) {
-                userCoins += 100;
-                document.getElementById('userCoins').textContent = userCoins.toLocaleString();
-                localStorage.setItem('lastDailyBonus', today);
-                alert('✅ ۱۰۰ سکه جایزه روزانه به شما اضافه شد!');
-            } else {
-                alert('❌ شما امروز قبلاً جایزه خود را دریافت کرده‌اید!');
+            
+            if (coins < currentBet) {
+                alert('سکه کافی ندارید!');
+                return;
             }
+            
+            isSpinning = true;
+            
+            // کم کردن سکه
+            coins -= currentBet;
+            document.getElementById('gameCoins').textContent = coins.toLocaleString('fa-IR');
+            
+            // چرخوندن
+            const wheel = document.getElementById('wheel');
+            wheel.classList.add('spinning');
+            
+            // تعیین نتیجه
+            setTimeout(() => {
+                wheel.classList.remove('spinning');
+                
+                const random = Math.random();
+                let result;
+                let multiplier;
+                
+                if (random < 0.45) { // 45% قرمز
+                    result = 'red';
+                    multiplier = 2;
+                } else if (random < 0.9) { // 45% مشکی
+                    result = 'black';
+                    multiplier = 2;
+                } else { // 10% سبز
+                    result = 'green';
+                    multiplier = 10;
+                }
+                
+                if (result === selectedColor) {
+                    const win = currentBet * multiplier;
+                    coins += win;
+                    document.getElementById('result').innerHTML = `
+                        🎉 برد! ${result === 'green' ? 'سبز' : (result === 'red' ? 'قرمز' : 'مشکی')} شد
+                        <br>
+                        شما ${win} سکه بردید
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        😢 باخت! ${result === 'green' ? 'سبز' : (result === 'red' ? 'قرمز' : 'مشکی')} شد
+                        <br>
+                        ${currentBet} سکه را باختید
+                    `;
+                }
+                
+                document.getElementById('gameCoins').textContent = coins.toLocaleString('fa-IR');
+                isSpinning = false;
+                selectedColor = null;
+            }, 3000);
         }
-
-        // تورنومنت‌ها
-        function loadTournaments() {
-            const tournaments = [
-                { name: "جام نوروزی", prize: "۵۰ میلیون", players: 234, game: "Poker" },
-                { name: "جکپات آخر هفته", prize: "۱۰۰ میلیون", players: 567, game: "Roulette" },
-                { name: "مسابقه هفتگی", prize: "۲۵ میلیون", players: 123, game: "Slots" }
-            ];
-
-            const tournamentHTML = `
-                <div class="section-title">
-                    <span>🏆</span>
-                    تورنومنت‌های ویژه
-                </div>
-                <div style="max-width: 1200px; margin: 20px auto; padding: 0 20px; display: grid; gap: 15px;">
-                    ${tournaments.map(t => `
-                        <div style="background: white; border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between;">
-                            <div>
-                                <h4 style="font-size: 18px; margin-bottom: 5px;">${t.name}</h4>
-                                <p style="color: #666;">🎮 ${t.game} | 👥 ${t.players} بازیکن</p>
-                            </div>
-                            <div style="text-align: left;">
-                                <div style="color: #ff4d6d; font-weight: bold; font-size: 20px;">${t.prize}</div>
-                                <button style="background: linear-gradient(135deg, #ff4d6d, #ff8a5c); color: white; border: none; padding: 8px 20px; border-radius: 20px; margin-top: 5px; cursor: pointer;" onclick="joinTournament('${t.name}')">شرکت</button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            document.querySelector('.live-games').insertAdjacentHTML('afterend', tournamentHTML);
-        }
-
-        // شرکت در تورنومنت
-        function joinTournament(name) {
-            if (userCoins >= 200) {
-                userCoins -= 200;
-                document.getElementById('userCoins').textContent = userCoins.toLocaleString();
-                alert(`✅ شما در تورنومنت "${name}" ثبت نام کردید!`);
-            } else {
-                alert('❌ سکه کافی ندارید! حداقل ۲۰۰ سکه نیاز است.');
-            }
-        }
-
-        // لود اولیه
-        window.onload = function() {
-            loadGames();
-            loadDailyGames();
-            loadTournaments();
-        };
     </script>
 </body>
 </html>
