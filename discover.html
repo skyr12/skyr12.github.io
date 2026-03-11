@@ -2,249 +2,904 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>اکتشاف | همدم</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(165deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* پس زمینه لوکس */
+        .luxury-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .luxury-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,77,109,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,138,92,0.1) 0%, transparent 50%);
+            animation: pulseGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* هدر */
+        .luxury-header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.3);
+        }
+
+        .logo-icon span {
+            transform: rotate(-45deg);
+            font-size: 28px;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* فیلترها */
+        .filters-section {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .filters-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .filters-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 12px 25px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-chip:hover {
+            background: #ff4d6d;
+            border-color: #ff4d6d;
+            transform: translateY(-2px);
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        /* گرید کاربران */
+        .discover-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: cardAppear 0.5s ease-out;
+            position: relative;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: #ff4d6d;
+        }
+
+        .card-image-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .user-card:hover .card-image {
+            transform: scale(1.1);
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+
+        .online-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            background: #4caf50;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 20px #4caf50;
+        }
+
+        .vip-indicator {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #ffd700, #ffa500);
+            padding: 5px 10px;
+            border-radius: 20px;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-info {
+            padding: 15px;
+        }
+
+        .card-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .card-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .card-distance {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ff4d6d;
+            font-size: 12px;
+        }
+
+        .card-interests {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .mini-interest {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 4px 8px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* دکمه شناور فیلتر */
+        .filter-fab {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+
+        .filter-fab:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* مودال فیلتر */
+        .filter-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .filter-modal.show {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px 40px 0 0;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .modal-header h3 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .close-modal {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: #ff4d6d;
+            border-color: #ff4d6d;
+        }
+
+        .filter-group {
+            margin-bottom: 25px;
+        }
+
+        .filter-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .range-slider {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff4d6d;
+        }
+
+        .range-values {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .interest-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .interest-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interest-option:hover {
+            background: #ff4d6d;
+            border-color: #ff4d6d;
+        }
+
+        .interest-option.selected {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border-color: transparent;
+            color: white;
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
+        }
+
+        /* منوی پایین */
+        .luxury-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #ff4d6d;
+            transform: translateY(-5px);
+        }
+
+        .nav-item.active {
+            color: #ff4d6d;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4d6d;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* حالت خالی */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            margin: 20px;
+        }
+
+        .empty-emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .empty-state h3 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .discover-grid {
+                gap: 10px;
+            }
+            
+            .card-image-container {
+                height: 180px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- هدر -->
-    <div class="header">
-        <div class="logo">
-            <span>🔥</span>
-            اکتشاف
+    <div class="luxury-bg"></div>
+
+    <header class="luxury-header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <span>❤️</span>
+                </div>
+                <span class="logo-text">همدم</span>
+            </div>
+            <div class="page-title">
+                <span>🔥</span>
+                <span>اکتشاف</span>
+            </div>
         </div>
-        <div class="wallet" onclick="location.href='wallet.html'">
-            <span>🪙</span>
-            <span class="user-coins">۰</span>
+    </header>
+
+    <!-- فیلترهای سریع -->
+    <div class="filters-section">
+        <div class="filters-scroll" id="quickFilters">
+            <span class="filter-chip active" onclick="filterUsers('all')">همه</span>
+            <span class="filter-chip" onclick="filterUsers('nearby')">نزدیک من</span>
+            <span class="filter-chip" onclick="filterUsers('online')">آنلاین</span>
+            <span class="filter-chip" onclick="filterUsers('vip')">VIP</span>
+            <span class="filter-chip" onclick="filterUsers('new')">جدید</span>
         </div>
     </div>
 
-    <!-- تب‌ها -->
-    <div class="tabs">
-        <div class="tab" onclick="location.href='index.html'">خانه</div>
-        <div class="tab active" onclick="location.href='discover.html'">اکتشاف</div>
-        <div class="tab" onclick="location.href='live.html'">لایو</div>
-        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
-        <div class="tab" onclick="location.href='profile.html'">پروفایل</div>
+    <!-- گرید کاربران -->
+    <div class="discover-grid" id="usersGrid"></div>
+
+    <!-- دکمه شناور فیلتر -->
+    <div class="filter-fab" onclick="openFilterModal()">
+        <span>⚙️</span>
     </div>
 
-    <!-- فیلترها -->
-    <div style="display: flex; gap: 10px; padding: 15px; overflow-x: auto;">
-        <select class="form-control" style="width: auto; min-width: 100px;" id="cityFilter">
-            <option value="">همه شهرها</option>
-            <option value="tehran">تهران</option>
-            <option value="isfahan">اصفهان</option>
-            <option value="shiraz">شیراز</option>
-            <option value="mashhad">مشهد</option>
-            <option value="tabriz">تبریز</option>
-        </select>
-        
-        <select class="form-control" style="width: auto; min-width: 100px;" id="ageFilter">
-            <option value="">همه سنین</option>
-            <option value="18-25">۱۸-۲۵</option>
-            <option value="26-35">۲۶-۳۵</option>
-            <option value="36-45">۳۶-۴۵</option>
-        </select>
-        
-        <button class="btn btn-primary" onclick="applyFilters()" style="padding: 10px 20px;">اعمال فیلتر</button>
+    <!-- مودال فیلتر -->
+    <div class="filter-modal" id="filterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>فیلترهای پیشرفته</h3>
+                <div class="close-modal" onclick="closeFilterModal()">✕</div>
+            </div>
+
+            <div class="filter-group">
+                <label>محدوده سنی</label>
+                <input type="range" class="range-slider" min="18" max="60" value="30" id="ageRange">
+                <div class="range-values">
+                    <span>۱۸ سال</span>
+                    <span id="ageValue">۳۰ سال</span>
+                    <span>۶۰ سال</span>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>حداکثر فاصله</label>
+                <input type="range" class="range-slider" min="1" max="50" value="10" id="distanceRange">
+                <div class="range-values">
+                    <span>۱ کیلومتر</span>
+                    <span id="distanceValue">۱۰ کیلومتر</span>
+                    <span>۵۰ کیلومتر</span>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label>علاقه‌مندی‌ها</label>
+                <div class="interest-selector" id="interestSelector">
+                    <span class="interest-option" onclick="toggleInterest(this)">🎵 موسیقی</span>
+                    <span class="interest-option" onclick="toggleInterest(this)">✈️ سفر</span>
+                    <span class="interest-option" onclick="toggleInterest(this)">📚 کتاب</span>
+                    <span class="interest-option" onclick="toggleInterest(this)">🎮 بازی</span>
+                    <span class="interest-option" onclick="toggleInterest(this)">⚽ ورزش</span>
+                    <span class="interest-option" onclick="toggleInterest(this)">🎨 هنر</span>
+                </div>
+            </div>
+
+            <button class="apply-btn" onclick="applyFilters()">اعمال فیلترها</button>
+        </div>
     </div>
 
-    <!-- کانتینر اصلی برای کاربران -->
-    <div id="discoverContainer">
-        <!-- کاربران با JS لود میشن -->
-    </div>
-
-    <!-- نوار پایین -->
-    <div class="navbar">
-        <a href="index.html" class="nav-item">🏠</a>
-        <a href="discover.html" class="nav-item active">🔥</a>
-        <a href="live.html" class="nav-item">🎥</a>
-        <a href="gifts.html" class="nav-item">🎁</a>
-        <a href="profile.html" class="nav-item">👤</a>
-    </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
-    <script src="assets/script.js"></script>
+    <!-- منوی پایین -->
+    <nav class="luxury-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">خانه</span>
+            </a>
+            <a href="discover.html" class="nav-item active">
+                <span class="nav-icon">🔥</span>
+                <span class="nav-label">اکتشاف</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">❤️</span>
+                <span class="nav-label">تطابق</span>
+                <span class="nav-badge">۳</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">💬</span>
+                <span class="nav-label">پیام</span>
+                <span class="nav-badge">۵</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">پروفایل</span>
+            </a>
+        </div>
+    </nav>
 
     <script>
-        let currentUsers = [];
-        let currentIndex = 0;
+        // داده‌های نمونه
+        const users = [
+            {
+                name: 'سارا محمدی',
+                age: 24,
+                city: 'تهران',
+                distance: 3,
+                image: 'https://randomuser.me/api/portraits/women/1.jpg',
+                online: true,
+                vip: true,
+                interests: ['🎵 موسیقی', '✈️ سفر', '📚 کتاب']
+            },
+            {
+                name: 'علی رضایی',
+                age: 28,
+                city: 'اصفهان',
+                distance: 15,
+                image: 'https://randomuser.me/api/portraits/men/1.jpg',
+                online: false,
+                vip: false,
+                interests: ['🎮 بازی', '⚽ ورزش', '🎨 هنر']
+            },
+            {
+                name: 'مریم کریمی',
+                age: 26,
+                city: 'شیراز',
+                distance: 8,
+                image: 'https://randomuser.me/api/portraits/women/2.jpg',
+                online: true,
+                vip: true,
+                interests: ['🎵 موسیقی', '🎨 هنر', '✈️ سفر']
+            },
+            {
+                name: 'رضا احمدی',
+                age: 30,
+                city: 'تبریز',
+                distance: 22,
+                image: 'https://randomuser.me/api/portraits/men/2.jpg',
+                online: false,
+                vip: false,
+                interests: ['📚 کتاب', '🎮 بازی', '⚽ ورزش']
+            },
+            {
+                name: 'زهرا حسینی',
+                age: 23,
+                city: 'مشهد',
+                distance: 5,
+                image: 'https://randomuser.me/api/portraits/women/3.jpg',
+                online: true,
+                vip: false,
+                interests: ['🎵 موسیقی', '📚 کتاب', '🎨 هنر']
+            },
+            {
+                name: 'محمد طاهری',
+                age: 32,
+                city: 'کرج',
+                distance: 12,
+                image: 'https://randomuser.me/api/portraits/men/3.jpg',
+                online: false,
+                vip: true,
+                interests: ['✈️ سفر', '🎮 بازی', '⚽ ورزش']
+            }
+        ];
 
-        // لود کاربران
+        let currentFilter = 'all';
+        let selectedInterests = [];
+
         function loadUsers() {
-            document.getElementById('discoverContainer').innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>در حال پیدا کردن کاربران...</p>
-                </div>
-            `;
+            const grid = document.getElementById('usersGrid');
+            let filteredUsers = [...users];
 
-            // گرفتن کاربران از Firebase
-            db.collection("users")
-                .limit(20)
-                .get()
-                .then(snapshot => {
-                    if (snapshot.empty) {
-                        useSampleUsers();
-                        return;
-                    }
+            // اعمال فیلتر
+            if (currentFilter === 'online') {
+                filteredUsers = users.filter(u => u.online);
+            } else if (currentFilter === 'vip') {
+                filteredUsers = users.filter(u => u.vip);
+            } else if (currentFilter === 'nearby') {
+                filteredUsers = users.filter(u => u.distance <= 10);
+            }
 
-                    currentUsers = [];
-                    snapshot.forEach(doc => {
-                        if (doc.id !== currentUser?.uid) {
-                            currentUsers.push({
-                                id: doc.id,
-                                ...doc.data()
-                            });
-                        }
-                    });
-
-                    if (currentUsers.length === 0) {
-                        useSampleUsers();
-                    } else {
-                        currentIndex = 0;
-                        showCurrentUser();
-                    }
-                })
-                .catch(error => {
-                    console.error("Error loading users:", error);
-                    useSampleUsers();
-                });
-        }
-
-        // استفاده از کاربران نمونه
-        function useSampleUsers() {
-            currentUsers = [
-                {
-                    id: "sample1",
-                    name: "سارا محمدی",
-                    age: 24,
-                    city: "تهران",
-                    bio: "عاشق موسیقی و سفر ❤️",
-                    photo: "https://randomuser.me/api/portraits/women/1.jpg",
-                    distance: 3
-                },
-                {
-                    id: "sample2",
-                    name: "علی رضایی",
-                    age: 28,
-                    city: "اصفهان",
-                    bio: "برنامه‌نویس، عاشق تکنولوژی 🎮",
-                    photo: "https://randomuser.me/api/portraits/men/1.jpg",
-                    distance: 5
-                },
-                {
-                    id: "sample3",
-                    name: "مریم کریمی",
-                    age: 23,
-                    city: "شیراز",
-                    bio: "موسیقی‌دان و عاشق هنر 🎵",
-                    photo: "https://randomuser.me/api/portraits/women/2.jpg",
-                    distance: 2
-                }
-            ];
-            currentIndex = 0;
-            showCurrentUser();
-        }
-
-        // نمایش کاربر فعلی
-        function showCurrentUser() {
-            if (currentIndex >= currentUsers.length) {
-                document.getElementById('discoverContainer').innerHTML = `
-                    <div style="text-align: center; padding: 50px; background: white; border-radius: 25px; margin: 15px;">
-                        <div style="font-size: 80px; margin-bottom: 20px;">🔍</div>
-                        <h3 style="margin-bottom: 10px;">کاربری پیدا نشد!</h3>
-                        <p style="color: #666; margin-bottom: 20px;">بعداً دوباره امتحان کن</p>
-                        <button class="btn btn-primary" onclick="loadUsers()">تلاش مجدد</button>
+            if (filteredUsers.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-emoji">🔍</div>
+                        <h3>کاربری پیدا نشد</h3>
+                        <p>فیلترها را تغییر دهید یا بعداً امتحان کنید</p>
+                        <button class="refresh-btn" onclick="resetFilters()">تنظیم مجدد</button>
                     </div>
                 `;
                 return;
             }
 
-            const user = currentUsers[currentIndex];
-            const remaining = currentUsers.length - currentIndex - 1;
-
-            const html = `
-                <div style="color: white; text-align: center; margin: 10px;">
-                    ${remaining} کاربر باقی‌مانده
-                </div>
-
-                <div class="profile-card">
-                    <img src="${user.photo}" class="profile-image" alt="${user.name}">
-                    
-                    <div class="profile-info">
-                        <div class="name-age">
-                            <span class="name">${user.name}</span>
-                            <span class="age">${user.age || '۲۴'}</span>
+            let html = '';
+            filteredUsers.forEach(user => {
+                html += `
+                    <div class="user-card" onclick="viewProfile('${user.name}')">
+                        <div class="card-image-container">
+                            <img src="${user.image}" class="card-image">
+                            <div class="card-overlay"></div>
+                            ${user.online ? '<span class="online-indicator"></span>' : ''}
+                            ${user.vip ? '<span class="vip-indicator"><span>👑</span>VIP</span>' : ''}
                         </div>
-                        
-                        <div class="location">
-                            <span>📍</span>
-                            <span>${user.city || 'تهران'}، ${user.distance || '۳'} کیلومتری</span>
-                        </div>
-                        
-                        <div class="bio">
-                            ${user.bio || 'عاشق موسیقی، سفر و تکنولوژی ❤️'}
-                        </div>
-                        
-                        <div class="interests">
-                            <span class="interest-tag">🎵 موسیقی</span>
-                            <span class="interest-tag">✈️ سفر</span>
-                            <span class="interest-tag">📚 کتاب</span>
-                            <span class="interest-tag">🎮 بازی</span>
-                        </div>
-                        
-                        <div class="action-buttons">
-                            <button class="action-btn dislike-btn" onclick="nextUser('dislike', '${user.id}')">✕</button>
-                            <button class="action-btn like-btn" onclick="nextUser('like', '${user.id}')">❤️</button>
-                            <button class="action-btn dislike-btn" onclick="nextUser('superlike', '${user.id}')">⭐</button>
+                        <div class="card-info">
+                            <div class="card-name">${user.name}</div>
+                            <div class="card-details">
+                                <span>${user.age} سال</span>
+                                <span>•</span>
+                                <span>${user.city}</span>
+                            </div>
+                            <div class="card-distance">
+                                <span>📍</span>
+                                <span>${user.distance} کیلومتر</span>
+                            </div>
+                            <div class="card-interests">
+                                ${user.interests.slice(0, 2).map(i => `<span class="mini-interest">${i}</span>`).join('')}
+                                ${user.interests.length > 2 ? '<span class="mini-interest">+...</span>' : ''}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            });
 
-            document.getElementById('discoverContainer').innerHTML = html;
+            grid.innerHTML = html;
         }
 
-        // رفتن به کاربر بعدی
-        function nextUser(action, userId) {
-            handleAction(action, userId);
-            currentIndex++;
-            setTimeout(showCurrentUser, 500);
+        function filterUsers(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadUsers();
         }
 
-        // اعمال فیلتر
-        function applyFilters() {
-            const city = document.getElementById('cityFilter').value;
-            const age = document.getElementById('ageFilter').value;
+        function viewProfile(name) {
+            alert(`پروفایل ${name} در حال باز شدن...`);
+        }
+
+        function openFilterModal() {
+            document.getElementById('filterModal').classList.add('show');
+        }
+
+        function closeFilterModal() {
+            document.getElementById('filterModal').classList.remove('show');
+        }
+
+        function toggleInterest(element) {
+            element.classList.toggle('selected');
+            const interest = element.textContent;
             
-            // فیلتر کردن کاربران
-            let filtered = [...currentUsers];
-            
-            if (city) {
-                filtered = filtered.filter(u => u.city === city);
-            }
-            
-            if (age) {
-                const [min, max] = age.split('-').map(Number);
-                filtered = filtered.filter(u => u.age >= min && u.age <= max);
-            }
-            
-            if (filtered.length > 0) {
-                currentUsers = filtered;
-                currentIndex = 0;
-                showCurrentUser();
+            if (selectedInterests.includes(interest)) {
+                selectedInterests = selectedInterests.filter(i => i !== interest);
             } else {
-                showToast('کاربری با این فیلترها پیدا نشد', 'error');
+                selectedInterests.push(interest);
             }
         }
+
+        function applyFilters() {
+            const age = document.getElementById('ageRange').value;
+            const distance = document.getElementById('distanceRange').value;
+            
+            alert(`فیلتر اعمال شد:\nسن: ${age}\nفاصله: ${distance}\nعلاقه‌مندی‌ها: ${selectedInterests.length} مورد`);
+            closeFilterModal();
+        }
+
+        function resetFilters() {
+            currentFilter = 'all';
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+                if (chip.textContent === 'همه') chip.classList.add('active');
+            });
+            loadUsers();
+        }
+
+        // آپدیت مقادیر رنج
+        document.getElementById('ageRange').addEventListener('input', function() {
+            document.getElementById('ageValue').textContent = this.value + ' سال';
+        });
+
+        document.getElementById('distanceRange').addEventListener('input', function() {
+            document.getElementById('distanceValue').textContent = this.value + ' کیلومتر';
+        });
 
         // لود اولیه
-        document.addEventListener('DOMContentLoaded', loadUsers);
+        loadUsers();
+
+        // انیمیشن کارت‌ها
+        document.querySelectorAll('.user-card').forEach((card, index) => {
+            card.style.animationDelay = (index * 0.1) + 's';
+        });
     </script>
 </body>
 </html>
