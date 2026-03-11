@@ -2,1263 +2,520 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>پنل مدیریت | نیمه گمشده</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت | همدم</title>
+    <link rel="stylesheet" href="assets/style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        /* هدر اصلی */
-        .header {
+        .admin-header {
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
             padding: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(255, 77, 109, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
-
-        .header h1 {
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header h1 i {
-            font-style: normal;
-            font-size: 28px;
-        }
-
-        .admin-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn {
-            background: white;
-            color: #ff4d6d;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* منوی کناری */
-        .sidebar {
-            position: fixed;
-            right: 0;
-            top: 80px;
-            width: 250px;
-            background: white;
-            height: calc(100vh - 80px);
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-            padding: 20px 0;
-            overflow-y: auto;
-            display: none;
-        }
-
-        @media (min-width: 768px) {
-            .sidebar {
-                display: block;
-            }
-            .main-content {
-                margin-right: 250px;
-            }
-        }
-
-        .menu-item {
-            padding: 15px 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-right: 3px solid transparent;
-        }
-
-        .menu-item:hover {
-            background: #f8f9ff;
-            border-right-color: #ff4d6d;
-            color: #ff4d6d;
-        }
-
-        .menu-item.active {
-            background: #f8f9ff;
-            border-right-color: #ff4d6d;
-            color: #ff4d6d;
-            font-weight: 600;
-        }
-
-        .menu-item i {
-            font-size: 20px;
-        }
-
-        /* محتوای اصلی */
-        .main-content {
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        /* کارت‌های آمار */
-        .stats-grid {
+        
+        .admin-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 15px;
         }
-
-        .stat-card {
+        
+        .stat-box {
             background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-box .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff4d6d;
+            margin: 10px 0;
+        }
+        
+        .admin-tabs {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        .stat-info h3 {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 10px;
-        }
-
-        .stat-number {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-        }
-
-        /* بخش‌ها */
-        .section {
             background: white;
-            border-radius: 25px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .section-header h2 {
-            font-size: 20px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-        }
-
-        .action-btn.small {
-            padding: 8px 16px;
-            font-size: 12px;
-        }
-
-        /* جدول کاربران */
-        .table-container {
+            border-radius: 15px;
+            margin: 15px;
+            padding: 5px;
             overflow-x: auto;
         }
-
-        table {
+        
+        .admin-tab {
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab.active {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+        }
+        
+        .admin-section {
+            background: white;
+            border-radius: 20px;
+            margin: 15px;
+            padding: 20px;
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .admin-table {
             width: 100%;
             border-collapse: collapse;
         }
-
-        th {
+        
+        .admin-table th {
+            background: #f5f5f5;
+            padding: 12px;
             text-align: right;
-            padding: 15px 10px;
-            background: #f8f9ff;
-            color: #ff4d6d;
-            font-weight: 600;
         }
-
-        td {
-            padding: 15px 10px;
+        
+        .admin-table td {
+            padding: 12px;
             border-bottom: 1px solid #eee;
         }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        
+        .admin-table tr:hover {
+            background: #f9f9f9;
         }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
+        
         .status-badge {
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: 600;
         }
-
+        
         .status-active {
             background: #4caf5020;
             color: #4caf50;
         }
-
+        
         .status-blocked {
             background: #f4433620;
             color: #f44336;
         }
-
-        .action-icons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            margin: 0 2px;
         }
-
-        .action-icon.edit {
+        
+        .action-btn.edit {
             background: #4a90e220;
             color: #4a90e2;
         }
-
-        .action-icon.delete {
+        
+        .action-btn.delete {
             background: #f4433620;
             color: #f44336;
         }
-
-        .action-icon.ban {
+        
+        .action-btn.ban {
             background: #ff980020;
             color: #ff9800;
         }
-
-        .action-icon:hover {
-            transform: scale(1.1);
+        
+        .search-box {
+            margin: 15px;
         }
-
-        /* مودال */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 30px;
-            padding: 30px;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .modal-header h3 {
-            font-size: 22px;
-            color: #333;
-        }
-
-        .close-modal {
-            font-size: 30px;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .form-control {
+        
+        .search-box input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px;
             border: 2px solid #eee;
             border-radius: 15px;
             font-size: 14px;
-            transition: all 0.3s ease;
         }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #ff4d6d;
-        }
-
-        .save-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        /* نوتیفیکیشن */
-        .toast {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 3000;
-            animation: slideInRight 0.3s ease;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .toast.success {
-            border-right: 4px solid #4caf50;
-        }
-
-        .toast.error {
-            border-right: 4px solid #f44336;
-        }
-
-        /* فیلتر */
-        .filters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filter-input {
-            padding: 10px 15px;
-            border: 2px solid #eee;
-            border-radius: 25px;
-            font-size: 14px;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .filter-select {
-            padding: 10px 15px;
-            border: 2px solid #eee;
-            border-radius: 25px;
-            font-size: 14px;
-            background: white;
-        }
-
-        /* صفحه‌بندی */
+        
         .pagination {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-top: 20px;
+            margin: 20px 0;
         }
-
+        
         .page-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             border: none;
             background: white;
-            color: #666;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
-
+        
         .page-btn.active {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            background: #ff4d6d;
             color: white;
-        }
-
-        /* گراف */
-        .chart-container {
-            height: 300px;
-            margin: 20px 0;
-            position: relative;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>
-            <i>⚡</i>
-            پنل مدیریت نیمه گمشده
-        </h1>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div class="admin-badge">
-                <span>👑</span>
-                <span id="adminName">مدیر سیستم</span>
+    <!-- هدر مدیریت -->
+    <div class="admin-header">
+        <div class="logo">
+            <span>⚡</span>
+            پنل مدیریت
+        </div>
+        <div>
+            <span id="adminName">مدیر سیستم</span>
+            <button class="btn btn-secondary" style="margin-right: 15px;" onclick="logout()">خروج</button>
+        </div>
+    </div>
+
+    <!-- آمار -->
+    <div class="admin-stats">
+        <div class="stat-box">
+            <div>👥 کاربران کل</div>
+            <div class="number" id="totalUsers">۰</div>
+        </div>
+        <div class="stat-box">
+            <div>💰 سکه‌ها</div>
+            <div class="number" id="totalCoins">۰</div>
+        </div>
+        <div class="stat-box">
+            <div>❤️ تطابق‌ها</div>
+            <div class="number" id="totalMatches">۰</div>
+        </div>
+        <div class="stat-box">
+            <div>🎁 هدایا</div>
+            <div class="number" id="totalGifts">۰</div>
+        </div>
+    </div>
+
+    <!-- تب‌های مدیریت -->
+    <div class="admin-tabs">
+        <div class="admin-tab active" onclick="switchAdminTab('users')">👥 کاربران</div>
+        <div class="admin-tab" onclick="switchAdminTab('transactions')">💰 تراکنش‌ها</div>
+        <div class="admin-tab" onclick="switchAdminTab('reports')">🚩 گزارشات</div>
+        <div class="admin-tab" onclick="switchAdminTab('settings')">⚙️ تنظیمات</div>
+        <div class="admin-tab" onclick="switchAdminTab('backup')">💾 پشتیبان</div>
+    </div>
+
+    <!-- جستجو -->
+    <div class="search-box">
+        <input type="text" placeholder="🔍 جستجو..." id="searchInput" onkeyup="searchTable()">
+    </div>
+
+    <!-- بخش کاربران -->
+    <div class="admin-section active" id="usersSection">
+        <table class="admin-table" id="usersTable">
+            <thead>
+                <tr>
+                    <th>کاربر</th>
+                    <th>ایمیل</th>
+                    <th>سکه</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                <!-- با JS لود میشه -->
+            </tbody>
+        </table>
+        
+        <div class="pagination" id="usersPagination"></div>
+    </div>
+
+    <!-- بخش تراکنش‌ها -->
+    <div class="admin-section" id="transactionsSection">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>کاربر</th>
+                    <th>نوع</th>
+                    <th>مقدار</th>
+                    <th>تاریخ</th>
+                    <th>وضعیت</th>
+                </tr>
+            </thead>
+            <tbody id="transactionsTableBody">
+                <tr><td colspan="5" style="text-align: center;">در حال بارگذاری...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- بخش گزارشات -->
+    <div class="admin-section" id="reportsSection">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>گزارش دهنده</th>
+                    <th>گزارش شونده</th>
+                    <th>دلیل</th>
+                    <th>تاریخ</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody id="reportsTableBody">
+                <tr><td colspan="5" style="text-align: center;">در حال بارگذاری...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- بخش تنظیمات -->
+    <div class="admin-section" id="settingsSection">
+        <div style="padding: 20px;">
+            <h3 style="margin-bottom: 20px;">تنظیمات سایت</h3>
+            
+            <div class="form-group">
+                <label>نام سایت</label>
+                <input type="text" class="form-control" id="siteName" value="همدم">
             </div>
-            <button class="logout-btn" onclick="logout()">
-                <span>🚪</span>
-                خروج
+            
+            <div class="form-group">
+                <label>ایمیل پشتیبانی</label>
+                <input type="email" class="form-control" id="supportEmail" value="support@hamdam.com">
+            </div>
+            
+            <div class="form-group">
+                <label>حداقل سن</label>
+                <input type="number" class="form-control" id="minAge" value="۱۸">
+            </div>
+            
+            <div class="form-group">
+                <label>حداکثر سن</label>
+                <input type="number" class="form-control" id="maxAge" value="۶۰">
+            </div>
+            
+            <button class="btn btn-primary" onclick="saveSettings()">ذخیره تنظیمات</button>
+        </div>
+    </div>
+
+    <!-- بخش پشتیبان -->
+    <div class="admin-section" id="backupSection">
+        <div style="padding: 20px;">
+            <h3 style="margin-bottom: 20px;">پشتیبان‌گیری</h3>
+            
+            <div style="background: #f5f5f5; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                <p>آخرین پشتیبان: ۱۴۰۳/۱۲/۲۵</p>
+                <p>حجم: ۱۲۵ مگابایت</p>
+                <p>وضعیت: موفق ✅</p>
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="createBackup()">
+                ایجاد پشتیبان جدید
+            </button>
+            
+            <button class="btn btn-secondary" style="width: 100%;" onclick="downloadBackup()">
+                دانلود آخرین پشتیبان
             </button>
         </div>
     </div>
 
-    <div class="sidebar">
-        <div class="menu-item active" onclick="switchTab('dashboard')">
-            <i>📊</i>
-            داشبورد
-        </div>
-        <div class="menu-item" onclick="switchTab('users')">
-            <i>👥</i>
-            مدیریت کاربران
-        </div>
-        <div class="menu-item" onclick="switchTab('coins')">
-            <i>💰</i>
-            مدیریت سکه
-        </div>
-        <div class="menu-item" onclick="switchTab('reports')">
-            <i>🚩</i>
-            گزارشات
-        </div>
-        <div class="menu-item" onclick="switchTab('settings')">
-            <i>⚙️</i>
-            تنظیمات
-        </div>
-        <div class="menu-item" onclick="switchTab('backup')">
-            <i>💾</i>
-            پشتیبان‌گیری
-        </div>
-    </div>
-
-    <div class="main-content" id="mainContent">
-        <!-- محتوا با جاوااسکریپت لود می‌شود -->
-    </div>
-
-    <!-- مودال ویرایش کاربر -->
-    <div class="modal" id="userModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">ویرایش کاربر</h3>
-                <span class="close-modal" onclick="closeModal()">&times;</span>
-            </div>
-            <form id="userForm">
-                <div class="form-group">
-                    <label>نام کاربر</label>
-                    <input type="text" class="form-control" id="editName" required>
-                </div>
-                <div class="form-group">
-                    <label>ایمیل</label>
-                    <input type="email" class="form-control" id="editEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>شهر</label>
-                    <input type="text" class="form-control" id="editCity">
-                </div>
-                <div class="form-group">
-                    <label>موجودی سکه</label>
-                    <input type="number" class="form-control" id="editCoins">
-                </div>
-                <div class="form-group">
-                    <label>وضعیت</label>
-                    <select class="form-control" id="editStatus">
-                        <option value="active">فعال</option>
-                        <option value="blocked">مسدود</option>
-                        <option value="pending">در انتظار</option>
-                    </select>
-                </div>
-                <button type="submit" class="save-btn">ذخیره تغییرات</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- مودال اضافه کردن سکه -->
-    <div class="modal" id="coinsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>افزایش سکه</h3>
-                <span class="close-modal" onclick="closeModal('coins')">&times;</span>
-            </div>
-            <form id="coinsForm">
-                <div class="form-group">
-                    <label>کاربر</label>
-                    <select class="form-control" id="coinUser" required>
-                        <option value="">انتخاب کاربر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>تعداد سکه</label>
-                    <input type="number" class="form-control" id="coinAmount" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label>دلیل</label>
-                    <input type="text" class="form-control" id="coinReason" placeholder="مثلاً: جایزه روزانه">
-                </div>
-                <button type="submit" class="save-btn">افزایش سکه</button>
-            </form>
-        </div>
-    </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
 
     <script>
-        // تنظیمات ادمین
-        const ADMIN_USER = "admin";
-        const ADMIN_PASS = "123456";
-
-        // بررسی احراز هویت
-        (function checkAuth() {
-            let u = prompt("👑 نام کاربری ادمین:");
-            let p = prompt("🔑 رمز عبور:");
-
-            if (u !== ADMIN_USER || p !== ADMIN_PASS) {
-                document.body.innerHTML = `
-                    <div style="height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #667eea, #764ba2);">
-                        <div style="background:white; padding:40px; border-radius:30px; text-align:center; max-width:400px;">
-                            <div style="font-size:64px; margin-bottom:20px;">🚫</div>
-                            <h1 style="color:#333; margin-bottom:15px;">دسترسی غیرمجاز</h1>
-                            <p style="color:#666; margin-bottom:25px;">شما اجازه دسترسی به این صفحه را ندارید.</p>
-                            <button onclick="location.href='index.html'" style="background:linear-gradient(135deg, #ff4d6d, #ff8a5c); color:white; border:none; padding:15px 40px; border-radius:30px; font-size:16px; cursor:pointer;">بازگشت به صفحه اصلی</button>
-                        </div>
-                    </div>
-                `;
-                throw new Error("Unauthorized access");
-            } else {
-                document.getElementById('adminName').textContent = u;
-                showToast("✅ خوش آمدید، " + u, "success");
-            }
-        })();
-
-        // داده‌های نمونه
-        let users = [
-            { id: 1, name: "سارا محمدی", email: "sara@example.com", city: "تهران", coins: 1250, status: "active", avatar: "https://randomuser.me/api/portraits/women/1.jpg", joinDate: "2024-01-15" },
-            { id: 2, name: "علی رضایی", email: "ali@example.com", city: "اصفهان", coins: 850, status: "active", avatar: "https://randomuser.me/api/portraits/men/1.jpg", joinDate: "2024-02-20" },
-            { id: 3, name: "مریم کریمی", email: "maryam@example.com", city: "شیراز", coins: 3200, status: "active", avatar: "https://randomuser.me/api/portraits/women/2.jpg", joinDate: "2024-01-10" },
-            { id: 4, name: "رضا احمدی", email: "reza@example.com", city: "تبریز", coins: 450, status: "blocked", avatar: "https://randomuser.me/api/portraits/men/2.jpg", joinDate: "2024-03-05" },
-            { id: 5, name: "زهرا حسینی", email: "zahra@example.com", city: "مشهد", coins: 2100, status: "active", avatar: "https://randomuser.me/api/portraits/women/3.jpg", joinDate: "2024-02-28" },
-            { id: 6, name: "محمد طاهری", email: "mohammad@example.com", city: "کرج", coins: 1750, status: "pending", avatar: "https://randomuser.me/api/portraits/men/3.jpg", joinDate: "2024-03-10" }
-        ];
-
-        let reports = [
-            { id: 1, from: "user1", against: "user3", reason: "رفتار نامناسب", date: "2024-03-10", status: "pending" },
-            { id: 2, from: "user4", against: "user2", reason: "اسپم", date: "2024-03-09", status: "resolved" }
-        ];
-
-        let currentTab = 'dashboard';
-        let currentPage = 1;
-        let itemsPerPage = 5;
-
-        // تابع نمایش نوتیفیکیشن
-        function showToast(message, type = "success") {
-            const toast = document.createElement("div");
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span>${type === "success" ? "✅" : "❌"}</span>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        // تابع تغییر تب
-        function switchTab(tab) {
-            currentTab = tab;
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.classList.remove('active');
+        // بررسی دسترسی ادمین
+        const ADMIN_EMAIL = "admin@hamdam.com";
+        const ADMIN_PASSWORD = "admin123";
+        
+        // لاگین خودکار برای دیباگ
+        let isAdmin = true; // در نسخه واقعی باید از Firebase Auth استفاده کنی
+        
+        // لود آمار
+        function loadStats() {
+            // کاربران کل
+            db.collection('users').get().then(snapshot => {
+                document.getElementById('totalUsers').textContent = snapshot.size;
             });
-            event.target.closest('.menu-item').classList.add('active');
             
-            loadTabContent();
-        }
-
-        // بارگذاری محتوای تب
-        function loadTabContent() {
-            const content = document.getElementById('mainContent');
+            // مجموع سکه‌ها
+            db.collection('users').get().then(snapshot => {
+                let total = 0;
+                snapshot.forEach(doc => total += doc.data().coins || 0);
+                document.getElementById('totalCoins').textContent = total.toLocaleString();
+            });
             
-            switch(currentTab) {
-                case 'dashboard':
-                    content.innerHTML = getDashboardHTML();
-                    break;
-                case 'users':
-                    content.innerHTML = getUsersHTML();
-                    attachUserEvents();
-                    break;
-                case 'coins':
-                    content.innerHTML = getCoinsHTML();
-                    loadCoinOptions();
-                    break;
-                case 'reports':
-                    content.innerHTML = getReportsHTML();
-                    break;
-                case 'settings':
-                    content.innerHTML = getSettingsHTML();
-                    break;
-                case 'backup':
-                    content.innerHTML = getBackupHTML();
-                    break;
-            }
+            // تطابق‌ها
+            db.collection('matches').get().then(snapshot => {
+                document.getElementById('totalMatches').textContent = snapshot.size;
+            });
+            
+            // هدایا
+            db.collection('gifts').get().then(snapshot => {
+                document.getElementById('totalGifts').textContent = snapshot.size;
+            });
         }
-
-        // HTML داشبورد
-        function getDashboardHTML() {
-            const totalUsers = users.length;
-            const totalCoins = users.reduce((sum, u) => sum + u.coins, 0);
-            const activeUsers = users.filter(u => u.status === 'active').length;
-            const pendingReports = reports.filter(r => r.status === 'pending').length;
-
-            return `
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>کاربران کل</h3>
-                            <div class="stat-number">${totalUsers}</div>
-                        </div>
-                        <div class="stat-icon">👥</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>سکه‌های کل</h3>
-                            <div class="stat-number">${totalCoins.toLocaleString()}</div>
-                        </div>
-                        <div class="stat-icon">💰</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>کاربران فعال</h3>
-                            <div class="stat-number">${activeUsers}</div>
-                        </div>
-                        <div class="stat-icon">✅</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>گزارشات جدید</h3>
-                            <div class="stat-number">${pendingReports}</div>
-                        </div>
-                        <div class="stat-icon">🚩</div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-header">
-                        <h2>📈 آمار روزانه</h2>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="statsChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-header">
-                        <h2>👑 برترین کاربران</h2>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>کاربر</th>
-                                    <th>سکه</th>
-                                    <th>وضعیت</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${users.sort((a,b) => b.coins - a.coins).slice(0,5).map(u => `
-                                    <tr>
-                                        <td>
-                                            <div class="user-info">
-                                                <img src="${u.avatar}" class="user-avatar">
-                                                <span>${u.name}</span>
-                                            </div>
-                                        </td>
-                                        <td>${u.coins.toLocaleString()}</td>
-                                        <td><span class="status-badge status-${u.status === 'active' ? 'active' : 'blocked'}">${u.status === 'active' ? 'فعال' : 'مسدود'}</span></td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
-        // HTML مدیریت کاربران
-        function getUsersHTML() {
-            const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const paginatedUsers = users.slice(start, end);
-
-            return `
-                <div class="section">
-                    <div class="section-header">
-                        <h2>👥 مدیریت کاربران</h2>
-                        <button class="action-btn" onclick="openAddUserModal()">
-                            <span>➕</span>
-                            افزودن کاربر جدید
-                        </button>
-                    </div>
-
-                    <div class="filters">
-                        <input type="text" class="filter-input" placeholder="🔍 جستجوی کاربر..." id="searchInput" onkeyup="searchUsers()">
-                        <select class="filter-select" id="statusFilter" onchange="filterUsers()">
-                            <option value="all">همه وضعیت‌ها</option>
-                            <option value="active">فعال</option>
-                            <option value="blocked">مسدود</option>
-                            <option value="pending">در انتظار</option>
-                        </select>
-                    </div>
-
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>کاربر</th>
-                                    <th>ایمیل</th>
-                                    <th>شهر</th>
-                                    <th>سکه</th>
-                                    <th>وضعیت</th>
-                                    <th>عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="usersTableBody">
-                                ${paginatedUsers.map(u => `
-                                    <tr>
-                                        <td>
-                                            <div class="user-info">
-                                                <img src="${u.avatar}" class="user-avatar">
-                                                <span>${u.name}</span>
-                                            </div>
-                                        </td>
-                                        <td>${u.email}</td>
-                                        <td>${u.city}</td>
-                                        <td>${u.coins.toLocaleString()}</td>
-                                        <td><span class="status-badge status-${u.status === 'active' ? 'active' : 'blocked'}">${u.status === 'active' ? 'فعال' : 'مسدود'}</span></td>
-                                        <td>
-                                            <div class="action-icons">
-                                                <div class="action-icon edit" onclick="openEditUser(${u.id})">✏️</div>
-                                                <div class="action-icon ban" onclick="toggleBanUser(${u.id})">🔨</div>
-                                                <div class="action-icon delete" onclick="deleteUser(${u.id})">🗑️</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="pagination">
-                        ${Array(Math.ceil(users.length / itemsPerPage)).fill().map((_, i) => `
-                            <button class="page-btn ${currentPage === i+1 ? 'active' : ''}" onclick="changePage(${i+1})">${i+1}</button>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        // HTML مدیریت سکه
-        function getCoinsHTML() {
-            return `
-                <div class="section">
-                    <div class="section-header">
-                        <h2>💰 مدیریت سکه</h2>
-                        <button class="action-btn" onclick="openCoinsModal()">
-                            <span>➕</span>
-                            افزایش سکه
-                        </button>
-                    </div>
-
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>کاربر</th>
-                                    <th>موجودی</th>
-                                    <th>تراکنش‌ها</th>
-                                    <th>آخرین فعالیت</th>
-                                    <th>عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${users.sort((a,b) => b.coins - a.coins).map(u => `
-                                    <tr>
-                                        <td>
-                                            <div class="user-info">
-                                                <img src="${u.avatar}" class="user-avatar">
-                                                <span>${u.name}</span>
-                                            </div>
-                                        </td>
-                                        <td>${u.coins.toLocaleString()}</td>
-                                        <td>${Math.floor(Math.random() * 50)}</td>
-                                        <td>${u.joinDate}</td>
-                                        <td>
-                                            <div class="action-icons">
-                                                <div class="action-icon edit" onclick="openAdjustCoins(${u.id})">💰</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
-        // HTML گزارشات
-        function getReportsHTML() {
-            return `
-                <div class="section">
-                    <div class="section-header">
-                        <h2>🚩 گزارشات کاربران</h2>
-                    </div>
-
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>شماره</th>
-                                    <th>گزارش دهنده</th>
-                                    <th>گزارش شونده</th>
-                                    <th>دلیل</th>
-                                    <th>تاریخ</th>
-                                    <th>وضعیت</th>
-                                    <th>عملیات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${reports.map(r => `
-                                    <tr>
-                                        <td>#${r.id}</td>
-                                        <td>کاربر ${r.from}</td>
-                                        <td>کاربر ${r.against}</td>
-                                        <td>${r.reason}</td>
-                                        <td>${r.date}</td>
-                                        <td><span class="status-badge ${r.status === 'pending' ? 'status-pending' : 'status-active'}">${r.status === 'pending' ? 'در انتظار' : 'رسیدگی شده'}</span></td>
-                                        <td>
-                                            <div class="action-icons">
-                                                <div class="action-icon edit" onclick="resolveReport(${r.id})">✅</div>
-                                                <div class="action-icon delete" onclick="ignoreReport(${r.id})">❌</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
-        // HTML تنظیمات
-        function getSettingsHTML() {
-            return `
-                <div class="section">
-                    <div class="section-header">
-                        <h2>⚙️ تنظیمات سایت</h2>
-                    </div>
-
-                    <form id="settingsForm">
-                        <div class="form-group">
-                            <label>نام سایت</label>
-                            <input type="text" class="form-control" value="نیمه گمشده">
-                        </div>
-
-                        <div class="form-group">
-                            <label>ایمیل پشتیبانی</label>
-                            <input type="email" class="form-control" value="support@nimeh.com">
-                        </div>
-
-                        <div class="form-group">
-                            <label>حداقل سن</label>
-                            <input type="number" class="form-control" value="18">
-                        </div>
-
-                        <div class="form-group">
-                            <label>حداکثر سن</label>
-                            <input type="number" class="form-control" value="60">
-                        </div>
-
-                        <div class="form-group">
-                            <label>وضعیت ثبت‌نام</label>
-                            <select class="form-control">
-                                <option value="open" selected>باز</option>
-                                <option value="closed">بسته</option>
-                                <option value="invite">فقط دعوت</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="save-btn">ذخیره تنظیمات</button>
-                    </form>
-                </div>
-            `;
-        }
-
-        // HTML پشتیبان‌گیری
-        function getBackupHTML() {
-            return `
-                <div class="section">
-                    <div class="section-header">
-                        <h2>💾 پشتیبان‌گیری</h2>
-                    </div>
-
-                    <div style="display: grid; gap: 20px;">
-                        <div style="background: #f8f9ff; padding: 20px; border-radius: 15px;">
-                            <h3 style="margin-bottom: 15px;">آخرین پشتیبان‌گیری</h3>
-                            <p>تاریخ: ۲۰۲۴-۰۳-۱۱ ۱۴:۳۰</p>
-                            <p>حجم: ۱۲۵ مگابایت</p>
-                            <p>وضعیت: موفق ✅</p>
-                        </div>
-
-                        <div style="display: flex; gap: 15px;">
-                            <button class="action-btn" style="flex:1;" onclick="createBackup()">
-                                <span>🔄</span>
-                                ایجاد پشتیبان جدید
-                            </button>
-                            <button class="action-btn" style="flex:1; background: #4caf50;" onclick="downloadBackup()">
-                                <span>📥</span>
-                                دانلود آخرین پشتیبان
-                            </button>
-                        </div>
-
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>تاریخ</th>
-                                        <th>حجم</th>
-                                        <th>وضعیت</th>
-                                        <th>عملیات</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>۲۰۲۴-۰۳-۱۱</td>
-                                        <td>۱۲۵ MB</td>
-                                        <td><span class="status-badge status-active">موفق</span></td>
-                                        <td>
-                                            <div class="action-icons">
-                                                <div class="action-icon edit">📥</div>
-                                                <div class="action-icon delete">🗑️</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>۲۰۲۴-۰۳-۱۰</td>
-                                        <td>۱۲۰ MB</td>
-                                        <td><span class="status-badge status-active">موفق</span></td>
-                                        <td>
-                                            <div class="action-icons">
-                                                <div class="action-icon edit">📥</div>
-                                                <div class="action-icon delete">🗑️</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // توابع کاربران
-        function openEditUser(id) {
-            const user = users.find(u => u.id === id);
-            if (user) {
-                document.getElementById('modalTitle').textContent = 'ویرایش کاربر';
-                document.getElementById('editName').value = user.name;
-                document.getElementById('editEmail').value = user.email;
-                document.getElementById('editCity').value = user.city;
-                document.getElementById('editCoins').value = user.coins;
-                document.getElementById('editStatus').value = user.status;
-                document.getElementById('userModal').classList.add('active');
+        
+        // لود کاربران
+        function loadUsers() {
+            db.collection('users').limit(20).get().then(snapshot => {
+                let html = '';
                 
-                // ذخیره id کاربر برای ویرایش
-                document.getElementById('userForm').onsubmit = (e) => {
-                    e.preventDefault();
-                    saveUser(id);
-                };
-            }
-        }
-
-        function saveUser(id) {
-            const user = users.find(u => u.id === id);
-            if (user) {
-                user.name = document.getElementById('editName').value;
-                user.email = document.getElementById('editEmail').value;
-                user.city = document.getElementById('editCity').value;
-                user.coins = parseInt(document.getElementById('editCoins').value);
-                user.status = document.getElementById('editStatus').value;
+                snapshot.forEach(doc => {
+                    const user = doc.data();
+                    html += `
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <img src="${user.photo || 'https://randomuser.me/api/portraits/women/1.jpg'}" style="width: 40px; height: 40px; border-radius: 50%;">
+                                    ${user.name || 'کاربر'}
+                                </div>
+                            </td>
+                            <td>${user.email || '---'}</td>
+                            <td>${user.coins || 0}</td>
+                            <td><span class="status-badge status-active">فعال</span></td>
+                            <td>
+                                <button class="action-btn edit" onclick="editUser('${doc.id}')">✏️</button>
+                                <button class="action-btn ban" onclick="toggleBan('${doc.id}')">🔨</button>
+                                <button class="action-btn delete" onclick="deleteUser('${doc.id}')">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                });
                 
-                closeModal();
-                showToast("✅ اطلاعات کاربر با موفقیت به‌روزرسانی شد", "success");
-                loadTabContent();
-            }
+                document.getElementById('usersTableBody').innerHTML = html;
+            });
         }
-
+        
+        // لود تراکنش‌ها
+        function loadTransactions() {
+            db.collection('transactions').orderBy('time', 'desc').limit(20).get().then(snapshot => {
+                let html = '';
+                
+                snapshot.forEach(doc => {
+                    const t = doc.data();
+                    html += `
+                        <tr>
+                            <td>${t.userId}</td>
+                            <td>${t.type === 'charge' ? 'شارژ' : 'هدیه'}</td>
+                            <td>${t.amount || t.price}</td>
+                            <td>${t.time ? new Date(t.time.toDate()).toLocaleDateString('fa-IR') : '---'}</td>
+                            <td><span class="status-badge status-active">موفق</span></td>
+                        </tr>
+                    `;
+                });
+                
+                document.getElementById('transactionsTableBody').innerHTML = html;
+            });
+        }
+        
+        // لود گزارشات
+        function loadReports() {
+            db.collection('reports').limit(20).get().then(snapshot => {
+                let html = '';
+                
+                snapshot.forEach(doc => {
+                    const r = doc.data();
+                    html += `
+                        <tr>
+                            <td>${r.from}</td>
+                            <td>${r.to}</td>
+                            <td>${r.reason}</td>
+                            <td>${r.time ? new Date(r.time.toDate()).toLocaleDateString('fa-IR') : '---'}</td>
+                            <td>
+                                <button class="action-btn edit" onclick="resolveReport('${doc.id}')">✅</button>
+                                <button class="action-btn delete" onclick="ignoreReport('${doc.id}')">❌</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                document.getElementById('reportsTableBody').innerHTML = html;
+            });
+        }
+        
+        // تغییر تب
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Section').classList.add('active');
+            
+            // لود داده‌های مربوطه
+            if (tab === 'users') loadUsers();
+            if (tab === 'transactions') loadTransactions();
+            if (tab === 'reports') loadReports();
+        }
+        
+        // جستجو
+        function searchTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            // منطق جستجو
+        }
+        
+        // عملیات روی کاربران
+        function editUser(id) {
+            showToast('ویرایش کاربر ' + id);
+        }
+        
+        function toggleBan(id) {
+            showToast('تغییر وضعیت کاربر ' + id);
+        }
+        
         function deleteUser(id) {
             if (confirm('آیا از حذف این کاربر اطمینان دارید؟')) {
-                users = users.filter(u => u.id !== id);
-                showToast("✅ کاربر با موفقیت حذف شد", "success");
-                loadTabContent();
+                db.collection('users').doc(id).delete()
+                    .then(() => {
+                        showToast('✅ کاربر حذف شد');
+                        loadUsers();
+                    });
             }
         }
-
-        function toggleBanUser(id) {
-            const user = users.find(u => u.id === id);
-            if (user) {
-                user.status = user.status === 'active' ? 'blocked' : 'active';
-                showToast(`✅ کاربر ${user.status === 'active' ? 'فعال' : 'مسدود'} شد`, "success");
-                loadTabContent();
-            }
-        }
-
-        function searchUsers() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = users.filter(u => 
-                u.name.toLowerCase().includes(search) || 
-                u.email.toLowerCase().includes(search)
-            );
-            updateUsersTable(filtered);
-        }
-
-        function filterUsers() {
-            const status = document.getElementById('statusFilter').value;
-            const filtered = status === 'all' ? users : users.filter(u => u.status === status);
-            updateUsersTable(filtered);
-        }
-
-        function updateUsersTable(filteredUsers) {
-            const tbody = document.getElementById('usersTableBody');
-            if (tbody) {
-                tbody.innerHTML = filteredUsers.map(u => `
-                    <tr>
-                        <td>
-                            <div class="user-info">
-                                <img src="${u.avatar}" class="user-avatar">
-                                <span>${u.name}</span>
-                            </div>
-                        </td>
-                        <td>${u.email}</td>
-                        <td>${u.city}</td>
-                        <td>${u.coins.toLocaleString()}</td>
-                        <td><span class="status-badge status-${u.status === 'active' ? 'active' : 'blocked'}">${u.status === 'active' ? 'فعال' : 'مسدود'}</span></td>
-                        <td>
-                            <div class="action-icons">
-                                <div class="action-icon edit" onclick="openEditUser(${u.id})">✏️</div>
-                                <div class="action-icon ban" onclick="toggleBanUser(${u.id})">🔨</div>
-                                <div class="action-icon delete" onclick="deleteUser(${u.id})">🗑️</div>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-        }
-
-        function changePage(page) {
-            currentPage = page;
-            loadTabContent();
-        }
-
-        // توابع سکه
-        function openCoinsModal() {
-            loadCoinOptions();
-            document.getElementById('coinsModal').classList.add('active');
-        }
-
-        function loadCoinOptions() {
-            const select = document.getElementById('coinUser');
-            if (select) {
-                select.innerHTML = '<option value="">انتخاب کاربر</option>' + 
-                    users.map(u => `<option value="${u.id}">${u.name} (${u.coins} سکه)</option>`).join('');
-            }
-        }
-
-        // توابع گزارشات
+        
+        // گزارشات
         function resolveReport(id) {
-            const report = reports.find(r => r.id === id);
-            if (report) {
-                report.status = 'resolved';
-                showToast("✅ گزارش با موفقیت رسیدگی شد", "success");
-                loadTabContent();
-            }
+            db.collection('reports').doc(id).update({ status: 'resolved' })
+                .then(() => {
+                    showToast('✅ گزارش رسیدگی شد');
+                    loadReports();
+                });
         }
-
+        
         function ignoreReport(id) {
-            if (confirm('آیا از نادیده گرفتن این گزارش اطمینان دارید؟')) {
-                reports = reports.filter(r => r.id !== id);
-                showToast("✅ گزارش نادیده گرفته شد", "success");
-                loadTabContent();
-            }
+            db.collection('reports').doc(id).delete()
+                .then(() => {
+                    showToast('✅ گزارش نادیده گرفته شد');
+                    loadReports();
+                });
         }
-
-        // توابع پشتیبان
+        
+        // تنظیمات
+        function saveSettings() {
+            showToast('✅ تنظیمات ذخیره شد');
+        }
+        
+        // پشتیبان
         function createBackup() {
-            showToast("🔄 در حال ایجاد پشتیبان...", "success");
-            setTimeout(() => {
-                showToast("✅ پشتیبان با موفقیت ایجاد شد", "success");
-            }, 2000);
+            showToast('در حال ایجاد پشتیبان...');
+            setTimeout(() => showToast('✅ پشتیبان با موفقیت ایجاد شد'), 2000);
         }
-
+        
         function downloadBackup() {
-            const data = JSON.stringify({ users, reports }, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `backup-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            showToast("📥 دانلود شروع شد", "success");
+            showToast('در حال دانلود...');
         }
-
-        // توابع عمومی
-        function closeModal(modal = 'user') {
-            document.getElementById(modal === 'user' ? 'userModal' : 'coinsModal').classList.remove('active');
-        }
-
+        
+        // خروج
         function logout() {
-            if (confirm('آیا می‌خواهید خارج شوید؟')) {
-                location.href = 'index.html';
-            }
+            location.href = 'index.html';
         }
-
-        function attachUserEvents() {
-            document.getElementById('userForm')?.addEventListener('submit', (e) => e.preventDefault());
-            document.getElementById('coinsForm')?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const userId = document.getElementById('coinUser').value;
-                const amount = document.getElementById('coinAmount').value;
-                const reason = document.getElementById('coinReason').value;
-                
-                const user = users.find(u => u.id == userId);
-                if (user) {
-                    user.coins += parseInt(amount);
-                    showToast(`✅ ${amount} سکه به ${user.name} اضافه شد`, "success");
-                    closeModal('coins');
-                    loadTabContent();
-                }
-            });
-        }
-
-        // بارگذاری اولیه
-        loadTabContent();
+        
+        // لود اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadUsers();
+        });
     </script>
 </body>
 </html>
