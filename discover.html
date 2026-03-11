@@ -2,515 +2,193 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>دیسکاور | نیمه گمشده</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding-bottom: 70px;
-        }
-
-        /* هدر */
-        .header {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        /* کانتینر اصلی */
-        .discover-container {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 0 15px;
-            position: relative;
-        }
-
-        /* کارت پروفایل */
-        .profile-card {
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            animation: slideIn 0.5s ease;
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* عکس کاربر */
-        .profile-image-container {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            background: #f0f0f0;
-        }
-
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .image-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-        }
-
-        /* اطلاعات کاربر */
-        .profile-info {
-            padding: 20px;
-            position: relative;
-        }
-
-        .name-age {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .name {
-            font-size: 28px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .age {
-            font-size: 20px;
-            color: #ff4d6d;
-            background: #ffe5e9;
-            padding: 5px 15px;
-            border-radius: 25px;
-        }
-
-        .location {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #666;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        .bio {
-            color: #444;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 15px;
-            font-size: 14px;
-        }
-
-        /* علاقه‌مندی‌ها */
-        .interests {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .interest-tag {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            color: #ff4d6d;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        /* دکمه‌های اقدام */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .action-btn {
-            flex: 1;
-            height: 65px;
-            border: none;
-            border-radius: 35px;
-            font-size: 28px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .dislike-btn {
-            background: white;
-            color: #ff4d6d;
-            border: 2px solid #ff4d6d;
-        }
-
-        .dislike-btn:hover {
-            background: #ff4d6d;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .like-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-        }
-
-        .like-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
-        }
-
-        .superlike-btn {
-            background: linear-gradient(135deg, #4a90e2, #357abd);
-            color: white;
-        }
-
-        /* کانتر کاربران باقی‌مانده */
-        .counter {
-            text-align: center;
-            color: white;
-            font-size: 14px;
-            margin: 10px 0;
-            background: rgba(255,255,255,0.2);
-            padding: 8px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* لودینگ */
-        .loading {
-            text-align: center;
-            padding: 50px;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid #f0f0f0;
-            border-top: 5px solid #ff4d6d;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* حالت خطا */
-        .error-state {
-            text-align: center;
-            padding: 40px;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .error-emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
-        }
-
-        .retry-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-        /* حالت خالی */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .empty-emoji {
-            font-size: 100px;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .find-users-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-        /* نوار پایین */
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            font-size: 24px;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            color: #666;
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            color: #ff4d6d;
-            transform: translateY(-5px);
-        }
-
-        /* نوتیفیکیشن */
-        .toast {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: #333;
-            padding: 12px 25px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 2000;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                top: 60px;
-                opacity: 0;
-            }
-            to {
-                top: 80px;
-                opacity: 1;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اکتشاف | همدم</title>
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+    <!-- هدر -->
     <div class="header">
-        🔥 دیسکاور
+        <div class="logo">
+            <span>🔥</span>
+            اکتشاف
+        </div>
+        <div class="wallet" onclick="location.href='wallet.html'">
+            <span>🪙</span>
+            <span class="user-coins">۰</span>
+        </div>
     </div>
 
-    <div class="discover-container" id="discoverContainer">
-        <!-- محتوا با JavaScript لود میشه -->
+    <!-- تب‌ها -->
+    <div class="tabs">
+        <div class="tab" onclick="location.href='index.html'">خانه</div>
+        <div class="tab active" onclick="location.href='discover.html'">اکتشاف</div>
+        <div class="tab" onclick="location.href='live.html'">لایو</div>
+        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
+        <div class="tab" onclick="location.href='profile.html'">پروفایل</div>
     </div>
 
+    <!-- فیلترها -->
+    <div style="display: flex; gap: 10px; padding: 15px; overflow-x: auto;">
+        <select class="form-control" style="width: auto; min-width: 100px;" id="cityFilter">
+            <option value="">همه شهرها</option>
+            <option value="tehran">تهران</option>
+            <option value="isfahan">اصفهان</option>
+            <option value="shiraz">شیراز</option>
+            <option value="mashhad">مشهد</option>
+            <option value="tabriz">تبریز</option>
+        </select>
+        
+        <select class="form-control" style="width: auto; min-width: 100px;" id="ageFilter">
+            <option value="">همه سنین</option>
+            <option value="18-25">۱۸-۲۵</option>
+            <option value="26-35">۲۶-۳۵</option>
+            <option value="36-45">۳۶-۴۵</option>
+        </select>
+        
+        <button class="btn btn-primary" onclick="applyFilters()" style="padding: 10px 20px;">اعمال فیلتر</button>
+    </div>
+
+    <!-- کانتینر اصلی برای کاربران -->
+    <div id="discoverContainer">
+        <!-- کاربران با JS لود میشن -->
+    </div>
+
+    <!-- نوار پایین -->
     <div class="navbar">
+        <a href="index.html" class="nav-item">🏠</a>
         <a href="discover.html" class="nav-item active">🔥</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="inbox.html" class="nav-item">💬</a>
-        <a href="notifications.html" class="nav-item">🔔</a>
+        <a href="live.html" class="nav-item">🎥</a>
+        <a href="gifts.html" class="nav-item">🎁</a>
         <a href="profile.html" class="nav-item">👤</a>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
 
     <script>
-        // تنظیمات Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-        };
-
-        // راه‌اندازی Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log("✅ Firebase راه‌اندازی شد");
-        }
-
-        const db = firebase.firestore();
-        let currentUser = null;
         let currentUsers = [];
         let currentIndex = 0;
-        let loading = false;
 
-        // بررسی احراز هویت
-        firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                console.log("❌ کاربر وارد نشده");
-                showError("لطفاً ابتدا وارد شوید", true);
-                setTimeout(() => {
-                    location.href = "login.html";
-                }, 2000);
-                return;
-            }
-
-            console.log("✅ کاربر وارد شد:", user.uid);
-            currentUser = user;
-            loadUsers();
-        });
-
-        // تابع نمایش نوتیفیکیشن
-        function showToast(message, type = "success") {
-            const toast = document.createElement("div");
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span>${type === "success" ? "✅" : "❌"}</span>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        // تابع نمایش خطا
-        function showError(message, redirect = false) {
-            document.getElementById('discoverContainer').innerHTML = `
-                <div class="error-state">
-                    <div class="error-emoji">❌</div>
-                    <h3 style="margin-bottom: 10px;">خطا</h3>
-                    <p style="color: #666; margin-bottom: 20px;">${message}</p>
-                    <button class="retry-btn" onclick="location.reload()">تلاش مجدد</button>
-                </div>
-            `;
-        }
-
-        // تابع نمایش لودینگ
-        function showLoading() {
+        // لود کاربران
+        function loadUsers() {
             document.getElementById('discoverContainer').innerHTML = `
                 <div class="loading">
                     <div class="spinner"></div>
-                    <p style="color: #666; font-size: 16px;">در حال پیدا کردن کاربران جدید...</p>
+                    <p>در حال پیدا کردن کاربران...</p>
                 </div>
             `;
+
+            // گرفتن کاربران از Firebase
+            db.collection("users")
+                .limit(20)
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        useSampleUsers();
+                        return;
+                    }
+
+                    currentUsers = [];
+                    snapshot.forEach(doc => {
+                        if (doc.id !== currentUser?.uid) {
+                            currentUsers.push({
+                                id: doc.id,
+                                ...doc.data()
+                            });
+                        }
+                    });
+
+                    if (currentUsers.length === 0) {
+                        useSampleUsers();
+                    } else {
+                        currentIndex = 0;
+                        showCurrentUser();
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading users:", error);
+                    useSampleUsers();
+                });
         }
 
-        // تابع نمایش حالت خالی
-        function showEmptyState() {
-            document.getElementById('discoverContainer').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-emoji">🔍</div>
-                    <h3 style="font-size: 24px; margin-bottom: 10px;">کاربری پیدا نشد!</h3>
-                    <p style="color: #666; margin-bottom: 20px;">همه کاربران رو دیدی. بعداً دوباره امتحان کن.</p>
-                    <button class="find-users-btn" onclick="loadUsers()">
-                        <span>🔄</span>
-                        جستجوی دوباره
-                    </button>
-                </div>
-            `;
+        // استفاده از کاربران نمونه
+        function useSampleUsers() {
+            currentUsers = [
+                {
+                    id: "sample1",
+                    name: "سارا محمدی",
+                    age: 24,
+                    city: "تهران",
+                    bio: "عاشق موسیقی و سفر ❤️",
+                    photo: "https://randomuser.me/api/portraits/women/1.jpg",
+                    distance: 3
+                },
+                {
+                    id: "sample2",
+                    name: "علی رضایی",
+                    age: 28,
+                    city: "اصفهان",
+                    bio: "برنامه‌نویس، عاشق تکنولوژی 🎮",
+                    photo: "https://randomuser.me/api/portraits/men/1.jpg",
+                    distance: 5
+                },
+                {
+                    id: "sample3",
+                    name: "مریم کریمی",
+                    age: 23,
+                    city: "شیراز",
+                    bio: "موسیقی‌دان و عاشق هنر 🎵",
+                    photo: "https://randomuser.me/api/portraits/women/2.jpg",
+                    distance: 2
+                }
+            ];
+            currentIndex = 0;
+            showCurrentUser();
         }
 
-        // تابع نمایش کاربر فعلی
+        // نمایش کاربر فعلی
         function showCurrentUser() {
             if (currentIndex >= currentUsers.length) {
-                showEmptyState();
+                document.getElementById('discoverContainer').innerHTML = `
+                    <div style="text-align: center; padding: 50px; background: white; border-radius: 25px; margin: 15px;">
+                        <div style="font-size: 80px; margin-bottom: 20px;">🔍</div>
+                        <h3 style="margin-bottom: 10px;">کاربری پیدا نشد!</h3>
+                        <p style="color: #666; margin-bottom: 20px;">بعداً دوباره امتحان کن</p>
+                        <button class="btn btn-primary" onclick="loadUsers()">تلاش مجدد</button>
+                    </div>
+                `;
                 return;
             }
 
             const user = currentUsers[currentIndex];
-            console.log("👤 نمایش کاربر:", user.name);
-
-            // سن تصادفی بین 18 تا 35
-            const age = Math.floor(Math.random() * (35 - 18) + 18);
-            
-            // عکس پیش‌فرض اگر نبود
-            const photoUrl = user.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'کاربر')}&size=400&background=ff4d6d&color=fff&bold=true`;
-
-            // کاربران باقی‌مانده
             const remaining = currentUsers.length - currentIndex - 1;
 
             const html = `
-                <div class="counter">
+                <div style="color: white; text-align: center; margin: 10px;">
                     ${remaining} کاربر باقی‌مانده
                 </div>
 
                 <div class="profile-card">
-                    <div class="profile-image-container">
-                        <img src="${photoUrl}" class="profile-image" alt="${user.name}" 
-                             onerror="this.src='https://ui-avatars.com/api/?name=کاربر&size=400&background=ff4d6d&color=fff&bold=true'">
-                        <div class="image-overlay"></div>
-                    </div>
+                    <img src="${user.photo}" class="profile-image" alt="${user.name}">
                     
                     <div class="profile-info">
                         <div class="name-age">
-                            <span class="name">${user.name || 'کاربر'}</span>
-                            <span class="age">${age}</span>
+                            <span class="name">${user.name}</span>
+                            <span class="age">${user.age || '۲۴'}</span>
                         </div>
                         
                         <div class="location">
                             <span>📍</span>
-                            <span>${user.city || 'تهران'}</span>
-                            <span>•</span>
-                            <span>${user.distance || '۲'}</span>
-                            <span>کیلومتر</span>
+                            <span>${user.city || 'تهران'}، ${user.distance || '۳'} کیلومتری</span>
                         </div>
                         
                         <div class="bio">
-                            ${user.bio || 'عاشق سفر، موسیقی و تکنولوژی | دنبال دوستان جدید برای ماجراجویی'}
+                            ${user.bio || 'عاشق موسیقی، سفر و تکنولوژی ❤️'}
                         </div>
                         
                         <div class="interests">
@@ -518,13 +196,12 @@
                             <span class="interest-tag">✈️ سفر</span>
                             <span class="interest-tag">📚 کتاب</span>
                             <span class="interest-tag">🎮 بازی</span>
-                            <span class="interest-tag">⚽ ورزش</span>
                         </div>
                         
                         <div class="action-buttons">
-                            <button class="action-btn dislike-btn" onclick="handleAction('dislike', '${user.id}')">✕</button>
-                            <button class="action-btn like-btn" onclick="handleAction('like', '${user.id}')">❤️</button>
-                            <button class="action-btn superlike-btn" onclick="handleAction('superlike', '${user.id}')">⭐</button>
+                            <button class="action-btn dislike-btn" onclick="nextUser('dislike', '${user.id}')">✕</button>
+                            <button class="action-btn like-btn" onclick="nextUser('like', '${user.id}')">❤️</button>
+                            <button class="action-btn dislike-btn" onclick="nextUser('superlike', '${user.id}')">⭐</button>
                         </div>
                     </div>
                 </div>
@@ -533,216 +210,41 @@
             document.getElementById('discoverContainer').innerHTML = html;
         }
 
-        // بارگذاری کاربران
-        function loadUsers() {
-            showLoading();
-            
-            if (!currentUser) {
-                showError("لطفاً ابتدا وارد شوید");
-                return;
-            }
-
-            console.log("📥 در حال بارگذاری کاربران...");
-
-            // دریافت کاربران از Firebase
-            db.collection("users")
-                .where("uid", "!=", currentUser.uid)
-                .limit(20)
-                .get()
-                .then(snapshot => {
-                    console.log("📊 تعداد کاربران دریافت شده:", snapshot.size);
-                    
-                    if (snapshot.empty) {
-                        // اگر کاربری نبود، از داده‌های نمونه استفاده کن
-                        useSampleUsers();
-                        return;
-                    }
-
-                    currentUsers = [];
-                    snapshot.forEach(doc => {
-                        const userData = doc.data();
-                        currentUsers.push({
-                            id: doc.id,
-                            name: userData.name || "کاربر",
-                            photo: userData.photo || null,
-                            city: userData.city || "تهران",
-                            bio: userData.bio || null,
-                            distance: Math.floor(Math.random() * 10) + 1
-                        });
-                    });
-
-                    console.log("✅ کاربران با موفقیت لود شدند:", currentUsers.length);
-                    currentIndex = 0;
-                    showCurrentUser();
-                })
-                .catch(error => {
-                    console.error("❌ خطا در دریافت کاربران:", error);
-                    // در صورت خطا، از داده‌های نمونه استفاده کن
-                    useSampleUsers();
-                });
+        // رفتن به کاربر بعدی
+        function nextUser(action, userId) {
+            handleAction(action, userId);
+            currentIndex++;
+            setTimeout(showCurrentUser, 500);
         }
 
-        // استفاده از داده‌های نمونه (برای تست)
-        function useSampleUsers() {
-            console.log("📋 استفاده از داده‌های نمونه");
+        // اعمال فیلتر
+        function applyFilters() {
+            const city = document.getElementById('cityFilter').value;
+            const age = document.getElementById('ageFilter').value;
             
-            currentUsers = [
-                {
-                    id: "sample1",
-                    name: "سارا محمدی",
-                    photo: "https://randomuser.me/api/portraits/women/1.jpg",
-                    city: "تهران",
-                    bio: "عاشق سفر و عکاسی 📸 | دنبال دوستای جدید برای ماجراجویی",
-                    distance: 3
-                },
-                {
-                    id: "sample2",
-                    name: "علی رضایی",
-                    photo: "https://randomuser.me/api/portraits/men/1.jpg",
-                    city: "اصفهان",
-                    bio: "برنامه‌نویس، عاشق تکنولوژی و بازی 🎮",
-                    distance: 5
-                },
-                {
-                    id: "sample3",
-                    name: "مریم کریمی",
-                    photo: "https://randomuser.me/api/portraits/women/2.jpg",
-                    city: "شیراز",
-                    bio: "موسیقی‌دان و عاشق هنر 🎵 | دنبال هم‌صحبت خوب",
-                    distance: 2
-                },
-                {
-                    id: "sample4",
-                    name: "رضا احمدی",
-                    photo: "https://randomuser.me/api/portraits/men/2.jpg",
-                    city: "تبریز",
-                    bio: "ورزشکار، کوهنورد و ماجراجو ⛰️",
-                    distance: 7
-                },
-                {
-                    id: "sample5",
-                    name: "زهرا حسینی",
-                    photo: "https://randomuser.me/api/portraits/women/3.jpg",
-                    city: "مشهد",
-                    bio: "معلم، عاشق کتاب و قهوه ☕",
-                    distance: 4
-                }
-            ];
-
-            currentIndex = 0;
-            showCurrentUser();
-        }
-
-        // مدیریت اقدامات (لایک/دیسلایک)
-        function handleAction(action, userId) {
-            console.log(`🎯 ${action} روی کاربر ${userId}`);
-
-            if (!currentUser) {
-                showToast("لطفاً ابتدا وارد شوید", "error");
-                return;
+            // فیلتر کردن کاربران
+            let filtered = [...currentUsers];
+            
+            if (city) {
+                filtered = filtered.filter(u => u.city === city);
             }
-
-            // ذخیره در Firebase
-            db.collection("actions").add({
-                from: currentUser.uid,
-                to: userId,
-                type: action,
-                time: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                console.log("✅ اقدام ذخیره شد");
-                
-                if (action === 'like') {
-                    showToast("❤️ لایک شد!");
-                    checkMatch(userId);
-                } else if (action === 'superlike') {
-                    showToast("⭐ سوپرلایک شد!");
-                } else {
-                    showToast("✕ رد شد");
-                }
-
-                // رفتن به کاربر بعدی
-                currentIndex++;
+            
+            if (age) {
+                const [min, max] = age.split('-').map(Number);
+                filtered = filtered.filter(u => u.age >= min && u.age <= max);
+            }
+            
+            if (filtered.length > 0) {
+                currentUsers = filtered;
+                currentIndex = 0;
                 showCurrentUser();
-            })
-            .catch(error => {
-                console.error("❌ خطا در ذخیره:", error);
-                showToast("خطا در ثبت", "error");
-                
-                // حتی با خطا هم برو بعدی
-                currentIndex++;
-                showCurrentUser();
-            });
-        }
-
-        // بررسی تطابق
-        function checkMatch(userId) {
-            db.collection("actions")
-                .where("from", "==", userId)
-                .where("to", "==", currentUser.uid)
-                .where("type", "==", "like")
-                .get()
-                .then(snapshot => {
-                    if (!snapshot.empty) {
-                        // تطابق وجود داره
-                        db.collection("matches").add({
-                            users: [currentUser.uid, userId],
-                            time: firebase.firestore.FieldValue.serverTimestamp()
-                        })
-                        .then(() => {
-                            showToast("💕 تطابق جدید! باهم صحبت کنید.", "success");
-                            
-                            // اضافه کردن به اینباکس
-                            db.collection("messages").add({
-                                from: "system",
-                                to: currentUser.uid,
-                                text: "شما یک تطابق جدید دارید!",
-                                time: firebase.firestore.FieldValue.serverTimestamp()
-                            });
-                        });
-                    }
-                });
-        }
-
-        // اضافه کردن کاربر تستی (برای مدیر)
-        window.addTestUser = function() {
-            const testUsers = [
-                { name: "نیما رضایی", city: "تهران", bio: "طراح گرافیک، عاشق هنر", photo: "https://randomuser.me/api/portraits/men/3.jpg" },
-                { name: "الناز کریمی", city: "کرج", bio: "دکتر، عاشق سفر", photo: "https://randomuser.me/api/portraits/women/4.jpg" },
-                { name: "کیان احمدی", city: "اصفهان", bio: "بازیگر، عاشق سینما", photo: "https://randomuser.me/api/portraits/men/4.jpg" }
-            ];
-
-            const randomUser = testUsers[Math.floor(Math.random() * testUsers.length)];
-            
-            db.collection("users").add({
-                ...randomUser,
-                uid: "test_" + Date.now(),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                showToast("✅ کاربر تستی اضافه شد");
-                loadUsers();
-            })
-            .catch(error => {
-                console.error("خطا:", error);
-            });
-        };
-
-        // کیبورد برای دیباگ
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                handleAction('like', 'test');
-            } else if (e.key === 'ArrowLeft') {
-                handleAction('dislike', 'test');
+            } else {
+                showToast('کاربری با این فیلترها پیدا نشد', 'error');
             }
-        });
+        }
 
-        console.log("🚀 صفحه دیسکاور آماده است");
+        // لود اولیه
+        document.addEventListener('DOMContentLoaded', loadUsers);
     </script>
-
-    <!-- دکمه تست (فقط برای دیباگ) -->
-    <div style="position: fixed; bottom: 80px; right: 10px; z-index: 1000;">
-        <button onclick="addTestUser()" style="background: #ff4d6d; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.3);">➕</button>
-    </div>
 </body>
 </html>
