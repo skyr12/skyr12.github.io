@@ -1,116 +1,221 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fa" dir="rtl">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Live Stream</title>
-
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:#000;
-color:white;
-text-align:center;
-padding-bottom:80px;
-}
-
-.header{
-background:#ff4d6d;
-padding:20px;
-font-size:22px;
-}
-
-video{
-width:100%;
-max-width:400px;
-border-radius:20px;
-margin-top:20px;
-}
-
-button{
-padding:12px 25px;
-border:none;
-border-radius:30px;
-font-size:18px;
-background:#ff4d6d;
-color:white;
-margin-top:20px;
-cursor:pointer;
-}
-
-.navbar{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-height:70px;
-background:white;
-display:flex;
-justify-content:space-around;
-align-items:center;
-box-shadow:0 -5px 15px rgba(0,0,0,0.2);
-}
-
-.navbar a{
-text-decoration:none;
-font-size:26px;
-color:black;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لایو | همدم</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        .live-container {
+            background: #1a1a1a;
+            min-height: 100vh;
+            color: white;
+            padding-bottom: 70px;
+        }
+        
+        .live-video {
+            width: 100%;
+            height: 60vh;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .live-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .host-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        
+        .viewer-stats {
+            background: rgba(0,0,0,0.5);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .gift-bar {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .gift-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gift-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .comments {
+            padding: 20px;
+            height: 30vh;
+            overflow-y: auto;
+        }
+        
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .comment-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+        
+        .comment-text {
+            background: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            max-width: 80%;
+        }
+        
+        .comment-input {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: #222;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .comment-input input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: #333;
+            color: white;
+        }
+        
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
-<body>
-
-<div class="header">
-Live Stream 🎥
-</div>
-
-<video id="liveVideo" autoplay muted></video>
-
-<br>
-
-<button onclick="startLive()">Start Live</button>
-
-<div class="navbar">
-
-<a href="discover.html">🔥</a>
-
-<a href="matches.html">❤️</a>
-
-<a href="chat.html">💬</a>
-
-<a href="notifications.html">🔔</a>
-
-<a href="profile.html">👤</a>
-
-</div>
-
-<script>
-
-async function startLive(){
-
-let video=document.getElementById("liveVideo")
-
-let stream=await navigator.mediaDevices.getUserMedia({
-
-video:true,
-audio:true
-
-})
-
-video.srcObject=stream
-
-}
-
-</script>
-
+<body class="live-container">
+    <div class="live-video">
+        <div class="live-info">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="host-avatar">
+            <div>
+                <strong>الناز شاکردوست</strong>
+                <div style="font-size: 12px;">🎤 گفتگو</div>
+            </div>
+            <div class="viewer-stats">
+                <span>👥</span>
+                <span>۲,۳۴۵</span>
+            </div>
+        </div>
+        
+        <div class="gift-bar">
+            <div class="gift-icon" onclick="sendGift('🌹')">🌹</div>
+            <div class="gift-icon" onclick="sendGift('💍')">💍</div>
+            <div class="gift-icon" onclick="sendGift('🚗')">🚗</div>
+            <div class="gift-icon" onclick="sendGift('🏰')">🏰</div>
+            <div class="gift-icon" onclick="location.href='gifts.html'">➕</div>
+        </div>
+    </div>
+    
+    <div class="comments" id="comments">
+        <div class="comment">
+            <img src="https://randomuser.me/api/portraits/men/1.jpg" class="comment-avatar">
+            <div class="comment-text">
+                <strong>علی: </strong> عالی بود 👏
+            </div>
+        </div>
+        <div class="comment">
+            <img src="https://randomuser.me/api/portraits/women/2.jpg" class="comment-avatar">
+            <div class="comment-text">
+                <strong>سارا: </strong> ❤️❤️❤️
+            </div>
+        </div>
+        <div class="comment">
+            <img src="https://randomuser.me/api/portraits/men/2.jpg" class="comment-avatar">
+            <div class="comment-text">
+                <strong>رضا: </strong> یه آهنگ بخون
+            </div>
+        </div>
+    </div>
+    
+    <div class="comment-input">
+        <input type="text" placeholder="پیام خود را بنویسید..." id="commentInput">
+        <button class="send-btn" onclick="sendComment()">➤</button>
+    </div>
+    
+    <div class="navbar">
+        <a href="index.html" class="nav-item">🏠</a>
+        <a href="discover.html" class="nav-item">🔥</a>
+        <a href="live.html" class="nav-item active">🎥</a>
+        <a href="gifts.html" class="nav-item">🎁</a>
+        <a href="profile.html" class="nav-item">👤</a>
+    </div>
+    
+    <script>
+        function sendGift(gift) {
+            alert(`هدیه ${gift} ارسال شد!`);
+        }
+        
+        function sendComment() {
+            const input = document.getElementById('commentInput');
+            const text = input.value;
+            if (text.trim()) {
+                const comments = document.getElementById('comments');
+                comments.innerHTML += `
+                    <div class="comment">
+                        <img src="https://randomuser.me/api/portraits/men/3.jpg" class="comment-avatar">
+                        <div class="comment-text">
+                            <strong>شما: </strong> ${text}
+                        </div>
+                    </div>
+                `;
+                input.value = '';
+                comments.scrollTop = comments.scrollHeight;
+            }
+        }
+        
+        document.getElementById('commentInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendComment();
+        });
+    </script>
 </body>
-
 </html>
