@@ -85,4 +85,52 @@
         <div class="coin-package" onclick="buyCoins(1000)">
             <div>
                 <strong style="font-size: 18px;">۱,۰۰۰ سکه</strong>
-                <span style="color
+                <span style="color: #4caf50; font-size: 12px;">+۲۰۰ جایزه</span>
+            </div>
+            <div style="color: #ff4d6d;">۸۰,۰۰۰ ت</div>
+        </div>
+        
+        <div class="coin-package" onclick="buyCoins(5000)">
+            <div>
+                <strong style="font-size: 18px;">۵,۰۰۰ سکه</strong>
+                <span style="color: #4caf50; font-size: 12px;">+۱,۰۰۰ جایزه</span>
+            </div>
+            <div style="color: #ff4d6d;">۳۵۰,۰۰۰ ت</div>
+        </div>
+    </div>
+    
+    <div class="navbar">
+        <a href="index.html" class="nav-item">🏠</a>
+        <a href="discover.html" class="nav-item">🔥</a>
+        <a href="live.html" class="nav-item">🎥</a>
+        <a href="gifts.html" class="nav-item active">🎁</a>
+        <a href="profile.html" class="nav-item">👤</a>
+    </div>
+    
+    <script>
+        let userCoins = 1250;
+        
+        function buyGift(emoji, price) {
+            if (userCoins >= price) {
+                userCoins -= price;
+                document.getElementById('userCoins').textContent = userCoins.toLocaleString();
+                showToast(`✅ هدیه ${emoji} خریداری شد!`);
+            } else {
+                showToast('❌ سکه کافی ندارید!', 'error');
+            }
+        }
+        
+        function buyCoins(coins) {
+            showToast(`🔄 درگاه پرداخت برای ${coins} سکه`);
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span><span>${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+    </script>
+</body>
+</html>
