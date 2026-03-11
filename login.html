@@ -4,186 +4,55 @@
     <meta charset="UTF-8">
     <title>ورود | همدم</title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 450px;
-        }
-
-        .login-card {
-            background: white;
-            border-radius: 30px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 80px;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            font-size: 42px;
-            color: #ff4d6d;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .subtitle {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-            text-align: right;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 18px 20px;
-            font-size: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #ff4d6d;
-            box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.1);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 18px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-        }
-
-        .btn-primary {
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
-        }
-
-        .btn-secondary {
+        .box {
             background: white;
-            color: #ff4d6d;
-            border: 2px solid #ff4d6d;
+            width: 400px;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-
-        .btn-secondary:hover {
+        h1 {
+            color: #ff4d6d;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        button {
             background: #ff4d6d;
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.3);
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
         }
-
-        .forgot-link {
-            display: block;
-            margin-top: 20px;
-            color: #999;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .forgot-link:hover {
-            color: #ff4d6d;
-        }
-
-        .footer {
-            margin-top: 30px;
-            color: #999;
-            font-size: 14px;
-        }
-
-        .footer a {
-            color: #ff4d6d;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
+        button:hover {
+            background: #ff3355;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-card">
-            <div class="logo">❤️</div>
-            <h1>همدم</h1>
-            <div class="subtitle">به خانواده همدم خوش آمدید</div>
-            
-            <div class="input-group">
-                <label>ایمیل</label>
-                <input type="email" id="email" value="test@test.com" placeholder="example@gmail.com">
-            </div>
-            
-            <div class="input-group">
-                <label>رمز عبور</label>
-                <input type="password" id="pass" value="123456" placeholder="********">
-            </div>
-            
-            <button class="btn btn-primary" onclick="login()">ورود به حساب</button>
-            <button class="btn btn-secondary" onclick="demo()">ورود به عنوان مهمان</button>
-            
-            <a href="#" class="forgot-link">رمز عبور را فراموش کرده‌اید؟</a>
-            
-            <div class="footer">
-                حساب کاربری ندارید؟ <a href="#">ثبت نام کنید</a>
-            </div>
-        </div>
+    <div class="box">
+        <h1>❤️ همدم</h1>
+        <p style="margin-bottom: 30px; color: #666;">برای ورود کلیک کنید</p>
+        
+        <button onclick="goToHome()">ورود به همدم</button>
     </div>
 
     <script>
-        function login() {
-            let email = document.getElementById('email').value;
-            let pass = document.getElementById('pass').value;
-            
-            if (email && pass) {
-                window.location.href = 'index.html';
-            } else {
-                alert('لطفاً ایمیل و رمز عبور را وارد کنید');
-            }
-        }
-        
-        function demo() {
+        function goToHome() {
             window.location.href = 'index.html';
         }
     </script>
