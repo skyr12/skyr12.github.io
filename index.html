@@ -2,329 +2,9 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>همدم | صفحه اصلی</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding-bottom: 70px;
-        }
-
-        /* هدر اصلی */
-        .header {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .wallet {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 18px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(10px);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .wallet:hover {
-            transform: scale(1.05);
-            background: rgba(255,255,255,0.3);
-        }
-
-        /* تب‌های ناوبری */
-        .tabs {
-            display: flex;
-            background: white;
-            border-radius: 30px;
-            margin: 15px;
-            padding: 5px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            color: #666;
-        }
-
-        .tab.active {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-        }
-
-        /* کارت پروفایل */
-        .profile-card {
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            margin: 15px;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .profile-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-        }
-
-        .profile-info {
-            padding: 20px;
-        }
-
-        .name-age {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .name {
-            font-size: 28px;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .age {
-            font-size: 20px;
-            color: #ff4d6d;
-            background: #ffe5e9;
-            padding: 5px 15px;
-            border-radius: 25px;
-        }
-
-        .location {
-            color: #666;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .bio {
-            color: #444;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 15px;
-        }
-
-        .interests {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .interest-tag {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            color: #ff4d6d;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .action-btn {
-            flex: 1;
-            height: 65px;
-            border: none;
-            border-radius: 35px;
-            font-size: 28px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .like-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-        }
-
-        .like-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255,77,109,0.4);
-        }
-
-        .dislike-btn {
-            background: white;
-            color: #ff4d6d;
-            border: 2px solid #ff4d6d;
-        }
-
-        .dislike-btn:hover {
-            background: #ff4d6d;
-            color: white;
-        }
-
-        /* گرید لایو */
-        .live-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            padding: 15px;
-        }
-
-        .live-card {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            border-radius: 20px;
-            padding: 15px;
-            color: white;
-            position: relative;
-            min-height: 150px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .live-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255,77,109,0.3);
-        }
-
-        .live-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: red;
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 11px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .viewer-count {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.5);
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 11px;
-        }
-
-        /* نوار پایین */
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            font-size: 24px;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            color: #666;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
-            color: #ff4d6d;
-            transform: translateY(-5px);
-        }
-
-        /* نوتیفیکیشن */
-        .toast {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: #333;
-            padding: 12px 25px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 2000;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { top: 60px; opacity: 0; }
-            to { top: 80px; opacity: 1; }
-        }
-
-        /* لودینگ */
-        .loading {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #ff4d6d;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
     <!-- هدر -->
@@ -335,7 +15,7 @@
         </div>
         <div class="wallet" onclick="location.href='wallet.html'">
             <span>🪙</span>
-            <span id="userCoins">۱,۲۵۰</span>
+            <span class="user-coins">۰</span>
         </div>
     </div>
 
@@ -348,77 +28,74 @@
         <div class="tab" onclick="location.href='profile.html'">پروفایل</div>
     </div>
 
-    <!-- محتوای اصلی -->
-    <div id="mainContent">
-        <!-- کارت پروفایل نمونه -->
-        <div class="profile-card">
-            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-image" alt="profile">
+    <!-- کارت پروفایل نمونه -->
+    <div class="profile-card">
+        <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-image" alt="profile">
+        
+        <div class="profile-info">
+            <div class="name-age">
+                <span class="name">سارا محمدی</span>
+                <span class="age">۲۴</span>
+            </div>
             
-            <div class="profile-info">
-                <div class="name-age">
-                    <span class="name" id="userName">سارا محمدی</span>
-                    <span class="age" id="userAge">۲۴</span>
-                </div>
-                
-                <div class="location" id="userLocation">
-                    <span>📍</span>
-                    <span>تهران، ۳ کیلومتری</span>
-                </div>
-                
-                <div class="bio" id="userBio">
-                    عاشق موسیقی، سفر و تکنولوژی ❤️ دنبال دوستای جدید برای ماجراجویی
-                </div>
-                
-                <div class="interests" id="userInterests">
-                    <span class="interest-tag">🎵 موسیقی</span>
-                    <span class="interest-tag">✈️ سفر</span>
-                    <span class="interest-tag">📚 کتاب</span>
-                    <span class="interest-tag">🎮 بازی</span>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="action-btn dislike-btn" onclick="handleAction('dislike')">✕</button>
-                    <button class="action-btn like-btn" onclick="handleAction('like')">❤️</button>
-                    <button class="action-btn dislike-btn" onclick="handleAction('superlike')">⭐</button>
-                </div>
+            <div class="location">
+                <span>📍</span>
+                <span>تهران، ۳ کیلومتری</span>
+            </div>
+            
+            <div class="bio">
+                عاشق موسیقی، سفر و تکنولوژی ❤️ دنبال دوستای جدید برای ماجراجویی
+            </div>
+            
+            <div class="interests">
+                <span class="interest-tag">🎵 موسیقی</span>
+                <span class="interest-tag">✈️ سفر</span>
+                <span class="interest-tag">📚 کتاب</span>
+                <span class="interest-tag">🎮 بازی</span>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn dislike-btn" onclick="handleAction('dislike', 'user1')">✕</button>
+                <button class="action-btn like-btn" onclick="handleAction('like', 'user1')">❤️</button>
+                <button class="action-btn dislike-btn" onclick="handleAction('superlike', 'user1')">⭐</button>
             </div>
         </div>
+    </div>
 
-        <!-- بخش لایوهای محبوب -->
-        <h3 style="color: white; padding: 15px; margin-top: 10px;">🔴 لایوهای محبوب</h3>
-        
-        <div class="live-grid">
-            <div class="live-card" onclick="location.href='live.html'">
-                <span class="live-badge">LIVE</span>
-                <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎤</div>
-                <div style="padding: 10px;">
-                    <strong>سارا جان</strong>
-                    <span class="viewer-count">👥 ۲٫۳k</span>
-                </div>
+    <!-- لایوهای محبوب -->
+    <h3 style="color: white; padding: 15px;">🔴 لایوهای محبوب</h3>
+    
+    <div class="live-grid">
+        <div class="live-card" onclick="location.href='live.html'">
+            <span class="live-badge">LIVE</span>
+            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎤</div>
+            <div style="padding: 10px;">
+                <strong>سارا جان</strong>
+                <span class="viewer-count">👥 ۲٫۳k</span>
             </div>
-            <div class="live-card" onclick="location.href='live.html'">
-                <span class="live-badge">LIVE</span>
-                <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎵</div>
-                <div style="padding: 10px;">
-                    <strong>علی‌رضا</strong>
-                    <span class="viewer-count">👥 ۱٫۲k</span>
-                </div>
+        </div>
+        <div class="live-card" onclick="location.href='live.html'">
+            <span class="live-badge">LIVE</span>
+            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎵</div>
+            <div style="padding: 10px;">
+                <strong>علی‌رضا</strong>
+                <span class="viewer-count">👥 ۱٫۲k</span>
             </div>
-            <div class="live-card" onclick="location.href='live.html'">
-                <span class="live-badge">LIVE</span>
-                <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎮</div>
-                <div style="padding: 10px;">
-                    <strong>نیما</strong>
-                    <span class="viewer-count">👥 ۸۹۰</span>
-                </div>
+        </div>
+        <div class="live-card" onclick="location.href='live.html'">
+            <span class="live-badge">LIVE</span>
+            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎮</div>
+            <div style="padding: 10px;">
+                <strong>نیما</strong>
+                <span class="viewer-count">👥 ۸۹۰</span>
             </div>
-            <div class="live-card" onclick="location.href='live.html'">
-                <span class="live-badge">LIVE</span>
-                <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎨</div>
-                <div style="padding: 10px;">
-                    <strong>الناز</strong>
-                    <span class="viewer-count">👥 ۵۶۷</span>
-                </div>
+        </div>
+        <div class="live-card" onclick="location.href='live.html'">
+            <span class="live-badge">LIVE</span>
+            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎨</div>
+            <div style="padding: 10px;">
+                <strong>الناز</strong>
+                <span class="viewer-count">👥 ۵۶۷</span>
             </div>
         </div>
     </div>
@@ -437,169 +114,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
-
-    <script>
-        // ✅ Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1",
-            measurementId: "G-KTCV2B5R9L"
-        };
-
-        // ✅ Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        const storage = firebase.storage();
-        const analytics = firebase.analytics();
-
-        console.log("✅ Firebase initialized successfully");
-        console.log("🔥 App:", app.name);
-        console.log("📊 Analytics:", analytics.app.name);
-
-        // متغیرهای اصلی
-        let currentUser = null;
-        let userCoins = 1250;
-
-        // بررسی وضعیت احراز هویت
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                console.log("✅ کاربر وارد شد:", user.email);
-                loadUserData(user.uid);
-            } else {
-                console.log("❌ کاربر وارد نشده");
-                // اگه خواستی می‌تونی به صفحه login بفرستی
-                // location.href = "login.html";
-            }
-        });
-
-        // بارگذاری اطلاعات کاربر
-        function loadUserData(uid) {
-            db.collection("users").doc(uid).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        console.log("📦 اطلاعات کاربر:", userData);
-                        
-                        // بروزرسانی صفحه با اطلاعات کاربر
-                        if (userData.name) {
-                            document.getElementById('userName').textContent = userData.name;
-                        }
-                        if (userData.city) {
-                            document.getElementById('userLocation').innerHTML = `📍 ${userData.city}`;
-                        }
-                        if (userData.bio) {
-                            document.getElementById('userBio').textContent = userData.bio;
-                        }
-                        if (userData.coins) {
-                            userCoins = userData.coins;
-                            document.getElementById('userCoins').textContent = userCoins.toLocaleString('fa-IR');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error("❌ خطا در دریافت اطلاعات کاربر:", error);
-                });
-        }
-
-        // تابع نمایش نوتیفیکیشن
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span>${type === 'success' ? '✅' : '❌'}</span>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 2000);
-        }
-
-        // تابع مدیریت اقدامات (لایک/دیسلایک)
-        function handleAction(action) {
-            if (!currentUser) {
-                showToast("لطفاً ابتدا وارد شوید", "error");
-                return;
-            }
-
-            if (action === 'like') {
-                showToast("❤️ لایک شد!");
-                
-                // ذخیره لایک در Firebase
-                db.collection("likes").add({
-                    from: currentUser.uid,
-                    to: "sample_user_id",
-                    time: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                // لود کاربر بعدی
-                setTimeout(() => location.reload(), 1000);
-                
-            } else if (action === 'superlike') {
-                if (userCoins >= 50) {
-                    userCoins -= 50;
-                    document.getElementById('userCoins').textContent = userCoins.toLocaleString('fa-IR');
-                    showToast("⭐ سوپرلایک شد!");
-                    
-                    // ذخیره سوپرلایک
-                    db.collection("superlikes").add({
-                        from: currentUser.uid,
-                        to: "sample_user_id",
-                        time: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                    // بروزرسانی سکه در Firebase
-                    db.collection("users").doc(currentUser.uid).update({
-                        coins: userCoins
-                    });
-                    
-                    setTimeout(() => location.reload(), 1000);
-                } else {
-                    showToast("❌ سکه کافی ندارید!", "error");
-                }
-            } else {
-                showToast("✕ رد شد");
-                setTimeout(() => location.reload(), 500);
-            }
-        }
-
-        // اضافه کردن کاربر تستی (برای دیباگ)
-        window.addTestUser = function() {
-            auth.createUserWithEmailAndPassword("test@test.com", "123456")
-                .then(userCredential => {
-                    const user = userCredential.user;
-                    
-                    return db.collection("users").doc(user.uid).set({
-                        name: "کاربر تست",
-                        email: "test@test.com",
-                        city: "تهران",
-                        bio: "این یه کاربر تستیه",
-                        coins: 1000,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                })
-                .then(() => {
-                    showToast("✅ کاربر تستی ساخته شد");
-                })
-                .catch(error => {
-                    console.error("خطا:", error);
-                });
-        };
-
-        console.log("🚀 صفحه اصلی آماده است");
-    </script>
-
-    <!-- دکمه تست (فقط برای دیباگ) -->
-    <div style="position: fixed; bottom: 80px; right: 10px; z-index: 1000;">
-        <button onclick="addTestUser()" style="background: #ff4d6d; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.3);">➕</button>
-    </div>
+    <script src="assets/script.js"></script>
 </body>
 </html>
