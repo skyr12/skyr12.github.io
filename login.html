@@ -27,12 +27,10 @@
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: 30px;
             padding: 50px 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .logo {
@@ -70,29 +68,11 @@
             border: 2px solid #e0e0e0;
             border-radius: 15px;
             transition: all 0.3s ease;
-            background: white;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #ff4d6d;
-            box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.1);
-        }
-
-        .form-group input.error {
-            border-color: #f44336;
-            background: #ffebee;
-        }
-
-        .error-message {
-            color: #f44336;
-            font-size: 13px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
         }
 
         .btn {
@@ -108,13 +88,13 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            background: #ff4d6d;
             color: white;
         }
 
         .btn-primary:hover {
+            background: #ff3355;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
         }
 
         .btn-secondary {
@@ -137,37 +117,10 @@
             color: #666;
             text-decoration: none;
             font-size: 14px;
-            transition: color 0.3s ease;
         }
 
         .links a:hover {
             color: #ff4d6d;
-        }
-
-        .success-message {
-            background: #4caf50;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            display: none;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
     </style>
 </head>
@@ -179,27 +132,21 @@
                 <p>به خانواده همدم خوش آمدید</p>
             </div>
 
-            <div class="success-message" id="successMessage"></div>
-
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>ایمیل</label>
-                    <input type="email" id="email" placeholder="example@gmail.com" value="test@test.com">
-                    <div class="error-message" id="emailError">ایمیل وارد شده معتبر نیست</div>
+                    <input type="email" id="email" value="test@test.com" required>
                 </div>
 
                 <div class="form-group">
                     <label>رمز عبور</label>
-                    <input type="password" id="password" placeholder="********" value="123456">
-                    <div class="error-message" id="passwordError">رمز عبور باید حداقل ۶ کاراکتر باشد</div>
+                    <input type="password" id="password" value="123456" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">ورود به حساب</button>
                 <button type="button" class="btn btn-secondary" onclick="demoLogin()">ورود به عنوان مهمان</button>
 
                 <div class="links">
-                    <a href="#">رمز عبور را فراموش کرده‌اید؟</a>
-                    <br><br>
                     <a href="#">ثبت نام کنید</a>
                 </div>
             </form>
@@ -207,108 +154,21 @@
     </div>
 
     <script>
-        // کاربران آزمایشی
-        const validUsers = [
-            { email: 'test@test.com', password: '123456' },
-            { email: 'admin@hamdam.com', password: 'admin123' },
-            { email: 'user@hamdam.com', password: '123456' }
-        ];
-
         function handleLogin(event) {
-            // جلوگیری از ارسال فرم به روش معمولی
             event.preventDefault();
             
-            // گرفتن مقادیر
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
             
-            // ریست کردن خطاها
-            resetErrors();
-            
-            // اعتبارسنجی
-            let isValid = true;
-            
-            if (!email || !isValidEmail(email)) {
-                showError('emailError');
-                document.getElementById('email').classList.add('error');
-                isValid = false;
-            }
-            
-            if (!password || password.length < 6) {
-                showError('passwordError');
-                document.getElementById('password').classList.add('error');
-                isValid = false;
-            }
-            
-            if (!isValid) {
-                return;
-            }
-            
-            // چک کردن اطلاعات کاربر
-            const user = validUsers.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                // ورود موفق
-                showSuccess('در حال انتقال به صفحه اصلی...');
-                
-                // ذخیره اطلاعات در localStorage
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-                
-                // انتقال به صفحه اصلی بعد از ۱ ثانیه
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
+            if (email === 'test@test.com' && password === '123456') {
+                window.location.href = 'index.html';
             } else {
-                // ورود ناموفق
                 alert('ایمیل یا رمز عبور اشتباه است');
             }
         }
 
         function demoLogin() {
-            // ورود به عنوان مهمان
-            showSuccess('در حال انتقال به صفحه اصلی...');
-            
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userEmail', 'guest@hamdam.com');
-            
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
-        }
-
-        function isValidEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        function showError(elementId) {
-            document.getElementById(elementId).classList.add('show');
-        }
-
-        function resetErrors() {
-            document.querySelectorAll('.error-message').forEach(el => {
-                el.classList.remove('show');
-            });
-            document.querySelectorAll('input').forEach(el => {
-                el.classList.remove('error');
-            });
-        }
-
-        function showSuccess(message) {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.textContent = message;
-            successDiv.classList.add('show');
-        }
-
-        // چک کردن اگه کاربر قبلاً وارد شده
-        window.onload = function() {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                // اگه کاربر قبلاً وارد شده، بپرس بره صفحه اصلی یا نه
-                if (confirm('شما قبلاً وارد شده‌اید. می‌خواهید به صفحه اصلی بروید؟')) {
-                    window.location.href = 'index.html';
-                }
-            }
+            window.location.href = 'index.html';
         }
     </script>
 </body>
