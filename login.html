@@ -28,18 +28,6 @@
             width: 100%;
             max-width: 400px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .auth-header {
@@ -50,18 +38,11 @@
         .auth-header .logo {
             font-size: 64px;
             margin-bottom: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
 
         .auth-header h2 {
             color: #333;
             margin-bottom: 5px;
-            font-size: 28px;
         }
 
         .auth-header p {
@@ -99,12 +80,6 @@
 
         .auth-form.active {
             display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .form-group {
@@ -128,7 +103,6 @@
             top: 50%;
             transform: translateY(-50%);
             color: #999;
-            font-size: 18px;
         }
 
         .form-control {
@@ -143,7 +117,6 @@
         .form-control:focus {
             outline: none;
             border-color: #ff4d6d;
-            box-shadow: 0 0 0 3px rgba(255,77,109,0.1);
         }
 
         .auth-btn {
@@ -160,14 +133,9 @@
             margin-top: 10px;
         }
 
-        .auth-btn:hover:not(:disabled) {
+        .auth-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255,77,109,0.3);
-        }
-
-        .auth-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         .auth-divider {
@@ -209,13 +177,53 @@
 
         .error-message.show {
             display: block;
-            animation: shake 0.3s ease;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+        .firebase-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-size: 14px;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .status-connected {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .status-disconnected {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .demo-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ff4d6d;
+            border-radius: 15px;
+            background: white;
+            color: #ff4d6d;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            background: #ff4d6d;
+            color: white;
         }
 
         .loading-spinner {
@@ -232,56 +240,11 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        .demo-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .demo-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #ff4d6d;
-            border-radius: 10px;
-            background: white;
-            color: #ff4d6d;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .demo-btn:hover {
-            background: #ff4d6d;
-            color: white;
-        }
-
-        .firebase-status {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            font-size: 12px;
-            z-index: 1000;
-        }
-
-        .status-connected {
-            color: #4caf50;
-            font-weight: bold;
-        }
-
-        .status-disconnected {
-            color: #f44336;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <div class="firebase-status" id="firebaseStatus">
-        🔄 بررسی اتصال Firebase...
+        🔄 در حال بررسی اتصال Firebase...
     </div>
 
     <div class="auth-box">
@@ -304,7 +267,7 @@
                 <label>ایمیل</label>
                 <div class="input-group">
                     <span class="input-icon">✉️</span>
-                    <input type="email" class="form-control" id="loginEmail" placeholder="example@email.com" value="vlmira021@gmail.com">
+                    <input type="email" class="form-control" id="loginEmail" placeholder="example@email.com" value="vladimirakr021@gmail.com">
                 </div>
             </div>
             
@@ -320,10 +283,7 @@
                 <a href="#" style="color: #ff4d6d; text-decoration: none; font-size: 13px;">رمز عبور را فراموش کردید؟</a>
             </div>
             
-            <button class="auth-btn" id="loginBtn" onclick="handleLogin()">
-                <span>ورود</span>
-                <span class="loading-spinner" style="display: none;"></span>
-            </button>
+            <button class="auth-btn" id="loginBtn" onclick="handleLogin()">ورود</button>
         </div>
         
         <!-- فرم ثبت نام -->
@@ -360,10 +320,7 @@
                 </div>
             </div>
             
-            <button class="auth-btn" id="registerBtn" onclick="handleRegister()">
-                <span>ثبت نام</span>
-                <span class="loading-spinner" style="display: none;"></span>
-            </button>
+            <button class="auth-btn" id="registerBtn" onclick="handleRegister()">ثبت نام</button>
         </div>
         
         <div class="auth-divider">
@@ -376,13 +333,8 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-
     <script>
-        // ==================== تنظیمات Firebase ====================
+        // ==================== تنظیمات Firebase (بررسی شده) ====================
         const firebaseConfig = {
             apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
             authDomain: "nimeh-gomsodeh.firebaseapp.com",
@@ -392,57 +344,76 @@
             appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
         };
 
-        // ==================== بررسی اتصال Firebase ====================
-        function checkFirebaseConnection() {
+        // ==================== راه‌اندازی Firebase ====================
+        let firebaseInitialized = false;
+        let auth, db;
+
+        function initFirebase() {
             const statusDiv = document.getElementById('firebaseStatus');
             
             try {
+                // چک کردن وجود Firebase SDK
+                if (typeof firebase === 'undefined') {
+                    statusDiv.innerHTML = '❌ <span class="status-disconnected">Firebase SDK لود نشده است</span>';
+                    return false;
+                }
+
                 // راه‌اندازی Firebase
                 if (!firebase.apps.length) {
                     firebase.initializeApp(firebaseConfig);
                 }
                 
-                const auth = firebase.auth();
-                const db = firebase.firestore();
+                auth = firebase.auth();
+                db = firebase.firestore();
+                
+                // تنظیمات اضافی Firestore
+                db.settings({
+                    cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+                });
                 
                 // تست اتصال
-                db.collection('test').doc('test').get()
+                db.collection('test').doc('connection-test').get()
                     .then(() => {
                         statusDiv.innerHTML = '✅ <span class="status-connected">اتصال Firebase برقرار است</span>';
-                        statusDiv.style.background = '#e8f5e8';
+                        firebaseInitialized = true;
                     })
                     .catch(error => {
-                        statusDiv.innerHTML = '❌ <span class="status-disconnected">خطا در اتصال به Firebase</span>';
-                        statusDiv.style.background = '#fee2e2';
-                        console.error('Firebase connection error:', error);
+                        statusDiv.innerHTML = '⚠️ <span class="status-disconnected">خطا در اتصال به Firebase</span>';
+                        console.error('Firestore connection error:', error);
                     });
-                    
+                
+                return true;
+                
             } catch (error) {
                 statusDiv.innerHTML = '❌ <span class="status-disconnected">خطا در راه‌اندازی Firebase</span>';
-                statusDiv.style.background = '#fee2e2';
-                console.error('Firebase init error:', error);
+                console.error('Firebase initialization error:', error);
+                return false;
             }
         }
 
-        // اجرای بررسی اتصال
-        setTimeout(checkFirebaseConnection, 1000);
+        // اجرای راه‌اندازی بعد از لود صفحه
+        window.addEventListener('load', () => {
+            setTimeout(initFirebase, 1000);
+        });
 
         // ==================== متغیرهای عمومی ====================
         let currentUser = null;
-        const auth = firebase.auth();
-        const db = firebase.firestore();
 
         // ==================== بررسی وضعیت کاربر ====================
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                console.log('✅ کاربر وارد شده:', user.email);
-                currentUser = user;
-                // انتقال به صفحه اصلی
-                window.location.href = 'index.html';
-            } else {
-                console.log('❌ کاربر خارج شده');
-            }
-        });
+        function checkAuthState() {
+            if (!firebaseInitialized || !auth) return;
+            
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    console.log('✅ کاربر وارد شده:', user.email);
+                    currentUser = user;
+                    // انتقال به صفحه اصلی
+                    window.location.href = 'index.html';
+                } else {
+                    console.log('❌ کاربر خارج شده');
+                }
+            });
+        }
 
         // ==================== توابع کمکی ====================
         function showError(message) {
@@ -455,19 +426,14 @@
             }, 5000);
         }
 
-        function showLoading(buttonId, show) {
+        function setLoading(buttonId, isLoading) {
             const btn = document.getElementById(buttonId);
-            const span = btn.querySelector('span:first-child');
-            const spinner = btn.querySelector('.loading-spinner');
-            
-            if (show) {
+            if (isLoading) {
                 btn.disabled = true;
-                span.style.display = 'none';
-                spinner.style.display = 'inline-block';
+                btn.innerHTML = 'لطفاً صبر کنید <span class="loading-spinner"></span>';
             } else {
                 btn.disabled = false;
-                span.style.display = 'inline';
-                spinner.style.display = 'none';
+                btn.innerHTML = buttonId === 'loginBtn' ? 'ورود' : 'ثبت نام';
             }
         }
 
@@ -487,6 +453,11 @@
 
         // ==================== ورود ====================
         function handleLogin() {
+            if (!firebaseInitialized) {
+                showError('لطفاً صبر کنید... Firebase در حال راه‌اندازی است');
+                return;
+            }
+            
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             
@@ -495,7 +466,7 @@
                 return;
             }
             
-            showLoading('loginBtn', true);
+            setLoading('loginBtn', true);
             
             auth.signInWithEmailAndPassword(email, password)
                 .then(userCredential => {
@@ -522,15 +493,22 @@
                         message = 'ایمیل نامعتبر است';
                     } else if (error.code === 'auth/too-many-requests') {
                         message = 'تلاش بیش از حد، لطفاً بعداً امتحان کنید';
+                    } else if (error.code === 'auth/network-request-failed') {
+                        message = 'خطا در اتصال به اینترنت';
                     }
                     
                     showError(message);
-                    showLoading('loginBtn', false);
+                    setLoading('loginBtn', false);
                 });
         }
 
         // ==================== ثبت نام ====================
         function handleRegister() {
+            if (!firebaseInitialized) {
+                showError('لطفاً صبر کنید... Firebase در حال راه‌اندازی است');
+                return;
+            }
+            
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
@@ -551,7 +529,7 @@
                 return;
             }
             
-            showLoading('registerBtn', true);
+            setLoading('registerBtn', true);
             
             auth.createUserWithEmailAndPassword(email, password)
                 .then(userCredential => {
@@ -581,16 +559,23 @@
                         message = 'این ایمیل قبلاً ثبت نام کرده است';
                     } else if (error.code === 'auth/invalid-email') {
                         message = 'ایمیل نامعتبر است';
+                    } else if (error.code === 'auth/network-request-failed') {
+                        message = 'خطا در اتصال به اینترنت';
                     }
                     
                     showError(message);
-                    showLoading('registerBtn', false);
+                    setLoading('registerBtn', false);
                 });
         }
 
         // ==================== دمو ====================
         function demoLogin(role) {
-            showLoading('loginBtn', true);
+            if (!firebaseInitialized) {
+                showError('لطفاً صبر کنید... Firebase در حال راه‌اندازی است');
+                return;
+            }
+            
+            setLoading('loginBtn', true);
             
             let email, password;
             
@@ -631,19 +616,35 @@
                         })
                         .catch(error => {
                             showError('خطا در ساخت کاربر دمو');
-                            showLoading('loginBtn', false);
+                            setLoading('loginBtn', false);
                         });
                 });
         }
 
         // ==================== Event Listeners ====================
-        document.getElementById('loginEmail').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const activeForm = document.querySelector('.auth-form.active');
+                if (activeForm.id === 'loginForm') {
+                    handleLogin();
+                } else {
+                    handleRegister();
+                }
+            }
         });
-        
-        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleLogin();
-        });
+
+        // ==================== اجرای اولیه ====================
+        // چک کردن وضعیت کاربر بعد از راه‌اندازی Firebase
+        setTimeout(() => {
+            if (firebaseInitialized) {
+                checkAuthState();
+            }
+        }, 2000);
     </script>
+
+    <!-- Firebase SDK (بارگذاری با CDN) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </body>
 </html>
