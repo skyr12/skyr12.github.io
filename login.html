@@ -3,17 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود | همدم</title>
+    <title>همدم | ورود به اپلیکیشن</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Vazirmatn', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            background: linear-gradient(165deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* انیمیشن پس زمینه */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* ایجاد 50 ستاره */
+        for (let i = 0; i < 50; i++) {}
+
+        .container {
+            position: relative;
+            z-index: 1;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,155 +64,443 @@
             padding: 20px;
         }
 
-        .login-container {
+        .glass-card {
             width: 100%;
-            max-width: 450px;
-        }
-
-        .login-card {
-            background: white;
-            border-radius: 30px;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
             padding: 50px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            animation: cardFloat 0.8s ease-out;
         }
 
-        .logo {
+        @keyframes cardFloat {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .logo-section {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .logo h1 {
+        .logo-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            animation: logoSpin 1s ease-out;
+            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.3);
+        }
+
+        .logo-icon span {
+            transform: rotate(-45deg);
             font-size: 48px;
-            color: #ff4d6d;
+        }
+
+        @keyframes logoSpin {
+            from {
+                transform: rotate(0deg) scale(0);
+            }
+            to {
+                transform: rotate(45deg) scale(1);
+            }
+        }
+
+        .logo-section h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
+            letter-spacing: 2px;
         }
 
-        .logo p {
-            color: #666;
+        .logo-section p {
+            color: rgba(255, 255, 255, 0.6);
             font-size: 16px;
+            font-weight: 300;
         }
 
-        .form-group {
+        .input-group {
             margin-bottom: 25px;
+            position: relative;
         }
 
-        .form-group label {
+        .input-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
             font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
-        .form-group input {
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            z-index: 1;
+        }
+
+        .input-wrapper input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 18px 25px 18px 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
             font-size: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
+            color: white;
             transition: all 0.3s ease;
         }
 
-        .form-group input:focus {
+        .input-wrapper input:focus {
             outline: none;
             border-color: #ff4d6d;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.2);
+        }
+
+        .input-wrapper input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .forgot-password {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .forgot-password a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-bottom: 1px dashed transparent;
+        }
+
+        .forgot-password a:hover {
+            color: #ff4d6d;
+            border-bottom-color: #ff4d6d;
         }
 
         .btn {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
+            border: none;
+            border-radius: 30px;
             font-size: 16px;
             font-weight: 600;
-            border: none;
-            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
-            background: #ff4d6d;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4);
         }
 
         .btn-primary:hover {
-            background: #ff3355;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.6);
         }
 
         .btn-secondary {
-            background: white;
-            color: #ff4d6d;
-            border: 2px solid #ff4d6d;
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         .btn-secondary:hover {
-            background: #ff4d6d;
-            color: white;
+            border-color: #ff4d6d;
+            color: #ff4d6d;
+            transform: translateY(-3px);
         }
 
-        .links {
+        .social-login {
             text-align: center;
-            margin-top: 20px;
+            margin: 30px 0 20px;
         }
 
-        .links a {
-            color: #666;
+        .social-login p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
             text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background: #ff4d6d;
+            transform: translateY(-5px) scale(1.1);
+            border-color: #ff4d6d;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            color: rgba(255, 255, 255, 0.5);
             font-size: 14px;
         }
 
-        .links a:hover {
+        .signup-link a {
             color: #ff4d6d;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 5px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            border-bottom-color: #ff4d6d;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            z-index: 1000;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success-message.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .success-message span {
+            font-size: 24px;
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 30px 20px;
+            }
+            
+            .logo-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .logo-icon span {
+                font-size: 36px;
+            }
+            
+            .logo-section h1 {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="logo">
-                <h1>❤️ همدم</h1>
-                <p>به خانواده همدم خوش آمدید</p>
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <span>❤️</span>
+                </div>
+                <h1>همدم</h1>
+                <p>به لوکس‌ترین اپلیکیشن همسریابی خوش آمدید</p>
             </div>
 
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>ایمیل</label>
-                    <input type="email" id="email" value="test@test.com" required>
+            <div class="input-group">
+                <label>ایمیل</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="email" placeholder="ایمیل خود را وارد کنید" value="test@test.com">
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>رمز عبور</label>
-                    <input type="password" id="password" value="123456" required>
+            <div class="input-group">
+                <label>رمز عبور</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید" value="123456">
                 </div>
+            </div>
 
-                <button type="submit" class="btn btn-primary">ورود به حساب</button>
-                <button type="button" class="btn btn-secondary" onclick="demoLogin()">ورود به عنوان مهمان</button>
+            <div class="forgot-password">
+                <a href="#">رمز عبور را فراموش کرده‌اید؟</a>
+            </div>
 
-                <div class="links">
-                    <a href="#">ثبت نام کنید</a>
+            <button class="btn btn-primary" onclick="handleLogin()">
+                <span>ورود به حساب کاربری</span>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="demoLogin()">
+                <span>ورود به عنوان مهمان</span>
+            </button>
+
+            <div class="social-login">
+                <p>ورود با شبکه‌های اجتماعی</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">🇬</a>
+                    <a href="#" class="social-icon">🇫</a>
+                    <a href="#" class="social-icon">🇹</a>
+                    <a href="#" class="social-icon">🇮</a>
                 </div>
-            </form>
+            </div>
+
+            <div class="signup-link">
+                <span>حساب کاربری ندارید؟</span>
+                <a href="#">ثبت نام کنید</a>
+            </div>
         </div>
     </div>
 
+    <div class="success-message" id="successMessage">
+        <span>✅</span>
+        <span>ورود موفق! در حال انتقال...</span>
+    </div>
+
     <script>
-        function handleLogin(event) {
-            event.preventDefault();
-            
+        // ایجاد ستاره‌های پس زمینه
+        function createStars() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('span');
+                const size = Math.random() * 6 + 2;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 15 + 's';
+                star.style.animationDuration = Math.random() * 20 + 10 + 's';
+                bgAnimation.appendChild(star);
+            }
+        }
+        createStars();
+
+        function showSuccessMessage() {
+            const msg = document.getElementById('successMessage');
+            msg.classList.add('show');
+            setTimeout(() => {
+                msg.classList.remove('show');
+            }, 2000);
+        }
+
+        function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            if (email === 'test@test.com' && password === '123456') {
-                window.location.href = 'index.html';
+            if (email && password) {
+                showSuccessMessage();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
             } else {
-                alert('ایمیل یا رمز عبور اشتباه است');
+                alert('لطفاً ایمیل و رمز عبور را وارد کنید');
             }
         }
 
         function demoLogin() {
-            window.location.href = 'index.html';
+            showSuccessMessage();
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
         }
+
+        // انیمیشن ورود با اینتر
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
     </script>
 </body>
 </html>
