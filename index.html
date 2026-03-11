@@ -19,13 +19,12 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            background: #ff4d6d;
             color: white;
             padding: 20px;
             text-align: center;
             font-size: 28px;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .container {
@@ -34,28 +33,37 @@
             padding: 0 15px;
         }
 
+        .welcome-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .welcome-card h2 {
+            color: #ff4d6d;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .welcome-card p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
         .profile-card {
             background: white;
-            border-radius: 25px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            animation: slideUp 0.5s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .profile-image {
+        .profile-card img {
             width: 100%;
-            height: 400px;
+            height: 350px;
             object-fit: cover;
         }
 
@@ -63,91 +71,70 @@
             padding: 25px;
         }
 
-        .name-age {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
         .name {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 26px;
+            font-weight: bold;
             color: #333;
-        }
-
-        .age {
-            font-size: 20px;
-            color: #ff4d6d;
-            background: #ffe5e9;
-            padding: 5px 15px;
-            border-radius: 30px;
+            margin-bottom: 10px;
         }
 
         .location {
             color: #666;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
         .bio {
             color: #444;
-            line-height: 1.6;
             margin-bottom: 20px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 15px;
+            line-height: 1.6;
         }
 
-        .interests {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-
-        .interest {
-            background: #f0f0f0;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 13px;
-            color: #555;
-        }
-
-        .action-buttons {
+        .buttons {
             display: flex;
             gap: 15px;
         }
 
-        .action-btn {
+        .btn {
             flex: 1;
-            height: 65px;
+            padding: 15px;
             border: none;
-            border-radius: 35px;
-            font-size: 28px;
+            border-radius: 10px;
+            font-size: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .like-btn {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+        .btn-like {
+            background: #ff4d6d;
             color: white;
         }
 
-        .like-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255,77,109,0.4);
+        .btn-like:hover {
+            background: #ff3355;
         }
 
-        .dislike-btn {
+        .btn-dislike {
+            background: #eee;
+            color: #333;
+        }
+
+        .btn-dislike:hover {
+            background: #ddd;
+        }
+
+        .logout-btn {
             background: white;
             color: #ff4d6d;
             border: 2px solid #ff4d6d;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
         }
 
-        .dislike-btn:hover {
+        .logout-btn:hover {
             background: #ff4d6d;
             color: white;
         }
@@ -162,94 +149,40 @@
             justify-content: space-around;
             padding: 12px 0;
             border-top: 1px solid #ddd;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
         }
 
         .nav-item {
             text-decoration: none;
             font-size: 24px;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
             color: #666;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item:hover {
-            background: #f0f0f0;
-            color: #ff4d6d;
-        }
-
-        .logout-btn {
-            background: #fee2e2;
-            color: #ef4444;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-
-        .logout-btn:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .user-info {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        🔥 همدم
+        ❤️ همدم
     </div>
 
     <div class="container">
-        <div class="user-info" id="userInfo"></div>
+        <div class="welcome-card">
+            <h2>خوش آمدید!</h2>
+            <p>شما با موفقیت وارد شدید</p>
+        </div>
 
         <div class="profile-card">
-            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-image">
-            
+            <img src="https://randomuser.me/api/portraits/women/1.jpg">
             <div class="profile-info">
-                <div class="name-age">
-                    <span class="name">سارا محمدی</span>
-                    <span class="age">۲۴</span>
-                </div>
-                
-                <div class="location">
-                    <span>📍</span>
-                    <span>تهران • ۳ کیلومتری شما</span>
-                </div>
-                
-                <div class="bio">
-                    عاشق موسیقی، سفر و تکنولوژی ❤️<br>
-                    دنبال دوستای جدید برای گپ و گفت
-                </div>
-                
-                <div class="interests">
-                    <span class="interest">🎵 موسیقی</span>
-                    <span class="interest">✈️ سفر</span>
-                    <span class="interest">📚 کتاب</span>
-                    <span class="interest">🎮 بازی</span>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="action-btn dislike-btn" onclick="nextProfile()">✕</button>
-                    <button class="action-btn like-btn" onclick="nextProfile()">❤️</button>
+                <div class="name">سارا محمدی، ۲۴</div>
+                <div class="location">📍 تهران • ۳ کیلومتری شما</div>
+                <div class="bio">عاشق موسیقی، سفر و کتاب ❤️</div>
+                <div class="buttons">
+                    <button class="btn btn-dislike" onclick="nextProfile()">✕</button>
+                    <button class="btn btn-like" onclick="nextProfile()">❤️</button>
                 </div>
             </div>
         </div>
 
-        <button class="logout-btn" onclick="logout()" style="width: 100%;">🚪 خروج از حساب</button>
+        <button class="logout-btn" onclick="logout()">🚪 خروج از حساب</button>
     </div>
 
     <div class="navbar">
@@ -260,39 +193,18 @@
     </div>
 
     <script>
-        // نمایش اطلاعات کاربر
-        window.onload = function() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const userEmail = localStorage.getItem('userEmail');
-            
-            if (!isLoggedIn) {
-                // اگه کاربر وارد نشده، بفرست به صفحه ورود
-                window.location.href = 'login.html';
-            } else {
-                // نمایش اطلاعات کاربر
-                const userInfo = document.getElementById('userInfo');
-                userInfo.innerHTML = `
-                    <p>👤 خوش آمدید، ${userEmail === 'guest@hamdam.com' ? 'مهمان' : userEmail}</p>
-                `;
-            }
-        };
-
         function nextProfile() {
-            // تغییر پروفایل (برای تست)
             const images = [
                 'https://randomuser.me/api/portraits/women/1.jpg',
                 'https://randomuser.me/api/portraits/women/2.jpg',
-                'https://randomuser.me/api/portraits/men/1.jpg'
+                'https://randomuser.me/api/portraits/men/1.jpg',
+                'https://randomuser.me/api/portraits/men/2.jpg'
             ];
-            
             const randomImage = images[Math.floor(Math.random() * images.length)];
-            document.querySelector('.profile-image').src = randomImage;
+            document.querySelector('.profile-card img').src = randomImage;
         }
 
         function logout() {
-            // خروج از حساب
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userEmail');
             window.location.href = 'login.html';
         }
     </script>
