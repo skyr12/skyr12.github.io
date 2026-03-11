@@ -71,6 +71,7 @@ body {
     margin: 15px;
     padding: 5px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow-x: auto;
 }
 
 .tab {
@@ -82,6 +83,7 @@ body {
     transition: all 0.3s ease;
     font-weight: 600;
     color: #666;
+    white-space: nowrap;
 }
 
 .tab.active {
@@ -108,26 +110,70 @@ body {
     width: 100%;
     height: 400px;
     object-fit: cover;
-    position: relative;
 }
 
-.vip-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, var(--gold), #ffa500);
-    color: white;
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-weight: bold;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+.profile-info {
+    padding: 20px;
+}
+
+.name-age {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.name {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.age {
+    font-size: 20px;
+    color: var(--primary);
+    background: #ffe5e9;
+    padding: 5px 15px;
+    border-radius: 25px;
+}
+
+.location {
+    color: #666;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.bio {
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 15px;
+}
+
+.interests {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.interest-tag {
+    background: linear-gradient(135deg, var(--primary)20, var(--secondary)20);
+    color: var(--primary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
 }
 
 /* دکمه‌های اقدام */
 .action-buttons {
     display: flex;
     gap: 15px;
-    padding: 20px;
+    margin-top: 20px;
 }
 
 .action-btn {
@@ -181,7 +227,7 @@ body {
     padding: 15px;
     color: white;
     position: relative;
-    min-height: 180px;
+    min-height: 150px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -247,6 +293,15 @@ body {
     margin-bottom: 5px;
 }
 
+.gift-price {
+    font-size: 12px;
+    color: #666;
+}
+
+.gift-item:hover .gift-price {
+    color: white;
+}
+
 /* پکیج‌های سکه */
 .coin-package {
     background: linear-gradient(135deg, #667eea20, #764ba220);
@@ -294,10 +349,12 @@ body {
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .vip-card {
     flex: 1;
+    min-width: 100px;
     background: rgba(255,255,255,0.2);
     border-radius: 15px;
     padding: 20px 5px;
@@ -413,4 +470,83 @@ body {
 @keyframes slideDown {
     from { top: 60px; opacity: 0; }
     to { top: 80px; opacity: 1; }
+}
+
+/* لودینگ */
+.loading {
+    text-align: center;
+    padding: 30px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* فرم‌ها */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* دکمه‌ها */
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255,77,109,0.3);
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-secondary:hover {
+    background: var(--primary);
+    color: white;
 }
