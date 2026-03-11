@@ -1,71 +1,363 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>VIP</title><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><style>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اشتراک ویژه | همدم</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        .vip-features {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 15px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .feature-text {
+            flex: 1;
+        }
+        
+        .feature-text h4 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        
+        .feature-text p {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .vip-comparison {
+            display: flex;
+            gap: 10px;
+            margin: 15px;
+        }
+        
+        .vip-col {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .vip-col:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .vip-col.gold {
+            background: linear-gradient(135deg, #ffd700, #ffa500);
+            color: white;
+        }
+        
+        .vip-col.silver {
+            background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+            color: white;
+        }
+        
+        .vip-col.diamond {
+            background: linear-gradient(135deg, #b9f2ff, #87ceeb);
+            color: white;
+        }
+        
+        .vip-price {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .vip-price small {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .vip-feature-list {
+            text-align: right;
+            margin: 20px 0;
+        }
+        
+        .vip-feature-list div {
+            margin: 10px 0;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر -->
+    <div class="header">
+        <div class="logo">
+            <span>👑</span>
+            اشتراک ویژه
+        </div>
+        <div class="wallet" onclick="location.href='wallet.html'">
+            <span>🪙</span>
+            <span class="user-coins">۰</span>
+        </div>
+    </div>
 
-body{
-margin:0;
-font-family:Arial;
-background:#f2f2f2;
-text-align:center;
-}
+    <!-- تب‌ها -->
+    <div class="tabs">
+        <div class="tab" onclick="location.href='index.html'">خانه</div>
+        <div class="tab" onclick="location.href='discover.html'">اکتشاف</div>
+        <div class="tab" onclick="location.href='live.html'">لایو</div>
+        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
+        <div class="tab active" onclick="location.href='profile.html'">پروفایل</div>
+    </div>
 
-.header{
-background:gold;
-color:black;
-padding:15px;
-font-size:22px;
-}
+    <!-- معرفی VIP -->
+    <div class="vip-section">
+        <h2 style="font-size: 28px; margin-bottom: 10px;">✨ همدم VIP</h2>
+        <p style="opacity: 0.9; margin-bottom: 20px;">با اشتراک ویژه، تجربه متفاوتی داشته باشید</p>
+        
+        <div class="vip-levels">
+            <div class="vip-card silver" onclick="selectVIP('silver')">
+                <div style="font-size: 40px; margin-bottom: 10px;">🥈</div>
+                <strong>نقره‌ای</strong>
+                <div class="vip-price">۵۰,۰۰۰ <small>تومان</small></div>
+                <div style="font-size: 12px;">ماهانه</div>
+            </div>
+            
+            <div class="vip-card gold" onclick="selectVIP('gold')">
+                <div style="font-size: 40px; margin-bottom: 10px;">🥇</div>
+                <strong>طلایی</strong>
+                <div class="vip-price">۱۰۰,۰۰۰ <small>تومان</small></div>
+                <div style="font-size: 12px;">ماهانه</div>
+            </div>
+            
+            <div class="vip-card diamond" onclick="selectVIP('diamond')">
+                <div style="font-size: 40px; margin-bottom: 10px;">💎</div>
+                <strong>الماسی</strong>
+                <div class="vip-price">۲۰۰,۰۰۰ <small>تومان</small></div>
+                <div style="font-size: 12px;">ماهانه</div>
+            </div>
+        </div>
+    </div>
 
-.box{
-background:white;
-margin:20px;
-padding:20px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
-}
+    <!-- مقایسه سطوح -->
+    <h3 style="color: white; padding: 15px;">📊 مقایسه سطوح</h3>
+    
+    <div class="vip-comparison">
+        <div class="vip-col silver">
+            <div style="font-size: 30px;">🥈</div>
+            <h4>نقره‌ای</h4>
+            <div class="vip-feature-list">
+                <div>✓ لایک نامحدود</div>
+                <div>✓ دیدن بازدیدها</div>
+                <div>✗ سوپرلایک روزانه</div>
+                <div>✗ اولویت نمایش</div>
+                <div>✗ پشتیبانی ویژه</div>
+            </div>
+        </div>
+        
+        <div class="vip-col gold">
+            <div style="font-size: 30px;">🥇</div>
+            <h4>طلایی</h4>
+            <div class="vip-feature-list">
+                <div>✓ لایک نامحدود</div>
+                <div>✓ دیدن بازدیدها</div>
+                <div>✓ ۵ سوپرلایک روزانه</div>
+                <div>✓ اولویت نمایش</div>
+                <div>✗ پشتیبانی ویژه</div>
+            </div>
+        </div>
+        
+        <div class="vip-col diamond">
+            <div style="font-size: 30px;">💎</div>
+            <h4>الماسی</h4>
+            <div class="vip-feature-list">
+                <div>✓ لایک نامحدود</div>
+                <div>✓ دیدن بازدیدها</div>
+                <div>✓ ۱۰ سوپرلایک روزانه</div>
+                <div>✓ اولویت نمایش</div>
+                <div>✓ پشتیبانی ۲۴/۷</div>
+            </div>
+        </div>
+    </div>
 
-button{
-padding:12px 25px;
-border:none;
-border-radius:25px;
-background:gold;
-font-size:16px;
-cursor:pointer;
-}
+    <!-- مزایای VIP -->
+    <h3 style="color: white; padding: 15px;">✨ مزایای اشتراک ویژه</h3>
+    
+    <div class="vip-features">
+        <div class="feature-item">
+            <div class="feature-icon">❤️</div>
+            <div class="feature-text">
+                <h4>لایک نامحدود</h4>
+                <p>بدون محدودیت به کاربران لایک کنید</p>
+            </div>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-icon">👁️</div>
+            <div class="feature-text">
+                <h4>مشاهده بازدیدکنندگان</h4>
+                <p>ببینید چه کسانی پروفایل شما را دیده‌اند</p>
+            </div>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-icon">⭐</div>
+            <div class="feature-text">
+                <h4>سوپرلایک روزانه</h4>
+                <p>تعداد سوپرلایک رایگان روزانه</p>
+            </div>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-icon">🚀</div>
+            <div class="feature-text">
+                <h4>اولویت در نمایش</h4>
+                <p>پروفایل شما زودتر به دیگران نشان داده می‌شود</p>
+            </div>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-icon">🎁</div>
+            <div class="feature-text">
+                <h4>هدیه ماهانه</h4>
+                <p>هر ماه ۲۰۰ سکه هدیه بگیرید</p>
+            </div>
+        </div>
+        
+        <div class="feature-item">
+            <div class="feature-icon">🔇</div>
+            <div class="feature-text">
+                <h4>بدون تبلیغات</h4>
+                <p>تجربه کاربری بدون مزاحمت</p>
+            </div>
+        </div>
+    </div>
 
-</style></head><body><div class="header">👑 VIP Membership
+    <!-- مودال خرید VIP -->
+    <div class="modal" id="vipModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="vipModalTitle">خرید اشتراک طلایی</h3>
+                <span class="close-modal" onclick="closeVIPModal()">&times;</span>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 60px;" id="vipModalIcon">🥇</div>
+                <div style="font-size: 32px; color: #ff4d6d;" id="vipModalPrice">۱۰۰,۰۰۰</div>
+                <div style="color: #666;">تومان / ماهانه</div>
+            </div>
+            
+            <div class="vip-feature-list" style="background: #f9f9f9; padding: 15px; border-radius: 15px; margin: 20px 0;">
+                <div>✓ لایک نامحدود</div>
+                <div>✓ دیدن بازدیدکنندگان</div>
+                <div>✓ ۵ سوپرلایک روزانه</div>
+                <div>✓ اولویت نمایش</div>
+                <div>✓ هدیه ماهانه ۲۰۰ سکه</div>
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%;" onclick="buyVIP()">
+                تایید و پرداخت
+            </button>
+        </div>
+    </div>
 
-</div><div class="box"><h2>VIP Level 1</h2><p>Unlimited Likes</p><button onclick="buyVip(1)">Buy</button>
+    <!-- نوار پایین -->
+    <div class="navbar">
+        <a href="index.html" class="nav-item">🏠</a>
+        <a href="discover.html" class="nav-item">🔥</a>
+        <a href="live.html" class="nav-item">🎥</a>
+        <a href="gifts.html" class="nav-item">🎁</a>
+        <a href="profile.html" class="nav-item active">👤</a>
+    </div>
 
-</div><div class="box"><h2>VIP Level 2</h2><p>Profile Boost</p><button onclick="buyVip(2)">Buy</button>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
 
-</div><div class="box"><h2>VIP Level 3</h2><p>Special Badge</p><button onclick="buyVip(3)">Buy</button>
-
-</div><script>
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain: "nimeh-gomsodeh.firebaseapp.com",
-projectId: "nimeh-gomsodeh"
-
-}
-
-firebase.initializeApp(firebaseConfig)
-
-const db = firebase.firestore()
-
-function buyVip(level){
-
-let user=firebase.auth().currentUser
-
-db.collection("vip").doc(user.uid).set({
-
-level:level
-
-})
-
-alert("VIP Activated 👑")
-
-}
-
-</script></body></html>
+    <script>
+        let selectedVIP = 'gold';
+        
+        // انتخاب سطح VIP
+        function selectVIP(level) {
+            selectedVIP = level;
+            
+            const titles = {
+                silver: '🥈 اشتراک نقره‌ای',
+                gold: '🥇 اشتراک طلایی',
+                diamond: '💎 اشتراک الماسی'
+            };
+            
+            const prices = {
+                silver: '۵۰,۰۰۰',
+                gold: '۱۰۰,۰۰۰',
+                diamond: '۲۰۰,۰۰۰'
+            };
+            
+            const icons = {
+                silver: '🥈',
+                gold: '🥇',
+                diamond: '💎'
+            };
+            
+            document.getElementById('vipModalTitle').textContent = titles[level];
+            document.getElementById('vipModalPrice').textContent = prices[level];
+            document.getElementById('vipModalIcon').textContent = icons[level];
+            
+            document.getElementById('vipModal').classList.add('active');
+        }
+        
+        // بستن مودال
+        function closeVIPModal() {
+            document.getElementById('vipModal').classList.remove('active');
+        }
+        
+        // خرید اشتراک
+        function buyVIP() {
+            if (!currentUser) {
+                showToast('لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
+            
+            showToast('در حال اتصال به درگاه پرداخت...');
+            
+            // شبیه‌سازی پرداخت موفق
+            setTimeout(() => {
+                const expiryDate = new Date();
+                expiryDate.setMonth(expiryDate.getMonth() + 1);
+                
+                // ذخیره اشتراک در Firebase
+                db.collection('users').doc(currentUser.uid).update({
+                    vip: selectedVIP,
+                    vipExpiry: expiryDate
+                });
+                
+                closeVIPModal();
+                showToast(`✅ اشتراک ${selectedVIP} با موفقیت فعال شد!`);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
