@@ -1,186 +1,961 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="fa" dir="rtl">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مچ‌های من | عشق‌های هماهنگ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Vazir', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Matches</title>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-<style>
+        /* ذرات پس‌زمینه */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
 
-body{
-font-family:Arial;
-background:#f5f5f5;
-margin:0;
-text-align:center;
-}
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 20s infinite ease-in-out;
+        }
 
-h2{
-margin-top:20px;
-}
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-30px) translateX(15px); }
+            50% { transform: translateY(-50px) translateX(-15px); }
+            75% { transform: translateY(-30px) translateX(30px); }
+        }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
-padding:20px;
-}
+        /* هدر اصلی */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
 
-.card{
-background:white;
-border-radius:15px;
-overflow:hidden;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
-cursor:pointer;
-}
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
 
-.card img{
-width:100%;
-height:180px;
-object-fit:cover;
-}
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-.card h3{
-margin:10px;
-}
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
 
-.navbar{
-position:fixed;
-bottom:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-border-top:1px solid #ddd;
-font-size:22px;
-}
+        .match-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
 
-.navbar a{
-text-decoration:none;
-}
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
 
-</style>
+        .header-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 15px;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* بخش آمار */
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            margin: 20px;
+            border-radius: 25px;
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* دسته‌بندی مچ‌ها */
+        .categories {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        .category-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            backdrop-filter: blur(5px);
+        }
+
+        .category-btn.active {
+            background: white;
+            color: #764ba2;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* گرید مچ‌ها */
+        .matches-container {
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        .match-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 3px solid transparent;
+            animation: cardAppear 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .match-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #FFD700;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .match-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .online-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .online-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .match-time {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            backdrop-filter: blur(5px);
+        }
+
+        .card-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-detail {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .compatibility {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* بخش مچ‌های جدید */
+        .new-matches {
+            padding: 20px;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .horizontal-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scrollbar-width: none;
+        }
+
+        .mini-card {
+            min-width: 120px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mini-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .mini-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .mini-card .name {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        /* حالت خالی */
+        .empty-state {
+            text-align: center;
+            color: white;
+            padding: 50px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-state span {
+            font-size: 80px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .explore-btn {
+            background: white;
+            color: #764ba2;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .explore-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        /* نوار پایین */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #666;
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* مودال جزئیات مچ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+        }
+
+        .modal-overlay.show {
+            display: block;
+        }
+
+        .match-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            border-radius: 40px;
+            overflow: hidden;
+            z-index: 2001;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .match-modal.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .modal-content {
+            padding: 25px;
+        }
+
+        .modal-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .modal-bio {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        /* نوتیفیکیشن */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-right: 4px solid #4CAF50;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .matches-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header-title h1 {
+                font-size: 22px;
+            }
+            
+            .stats-container {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
-
-
 <body>
+    <!-- ذرات پس‌زمینه -->
+    <div class="bg-particles" id="particles"></div>
 
-<h2>❤️ Matches</h2>
+    <!-- هدر -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <h1>❤️ مچ‌های من</h1>
+                <span class="match-count" id="matchCount">0</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" onclick="filterMatches('newest')">🔄</button>
+                <button class="header-btn" onclick="showFilters()">⚙️</button>
+            </div>
+        </div>
+    </div>
 
-<div id="matches" class="grid"></div>
+    <!-- آمار -->
+    <div class="stats-container">
+        <div class="stat-item">
+            <div class="stat-value" id="totalMatches">0</div>
+            <div class="stat-label">کل مچ‌ها</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="newMatches">0</div>
+            <div class="stat-label">مچ جدید</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="onlineNow">0</div>
+            <div class="stat-label">آنلاین</div>
+        </div>
+    </div>
 
+    <!-- دسته‌بندی -->
+    <div class="categories">
+        <button class="category-btn active" onclick="filterCategory('all', this)">همه مچ‌ها</button>
+        <button class="category-btn" onclick="filterCategory('new', this)">جدیدترین</button>
+        <button class="category-btn" onclick="filterCategory('online', this)">آنلاین</button>
+        <button class="category-btn" onclick="filterCategory('popular', this)">محبوب‌ترین</button>
+    </div>
 
-<div class="navbar">
+    <!-- مچ‌های جدید (اسکرول افقی) -->
+    <div class="new-matches" id="newMatchesSection">
+        <div class="section-title">
+            <span>✨</span>
+            <span>مچ‌های جدید</span>
+        </div>
+        <div class="horizontal-scroll" id="newMatchesScroll"></div>
+    </div>
 
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="visitors.html">👁️</a>
-<a href="profile.html">👤</a>
+    <!-- گرید اصلی مچ‌ها -->
+    <div class="matches-container">
+        <div class="matches-grid" id="matchesGrid"></div>
+    </div>
 
-</div>
+    <!-- حالت خالی -->
+    <div class="empty-state" id="emptyState" style="display: none; margin: 20px;">
+        <span>💔</span>
+        <h3>هنوز مچی نداری!</h3>
+        <p>برای پیدا کردن عشق واقعی، کشف کاربران رو شروع کن</p>
+        <button class="explore-btn" onclick="goToDiscover()">شروع کشف 🔥</button>
+    </div>
 
+    <!-- نوار پایین -->
+    <nav class="bottom-nav">
+        <a href="discover.html" class="nav-item" data-tooltip="کشف">🔥</a>
+        <a href="matches.html" class="nav-item active" data-tooltip="مچ‌ها">❤️</a>
+        <a href="gift.html" class="nav-item" data-tooltip="گیفت">🎁</a>
+        <a href="inbox.html" class="nav-item" data-tooltip="پیام‌ها">💬</a>
+        <a href="profile.html" class="nav-item" data-tooltip="پروفایل">👤</a>
+    </nav>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- مودال جزئیات مچ -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+    <div class="match-modal" id="matchModal">
+        <button class="close-modal" onclick="closeModal()">✕</button>
+        <img src="" alt="user photo" class="modal-image" id="modalImage">
+        <div class="modal-content">
+            <div class="modal-name" id="modalName"></div>
+            <div class="modal-bio" id="modalBio"></div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" onclick="startChat()" id="modalChatBtn">💬 شروع چت</button>
+                <button class="modal-btn secondary" onclick="sendGift()" id="modalGiftBtn">🎁 ارسال گیفت</button>
+            </div>
+        </div>
+    </div>
 
-<script>
+    <!-- نوتیفیکیشن -->
+    <div class="toast" id="toast">
+        <span>✓</span>
+        <span id="toastMessage"></span>
+    </div>
 
-const firebaseConfig = {
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh",
-storageBucket:"nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId:"815930956932",
-appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+            authDomain: "nimeh-gomsodeh.firebaseapp.com",
+            projectId: "nimeh-gomsodeh",
+            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+            messagingSenderId: "815930956932",
+            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+        };
 
-};
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-firebase.initializeApp(firebaseConfig)
+        // Variables
+        let myId = "";
+        let allMatches = [];
+        let matchedUsers = new Map();
+        let currentFilter = 'all';
+        let selectedUserId = null;
 
-const db=firebase.firestore()
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = `${Math.random() * 15 + 5}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
 
-let myId=""
+        // Check Authentication
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                location.href = "login.html";
+                return;
+            }
+            myId = user.uid;
+            loadMatches();
+            createParticles();
+        });
 
-firebase.auth().onAuthStateChanged(user=>{
+        // Load matches
+        function loadMatches() {
+            db.collection("matches")
+                .orderBy("time", "desc")
+                .onSnapshot(snapshot => {
+                    allMatches = [];
+                    matchedUsers.clear();
+                    
+                    snapshot.forEach(doc => {
+                        const match = doc.data();
+                        match.id = doc.id;
+                        
+                        if (match.users && match.users.includes(myId)) {
+                            allMatches.push(match);
+                            const otherId = match.users.find(u => u !== myId);
+                            
+                            // Load user data
+                            db.collection("users").doc(otherId).get().then(userDoc => {
+                                if (userDoc.exists) {
+                                    matchedUsers.set(otherId, {
+                                        ...userDoc.data(),
+                                        id: otherId,
+                                        matchTime: match.time,
+                                        matchId: match.id
+                                    });
+                                    displayMatches();
+                                }
+                            });
+                        }
+                    });
+                    
+                    updateStats();
+                });
+        }
 
-if(!user){
+        // Display matches
+        function displayMatches() {
+            const matchesGrid = document.getElementById('matchesGrid');
+            const newMatchesScroll = document.getElementById('newMatchesScroll');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (matchedUsers.size === 0) {
+                matchesGrid.innerHTML = '';
+                newMatchesScroll.innerHTML = '';
+                emptyState.style.display = 'block';
+                document.getElementById('matchCount').textContent = '0';
+                return;
+            }
 
-location.href="login.html"
-return
+            emptyState.style.display = 'none';
+            
+            // Convert to array and sort
+            let matches = Array.from(matchedUsers.values());
+            
+            // Apply filter
+            if (currentFilter === 'new') {
+                matches.sort((a, b) => (b.matchTime?.seconds || 0) - (a.matchTime?.seconds || 0));
+            } else if (currentFilter === 'online') {
+                matches = matches.filter(m => m.online);
+            } else if (currentFilter === 'popular') {
+                matches.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+            }
+            
+            // Display in grid
+            let gridHtml = '';
+            matches.slice(0, 6).forEach((user, index) => {
+                gridHtml += createMatchCard(user, index);
+            });
+            matchesGrid.innerHTML = gridHtml;
+            
+            // Display new matches in horizontal scroll
+            let scrollHtml = '';
+            matches.slice(0, 10).forEach((user, index) => {
+                scrollHtml += createMiniCard(user, index);
+            });
+            newMatchesScroll.innerHTML = scrollHtml;
+            
+            document.getElementById('matchCount').textContent = matches.length;
+            document.getElementById('totalMatches').textContent = matches.length;
+            
+            const onlineCount = matches.filter(m => m.online).length;
+            document.getElementById('onlineNow').textContent = onlineCount;
+            
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+            const newCount = matches.filter(m => 
+                m.matchTime?.seconds * 1000 > oneWeekAgo.getTime()
+            ).length;
+            document.getElementById('newMatches').textContent = newCount;
+        }
 
-}
+        // Create match card HTML
+        function createMatchCard(user, index) {
+            const matchTime = user.matchTime ? new Date(user.matchTime.seconds * 1000) : new Date();
+            const timeStr = formatMatchTime(matchTime);
+            const compatibility = Math.floor(Math.random() * 30 + 70); // Random compatibility
+            
+            return `
+                <div class="match-card" onclick="showUserDetails('${user.id}')" style="animation-delay: ${index * 0.1}s">
+                    <div class="card-image">
+                        <img src="${user.photo || 'https://via.placeholder.com/300x300?text=User'}" alt="${user.name || 'User'}">
+                        ${user.online ? '<div class="online-badge">آنلاین</div>' : ''}
+                        <div class="match-time">${timeStr}</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="user-name">${user.name || 'کاربر'}</div>
+                        <div class="user-detail">
+                            <span>📍</span>
+                            <span>${user.city || 'نامشخص'}</span>
+                        </div>
+                        <div class="compatibility">💕 ${compatibility}% سازگاری</div>
+                    </div>
+                </div>
+            `;
+        }
 
-myId=user.uid
+        // Create mini card for horizontal scroll
+        function createMiniCard(user, index) {
+            return `
+                <div class="mini-card" onclick="showUserDetails('${user.id}')">
+                    <img src="${user.photo || 'https://via.placeholder.com/150x150?text=User'}" alt="${user.name || 'User'}">
+                    <div class="name">${user.name || 'کاربر'}</div>
+                </div>
+            `;
+        }
 
-loadMatches()
+        // Format match time
+        function formatMatchTime(date) {
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 86400000) return 'امروز';
+            if (diff < 604800000) return `${Math.floor(diff / 86400000)} روز پیش`;
+            return date.toLocaleDateString('fa-IR');
+        }
 
-})
+        // Filter category
+        function filterCategory(category, btn) {
+            currentFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            displayMatches();
+        }
 
+        // Show user details
+        function showUserDetails(userId) {
+            selectedUserId = userId;
+            const user = matchedUsers.get(userId);
+            
+            if (user) {
+                document.getElementById('modalImage').src = user.photo || 'https://via.placeholder.com/400x400?text=User';
+                document.getElementById('modalName').textContent = user.name || 'کاربر';
+                document.getElementById('modalBio').textContent = user.bio || 'سلام! خوشحال می‌شم بیشتر همدیگه رو بشناسیم :)';
+                
+                document.getElementById('modalOverlay').classList.add('show');
+                document.getElementById('matchModal').classList.add('show');
+            }
+        }
 
+        // Close modal
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            document.getElementById('matchModal').classList.remove('show');
+        }
 
-function loadMatches(){
+        // Start chat
+        function startChat() {
+            if (selectedUserId) {
+                location.href = `chat.html?id=${selectedUserId}`;
+            }
+        }
 
-db.collection("matches")
+        // Send gift
+        function sendGift() {
+            if (selectedUserId) {
+                location.href = `gift.html?id=${selectedUserId}`;
+            }
+        }
 
-.get()
+        // Go to discover
+        function goToDiscover() {
+            location.href = "discover.html";
+        }
 
-.then(snapshot=>{
+        // Show filters
+        function showFilters() {
+            showToast('فیلترها به زودی اضافه می‌شوند');
+        }
 
-let html=""
+        // Filter matches
+        function filterMatches(type) {
+            showToast(`مرتب‌سازی بر اساس ${type === 'newest' ? 'جدیدترین' : 'قدیمی‌ترین'}`);
+            displayMatches();
+        }
 
-snapshot.forEach(doc=>{
+        // Show toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
 
-let m=doc.data()
+        // Update stats
+        function updateStats() {
+            // Stats are updated in displayMatches
+        }
 
-if(m.users.includes(myId)){
+        // Handle network status
+        window.addEventListener('online', () => {
+            showToast('اتصال اینترنت برقرار شد');
+        });
 
-let other=m.users.find(u=>u!==myId)
-
-db.collection("users").doc(other).get()
-
-.then(userDoc=>{
-
-let u=userDoc.data()
-
-html+=`
-
-<div class="card" onclick="openChat('${other}')">
-
-<img src="${u.photo}">
-
-<h3>${u.name}</h3>
-
-</div>
-
-`
-
-document.getElementById("matches").innerHTML=html
-
-})
-
-}
-
-})
-
-})
-
-}
-
-
-
-function openChat(userId){
-
-location.href="chat.html?id="+userId
-
-}
-
-</script>
-
+        window.addEventListener('offline', () => {
+            showToast('اتصال اینترنت قطع شد', 'error');
+        });
+    </script>
 </body>
 </html>
