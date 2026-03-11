@@ -4,116 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>همدم | صفحه اصلی</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .welcome-box {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .welcome-box h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ff4d6d;
+        }
+
+        .welcome-box p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .user-info {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .user-info div {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,77,109,0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
+        }
+    </style>
 </head>
 <body>
-    <!-- هدر -->
-    <div class="header">
-        <div class="logo">
-            <span>❤️</span>
-            همدم
-        </div>
-        <div class="wallet" onclick="location.href='wallet.html'">
-            <span>🪙</span>
-            <span class="user-coins">۰</span>
-        </div>
-    </div>
-
-    <!-- تب‌ها -->
-    <div class="tabs">
-        <div class="tab active" onclick="location.href='index.html'">خانه</div>
-        <div class="tab" onclick="location.href='discover.html'">اکتشاف</div>
-        <div class="tab" onclick="location.href='live.html'">لایو</div>
-        <div class="tab" onclick="location.href='gifts.html'">هدایا</div>
-        <div class="tab" onclick="location.href='profile.html'">پروفایل</div>
-    </div>
-
-    <!-- کارت پروفایل نمونه -->
-    <div class="profile-card">
-        <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-image" alt="profile">
+    <div class="welcome-box" id="welcomeBox">
+        <h1>❤️ همدم</h1>
+        <p>به پنل کاربری خوش آمدید</p>
         
-        <div class="profile-info">
-            <div class="name-age">
-                <span class="name">سارا محمدی</span>
-                <span class="age">۲۴</span>
-            </div>
-            
-            <div class="location">
-                <span>📍</span>
-                <span>تهران، ۳ کیلومتری</span>
-            </div>
-            
-            <div class="bio">
-                عاشق موسیقی، سفر و تکنولوژی ❤️ دنبال دوستای جدید برای ماجراجویی
-            </div>
-            
-            <div class="interests">
-                <span class="interest-tag">🎵 موسیقی</span>
-                <span class="interest-tag">✈️ سفر</span>
-                <span class="interest-tag">📚 کتاب</span>
-                <span class="interest-tag">🎮 بازی</span>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="action-btn dislike-btn" onclick="handleAction('dislike', 'user1')">✕</button>
-                <button class="action-btn like-btn" onclick="handleAction('like', 'user1')">❤️</button>
-                <button class="action-btn dislike-btn" onclick="handleAction('superlike', 'user1')">⭐</button>
-            </div>
+        <div class="user-info" id="userInfo">
+            <div>در حال بارگذاری...</div>
         </div>
+        
+        <button class="btn" onclick="goToPage('discover.html')">🔥 اکتشاف</button>
+        <button class="btn" onclick="goToPage('profile.html')">👤 پروفایل</button>
+        <button class="btn btn-secondary" onclick="logout()">🚪 خروج</button>
     </div>
 
-    <!-- لایوهای محبوب -->
-    <h3 style="color: white; padding: 15px;">🔴 لایوهای محبوب</h3>
-    
-    <div class="live-grid">
-        <div class="live-card" onclick="location.href='live.html'">
-            <span class="live-badge">LIVE</span>
-            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎤</div>
-            <div style="padding: 10px;">
-                <strong>سارا جان</strong>
-                <span class="viewer-count">👥 ۲٫۳k</span>
-            </div>
-        </div>
-        <div class="live-card" onclick="location.href='live.html'">
-            <span class="live-badge">LIVE</span>
-            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎵</div>
-            <div style="padding: 10px;">
-                <strong>علی‌رضا</strong>
-                <span class="viewer-count">👥 ۱٫۲k</span>
-            </div>
-        </div>
-        <div class="live-card" onclick="location.href='live.html'">
-            <span class="live-badge">LIVE</span>
-            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎮</div>
-            <div style="padding: 10px;">
-                <strong>نیما</strong>
-                <span class="viewer-count">👥 ۸۹۰</span>
-            </div>
-        </div>
-        <div class="live-card" onclick="location.href='live.html'">
-            <span class="live-badge">LIVE</span>
-            <div style="font-size: 40px; text-align: center; margin-top: 20px;">🎨</div>
-            <div style="padding: 10px;">
-                <strong>الناز</strong>
-                <span class="viewer-count">👥 ۵۶۷</span>
-            </div>
-        </div>
-    </div>
+    <script>
+        function loadUser() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userInfo = document.getElementById('userInfo');
+            
+            if (user) {
+                userInfo.innerHTML = `
+                    <div>📧 ایمیل: ${user.email}</div>
+                    <div>👤 نام: ${user.name}</div>
+                    <div>🎭 نقش: ${user.role === 'admin' ? 'مدیر' : 'کاربر'}</div>
+                `;
+            } else {
+                userInfo.innerHTML = '<div>❌ کاربر وارد نشده است</div>';
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        }
 
-    <!-- نوار پایین -->
-    <div class="navbar">
-        <a href="index.html" class="nav-item active">🏠</a>
-        <a href="discover.html" class="nav-item">🔥</a>
-        <a href="live.html" class="nav-item">🎥</a>
-        <a href="gifts.html" class="nav-item">🎁</a>
-        <a href="profile.html" class="nav-item">👤</a>
-    </div>
+        function goToPage(page) {
+            window.location.href = page;
+        }
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
-    <script src="assets/script.js"></script>
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        loadUser();
+    </script>
 </body>
 </html>
