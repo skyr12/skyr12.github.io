@@ -3,488 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>کشف کاربران | دیسکاور مدرن</title>
+    <title>نیمه گمشده | صفحه اصلی</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Vazir', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
         }
 
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding-bottom: 80px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* انیمیشن پس‌زمینه */
-        .bg-bubbles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .bubble {
-            position: absolute;
-            bottom: -100px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: rise 10s infinite ease-in;
-        }
-
-        @keyframes rise {
-            0% {
-                bottom: -100px;
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(100px);
-            }
-            100% {
-                bottom: 1080px;
-                transform: translateX(-200px);
-            }
+            padding-bottom: 70px;
         }
 
         /* هدر اصلی */
-        .main-header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .header {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.3);
         }
 
-        .header-content h2 {
-            font-size: 24px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
         }
 
-        .header-content h2 span {
-            animation: pulse 2s infinite;
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
-        }
-
-        /* کارت اصلی */
-        .card-container {
-            position: relative;
-            width: 100%;
-            max-width: 380px;
-            margin: 20px auto;
-            min-height: 600px;
-            z-index: 10;
-        }
-
-        .card {
-            position: absolute;
-            width: 100%;
-            background: white;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            cursor: grab;
-            user-select: none;
-            touch-action: none;
-        }
-
-        .card:active {
-            cursor: grabbing;
-        }
-
-        .card-image {
-            width: 100%;
-            height: 450px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover .card-image img {
-            transform: scale(1.05);
-        }
-
-        .card-badge {
+        /* کارت سکه */
+        .coins-card {
             position: absolute;
             top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-            z-index: 2;
-        }
-
-        .online-badge {
-            position: absolute;
-            bottom: 20px;
             left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            color: #4CAF50;
-            padding: 8px 15px;
-            border-radius: 50px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            z-index: 2;
-        }
-
-        .online-badge::before {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: #4CAF50;
-            border-radius: 50%;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .card-info {
-            padding: 25px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            color: white;
-        }
-
-        .card-info h3 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-info .age {
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .card-info .location {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .card-info .distance {
             background: rgba(255, 255, 255, 0.2);
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 14px;
-            display: inline-block;
-        }
-
-        /* دکمه‌های اکشن */
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-            position: relative;
-            z-index: 20;
-        }
-
-        .action-btn {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 28px;
+            padding: 10px 20px;
+            border-radius: 30px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .action-btn.skip {
-            background: white;
-            color: #ff4d4d;
-        }
-
-        .action-btn.skip:hover {
-            background: #ff4d4d;
-            color: white;
-            transform: scale(1.1) rotate(90deg);
-        }
-
-        .action-btn.super {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            width: 75px;
-            height: 75px;
-            font-size: 32px;
-        }
-
-        .action-btn.super:hover {
-            transform: scale(1.1) rotate(360deg);
-            box-shadow: 0 0 30px #3b82f6;
-        }
-
-        .action-btn.like {
-            background: linear-gradient(135deg, #ff4d6d, #ff1e4d);
-            color: white;
-        }
-
-        .action-btn.like:hover {
-            transform: scale(1.1) rotate(-90deg);
-            box-shadow: 0 0 30px #ff4d6d;
-        }
-
-        .action-btn:active {
-            transform: scale(0.9);
-        }
-
-        /* اندیکاتور سوآیپ */
-        .swipe-indicator {
-            display: flex;
-            justify-content: center;
             gap: 10px;
-            margin: 10px 0;
-        }
-
-        .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .indicator.active {
-            background: white;
-            width: 30px;
-            border-radius: 10px;
-        }
-
-        /* مودال فیلتر */
-        .filter-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: white;
-            padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            transition: all 0.3s ease;
-            max-width: 350px;
-            width: 90%;
-        }
-
-        .filter-modal.show {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .filter-modal h3 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .filter-option {
-            margin-bottom: 20px;
-        }
-
-        .filter-option label {
-            display: block;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .filter-option input[type="range"] {
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 5px;
-            -webkit-appearance: none;
-        }
-
-        .filter-option input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border: 2px solid #667eea;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .apply-filter {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 15px;
-            width: 100%;
-            font-size: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .apply-filter:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        .coins-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        /* مودال موفقیت */
-        .match-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, #ff4d6d, #ff1e4d);
-            padding: 40px;
-            border-radius: 40px;
-            box-shadow: 0 30px 60px rgba(255, 77, 109, 0.4);
-            z-index: 1000;
-            transition: all 0.3s ease;
-            text-align: center;
+        /* بخش‌های مختلف */
+        .section {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
             color: white;
-            max-width: 350px;
-            width: 90%;
-        }
-
-        .match-modal.show {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .match-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: heartbeat 1s ease infinite;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .match-title {
-            font-size: 40px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .match-names {
             font-size: 24px;
-            margin-bottom: 30px;
-        }
-
-        .match-buttons {
+            margin-bottom: 20px;
             display: flex;
+            align-items: center;
             gap: 10px;
         }
 
-        .match-btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* اسکرول افقی */
+        .horizontal-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0 20px;
+            scrollbar-width: none;
         }
 
-        .match-btn.primary {
-            background: white;
-            color: #ff4d6d;
-        }
-
-        .match-btn.secondary {
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 999;
+        .horizontal-scroll::-webkit-scrollbar {
             display: none;
         }
 
-        .overlay.show {
-            display: block;
+        /* کارت بازی برای اسکرول افقی */
+        .game-card-horizontal {
+            min-width: 150px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-card-horizontal:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .game-card-horizontal img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .game-card-horizontal .title {
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* گرید بازی‌ها */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* کارت بازی اصلی */
+        .game-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.3);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .game-content {
+            padding: 15px;
+        }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .game-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .game-badge {
+            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
+            color: #ff4d6d;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .game-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .game-price {
+            color: #ff4d6d;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .game-players {
+            color: #4caf50;
+            font-size: 13px;
+        }
+
+        /* دسته‌بندی */
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        .category-btn {
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+        }
+
+        /* بنر ویژه */
+        .featured-banner {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 30px 0;
         }
 
         /* نوار پایین */
-        .bottom-nav {
+        .navbar {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -494,619 +250,182 @@
             display: flex;
             justify-content: space-around;
             padding: 12px 0;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: 100;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
         .nav-item {
-            color: #666;
-            font-size: 24px;
             text-decoration: none;
-            transition: all 0.3s ease;
-            width: 45px;
-            height: 45px;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 15px;
+            border-radius: 50%;
+            color: #666;
         }
 
         .nav-item.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .nav-item:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            transform: translateY(-3px);
-        }
-
-        /* نوتیفیکیشن */
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 200;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .notification-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .notification.success .notification-icon {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .notification.error .notification-icon {
-            background: #ff4d4d;
-            color: white;
-        }
-
-        /* حالت خالی */
-        .empty-state {
-            text-align: center;
-            color: white;
-            padding: 50px 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
-
-        .empty-state p {
-            font-size: 16px;
-            opacity: 0.8;
-            margin-bottom: 30px;
-        }
-
-        .refresh-btn {
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 50px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .refresh-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
+            color: #ff4d6d;
+            transform: translateY(-5px);
         }
     </style>
 </head>
 <body>
-    <!-- حباب‌های پس‌زمینه -->
-    <div class="bg-bubbles" id="bubbles"></div>
-
-    <!-- هدر اصلی -->
-    <header class="main-header">
-        <div class="header-content">
-            <h2>
-                <span>🔥</span>
-                دیسکاور
-            </h2>
-            <div class="filter-btn" onclick="toggleFilterModal()">
-                ⚙️
-            </div>
-        </div>
-    </header>
-
-    <!-- نوتیفیکیشن -->
-    <div class="notification" id="notification">
-        <div class="notification-icon" id="notificationIcon">✓</div>
-        <span id="notificationMessage"></span>
+    <div class="coins-card" onclick="showCoinShop()">
+        <span>🪙</span>
+        <span id="userCoins">1,250</span>
     </div>
 
-    <!-- کارت اصلی -->
-    <div class="card-container" id="cardContainer">
-        <div class="card" id="mainCard">
-            <div class="card-image" id="cardImage">
-                <img src="" alt="user photo" id="userPhoto">
-                <div class="card-badge" id="boostBadge" style="display: none;">⭐ ویژه</div>
-                <div class="online-badge" id="onlineBadge" style="display: none;">آنلاین</div>
-            </div>
-            <div class="card-info" id="cardInfo">
-                <h3>
-                    <span id="userName"></span>
-                    <span class="age" id="userAge"></span>
-                </h3>
-                <div class="location">
-                    <span>📍</span>
-                    <span id="userCity"></span>
-                </div>
-                <div class="distance" id="userDistance"></div>
-            </div>
+    <div class="header">
+        <h1>✨ نیمه گمشده</h1>
+        <p>دوستان جدید پیدا کن، بازی کن و برنده شو!</p>
+    </div>
+
+    <!-- دسته‌بندی سریع -->
+    <div class="categories">
+        <button class="category-btn active" onclick="filterGames('all')">همه</button>
+        <button class="category-btn" onclick="filterGames('casino')">🎰 کازینو</button>
+        <button class="category-btn" onclick="filterGames('puzzle')">🧩 پازل</button>
+        <button class="category-btn" onclick="filterGames('action')">⚡ اکشن</button>
+        <button class="category-btn" onclick="filterGames('sport')">⚽ ورزشی</button>
+    </div>
+
+    <!-- بازی‌های محبوب (اسکرول افقی) -->
+    <div class="section">
+        <div class="section-title">
+            <span>🔥</span>
+            بازی‌های محبوب
+        </div>
+        <div class="horizontal-scroll" id="popularGames">
+            <!-- با JS لود میشه -->
         </div>
     </div>
 
-    <!-- اندیکاتور سوآیپ -->
-    <div class="swipe-indicator" id="swipeIndicator">
-        <div class="indicator active"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
-        <div class="indicator"></div>
+    <!-- بنر ویژه بازی -->
+    <div class="section">
+        <div class="featured-banner">
+            <div>
+                <h2 style="font-size: 24px; margin-bottom: 10px;">🎰 جکپات ۱۰۰ میلیونی</h2>
+                <p style="margin-bottom: 20px;">امشب، یک نفر برنده می‌شود!</p>
+                <button style="background: white; color: #667eea; border: none; padding: 12px 30px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer;" onclick="openGame('jackpot.html')">شرکت در مسابقه</button>
+            </div>
+            <div style="font-size: 60px;">🏆</div>
+        </div>
     </div>
 
-    <!-- دکمه‌های اکشن -->
-    <div class="action-buttons">
-        <button class="action-btn skip" onclick="handleAction('skip')" id="skipBtn">❌</button>
-        <button class="action-btn super" onclick="handleAction('super')" id="superBtn">⭐</button>
-        <button class="action-btn like" onclick="handleAction('like')" id="likeBtn">❤️</button>
+    <!-- همه بازی‌ها -->
+    <div class="section">
+        <div class="section-title">
+            <span>🎮</span>
+            همه بازی‌ها
+        </div>
+        <div class="games-grid" id="allGames">
+            <!-- با JS لود میشه -->
+        </div>
     </div>
 
     <!-- نوار پایین -->
-    <nav class="bottom-nav">
-        <a href="discover.html" class="nav-item active">🔥</a>
+    <div class="navbar">
+        <a href="index.html" class="nav-item active">🏠</a>
+        <a href="discover.html" class="nav-item">🔥</a>
         <a href="matches.html" class="nav-item">❤️</a>
         <a href="inbox.html" class="nav-item">💬</a>
-        <a href="notifications.html" class="nav-item">🔔</a>
-        <a href="visitors.html" class="nav-item">👁️</a>
         <a href="profile.html" class="nav-item">👤</a>
-    </nav>
-
-    <!-- مودال فیلتر -->
-    <div class="overlay" id="filterOverlay" onclick="toggleFilterModal()"></div>
-    <div class="filter-modal" id="filterModal">
-        <h3>فیلتر جستجو</h3>
-        <div class="filter-option">
-            <label>فاصله: <span id="distanceValue">۵۰</span> کیلومتر</label>
-            <input type="range" id="distanceFilter" min="1" max="100" value="50" oninput="updateDistanceValue(this.value)">
-        </div>
-        <div class="filter-option">
-            <label>سن: <span id="ageValue">۱۸-۳۵</span></label>
-            <input type="range" id="ageMinFilter" min="18" max="60" value="18" onchange="updateAgeRange()">
-            <input type="range" id="ageMaxFilter" min="18" max="60" value="35" onchange="updateAgeRange()">
-        </div>
-        <div class="filter-option">
-            <label>مرتب‌سازی بر اساس:</label>
-            <select id="sortFilter" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd;">
-                <option value="boost">کاربران ویژه</option>
-                <option value="distance">نزدیک‌ترین</option>
-                <option value="age">جوان‌ترین</option>
-            </select>
-        </div>
-        <button class="apply-filter" onclick="applyFilters()">اعمال فیلتر</button>
     </div>
-
-    <!-- مودال مچ -->
-    <div class="overlay" id="matchOverlay" onclick="closeMatchModal()"></div>
-    <div class="match-modal" id="matchModal">
-        <div class="match-icon">💕</div>
-        <div class="match-title">مچ شدید!</div>
-        <div class="match-names" id="matchNames"></div>
-        <div class="match-buttons">
-            <button class="match-btn primary" onclick="startChat()">شروع چت</button>
-            <button class="match-btn secondary" onclick="closeMatchModal()">ادامه</button>
-        </div>
-    </div>
-
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-        };
+        // داده‌های بازی‌ها
+        const games = [
+            { id: 1, name: "Roulette", category: "casino", image: "https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400", players: 1243, prize: "۵۰M", price: 100, popular: true },
+            { id: 2, name: "Lucky Wheel", category: "casino", image: "https://images.unsplash.com/photo-1608889175123-7c52c2b3b8d5?w=400", players: 892, prize: "۱۰M", price: 50, popular: true },
+            { id: 3, name: "Slots", category: "casino", image: "https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400", players: 2156, prize: "۱۰۰M", price: 200, popular: true },
+            { id: 4, name: "Fruit Game", category: "casino", image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400", players: 567, prize: "۵M", price: 25, popular: false },
+            { id: 5, name: "Quiz", category: "puzzle", image: "https://images.unsplash.com/photo-1584697964358-4f47c6df0b6c?w=400", players: 432, prize: "۲M", price: 30, popular: false },
+            { id: 6, name: "Fishing", category: "action", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400", players: 789, prize: "۳M", price: 40, popular: true }
+        ];
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        let userCoins = 1250;
 
-        // Variables
-        let users = [];
-        let index = 0;
-        let myId = "";
-        let myLat = 0;
-        let myLng = 0;
-        let currentUser = null;
-        let isDragging = false;
-        let startX = 0;
-        let currentX = 0;
-        let filters = {
-            maxDistance: 50,
-            minAge: 18,
-            maxAge: 35,
-            sortBy: 'boost'
-        };
+        // لود بازی‌ها
+        function loadGames() {
+            // بازی‌های محبوب (افقی)
+            const popularGames = games.filter(g => g.popular);
+            document.getElementById('popularGames').innerHTML = popularGames.map(game => `
+                <div class="game-card-horizontal" onclick="openGame('${game.name.toLowerCase()}.html')">
+                    <img src="${game.image}" alt="${game.name}">
+                    <div class="title">${game.name}</div>
+                </div>
+            `).join('');
 
-        // Create background bubbles
-        function createBubbles() {
-            const bubblesContainer = document.getElementById('bubbles');
-            for (let i = 0; i < 20; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                bubble.style.left = `${Math.random() * 100}%`;
-                bubble.style.width = `${Math.random() * 60 + 20}px`;
-                bubble.style.height = bubble.style.width;
-                bubble.style.animationDelay = `${Math.random() * 10}s`;
-                bubble.style.animationDuration = `${Math.random() * 10 + 5}s`;
-                bubblesContainer.appendChild(bubble);
-            }
-        }
-
-        // Check Authentication
-        firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                location.href = "login.html";
-                return;
-            }
-
-            currentUser = user;
-            myId = user.uid;
-            
-            getLocation();
-            loadUsers();
-            createBubbles();
-            setupSwipe();
-        });
-
-        // Get user location
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        myLat = position.coords.latitude;
-                        myLng = position.coords.longitude;
-                        
-                        // Save location to Firebase
-                        db.collection("users").doc(myId).update({
-                            lat: myLat,
-                            lng: myLng
-                        }).catch(error => console.log("Location not updated"));
-                    },
-                    function(error) {
-                        console.log("Location error:", error);
-                        showNotification("لطفاً موقعیت مکانی را فعال کنید", "error");
-                    }
-                );
-            }
-        }
-
-        // Load users from Firebase
-        function loadUsers() {
-            let query = db.collection("users");
-            
-            // Apply sorting
-            if (filters.sortBy === 'boost') {
-                query = query.orderBy("boost", "desc");
-            }
-            
-            query.get()
-                .then(snapshot => {
-                    users = [];
-                    snapshot.forEach(doc => {
-                        let data = doc.data();
-                        data.id = doc.id;
-                        
-                        if (data.id !== myId) {
-                            // Apply age filter
-                            if (data.age >= filters.minAge && data.age <= filters.maxAge) {
-                                users.push(data);
-                            }
-                        }
-                    });
-
-                    // Apply distance filter and sorting
-                    if (myLat && myLng) {
-                        users = users.filter(user => {
-                            if (user.lat && user.lng) {
-                                const dist = calculateDistance(myLat, myLng, user.lat, user.lng);
-                                user.distance = dist;
-                                return dist <= filters.maxDistance;
-                            }
-                            return true;
-                        });
-
-                        if (filters.sortBy === 'distance') {
-                            users.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
-                        } else if (filters.sortBy === 'age') {
-                            users.sort((a, b) => (a.age || 0) - (b.age || 0));
-                        }
-                    }
-
-                    index = 0;
-                    showUser();
-                    updateSwipeIndicator();
-                })
-                .catch(error => {
-                    console.error("Error loading users:", error);
-                    showNotification("خطا در بارگذاری کاربران", "error");
-                });
-        }
-
-        // Show current user
-        function showUser() {
-            const cardContainer = document.getElementById('mainCard');
-            
-            if (index >= users.length) {
-                document.getElementById('cardContainer').innerHTML = `
-                    <div class="empty-state">
-                        <h3>😢 کاربری یافت نشد</h3>
-                        <p>همه کاربران رو دیدی! بعداً دوباره امتحان کن</p>
-                        <button class="refresh-btn" onclick="refreshUsers()">🔄 بارگذاری مجدد</button>
+            // همه بازی‌ها (گرید)
+            document.getElementById('allGames').innerHTML = games.map(game => `
+                <div class="game-card" onclick="openGame('${game.name.toLowerCase()}.html')">
+                    <img src="${game.image}" alt="${game.name}">
+                    <div class="game-content">
+                        <div class="game-header">
+                            <span class="game-name">${game.name}</span>
+                            <span class="game-badge">${game.category}</span>
+                        </div>
+                        <div class="game-stats">
+                            <span>👥 ${game.players.toLocaleString()}</span>
+                            <span>🏆 ${game.prize}</span>
+                        </div>
+                        <div class="game-footer">
+                            <span class="game-price">🪙 ${game.price}</span>
+                            <span class="game-players">🟢 ${Math.floor(game.players/10)} آنلاین</span>
+                        </div>
                     </div>
-                `;
-                return;
-            }
+                </div>
+            `).join('');
+        }
 
-            let u = users[index];
-
-            // Calculate distance
-            let distanceText = "";
-            if (u.lat && u.lng && myLat && myLng) {
-                let dist = calculateDistance(myLat, myLng, u.lat, u.lng);
-                distanceText = `${dist} کیلومتر فاصله`;
+        // باز کردن بازی
+        function openGame(page) {
+            if (userCoins >= 50) {
+                userCoins -= 50;
+                document.getElementById('userCoins').textContent = userCoins.toLocaleString();
+                window.location = page;
             } else {
-                distanceText = "موقعیت نامشخص";
+                alert('❌ سکه کافی ندارید!');
             }
-
-            // Update UI
-            document.getElementById('userPhoto').src = u.photo || 'https://via.placeholder.com/400x400?text=User';
-            document.getElementById('userName').textContent = u.name || 'کاربر';
-            document.getElementById('userAge').textContent = u.age || '??';
-            document.getElementById('userCity').textContent = u.city || 'نامشخص';
-            document.getElementById('userDistance').textContent = `📍 ${distanceText}`;
-
-            // Show boost badge
-            if (u.boost) {
-                document.getElementById('boostBadge').style.display = 'block';
-            } else {
-                document.getElementById('boostBadge').style.display = 'none';
-            }
-
-            // Show online badge
-            if (u.online) {
-                document.getElementById('onlineBadge').style.display = 'flex';
-            } else {
-                document.getElementById('onlineBadge').style.display = 'none';
-            }
-
-            // Add animation
-            cardContainer.style.animation = 'none';
-            cardContainer.offsetHeight;
-            cardContainer.style.animation = 'fadeInUp 0.5s ease';
         }
 
-        // Calculate distance between two coordinates
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Earth's radius in km
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = 
-                Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return Math.round(R * c);
+        // فیلتر بازی‌ها
+        function filterGames(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const filtered = category === 'all' ? games : games.filter(g => g.category === category);
+            document.getElementById('allGames').innerHTML = filtered.map(game => `
+                <div class="game-card" onclick="openGame('${game.name.toLowerCase()}.html')">
+                    <img src="${game.image}" alt="${game.name}">
+                    <div class="game-content">
+                        <div class="game-header">
+                            <span class="game-name">${game.name}</span>
+                            <span class="game-badge">${game.category}</span>
+                        </div>
+                        <div class="game-stats">
+                            <span>👥 ${game.players.toLocaleString()}</span>
+                            <span>🏆 ${game.prize}</span>
+                        </div>
+                        <div class="game-footer">
+                            <span class="game-price">🪙 ${game.price}</span>
+                            <span class="game-players">🟢 ${Math.floor(game.players/10)} آنلاین</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Handle actions
-        function handleAction(action) {
-            if (index >= users.length) return;
-
-            const currentUser = users[index];
-            
-            switch(action) {
-                case 'skip':
-                    animateCard('left');
-                    break;
-                case 'like':
-                    animateCard('right');
-                    likeUser(currentUser);
-                    break;
-                case 'super':
-                    animateCard('up');
-                    superLikeUser(currentUser);
-                    break;
-            }
-
-            index++;
-            setTimeout(() => {
-                showUser();
-                updateSwipeIndicator();
-            }, 300);
+        // فروشگاه سکه
+        function showCoinShop() {
+            alert('🪙 فروشگاه سکه به زودی...');
         }
 
-        // Like user
-        function likeUser(user) {
-            db.collection("likes").add({
-                from: myId,
-                to: user.id,
-                time: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                checkMatch(user.id);
-                showNotification("لایک ثبت شد", "success");
-            })
-            .catch(error => {
-                console.error("Error liking user:", error);
-                showNotification("خطا در ثبت لایک", "error");
-            });
-        }
-
-        // Super like user
-        function superLikeUser(user) {
-            db.collection("superlikes").add({
-                from: myId,
-                to: user.id,
-                time: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                return db.collection("notifications").add({
-                    to: user.id,
-                    type: "superlike",
-                    text: "⭐ یک نفر به شما سوپر لایک داده است!",
-                    time: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            })
-            .then(() => {
-                showNotification("⭐ سوپر لایک ارسال شد!", "success");
-            })
-            .catch(error => {
-                console.error("Error super liking user:", error);
-                showNotification("خطا در ثبت سوپر لایک", "error");
-            });
-        }
-
-        // Check for match
-        function checkMatch(likedUserId) {
-            db.collection("likes")
-                .where("from", "==", likedUserId)
-                .where("to", "==", myId)
-                .get()
-                .then(snapshot => {
-                    if (!snapshot.empty) {
-                        // It's a match!
-                        return db.collection("matches").add({
-                            users: [myId, likedUserId],
-                            time: firebase.firestore.FieldValue.serverTimestamp(),
-                            lastMessage: null
-                        });
-                    }
-                })
-                .then(matchDoc => {
-                    if (matchDoc) {
-                        showMatchModal(users[index-1].name);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error checking match:", error);
-                });
-        }
-
-        // Animate card
-        function animateCard(direction) {
-            const card = document.getElementById('mainCard');
-            card.style.transition = 'all 0.3s ease';
-            
-            switch(direction) {
-                case 'left':
-                    card.style.transform = 'translateX(-200px) rotate(-20deg)';
-                    card.style.opacity = '0';
-                    break;
-                case 'right':
-                    card.style.transform = 'translateX(200px) rotate(20deg)';
-                    card.style.opacity = '0';
-                    break;
-                case 'up':
-                    card.style.transform = 'translateY(-200px) scale(0.8)';
-                    card.style.opacity = '0';
-                    break;
-            }
-
-            setTimeout(() => {
-                card.style.transition = 'none';
-                card.style.transform = 'none';
-                card.style.opacity = '1';
-            }, 300);
-        }
-
-        // Setup swipe
-        function setupSwipe() {
-            const card = document.getElementById('mainCard');
-            
-            card.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                startX = e.touches[0].clientX;
-                currentX = startX;
-                card.style.transition = 'none';
-            });
-
-            card.addEventListener('touchmove', (e) => {
-                if (!isDragging) return;
-                e.preventDefault();
-                
-                currentX = e.touches[0].clientX;
-                const diff = currentX - startX;
-                const rotate = diff * 0.1;
-                
-                card.style.transform = `translateX(${diff}px) rotate(${rotate}deg)`;
-                card.style.opacity = 1 - Math.abs(diff) / 500;
-            });
-
-            card.addEventListener('touchend', (e) => {
-                if (!isDragging) return;
-                isDragging = false;
-                
-                const diff = currentX - startX;
-                card.style.transition = 'all 0.3s ease';
-                
-                if (Math.abs(diff) > 100) {
-                    if (diff > 0) {
-                        handleAction('like');
-                    } else {
-                        handleAction('skip');
-                    }
-                } else {
-                    card.style.transform = 'none';
-                    card.style.opacity = '1';
-                }
-            });
-        }
-
-        // Update swipe indicator
-        function updateSwipeIndicator() {
-            const indicators = document.querySelectorAll('.indicator');
-            indicators.forEach((ind, i) => {
-                if (i === index % indicators.length) {
-                    ind.classList.add('active');
-                } else {
-                    ind.classList.remove('active');
-                }
-            });
-        }
-
-        // Show notification
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const icon = document.getElementById('notificationIcon');
-            const messageEl = document.getElementById('notificationMessage');
-            
-            notification.className = `notification ${type}`;
-            icon.innerHTML = type === 'success' ? '✓' : '✗';
-            messageEl.textContent = message;
-            
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Show match modal
-        function showMatchModal(userName) {
-            const modal = document.getElementById('
+        loadGames();
+    </script>
+</body>
+</html>
