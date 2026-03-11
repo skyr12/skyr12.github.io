@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ورود | نیمه گمشده</title>
-    <!-- فونت وزیر -->
+    <title>اکتشاف | نیمه گمشده</title>
     <link href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css" rel="stylesheet">
     <style>
         * {
@@ -17,242 +16,219 @@
         body {
             background: #fef9f7;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
+            padding-bottom: 80px;
         }
 
-        .login-container {
-            max-width: 400px;
-            width: 100%;
+        /* هدر ساده */
+        .header {
             background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
-            padding: 2.5rem 2rem;
-            transition: all 0.3s;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo h1 {
-            font-size: 2.2rem;
+            font-size: 1.5rem;
             font-weight: 300;
             color: #e3636b;
-            letter-spacing: 1px;
         }
 
-        .logo p {
-            color: #aaa;
-            font-size: 0.9rem;
-            margin-top: 0.3rem;
-        }
-
-        .tabs {
+        .icons {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            border-bottom: 1px solid #f0eae7;
-            margin-bottom: 2rem;
+            gap: 1.2rem;
         }
 
-        .tab {
-            padding-bottom: 0.8rem;
-            color: #aaa;
+        .icons span {
+            font-size: 1.3rem;
+            color: #888;
             cursor: pointer;
             transition: 0.2s;
-            font-weight: 500;
-            border-bottom: 2px solid transparent;
         }
 
-        .tab.active {
+        .icons span:hover {
             color: #e3636b;
-            border-bottom: 2px solid #e3636b;
         }
 
-        .form-group {
+        /* بخش اصلی */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #444;
             margin-bottom: 1.5rem;
+            padding-right: 0.5rem;
         }
 
-        .form-group label {
-            display: block;
-            color: #4a4a4a;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
+        /* کارت‌های پروفایل */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 0.9rem 1.2rem;
-            border: 1px solid #f0e0da;
-            border-radius: 3rem;
-            font-size: 1rem;
-            background: #fefaf8;
-            transition: 0.2s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #e3636b;
+        .profile-card {
             background: white;
-            box-shadow: 0 0 0 3px rgba(227, 99, 107, 0.1);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 3rem;
-            background: #e3636b;
-            color: white;
-            font-size: 1rem;
-            font-weight: 500;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+            transition: 0.25s;
             cursor: pointer;
-            transition: 0.2s;
-            margin-bottom: 1rem;
         }
 
-        .btn:hover {
-            background: #d14f57;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(227, 99, 107, 0.3);
+        .profile-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(227, 99, 107, 0.1);
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #e3636b;
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.2rem;
+        }
+
+        .card-name {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-age {
             color: #e3636b;
+            font-weight: 400;
         }
 
-        .btn-outline:hover {
-            background: #e3636b;
-            color: white;
-        }
-
-        .divider {
-            text-align: center;
-            color: #ccc;
-            font-size: 0.9rem;
-            margin: 1.5rem 0;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 30%;
-            height: 1px;
-            background: #f0e0da;
-        }
-
-        .divider::before { right: 0; }
-        .divider::after { left: 0; }
-
-        .footer-links {
-            text-align: center;
-            margin-top: 1.5rem;
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
             color: #aaa;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
         }
 
-        .footer-links a {
+        .card-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #fef0ec;
             color: #e3636b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+        }
+
+        /* نوار پایین */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
+            border-top: 1px solid #f0eae7;
+        }
+
+        .nav-item {
             text-decoration: none;
+            color: #aaa;
+            font-size: 1.4rem;
+            transition: 0.2s;
         }
 
-        .footer-links a:hover {
-            text-decoration: underline;
+        .nav-item.active {
+            color: #e3636b;
         }
 
-        /* ریسپانسیو */
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 2rem 1.5rem;
+        .nav-item:hover {
+            color: #e3636b;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                padding: 1rem;
+            }
+            .profile-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="logo">
-            <h1>نیمه گمشده</h1>
-            <p>پیدا کردن نفهمیده‌ترین اتفاق</p>
+    <header class="header">
+        <div class="logo">نیمه گمشده</div>
+        <div class="icons">
+            <span>🔔</span>
+            <span>💬</span>
         </div>
+    </header>
 
-        <div class="tabs">
-            <span class="tab active" id="loginTab" onclick="switchTab('login')">ورود</span>
-            <span class="tab" id="registerTab" onclick="switchTab('register')">ثبت‌نام</span>
-        </div>
-
-        <!-- فرم ورود -->
-        <div id="loginForm">
-            <div class="form-group">
-                <label>ایمیل</label>
-                <input type="email" placeholder="example@email.com">
-            </div>
-            <div class="form-group">
-                <label>رمز عبور</label>
-                <input type="password" placeholder="********">
-            </div>
-            <button class="btn">ورود</button>
-            <div style="text-align: left;">
-                <a href="#" style="color: #e3636b; font-size: 0.85rem; text-decoration: none;">رمز عبور را فراموش کردید؟</a>
-            </div>
-        </div>
-
-        <!-- فرم ثبت‌نام (پیش‌فرض مخفی) -->
-        <div id="registerForm" style="display: none;">
-            <div class="form-group">
-                <label>نام کامل</label>
-                <input type="text" placeholder="مثال: سارا محمدی">
-            </div>
-            <div class="form-group">
-                <label>ایمیل</label>
-                <input type="email" placeholder="example@email.com">
-            </div>
-            <div class="form-group">
-                <label>رمز عبور</label>
-                <input type="password" placeholder="حداقل ۶ کاراکتر">
-            </div>
-            <div class="form-group">
-                <label>تکرار رمز عبور</label>
-                <input type="password" placeholder="">
-            </div>
-            <button class="btn">ثبت‌نام</button>
-        </div>
-
-        <div class="divider">یا</div>
-
-        <button class="btn btn-outline">ادامه با گوگل</button>
-
-        <div class="footer-links">
-            <span>با ورود یا ثبت‌نام، <a href="#">قوانین</a> را می‌پذیرید.</span>
-        </div>
+    <div class="container">
+        <div class="section-title">پروفایل‌های نزدیک شما</div>
+        <div class="profile-grid" id="profileGrid"></div>
     </div>
 
-    <script>
-        function switchTab(tab) {
-            const loginTab = document.getElementById('loginTab');
-            const registerTab = document.getElementById('registerTab');
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">🏠</a>
+        <a href="discover.html" class="nav-item">🔍</a>
+        <a href="matches.html" class="nav-item">❤️</a>
+        <a href="profile.html" class="nav-item">👤</a>
+    </nav>
 
-            if (tab === 'login') {
-                loginTab.classList.add('active');
-                registerTab.classList.remove('active');
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-            } else {
-                registerTab.classList.add('active');
-                loginTab.classList.remove('active');
-                registerForm.style.display = 'block';
-                loginForm.style.display = 'none';
-            }
+    <script>
+        // داده‌های نمونه
+        const profiles = [
+            { name: 'سارا محمدی', age: ۲۴, city: 'تهران', image: 'https://randomuser.me/api/portraits/women/1.jpg', tags: ['موسیقی', 'سفر'] },
+            { name: 'علی رضایی', age: ۲۸, city: 'اصفهان', image: 'https://randomuser.me/api/portraits/men/1.jpg', tags: ['ورزش', 'کتاب'] },
+            { name: 'مریم کریمی', age: ۲۶, city: 'شیراز', image: 'https://randomuser.me/api/portraits/women/2.jpg', tags: ['هنر', 'فیلم'] },
+            { name: 'رضا احمدی', age: ۳۰, city: 'مشهد', image: 'https://randomuser.me/api/portraits/men/2.jpg', tags: ['بازی', 'سفر'] },
+            { name: 'زهرا حسینی', age: ۲۳, city: 'تبریز', image: 'https://randomuser.me/api/portraits/women/3.jpg', tags: ['موسیقی', 'کتاب'] },
+            { name: 'محمد طاهری', age: ۳۲, city: 'کرج', image: 'https://randomuser.me/api/portraits/men/3.jpg', tags: ['فناوری', 'سینما'] }
+        ];
+
+        const grid = document.getElementById('profileGrid');
+        grid.innerHTML = profiles.map(p => `
+            <div class="profile-card" onclick="viewProfile('${p.name}')">
+                <img src="${p.image}" class="card-image">
+                <div class="card-content">
+                    <div class="card-name">
+                        <span>${p.name}</span>
+                        <span class="card-age">${p.age}</span>
+                    </div>
+                    <div class="card-location">
+                        <span>📍</span> ${p.city}
+                    </div>
+                    <div class="card-tags">
+                        ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        function viewProfile(name) {
+            alert(`پروفایل ${name} در حال باز شدن...`);
         }
     </script>
 </body>
