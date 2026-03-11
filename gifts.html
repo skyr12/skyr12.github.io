@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+    <!-- هدر -->
     <div class="header">
         <div class="logo">
             <span>🎁</span>
@@ -14,91 +15,122 @@
         </div>
         <div class="wallet" onclick="location.href='wallet.html'">
             <span>🪙</span>
-            <span id="userCoins">۱,۲۵۰</span>
+            <span class="user-coins">۰</span>
         </div>
     </div>
+
+    <!-- تب‌ها -->
+    <div class="tabs">
+        <div class="tab" onclick="location.href='index.html'">خانه</div>
+        <div class="tab" onclick="location.href='discover.html'">اکتشاف</div>
+        <div class="tab" onclick="location.href='live.html'">لایو</div>
+        <div class="tab active" onclick="location.href='gifts.html'">هدایا</div>
+        <div class="tab" onclick="location.href='profile.html'">پروفایل</div>
+    </div>
+
+    <!-- موجودی -->
+    <div style="background: white; margin: 15px; padding: 20px; border-radius: 20px; text-align: center;">
+        <div style="font-size: 16px; color: #666;">موجودی کیف پول</div>
+        <div style="font-size: 36px; font-weight: bold; color: #ff4d6d;" class="user-coins">۰</div>
+        <div style="font-size: 14px; color: #999;">سکه</div>
+        <button class="btn btn-primary" onclick="location.href='wallet.html'" style="margin-top: 15px; width: 100%;">افزایش موجودی</button>
+    </div>
+
+    <!-- هدایای مجازی -->
+    <h3 style="color: white; padding: 15px 15px 5px;">🎁 هدایای مجازی</h3>
     
-    <div style="padding: 15px;">
-        <h3 style="color: white; margin-bottom: 15px;">🎁 هدایای مجازی</h3>
-        
-        <div class="gifts-grid">
-            <div class="gift-item" onclick="buyGift('🌹', 10)">
-                <div class="gift-emoji">🌹</div>
-                <div>گل رز</div>
-                <div style="font-size: 12px;">۱۰ 🪙</div>
-            </div>
-            <div class="gift-item" onclick="buyGift('💍', 500)">
-                <div class="gift-emoji">💍</div>
-                <div>حلقه</div>
-                <div style="font-size: 12px;">۵۰۰ 🪙</div>
-            </div>
-            <div class="gift-item" onclick="buyGift('🚗', 1000)">
-                <div class="gift-emoji">🚗</div>
-                <div>ماشین</div>
-                <div style="font-size: 12px;">۱,۰۰۰ 🪙</div>
-            </div>
-            <div class="gift-item" onclick="buyGift('🏰', 5000)">
-                <div class="gift-emoji">🏰</div>
-                <div>کاخ</div>
-                <div style="font-size: 12px;">۵,۰۰۰ 🪙</div>
-            </div>
-            <div class="gift-item" onclick="buyGift('⭐', 10000)">
-                <div class="gift-emoji">⭐</div>
-                <div>سوپراستار</div>
-                <div style="font-size: 12px;">۱۰,۰۰۰ 🪙</div>
-            </div>
-            <div class="gift-item" onclick="buyGift('🎁', 200)">
-                <div class="gift-emoji">🎁</div>
-                <div>جعبه</div>
-                <div style="font-size: 12px;">۲۰۰ 🪙</div>
-            </div>
-            <div class="gift-item" onclick="buyGift('🎂', 150)">
-                <div class="gift-emoji">🎂</div>
-                <div>کیک</div>
-                <div style="font-size: 12px;">۱۵۰ 🪙</div>
-            </div>
-            <div class="gift-item" onclick="buyGift('🍾', 300)">
-                <div class="gift-emoji">🍾</div>
-                <div>شامپاین</div>
-                <div style="font-size: 12px;">۳۰۰ 🪙</div>
-            </div>
+    <div class="gifts-grid">
+        <div class="gift-item" onclick="buyGift('🌹', 10)">
+            <div class="gift-emoji">🌹</div>
+            <div>گل رز</div>
+            <div class="gift-price">۱۰ 🪙</div>
         </div>
-        
-        <h3 style="color: white; margin: 30px 0 15px;">📦 خرید سکه</h3>
-        
-        <div class="coin-package popular" onclick="buyCoins(100)">
-            <span class="popular-badge">پرفروش</span>
-            <div>
-                <strong style="font-size: 18px;">۱۰۰ سکه</strong>
-            </div>
-            <div style="color: #ff4d6d;">۱۰,۰۰۰ ت</div>
+        <div class="gift-item" onclick="buyGift('💐', 25)">
+            <div class="gift-emoji">💐</div>
+            <div>دسته گل</div>
+            <div class="gift-price">۲۵ 🪙</div>
         </div>
-        
-        <div class="coin-package" onclick="buyCoins(500)">
-            <div>
-                <strong style="font-size: 18px;">۵۰۰ سکه</strong>
-                <span style="color: #4caf50; font-size: 12px;">+۵۰ جایزه</span>
-            </div>
-            <div style="color: #ff4d6d;">۴۵,۰۰۰ ت</div>
+        <div class="gift-item" onclick="buyGift('🍫', 15)">
+            <div class="gift-emoji">🍫</div>
+            <div>شکلات</div>
+            <div class="gift-price">۱۵ 🪙</div>
         </div>
-        
-        <div class="coin-package" onclick="buyCoins(1000)">
-            <div>
-                <strong style="font-size: 18px;">۱,۰۰۰ سکه</strong>
-                <span style="color: #4caf50; font-size: 12px;">+۲۰۰ جایزه</span>
-            </div>
-            <div style="color: #ff4d6d;">۸۰,۰۰۰ ت</div>
+        <div class="gift-item" onclick="buyGift('🧸', 30)">
+            <div class="gift-emoji">🧸</div>
+            <div>عروسک</div>
+            <div class="gift-price">۳۰ 🪙</div>
         </div>
-        
-        <div class="coin-package" onclick="buyCoins(5000)">
-            <div>
-                <strong style="font-size: 18px;">۵,۰۰۰ سکه</strong>
-                <span style="color: #4caf50; font-size: 12px;">+۱,۰۰۰ جایزه</span>
-            </div>
-            <div style="color: #ff4d6d;">۳۵۰,۰۰۰ ت</div>
+        <div class="gift-item" onclick="buyGift('💍', 500)">
+            <div class="gift-emoji">💍</div>
+            <div>حلقه</div>
+            <div class="gift-price">۵۰۰ 🪙</div>
+        </div>
+        <div class="gift-item" onclick="buyGift('🚗', 1000)">
+            <div class="gift-emoji">🚗</div>
+            <div>ماشین</div>
+            <div class="gift-price">۱,۰۰۰ 🪙</div>
+        </div>
+        <div class="gift-item" onclick="buyGift('🏰', 5000)">
+            <div class="gift-emoji">🏰</div>
+            <div>کاخ</div>
+            <div class="gift-price">۵,۰۰۰ 🪙</div>
+        </div>
+        <div class="gift-item" onclick="buyGift('⭐', 10000)">
+            <div class="gift-emoji">⭐</div>
+            <div>سوپراستار</div>
+            <div class="gift-price">۱۰,۰۰۰ 🪙</div>
+        </div>
+        <div class="gift-item" onclick="buyGift('🎂', 50)">
+            <div class="gift-emoji">🎂</div>
+            <div>کیک تولد</div>
+            <div class="gift-price">۵۰ 🪙</div>
+        </div>
+        <div class="gift-item" onclick="buyGift('🍾', 75)">
+            <div class="gift-emoji">🍾</div>
+            <div>شامپاین</div>
+            <div class="gift-price">۷۵ 🪙</div>
+        </div>
+        <div class="gift-item" onclick="buyGift('🎈', 20)">
+            <div class="gift-emoji">🎈</div>
+            <div>بادکنک</div>
+            <div class="gift-price">۲۰ 🪙</div>
+        </div>
+        <div class="gift-item" onclick="buyGift('🎊', 40)">
+            <div class="gift-emoji">🎊</div>
+            <div>کنفتی</div>
+            <div class="gift-price">۴۰ 🪙</div>
         </div>
     </div>
+
+    <!-- پکیج‌های ویژه -->
+    <h3 style="color: white; padding: 15px 15px 5px;">📦 پکیج‌های ویژه</h3>
     
+    <div class="coin-package popular" onclick="buyGift('🎁', 200)">
+        <span class="popular-badge">پرفروش</span>
+        <div>
+            <strong style="font-size: 18px;">پکیج عاشقانه</strong>
+            <div style="font-size: 12px; color: #666;">🌹 + 💍 + 🎂</div>
+        </div>
+        <div style="color: #ff4d6d;">۲۰۰ 🪙</div>
+    </div>
+    
+    <div class="coin-package" onclick="buyGift('🎁', 500)">
+        <div>
+            <strong style="font-size: 18px;">پکیج VIP</strong>
+            <div style="font-size: 12px; color: #666;">🚗 + 🏰 + ⭐</div>
+        </div>
+        <div style="color: #ff4d6d;">۵۰۰ 🪙</div>
+    </div>
+    
+    <div class="coin-package" onclick="buyGift('🎁', 1000)">
+        <div>
+            <strong style="font-size: 18px;">پکیج الماس</strong>
+            <div style="font-size: 12px; color: #666;">💎 + 👑 + ✨</div>
+        </div>
+        <div style="color: #ff4d6d;">۱,۰۰۰ 🪙</div>
+    </div>
+
+    <!-- نوار پایین -->
     <div class="navbar">
         <a href="index.html" class="nav-item">🏠</a>
         <a href="discover.html" class="nav-item">🔥</a>
@@ -106,30 +138,50 @@
         <a href="gifts.html" class="nav-item active">🎁</a>
         <a href="profile.html" class="nav-item">👤</a>
     </div>
-    
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="assets/script.js"></script>
+
     <script>
-        let userCoins = 1250;
-        
+        // خرید هدیه
         function buyGift(emoji, price) {
-            if (userCoins >= price) {
-                userCoins -= price;
-                document.getElementById('userCoins').textContent = userCoins.toLocaleString();
-                showToast(`✅ هدیه ${emoji} خریداری شد!`);
-            } else {
-                showToast('❌ سکه کافی ندارید!', 'error');
+            if (!currentUser) {
+                showToast('لطفاً ابتدا وارد شوید', 'error');
+                return;
             }
-        }
-        
-        function buyCoins(coins) {
-            showToast(`🔄 درگاه پرداخت برای ${coins} سکه`);
-        }
-        
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span><span>${message}</span>`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
+            
+            if (userCoins < price) {
+                showToast('سکه کافی ندارید!', 'error');
+                return;
+            }
+            
+            // کم کردن سکه
+            userCoins -= price;
+            
+            // بروزرسانی در Firebase
+            db.collection('users').doc(currentUser.uid).update({
+                coins: userCoins
+            });
+            
+            // ذخیره تراکنش
+            db.collection('transactions').add({
+                userId: currentUser.uid,
+                type: 'gift_purchase',
+                gift: emoji,
+                price: price,
+                time: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            // بروزرسانی نمایش
+            document.querySelectorAll('.user-coins').forEach(el => {
+                el.textContent = userCoins.toLocaleString('fa-IR');
+            });
+            
+            showToast(`✅ هدیه ${emoji} خریداری شد!`);
         }
     </script>
 </body>
