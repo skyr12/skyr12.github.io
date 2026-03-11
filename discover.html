@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>نیمه گمشده | صفحه اصلی</title>
+    <title>دیسکاور | نیمه گمشده</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
@@ -18,225 +18,273 @@
             padding-bottom: 70px;
         }
 
-        /* هدر اصلی */
+        /* هدر */
         .header {
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.3);
-        }
-
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        /* کارت سکه */
-        .coins-card {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .coins-card:hover {
-            transform: scale(1.05);
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* بخش‌های مختلف */
-        .section {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            color: white;
             font-size: 24px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* اسکرول افقی */
-        .horizontal-scroll {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            padding: 10px 0 20px;
-            scrollbar-width: none;
-        }
-
-        .horizontal-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* کارت بازی برای اسکرول افقی */
-        .game-card-horizontal {
-            min-width: 150px;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .game-card-horizontal:hover {
-            transform: translateY(-5px) scale(1.05);
-        }
-
-        .game-card-horizontal img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-        }
-
-        .game-card-horizontal .title {
-            padding: 10px;
-            text-align: center;
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* گرید بازی‌ها */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        /* کارت بازی اصلی */
-        .game-card {
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* کانتینر اصلی */
+        .discover-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 0 15px;
             position: relative;
         }
 
-        .game-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.3);
+        /* کارت پروفایل */
+        .profile-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s ease;
+            position: relative;
+            margin-bottom: 20px;
         }
 
-        .game-card img {
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* عکس کاربر */
+        .profile-image-container {
+            position: relative;
             width: 100%;
-            height: 160px;
+            height: 400px;
+            background: #f0f0f0;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
-        .game-content {
-            padding: 15px;
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         }
 
-        .game-header {
+        /* اطلاعات کاربر */
+        .profile-info {
+            padding: 20px;
+            position: relative;
+        }
+
+        .name-age {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
             margin-bottom: 10px;
         }
 
-        .game-name {
-            font-size: 18px;
+        .name {
+            font-size: 28px;
             font-weight: 700;
             color: #333;
         }
 
-        .game-badge {
-            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
+        .age {
+            font-size: 20px;
             color: #ff4d6d;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            background: #ffe5e9;
+            padding: 5px 15px;
+            border-radius: 25px;
         }
 
-        .game-stats {
-            display: flex;
-            gap: 15px;
-            color: #666;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .game-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-
-        .game-price {
-            color: #ff4d6d;
-            font-weight: 700;
+        .location {
             display: flex;
             align-items: center;
             gap: 5px;
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 16px;
         }
 
-        .game-players {
-            color: #4caf50;
-            font-size: 13px;
-        }
-
-        /* دسته‌بندی */
-        .categories {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            margin: 20px 0;
-            padding: 0 20px;
-        }
-
-        .category-btn {
-            background: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
+        .bio {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 15px;
             font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .category-btn.active {
+        /* علاقه‌مندی‌ها */
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .interest-tag {
+            background: linear-gradient(135deg, #ff4d6d20, #ff8a5c20);
+            color: #ff4d6d;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* دکمه‌های اقدام */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            height: 65px;
+            border: none;
+            border-radius: 35px;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dislike-btn {
+            background: white;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
+        }
+
+        .dislike-btn:hover {
+            background: #ff4d6d;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .like-btn {
             background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
             color: white;
         }
 
-        /* بنر ویژه */
-        .featured-banner {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 20px;
-            padding: 30px;
+        .like-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
+        }
+
+        .superlike-btn {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 30px 0;
+        }
+
+        /* کانتر کاربران باقی‌مانده */
+        .counter {
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* لودینگ */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f0f0f0;
+            border-top: 5px solid #ff4d6d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* حالت خطا */
+        .error-state {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .error-emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        /* حالت خالی */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .empty-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .find-users-btn {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
         }
 
         /* نوار پایین */
@@ -251,6 +299,7 @@
             justify-content: space-around;
             padding: 12px 0;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
             z-index: 1000;
         }
 
@@ -263,6 +312,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            transition: all 0.3s ease;
             color: #666;
         }
 
@@ -271,161 +321,428 @@
             color: #ff4d6d;
             transform: translateY(-5px);
         }
+
+        /* نوتیفیکیشن */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #333;
+            padding: 12px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 2000;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                top: 60px;
+                opacity: 0;
+            }
+            to {
+                top: 80px;
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="coins-card" onclick="showCoinShop()">
-        <span>🪙</span>
-        <span id="userCoins">1,250</span>
-    </div>
-
     <div class="header">
-        <h1>✨ نیمه گمشده</h1>
-        <p>دوستان جدید پیدا کن، بازی کن و برنده شو!</p>
+        🔥 دیسکاور
     </div>
 
-    <!-- دسته‌بندی سریع -->
-    <div class="categories">
-        <button class="category-btn active" onclick="filterGames('all')">همه</button>
-        <button class="category-btn" onclick="filterGames('casino')">🎰 کازینو</button>
-        <button class="category-btn" onclick="filterGames('puzzle')">🧩 پازل</button>
-        <button class="category-btn" onclick="filterGames('action')">⚡ اکشن</button>
-        <button class="category-btn" onclick="filterGames('sport')">⚽ ورزشی</button>
+    <div class="discover-container" id="discoverContainer">
+        <!-- محتوا با JavaScript لود میشه -->
     </div>
 
-    <!-- بازی‌های محبوب (اسکرول افقی) -->
-    <div class="section">
-        <div class="section-title">
-            <span>🔥</span>
-            بازی‌های محبوب
-        </div>
-        <div class="horizontal-scroll" id="popularGames">
-            <!-- با JS لود میشه -->
-        </div>
-    </div>
-
-    <!-- بنر ویژه بازی -->
-    <div class="section">
-        <div class="featured-banner">
-            <div>
-                <h2 style="font-size: 24px; margin-bottom: 10px;">🎰 جکپات ۱۰۰ میلیونی</h2>
-                <p style="margin-bottom: 20px;">امشب، یک نفر برنده می‌شود!</p>
-                <button style="background: white; color: #667eea; border: none; padding: 12px 30px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer;" onclick="openGame('jackpot.html')">شرکت در مسابقه</button>
-            </div>
-            <div style="font-size: 60px;">🏆</div>
-        </div>
-    </div>
-
-    <!-- همه بازی‌ها -->
-    <div class="section">
-        <div class="section-title">
-            <span>🎮</span>
-            همه بازی‌ها
-        </div>
-        <div class="games-grid" id="allGames">
-            <!-- با JS لود میشه -->
-        </div>
-    </div>
-
-    <!-- نوار پایین -->
     <div class="navbar">
-        <a href="index.html" class="nav-item active">🏠</a>
-        <a href="discover.html" class="nav-item">🔥</a>
+        <a href="discover.html" class="nav-item active">🔥</a>
         <a href="matches.html" class="nav-item">❤️</a>
         <a href="inbox.html" class="nav-item">💬</a>
+        <a href="notifications.html" class="nav-item">🔔</a>
         <a href="profile.html" class="nav-item">👤</a>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <script>
-        // داده‌های بازی‌ها
-        const games = [
-            { id: 1, name: "Roulette", category: "casino", image: "https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400", players: 1243, prize: "۵۰M", price: 100, popular: true },
-            { id: 2, name: "Lucky Wheel", category: "casino", image: "https://images.unsplash.com/photo-1608889175123-7c52c2b3b8d5?w=400", players: 892, prize: "۱۰M", price: 50, popular: true },
-            { id: 3, name: "Slots", category: "casino", image: "https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400", players: 2156, prize: "۱۰۰M", price: 200, popular: true },
-            { id: 4, name: "Fruit Game", category: "casino", image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400", players: 567, prize: "۵M", price: 25, popular: false },
-            { id: 5, name: "Quiz", category: "puzzle", image: "https://images.unsplash.com/photo-1584697964358-4f47c6df0b6c?w=400", players: 432, prize: "۲M", price: 30, popular: false },
-            { id: 6, name: "Fishing", category: "action", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400", players: 789, prize: "۳M", price: 40, popular: true }
-        ];
+        // تنظیمات Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+            authDomain: "nimeh-gomsodeh.firebaseapp.com",
+            projectId: "nimeh-gomsodeh",
+            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+            messagingSenderId: "815930956932",
+            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+        };
 
-        let userCoins = 1250;
-
-        // لود بازی‌ها
-        function loadGames() {
-            // بازی‌های محبوب (افقی)
-            const popularGames = games.filter(g => g.popular);
-            document.getElementById('popularGames').innerHTML = popularGames.map(game => `
-                <div class="game-card-horizontal" onclick="openGame('${game.name.toLowerCase()}.html')">
-                    <img src="${game.image}" alt="${game.name}">
-                    <div class="title">${game.name}</div>
-                </div>
-            `).join('');
-
-            // همه بازی‌ها (گرید)
-            document.getElementById('allGames').innerHTML = games.map(game => `
-                <div class="game-card" onclick="openGame('${game.name.toLowerCase()}.html')">
-                    <img src="${game.image}" alt="${game.name}">
-                    <div class="game-content">
-                        <div class="game-header">
-                            <span class="game-name">${game.name}</span>
-                            <span class="game-badge">${game.category}</span>
-                        </div>
-                        <div class="game-stats">
-                            <span>👥 ${game.players.toLocaleString()}</span>
-                            <span>🏆 ${game.prize}</span>
-                        </div>
-                        <div class="game-footer">
-                            <span class="game-price">🪙 ${game.price}</span>
-                            <span class="game-players">🟢 ${Math.floor(game.players/10)} آنلاین</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        // راه‌اندازی Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log("✅ Firebase راه‌اندازی شد");
         }
 
-        // باز کردن بازی
-        function openGame(page) {
-            if (userCoins >= 50) {
-                userCoins -= 50;
-                document.getElementById('userCoins').textContent = userCoins.toLocaleString();
-                window.location = page;
-            } else {
-                alert('❌ سکه کافی ندارید!');
+        const db = firebase.firestore();
+        let currentUser = null;
+        let currentUsers = [];
+        let currentIndex = 0;
+        let loading = false;
+
+        // بررسی احراز هویت
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                console.log("❌ کاربر وارد نشده");
+                showError("لطفاً ابتدا وارد شوید", true);
+                setTimeout(() => {
+                    location.href = "login.html";
+                }, 2000);
+                return;
             }
+
+            console.log("✅ کاربر وارد شد:", user.uid);
+            currentUser = user;
+            loadUsers();
+        });
+
+        // تابع نمایش نوتیفیکیشن
+        function showToast(message, type = "success") {
+            const toast = document.createElement("div");
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${type === "success" ? "✅" : "❌"}</span>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
         }
 
-        // فیلتر بازی‌ها
-        function filterGames(category) {
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        // تابع نمایش خطا
+        function showError(message, redirect = false) {
+            document.getElementById('discoverContainer').innerHTML = `
+                <div class="error-state">
+                    <div class="error-emoji">❌</div>
+                    <h3 style="margin-bottom: 10px;">خطا</h3>
+                    <p style="color: #666; margin-bottom: 20px;">${message}</p>
+                    <button class="retry-btn" onclick="location.reload()">تلاش مجدد</button>
+                </div>
+            `;
+        }
 
-            const filtered = category === 'all' ? games : games.filter(g => g.category === category);
-            document.getElementById('allGames').innerHTML = filtered.map(game => `
-                <div class="game-card" onclick="openGame('${game.name.toLowerCase()}.html')">
-                    <img src="${game.image}" alt="${game.name}">
-                    <div class="game-content">
-                        <div class="game-header">
-                            <span class="game-name">${game.name}</span>
-                            <span class="game-badge">${game.category}</span>
+        // تابع نمایش لودینگ
+        function showLoading() {
+            document.getElementById('discoverContainer').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p style="color: #666; font-size: 16px;">در حال پیدا کردن کاربران جدید...</p>
+                </div>
+            `;
+        }
+
+        // تابع نمایش حالت خالی
+        function showEmptyState() {
+            document.getElementById('discoverContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-emoji">🔍</div>
+                    <h3 style="font-size: 24px; margin-bottom: 10px;">کاربری پیدا نشد!</h3>
+                    <p style="color: #666; margin-bottom: 20px;">همه کاربران رو دیدی. بعداً دوباره امتحان کن.</p>
+                    <button class="find-users-btn" onclick="loadUsers()">
+                        <span>🔄</span>
+                        جستجوی دوباره
+                    </button>
+                </div>
+            `;
+        }
+
+        // تابع نمایش کاربر فعلی
+        function showCurrentUser() {
+            if (currentIndex >= currentUsers.length) {
+                showEmptyState();
+                return;
+            }
+
+            const user = currentUsers[currentIndex];
+            console.log("👤 نمایش کاربر:", user.name);
+
+            // سن تصادفی بین 18 تا 35
+            const age = Math.floor(Math.random() * (35 - 18) + 18);
+            
+            // عکس پیش‌فرض اگر نبود
+            const photoUrl = user.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || 'کاربر')}&size=400&background=ff4d6d&color=fff&bold=true`;
+
+            // کاربران باقی‌مانده
+            const remaining = currentUsers.length - currentIndex - 1;
+
+            const html = `
+                <div class="counter">
+                    ${remaining} کاربر باقی‌مانده
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-image-container">
+                        <img src="${photoUrl}" class="profile-image" alt="${user.name}" 
+                             onerror="this.src='https://ui-avatars.com/api/?name=کاربر&size=400&background=ff4d6d&color=fff&bold=true'">
+                        <div class="image-overlay"></div>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <div class="name-age">
+                            <span class="name">${user.name || 'کاربر'}</span>
+                            <span class="age">${age}</span>
                         </div>
-                        <div class="game-stats">
-                            <span>👥 ${game.players.toLocaleString()}</span>
-                            <span>🏆 ${game.prize}</span>
+                        
+                        <div class="location">
+                            <span>📍</span>
+                            <span>${user.city || 'تهران'}</span>
+                            <span>•</span>
+                            <span>${user.distance || '۲'}</span>
+                            <span>کیلومتر</span>
                         </div>
-                        <div class="game-footer">
-                            <span class="game-price">🪙 ${game.price}</span>
-                            <span class="game-players">🟢 ${Math.floor(game.players/10)} آنلاین</span>
+                        
+                        <div class="bio">
+                            ${user.bio || 'عاشق سفر، موسیقی و تکنولوژی | دنبال دوستان جدید برای ماجراجویی'}
+                        </div>
+                        
+                        <div class="interests">
+                            <span class="interest-tag">🎵 موسیقی</span>
+                            <span class="interest-tag">✈️ سفر</span>
+                            <span class="interest-tag">📚 کتاب</span>
+                            <span class="interest-tag">🎮 بازی</span>
+                            <span class="interest-tag">⚽ ورزش</span>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn dislike-btn" onclick="handleAction('dislike', '${user.id}')">✕</button>
+                            <button class="action-btn like-btn" onclick="handleAction('like', '${user.id}')">❤️</button>
+                            <button class="action-btn superlike-btn" onclick="handleAction('superlike', '${user.id}')">⭐</button>
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+
+            document.getElementById('discoverContainer').innerHTML = html;
         }
 
-        // فروشگاه سکه
-        function showCoinShop() {
-            alert('🪙 فروشگاه سکه به زودی...');
+        // بارگذاری کاربران
+        function loadUsers() {
+            showLoading();
+            
+            if (!currentUser) {
+                showError("لطفاً ابتدا وارد شوید");
+                return;
+            }
+
+            console.log("📥 در حال بارگذاری کاربران...");
+
+            // دریافت کاربران از Firebase
+            db.collection("users")
+                .where("uid", "!=", currentUser.uid)
+                .limit(20)
+                .get()
+                .then(snapshot => {
+                    console.log("📊 تعداد کاربران دریافت شده:", snapshot.size);
+                    
+                    if (snapshot.empty) {
+                        // اگر کاربری نبود، از داده‌های نمونه استفاده کن
+                        useSampleUsers();
+                        return;
+                    }
+
+                    currentUsers = [];
+                    snapshot.forEach(doc => {
+                        const userData = doc.data();
+                        currentUsers.push({
+                            id: doc.id,
+                            name: userData.name || "کاربر",
+                            photo: userData.photo || null,
+                            city: userData.city || "تهران",
+                            bio: userData.bio || null,
+                            distance: Math.floor(Math.random() * 10) + 1
+                        });
+                    });
+
+                    console.log("✅ کاربران با موفقیت لود شدند:", currentUsers.length);
+                    currentIndex = 0;
+                    showCurrentUser();
+                })
+                .catch(error => {
+                    console.error("❌ خطا در دریافت کاربران:", error);
+                    // در صورت خطا، از داده‌های نمونه استفاده کن
+                    useSampleUsers();
+                });
         }
 
-        loadGames();
+        // استفاده از داده‌های نمونه (برای تست)
+        function useSampleUsers() {
+            console.log("📋 استفاده از داده‌های نمونه");
+            
+            currentUsers = [
+                {
+                    id: "sample1",
+                    name: "سارا محمدی",
+                    photo: "https://randomuser.me/api/portraits/women/1.jpg",
+                    city: "تهران",
+                    bio: "عاشق سفر و عکاسی 📸 | دنبال دوستای جدید برای ماجراجویی",
+                    distance: 3
+                },
+                {
+                    id: "sample2",
+                    name: "علی رضایی",
+                    photo: "https://randomuser.me/api/portraits/men/1.jpg",
+                    city: "اصفهان",
+                    bio: "برنامه‌نویس، عاشق تکنولوژی و بازی 🎮",
+                    distance: 5
+                },
+                {
+                    id: "sample3",
+                    name: "مریم کریمی",
+                    photo: "https://randomuser.me/api/portraits/women/2.jpg",
+                    city: "شیراز",
+                    bio: "موسیقی‌دان و عاشق هنر 🎵 | دنبال هم‌صحبت خوب",
+                    distance: 2
+                },
+                {
+                    id: "sample4",
+                    name: "رضا احمدی",
+                    photo: "https://randomuser.me/api/portraits/men/2.jpg",
+                    city: "تبریز",
+                    bio: "ورزشکار، کوهنورد و ماجراجو ⛰️",
+                    distance: 7
+                },
+                {
+                    id: "sample5",
+                    name: "زهرا حسینی",
+                    photo: "https://randomuser.me/api/portraits/women/3.jpg",
+                    city: "مشهد",
+                    bio: "معلم، عاشق کتاب و قهوه ☕",
+                    distance: 4
+                }
+            ];
+
+            currentIndex = 0;
+            showCurrentUser();
+        }
+
+        // مدیریت اقدامات (لایک/دیسلایک)
+        function handleAction(action, userId) {
+            console.log(`🎯 ${action} روی کاربر ${userId}`);
+
+            if (!currentUser) {
+                showToast("لطفاً ابتدا وارد شوید", "error");
+                return;
+            }
+
+            // ذخیره در Firebase
+            db.collection("actions").add({
+                from: currentUser.uid,
+                to: userId,
+                type: action,
+                time: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                console.log("✅ اقدام ذخیره شد");
+                
+                if (action === 'like') {
+                    showToast("❤️ لایک شد!");
+                    checkMatch(userId);
+                } else if (action === 'superlike') {
+                    showToast("⭐ سوپرلایک شد!");
+                } else {
+                    showToast("✕ رد شد");
+                }
+
+                // رفتن به کاربر بعدی
+                currentIndex++;
+                showCurrentUser();
+            })
+            .catch(error => {
+                console.error("❌ خطا در ذخیره:", error);
+                showToast("خطا در ثبت", "error");
+                
+                // حتی با خطا هم برو بعدی
+                currentIndex++;
+                showCurrentUser();
+            });
+        }
+
+        // بررسی تطابق
+        function checkMatch(userId) {
+            db.collection("actions")
+                .where("from", "==", userId)
+                .where("to", "==", currentUser.uid)
+                .where("type", "==", "like")
+                .get()
+                .then(snapshot => {
+                    if (!snapshot.empty) {
+                        // تطابق وجود داره
+                        db.collection("matches").add({
+                            users: [currentUser.uid, userId],
+                            time: firebase.firestore.FieldValue.serverTimestamp()
+                        })
+                        .then(() => {
+                            showToast("💕 تطابق جدید! باهم صحبت کنید.", "success");
+                            
+                            // اضافه کردن به اینباکس
+                            db.collection("messages").add({
+                                from: "system",
+                                to: currentUser.uid,
+                                text: "شما یک تطابق جدید دارید!",
+                                time: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                        });
+                    }
+                });
+        }
+
+        // اضافه کردن کاربر تستی (برای مدیر)
+        window.addTestUser = function() {
+            const testUsers = [
+                { name: "نیما رضایی", city: "تهران", bio: "طراح گرافیک، عاشق هنر", photo: "https://randomuser.me/api/portraits/men/3.jpg" },
+                { name: "الناز کریمی", city: "کرج", bio: "دکتر، عاشق سفر", photo: "https://randomuser.me/api/portraits/women/4.jpg" },
+                { name: "کیان احمدی", city: "اصفهان", bio: "بازیگر، عاشق سینما", photo: "https://randomuser.me/api/portraits/men/4.jpg" }
+            ];
+
+            const randomUser = testUsers[Math.floor(Math.random() * testUsers.length)];
+            
+            db.collection("users").add({
+                ...randomUser,
+                uid: "test_" + Date.now(),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                showToast("✅ کاربر تستی اضافه شد");
+                loadUsers();
+            })
+            .catch(error => {
+                console.error("خطا:", error);
+            });
+        };
+
+        // کیبورد برای دیباگ
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                handleAction('like', 'test');
+            } else if (e.key === 'ArrowLeft') {
+                handleAction('dislike', 'test');
+            }
+        });
+
+        console.log("🚀 صفحه دیسکاور آماده است");
     </script>
+
+    <!-- دکمه تست (فقط برای دیباگ) -->
+    <div style="position: fixed; bottom: 80px; right: 10px; z-index: 1000;">
+        <button onclick="addTestUser()" style="background: #ff4d6d; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.3);">➕</button>
+    </div>
 </body>
 </html>
