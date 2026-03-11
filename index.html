@@ -1,131 +1,898 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inbox</title><style>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>پیام‌ها | چت پیشرفته</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Vazir', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-body{
-font-family:Arial;
-background:#f2f2f2;
-margin:0;
-}
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
 
-.header{
-background:#ff4d6d;
-color:white;
-padding:15px;
-text-align:center;
-font-size:20px;
-}
+        /* هدر پیشرفته */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-.chat{
-background:white;
-margin:10px;
-padding:15px;
-border-radius:10px;
-cursor:pointer;
-}
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.navbar{
-position:fixed;
-bottom:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-border-top:1px solid #ddd;
-font-size:22px;
-}
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
 
-</style></head><body><div class="header">💬 Inbox</div><div id="chats"></div><div class="navbar">
-<a href="discover.html">🔥</a>
-<a href="matches.html">❤️</a>
-<a href="inbox.html">💬</a>
-<a href="notifications.html">🔔</a>
-<a href="profile.html">👤</a>
-</div><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script><script>
+        .header-title span {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 14px;
+        }
 
-const firebaseConfig = {
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
 
-apiKey:"AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-authDomain:"nimeh-gomsodeh.firebaseapp.com",
-projectId:"nimeh-gomsodeh",
-storageBucket:"nimeh-gomsodeh.firebasestorage.app",
-messagingSenderId:"815930956932",
-appId:"1:815930956932:web:e8696a6a69b4458fd936d1"
+        .header-actions button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-};
+        .header-actions button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
 
-if(!firebase.apps.length){
-firebase.initializeApp(firebaseConfig)
-}
+        /* جستجو */
+        .search-box {
+            padding: 15px;
+            background: white;
+            margin: 10px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-const db=firebase.firestore()
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 5px;
+        }
 
+        .search-box span {
+            color: #999;
+            font-size: 20px;
+        }
 
-firebase.auth().onAuthStateChanged(user=>{
+        /* لیست چت‌ها */
+        .chats-container {
+            padding: 10px;
+        }
 
-if(!user){
+        .chat-item {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            animation: slideIn 0.3s ease;
+        }
 
-location.href="login.html"
-return
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
 
-}
+        .chat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
 
-loadChats(user.uid)
+        .chat-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            position: relative;
+        }
 
-})
+        .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
 
+        .chat-info {
+            flex: 1;
+        }
 
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
 
-function loadChats(uid){
+        .chat-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
 
-db.collection("messages")
-.orderBy("time","desc")
-.onSnapshot(snapshot=>{
+        .chat-time {
+            font-size: 12px;
+            color: #999;
+        }
 
-let chats={}
-let html=""
+        .chat-last-message {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-snapshot.forEach(doc=>{
+        .message-text {
+            color: #666;
+            font-size: 14px;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-let m=doc.data()
+        .unread-badge {
+            background: #ff4d6d;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+        }
 
-if(m.from!==uid && m.chat.includes(uid)){
+        /* دسته‌بندی چت‌ها */
+        .chat-categories {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
 
-let other=m.chat.replace(uid,"").replace("_","")
+        .category-btn {
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-chats[other]=m
+        .category-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
 
-}
+        /* حالت خالی */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #999;
+        }
 
-})
+        .empty-state span {
+            font-size: 80px;
+            display: block;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
 
-for(let id in chats){
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #666;
+        }
 
-html+=`
+        .empty-state p {
+            font-size: 14px;
+        }
 
-<div class="chat" onclick="openChat('${id}')">
+        /* نوار پایین */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+        }
 
-💬 Chat with ${id}
+        .nav-item {
+            color: #666;
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            position: relative;
+        }
 
-</div>
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
 
-`
+        .nav-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-3px);
+        }
 
-}
+        .nav-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff4d6d;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
 
-document.getElementById("chats").innerHTML=html
+        /* مودال کاربر جدید */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+        }
 
-})
+        .modal-overlay.show {
+            display: block;
+        }
 
-}
+        .new-chat-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            z-index: 2001;
+            transition: all 0.3s ease;
+            max-width: 350px;
+            width: 90%;
+        }
 
+        .new-chat-modal.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
 
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-function openChat(id){
+        .user-search {
+            margin-bottom: 20px;
+        }
 
-location.href="chat.html?id="+id
+        .user-search input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
 
-}
+        .user-search input:focus {
+            border-color: #667eea;
+        }
 
-</script></body>
+        .users-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-item:hover {
+            background: #f5f5f5;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-details h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .user-details p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        /* نوتیفیکیشن */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-right: 4px solid #4CAF50;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.error {
+            border-right-color: #ff4d4d;
+        }
+
+        .toast-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .toast.success .toast-icon {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .toast.error .toast-icon {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        .toast-message {
+            flex: 1;
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .chat-name {
+                font-size: 16px;
+            }
+            
+            .message-text {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- هدر -->
+    <div class="header">
+        <div class="header-title">
+            <h1>💬 پیام‌ها</h1>
+            <span id="totalChats">0</span>
+        </div>
+        <div class="header-actions">
+            <button onclick="openNewChat()">✏️</button>
+            <button onclick="refreshChats()">🔄</button>
+        </div>
+    </div>
+
+    <!-- جستجو -->
+    <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="جستجو در پیام‌ها..." onkeyup="filterChats()">
+    </div>
+
+    <!-- دسته‌بندی -->
+    <div class="chat-categories">
+        <button class="category-btn active" onclick="filterCategory('all')">همه</button>
+        <button class="category-btn" onclick="filterCategory('unread')">نخوانده</button>
+        <button class="category-btn" onclick="filterCategory('online')">آنلاین</button>
+        <button class="category-btn" onclick="filterCategory('groups')">گروه‌ها</button>
+    </div>
+
+    <!-- لیست چت‌ها -->
+    <div class="chats-container" id="chatsContainer">
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <span>💭</span>
+            <h3>پیامی وجود ندارد</h3>
+            <p>برای شروع چت روی دکمه + کلیک کنید</p>
+        </div>
+        <div id="chatsList"></div>
+    </div>
+
+    <!-- نوار پایین -->
+    <nav class="navbar">
+        <a href="discover.html" class="nav-item" data-tooltip="کشف">🔥</a>
+        <a href="matches.html" class="nav-item" data-tooltip="مچ‌ها">❤️</a>
+        <a href="inbox.html" class="nav-item active" data-tooltip="پیام‌ها">💬</a>
+        <a href="notifications.html" class="nav-item" data-tooltip="اعلان‌ها">🔔</a>
+        <a href="profile.html" class="nav-item" data-tooltip="پروفایل">👤</a>
+    </nav>
+
+    <!-- مودال چت جدید -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+    <div class="new-chat-modal" id="newChatModal">
+        <button class="close-modal" onclick="closeModal()">✕</button>
+        <div class="modal-title">شروع چت جدید</div>
+        <div class="user-search">
+            <input type="text" id="userSearch" placeholder="جستجوی کاربر..." onkeyup="searchUsers()">
+        </div>
+        <div class="users-list" id="usersList">
+            <!-- کاربران با جاوااسکریپت اضافه می‌شوند -->
+        </div>
+    </div>
+
+    <!-- نوتیفیکیشن -->
+    <div class="toast" id="toast">
+        <div class="toast-icon" id="toastIcon">✓</div>
+        <div class="toast-message" id="toastMessage"></div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
+            authDomain: "nimeh-gomsodeh.firebaseapp.com",
+            projectId: "nimeh-gomsodeh",
+            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
+            messagingSenderId: "815930956932",
+            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        // Variables
+        let currentUserId = null;
+        let allChats = [];
+        let filteredChats = [];
+        let users = [];
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        // Check Authentication
+        firebase.auth().onAuthStateChanged(user => {
+            if (!user) {
+                location.href = "login.html";
+                return;
+            }
+            currentUserId = user.uid;
+            loadChats(user.uid);
+            loadAllUsers();
+        });
+
+        // Load all chats
+        function loadChats(uid) {
+            db.collection("messages")
+                .orderBy("time", "desc")
+                .onSnapshot(snapshot => {
+                    let chatsMap = new Map();
+                    
+                    snapshot.forEach(doc => {
+                        let message = doc.data();
+                        message.id = doc.id;
+                        
+                        // Check if message belongs to user
+                        if (message.chat && message.chat.includes(uid)) {
+                            let otherId = message.chat.replace(uid, "").replace("_", "");
+                            
+                            if (!chatsMap.has(otherId) || 
+                                (chatsMap.get(otherId).time < message.time)) {
+                                chatsMap.set(otherId, {
+                                    ...message,
+                                    otherId: otherId,
+                                    unread: !message.read && message.to === uid
+                                });
+                            }
+                        }
+                    });
+
+                    allChats = Array.from(chatsMap.values());
+                    filterAndDisplayChats();
+                    updateTotalChats(allChats.length);
+                    
+                    // Update online status
+                    allChats.forEach(chat => {
+                        checkOnlineStatus(chat.otherId);
+                    });
+                });
+        }
+
+        // Load all users for new chat
+        function loadAllUsers() {
+            db.collection("users").get().then(snapshot => {
+                users = [];
+                snapshot.forEach(doc => {
+                    if (doc.id !== currentUserId) {
+                        users.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    }
+                });
+            });
+        }
+
+        // Filter and display chats
+        function filterAndDisplayChats() {
+            let filtered = [...allChats];
+            
+            // Apply category filter
+            if (currentFilter === 'unread') {
+                filtered = filtered.filter(chat => chat.unread);
+            } else if (currentFilter === 'online') {
+                filtered = filtered.filter(chat => chat.online);
+            }
+
+            // Apply search filter
+            if (searchTerm) {
+                filtered = filtered.filter(chat => 
+                    chat.otherId.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+
+            filteredChats = filtered;
+            displayChats(filtered);
+        }
+
+        // Display chats
+        function displayChats(chats) {
+            const chatsList = document.getElementById('chatsList');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (chats.length === 0) {
+                chatsList.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            
+            let html = '';
+            chats.forEach((chat, index) => {
+                html += createChatItem(chat, index);
+            });
+            
+            chatsList.innerHTML = html;
+        }
+
+        // Create chat item HTML
+        function createChatItem(chat, index) {
+            const time = chat.time ? new Date(chat.time.seconds * 1000) : new Date();
+            const timeStr = formatTime(time);
+            const avatarLetter = chat.otherId.charAt(0).toUpperCase();
+            const lastMessage = chat.text || "پیامی وجود ندارد";
+            
+            return `
+                <div class="chat-item" onclick="openChat('${chat.otherId}')" style="animation-delay: ${index * 0.1}s">
+                    <div class="chat-avatar">
+                        ${avatarLetter}
+                        ${chat.online ? '<span class="online-indicator"></span>' : ''}
+                    </div>
+                    <div class="chat-info">
+                        <div class="chat-header">
+                            <span class="chat-name">${chat.otherName || chat.otherId}</span>
+                            <span class="chat-time">${timeStr}</span>
+                        </div>
+                        <div class="chat-last-message">
+                            <span class="message-text">${lastMessage}</span>
+                            ${chat.unread ? '<span class="unread-badge">جدید</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Format time
+        function formatTime(date) {
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'لحظاتی پیش';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)} دقیقه پیش`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)} ساعت پیش`;
+            return date.toLocaleDateString('fa-IR');
+        }
+
+        // Check online status
+        function checkOnlineStatus(userId) {
+            db.collection("users").doc(userId).get().then(doc => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    const chat = allChats.find(c => c.otherId === userId);
+                    if (chat) {
+                        chat.online = userData.online || false;
+                        if (currentFilter === 'all' || 
+                            (currentFilter === 'online' && chat.online)) {
+                            filterAndDisplayChats();
+                        }
+                    }
+                }
+            });
+        }
+
+        // Open chat
+        function openChat(userId) {
+            location.href = `chat.html?id=${userId}`;
+        }
+
+        // Open new chat modal
+        function openNewChat() {
+            document.getElementById('modalOverlay').classList.add('show');
+            document.getElementById('newChatModal').classList.add('show');
+            searchUsers();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            document.getElementById('newChatModal').classList.remove('show');
+        }
+
+        // Search users
+        function searchUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const filteredUsers = users.filter(user => 
+                user.name?.toLowerCase().includes(searchTerm) ||
+                user.email?.toLowerCase().includes(searchTerm) ||
+                user.id?.toLowerCase().includes(searchTerm)
+            );
+            
+            displayUsers(filteredUsers);
+        }
+
+        // Display users in modal
+        function displayUsers(usersList) {
+            const usersContainer = document.getElementById('usersList');
+            
+            if (usersList.length === 0) {
+                usersContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">کاربری یافت نشد</div>';
+                return;
+            }
+
+            let html = '';
+            usersList.forEach(user => {
+                const avatarLetter = (user.name || user.email || user.id).charAt(0).toUpperCase();
+                html += `
+                    <div class="user-item" onclick="startNewChat('${user.id}')">
+                        <div class="user-avatar">${avatarLetter}</div>
+                        <div class="user-details">
+                            <h4>${user.name || user.email || user.id}</h4>
+                            <p>${user.online ? '🟢 آنلاین' : '⚪ آفلاین'}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            usersContainer.innerHTML = html;
+        }
+
+        // Start new chat
+        function startNewChat(userId) {
+            closeModal();
+            openChat(userId);
+        }
+
+        // Filter chats by category
+        function filterCategory(category) {
+            currentFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            filterAndDisplayChats();
+        }
+
+        // Filter chats by search
+        function filterChats() {
+            searchTerm = document.getElementById('searchInput').value;
+            filterAndDisplayChats();
+        }
+
+        // Update total chats count
+        function updateTotalChats(count) {
+            document.getElementById('totalChats').textContent = count;
+        }
+
+        // Refresh chats
+        function refreshChats() {
+            showToast('در حال به‌روزرسانی...', 'success');
+            loadChats(currentUserId);
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const messageEl = document.getElementById('toastMessage');
+            
+            toast.className = `toast ${type}`;
+            icon.innerHTML = type === 'success' ? '✓' : '✗';
+            messageEl.textContent = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Mark messages as read
+        function markAsRead(chatId) {
+            db.collection("messages")
+                .where("chat", "==", chatId)
+                .where("to", "==", currentUserId)
+                .where("read", "==", false)
+                .get()
+                .then(snapshot => {
+                    snapshot.forEach(doc => {
+                        doc.ref.update({ read: true });
+                    });
+                });
+        }
+
+        // Handle network status
+        window.addEventListener('online', () => {
+            showToast('اتصال اینترنت برقرار شد', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            showToast('اتصال اینترنت قطع شد', 'error');
+        });
+    </script>
+</body>
 </html>
