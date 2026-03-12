@@ -4,124 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>پروفایل من | نیمه گمشده</title>
-    <link href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Vazir, sans-serif;
+            font-family: Tahoma, Arial, sans-serif;
         }
 
         body {
-            background: #f8fafc;
-            padding-bottom: 80px;
+            background: #f0f2f5;
+            direction: rtl;
         }
 
         .header {
-            background: white;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-bottom: 1px solid #eef2f6;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .back-btn {
-            font-size: 1.5rem;
-            color: #6b7280;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .header h2 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #1f2937;
-            flex: 1;
-        }
-
-        .edit-btn {
-            color: #ff4d6d;
-            font-size: 1.2rem;
-            cursor: pointer;
+            background: #ff4d6d;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
         }
 
         .container {
-            max-width: 600px;
-            margin: 1.5rem auto;
-            padding: 0 1rem;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
-        .profile-header {
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .avatar-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 1rem;
         }
 
         .avatar {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
             border: 3px solid #ff4d6d;
-            padding: 3px;
-            background: white;
-        }
-
-        .change-photo {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: #ff4d6d;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 2px solid white;
-            font-size: 1rem;
         }
 
         .name {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.3rem;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
         }
 
         .location {
-            color: #6b7280;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-            margin-bottom: 1rem;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
         }
 
         .stats {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 1.5rem 0;
-            padding: 1rem;
+            justify-content: space-around;
             background: white;
-            border-radius: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .stat-item {
@@ -129,124 +78,64 @@
         }
 
         .stat-number {
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: bold;
             color: #ff4d6d;
         }
 
         .stat-label {
-            color: #6b7280;
-            font-size: 0.8rem;
-            margin-top: 0.2rem;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
         }
 
         .section {
             background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .section-title {
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
         }
 
         .bio {
-            color: #4b5563;
+            color: #555;
             line-height: 1.6;
-            font-size: 0.95rem;
+            font-size: 14px;
         }
 
         .interests {
             display: flex;
-            gap: 0.5rem;
             flex-wrap: wrap;
+            gap: 8px;
         }
 
         .interest {
-            background: #f3f4f6;
-            color: #4b5563;
-            padding: 0.4rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            cursor: pointer;
-        }
-
-        .interest:hover {
-            background: #ff4d6d;
-            color: white;
-        }
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #eef2f6;
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            color: #6b7280;
-            width: 100px;
-            font-size: 0.9rem;
-        }
-
-        .info-value {
-            color: #1f2937;
-            font-weight: 500;
-            flex: 1;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 0.8rem 0;
-            border-top: 1px solid #eef2f6;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #9ca3af;
-            font-size: 1.5rem;
-            transition: 0.2s;
-        }
-
-        .nav-item.active {
-            color: #ff4d6d;
-        }
-
-        .nav-item:hover {
-            color: #ff4d6d;
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #555;
         }
 
         .logout-btn {
             background: #fee2e2;
             color: #ef4444;
             border: none;
-            padding: 0.8rem;
-            border-radius: 2rem;
+            padding: 12px;
+            border-radius: 10px;
             width: 100%;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 16px;
             cursor: pointer;
-            transition: 0.2s;
-            margin-top: 1rem;
+            margin-top: 10px;
         }
 
         .logout-btn:hover {
@@ -254,228 +143,97 @@
             color: white;
         }
 
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: #6b7280;
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            margin-left: 10px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
         }
 
-        .spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f4f6;
-            border-top-color: #ff4d6d;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+        .nav-item {
+            text-decoration: none;
+            color: #666;
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: #ff4d6d;
         }
     </style>
 </head>
 <body>
-    <header class="header">
+    <div class="header">
         <a href="javascript:history.back()" class="back-btn">←</a>
-        <h2>پروفایل من</h2>
-        <span class="edit-btn" onclick="editProfile()">✎</span>
-    </header>
-
-    <div class="container" id="profileContainer">
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>در حال بارگذاری...</p>
-        </div>
+        پروفایل من
     </div>
 
-    <nav class="bottom-nav">
+    <div class="container">
+        <div class="profile-card">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="avatar">
+            <div class="name">سارا محمدی</div>
+            <div class="location">📍 تهران • ۲۴ ساله</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">۱۲۸</div>
+                <div class="stat-label">لایک</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">۴۵</div>
+                <div class="stat-label">تطابق</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">۱,۲۵۰</div>
+                <div class="stat-label">سکه</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">📝 درباره من</div>
+            <div class="bio">
+                ✨ عاشق موسیقی، سفر و ماجراجویی<br>
+                📸 عکاس آماتور<br>
+                ☕ قهوه و کتاب
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🎯 علاقه‌مندی‌ها</div>
+            <div class="interests">
+                <span class="interest">🎵 موسیقی</span>
+                <span class="interest">✈️ سفر</span>
+                <span class="interest">📚 کتاب</span>
+                <span class="interest">☕ قهوه</span>
+                <span class="interest">🎮 بازی</span>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">🚪 خروج از حساب</button>
+    </div>
+
+    <div class="nav-bar">
         <a href="index.html" class="nav-item">🏠</a>
         <a href="discover.html" class="nav-item">🔍</a>
         <a href="matches.html" class="nav-item">❤️</a>
         <a href="profile.html" class="nav-item active">👤</a>
-    </nav>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    </div>
 
     <script>
-        // ==================== تنظیمات Firebase ====================
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // ==================== لود اطلاعات کاربر ====================
-        auth.onAuthStateChanged(user => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            loadUserProfile(user.uid);
-        });
-
-        function loadUserProfile(uid) {
-            const container = document.getElementById('profileContainer');
-            
-            // گرفتن اطلاعات کاربر از Firestore
-            db.collection('users').doc(uid).get()
-                .then(doc => {
-                    if (!doc.exists) {
-                        container.innerHTML = '<div class="error">کاربر یافت نشد</div>';
-                        return;
-                    }
-
-                    const userData = doc.data();
-                    
-                    // گرفتن آمار (لایک‌ها و تطابق‌ها)
-                    return Promise.all([
-                        Promise.resolve(userData),
-                        db.collection('likes').where('to', '==', uid).get(),
-                        db.collection('matches').where('users', 'array-contains', uid).get()
-                    ]);
-                })
-                .then(([userData, likesSnapshot, matchesSnapshot]) => {
-                    const likesCount = likesSnapshot.size;
-                    const matchesCount = matchesSnapshot.size;
-                    
-                    displayProfile(userData, likesCount, matchesCount);
-                })
-                .catch(error => {
-                    console.error('خطا:', error);
-                    document.getElementById('profileContainer').innerHTML = `
-                        <div style="text-align:center; padding:2rem; color:#ef4444;">
-                            ❌ خطا در بارگذاری اطلاعات
-                        </div>
-                    `;
-                });
-        }
-
-        function displayProfile(userData, likesCount, matchesCount) {
-            const container = document.getElementById('profileContainer');
-            
-            // عکس پیش‌فرض اگر نبود
-            const avatarUrl = userData.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || 'کاربر')}&size=200&background=ff4d6d&color=fff`;
-            
-            // سن (اگر ذخیره شده بود)
-            const age = userData.age || '۲۴';
-            
-            // شهر (اگر ذخیره شده بود)
-            const city = userData.city || 'تهران';
-            
-            // بیوگرافی (اگر ذخیره شده بود)
-            const bio = userData.bio || '✨ عاشق موسیقی، سفر و ماجراجویی';
-            
-            // علاقه‌مندی‌ها (اگر ذخیره شده بود)
-            const interests = userData.interests || ['🎵 موسیقی', '✈️ سفر', '📚 کتاب', '☕ قهوه'];
-
-            container.innerHTML = `
-                <div class="profile-header">
-                    <div class="avatar-container">
-                        <img src="${avatarUrl}" class="avatar" id="profileAvatar">
-                        <div class="change-photo" onclick="changePhoto()">📷</div>
-                    </div>
-                    <div class="name" id="profileName">${userData.name || 'کاربر'}</div>
-                    <div class="location" id="profileLocation">
-                        📍 ${city} • ${age} ساله
-                    </div>
-                </div>
-
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-number" id="likesCount">${likesCount}</div>
-                        <div class="stat-label">لایک</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="matchesCount">${matchesCount}</div>
-                        <div class="stat-label">تطابق</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="coinsCount">${userData.coins || 0}</div>
-                        <div class="stat-label">سکه</div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">
-                        <span>📝</span> درباره من
-                    </div>
-                    <div class="bio" id="profileBio">
-                        ${bio}
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">
-                        <span>🎯</span> علاقه‌مندی‌ها
-                    </div>
-                    <div class="interests" id="profileInterests">
-                        ${interests.map(i => `<span class="interest">${i}</span>`).join('')}
-                        <span class="interest" onclick="addInterest()" style="background:#ff4d6d; color:white;">+ اضافه</span>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">
-                        <span>ℹ️</span> اطلاعات بیشتر
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">ایمیل</span>
-                        <span class="info-value">${userData.email || '—'}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">عضو از</span>
-                        <span class="info-value">${new Date(userData.createdAt).toLocaleDateString('fa-IR') || '—'}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">وضعیت VIP</span>
-                        <span class="info-value">${userData.vip ? '✨ فعال' : '—'}</span>
-                    </div>
-                </div>
-
-                <button class="logout-btn" onclick="logout()">
-                    🚪 خروج از حساب
-                </button>
-            `;
-        }
-
-        // ==================== توابع ویرایش ====================
-        function editProfile() {
-            alert('ویرایش پروفایل به زودی...');
-        }
-
-        function changePhoto() {
-            alert('تغییر عکس به زودی...');
-        }
-
-        function addInterest() {
-            const newInterest = prompt('علاقه‌مندی جدید را وارد کنید:');
-            if (newInterest) {
-                alert(`علاقه‌مندی "${newInterest}" اضافه شد`);
-            }
-        }
-
-        // ==================== خروج ====================
         function logout() {
             if (confirm('آیا می‌خواهید خارج شوید؟')) {
-                auth.signOut()
-                    .then(() => {
-                        window.location.href = 'login.html';
-                    })
-                    .catch(error => {
-                        console.error('خطا:', error);
-                    });
+                window.location.href = 'login.html';
             }
         }
     </script>
