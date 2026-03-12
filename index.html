@@ -1,33 +1,378 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
 <head>
-    <title>نیمه گمشده</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نیمه گمشده | صفحه اصلی</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        /* هدر */
+        .header {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .coins {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* فیلترها */
+        .filters {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            background: white;
+            margin: 10px 15px;
+            border-radius: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            background: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-chip.active {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        /* کارت پروفایل */
+        .profile-card {
+            background: white;
+            margin: 15px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            padding: 15px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .age {
+            background: #ffe5e9;
+            color: #ff4d6d;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .bio {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            color: #555;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff3355;
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #ff4d6d;
+            border: 1px solid #ff4d6d;
+        }
+
+        .btn-secondary:hover {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        /* منوی پایین */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid #ddd;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #999;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: #ff4d6d;
+        }
+
+        .nav-item:hover {
+            color: #ff4d6d;
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(102,126,234,0.3);
+        }
+
+        .welcome-message h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .welcome-message p {
+            opacity: 0.9;
+        }
+    </style>
 </head>
 <body>
-    <h1>❤️ نیمه گمشده</h1>
-    <p>خوش آمدید! شما با موفقیت وارد شدید.</p>
-    
-    <hr>
-    
-    <h2>پروفایل‌های نزدیک شما</h2>
-    
-    <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
-        <img src="https://randomuser.me/api/portraits/women/1.jpg" width="100">
-        <h3>سارا محمدی، ۲۴</h3>
-        <p>📍 تهران</p>
-        <button>❤️ لایک</button>
-        <button>✕ رد</button>
+    <div class="header">
+        <div class="logo">
+            <span>❤️</span>
+            نیمه گمشده
+        </div>
+        <div class="coins">
+            <span>🪙</span>
+            <span id="coinDisplay">۱,۲۵۰</span>
+        </div>
     </div>
-    
-    <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
-        <img src="https://randomuser.me/api/portraits/men/1.jpg" width="100">
-        <h3>علی رضایی، ۲۸</h3>
-        <p>📍 اصفهان</p>
-        <button>❤️ لایک</button>
-        <button>✕ رد</button>
+
+    <div class="welcome-message">
+        <h3>✨ خوش آمدید، سارا!</h3>
+        <p>امروز ۸ نفر جدید به شما نزدیک هستند</p>
     </div>
-    
-    <hr>
-    <a href="login.html">خروج</a>
+
+    <div class="filters">
+        <span class="filter-chip active">همه</span>
+        <span class="filter-chip">آنلاین</span>
+        <span class="filter-chip">نزدیک من</span>
+        <span class="filter-chip">تازه‌واردها</span>
+        <span class="filter-chip">VIP</span>
+    </div>
+
+    <div class="profile-card">
+        <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-image">
+        <div class="profile-info">
+            <div class="row">
+                <span class="name">سارا محمدی</span>
+                <span class="age">۲۴</span>
+            </div>
+            <div class="location">
+                <span>📍</span>
+                <span>تهران • ۳ کیلومتری شما</span>
+            </div>
+            <div class="bio">
+                ✨ عاشق موسیقی، سفر و ماجراجویی<br>
+                📸 عکاس آماتور
+            </div>
+            <div class="tags">
+                <span class="tag">🎵 موسیقی</span>
+                <span class="tag">✈️ سفر</span>
+                <span class="tag">📚 کتاب</span>
+            </div>
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="handleAction('dislike')">✕</button>
+                <button class="btn btn-primary" onclick="handleAction('like')">❤️ لایک</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-card">
+        <img src="https://randomuser.me/api/portraits/men/1.jpg" class="profile-image">
+        <div class="profile-info">
+            <div class="row">
+                <span class="name">علی رضایی</span>
+                <span class="age">۲۸</span>
+            </div>
+            <div class="location">
+                <span>📍</span>
+                <span>اصفهان • ۵ کیلومتری</span>
+            </div>
+            <div class="bio">
+                🎮 گیمر حرفه‌ای<br>
+                🏋️‍♂️ بدنساز
+            </div>
+            <div class="tags">
+                <span class="tag">🎮 بازی</span>
+                <span class="tag">⚽ ورزش</span>
+                <span class="tag">💻 برنامه‌نویسی</span>
+            </div>
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="handleAction('dislike')">✕</button>
+                <button class="btn btn-primary" onclick="handleAction('like')">❤️ لایک</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-card">
+        <img src="https://randomuser.me/api/portraits/women/2.jpg" class="profile-image">
+        <div class="profile-info">
+            <div class="row">
+                <span class="name">مریم کریمی</span>
+                <span class="age">۲۶</span>
+            </div>
+            <div class="location">
+                <span>📍</span>
+                <span>شیراز • ۲ کیلومتری</span>
+            </div>
+            <div class="bio">
+                📸 عکاس<br>
+                ✈️ عاشق سفر
+            </div>
+            <div class="tags">
+                <span class="tag">📸 عکاسی</span>
+                <span class="tag">✈️ سفر</span>
+                <span class="tag">☕ قهوه</span>
+            </div>
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="handleAction('dislike')">✕</button>
+                <button class="btn btn-primary" onclick="handleAction('like')">❤️ لایک</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active">🏠</a>
+        <a href="discover.html" class="nav-item">🔍</a>
+        <a href="matches.html" class="nav-item">❤️</a>
+        <a href="profile.html" class="nav-item">👤</a>
+    </div>
+
+    <script>
+        function handleAction(action) {
+            if (action === 'like') {
+                alert('❤️ لایک شد!');
+            } else {
+                alert('✕ رد شد');
+            }
+        }
+
+        // آپدیت سکه (برای تست)
+        let coins = 1250;
+        document.getElementById('coinDisplay').textContent = coins.toLocaleString('fa-IR');
+    </script>
 </body>
 </html>
