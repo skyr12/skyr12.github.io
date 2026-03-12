@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نیمه گمشده | اکتشاف</title>
+    <title>ورود | نیمه گمشده</title>
     <link href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css" rel="stylesheet">
     <link rel="manifest" href="manifest.json">
     <style>
@@ -15,236 +15,229 @@
         }
 
         body {
-            background: #f8fafc;
-            padding-bottom: 80px;
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
         }
 
-        /* هدر */
-        .header {
+        .login-card {
             background: white;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eef2f6;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            border-radius: 2rem;
+            padding: 2.5rem 2rem;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.2);
         }
 
         .logo {
-            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
             font-weight: 600;
-            color: #1f2937;
+            color: #ff4d6d;
         }
 
-        .header-icons {
-            display: flex;
-            gap: 1.2rem;
-        }
-
-        .header-icons span {
-            font-size: 1.4rem;
-            color: #6b7280;
-            cursor: pointer;
-        }
-
-        /* فیلترها */
-        .filters {
-            display: flex;
-            gap: 0.5rem;
-            padding: 1rem 1.5rem;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-            background: white;
-            border-bottom: 1px solid #eef2f6;
-        }
-
-        .filters::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter-chip {
-            background: #f3f4f6;
-            color: #4b5563;
-            padding: 0.5rem 1.2rem;
-            border-radius: 2rem;
+        .logo p {
+            color: #666;
             font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            border-bottom: 1px solid #eef2f6;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding-bottom: 0.8rem;
+            color: #9ca3af;
             cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #ff4d6d;
+            border-bottom: 2px solid #ff4d6d;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid #d1d5db;
+            border-radius: 3rem;
+            font-size: 1rem;
+            background: #f9fafb;
             transition: 0.2s;
         }
 
-        .filter-chip.active {
-            background: #10b981;
-            color: white;
-        }
-
-        /* کارت پروفایل */
-        .profile-card {
-            background: white;
-            margin: 1rem 1.5rem;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .profile-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-        }
-
-        .profile-details {
-            padding: 1.2rem;
-        }
-
-        .row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
-        .name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .age {
-            color: #10b981;
-            font-weight: 500;
-        }
-
-        .location {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            color: #6b7280;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .bio {
-            color: #4b5563;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-
-        .tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background: #f3f4f6;
-            color: #4b5563;
-            padding: 0.3rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff4d6d;
+            box-shadow: 0 0 0 3px rgba(255,77,109,0.1);
         }
 
         .btn {
-            flex: 1;
-            padding: 0.8rem 0;
+            width: 100%;
+            padding: 1rem;
             border: none;
             border-radius: 3rem;
+            background: #ff4d6d;
+            color: white;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .btn-primary {
-            background: #10b981;
-            color: white;
+        .btn:hover {
+            background: #ff3355;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,77,109,0.3);
         }
 
-        .btn-primary:hover {
-            background: #059669;
-        }
-
-        .btn-secondary {
+        .btn-outline {
             background: white;
-            color: #10b981;
-            border: 1px solid #10b981;
+            border: 1px solid #ff4d6d;
+            color: #ff4d6d;
         }
 
-        .btn-secondary:hover {
-            background: #f0fdf4;
+        .btn-outline:hover {
+            background: #ffe5e9;
         }
 
-        /* منوی پایین */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 0.8rem 0;
-            border-top: 1px solid #eef2f6;
-        }
-
-        .nav-item {
-            text-decoration: none;
+        .divider {
+            text-align: center;
             color: #9ca3af;
-            font-size: 1.5rem;
-            transition: 0.2s;
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            position: relative;
         }
 
-        .nav-item.active {
-            color: #10b981;
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #e5e7eb;
         }
 
-        .nav-item:hover {
-            color: #10b981;
+        .divider::before { right: 0; }
+        .divider::after { left: 0; }
+
+        .footer-links {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: #ff4d6d;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 0.8rem;
+            border-radius: 3rem;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">نیمه گمشده</div>
-        <div class="header-icons">
-            <span>🔔</span>
-            <span>⚙️</span>
+    <div class="login-card">
+        <div class="logo">
+            <h1>نیمه گمشده</h1>
+            <p>به جامعه ما بپیوندید</p>
         </div>
-    </header>
 
-    <div class="filters">
-        <span class="filter-chip active">همه</span>
-        <span class="filter-chip">آنلاین</span>
-        <span class="filter-chip">نزدیک من</span>
-        <span class="filter-chip">تازه واردها</span>
-        <span class="filter-chip">VIP</span>
+        <div class="tabs">
+            <span class="tab active" onclick="switchTab('login')">ورود</span>
+            <span class="tab" onclick="switchTab('register')">ثبت‌نام</span>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <!-- فرم ورود -->
+        <div id="loginForm">
+            <div class="form-group">
+                <label>ایمیل</label>
+                <input type="email" id="loginEmail" placeholder="example@email.com" value="test@test.com">
+            </div>
+            <div class="form-group">
+                <label>رمز عبور</label>
+                <input type="password" id="loginPassword" placeholder="********" value="123456">
+            </div>
+            <button class="btn" onclick="login()">ورود</button>
+            <button class="btn btn-outline" onclick="guestLogin()">ورود به عنوان مهمان</button>
+        </div>
+
+        <!-- فرم ثبت‌نام (مخفی) -->
+        <div id="registerForm" style="display: none;">
+            <div class="form-group">
+                <label>نام کامل</label>
+                <input type="text" id="registerName" placeholder="مثال: سارا محمدی">
+            </div>
+            <div class="form-group">
+                <label>ایمیل</label>
+                <input type="email" id="registerEmail" placeholder="example@email.com">
+            </div>
+            <div class="form-group">
+                <label>رمز عبور</label>
+                <input type="password" id="registerPassword" placeholder="حداقل ۶ کاراکتر">
+            </div>
+            <button class="btn" onclick="register()">ثبت‌نام</button>
+        </div>
+
+        <div class="divider">یا</div>
+        <button class="btn btn-outline" onclick="alert('ورود با موبایل به زودی')">ادامه با شماره موبایل</button>
+
+        <div class="footer-links">
+            <span>حساب ندارید؟ <a href="#" onclick="switchTab('register')">ثبت نام</a></span>
+        </div>
     </div>
 
-    <div id="profiles-container"></div>
-
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">🏠</a>
-        <a href="discover.html" class="nav-item">🔍</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="profile.html" class="nav-item">👤</a>
-    </nav>
-
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
     <script>
+        // ==================== تنظیمات Firebase ====================
         const firebaseConfig = {
             apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
             authDomain: "nimeh-gomsodeh.firebaseapp.com",
@@ -254,115 +247,157 @@
             appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
         };
 
-        // Initialize Firebase
+        // ==================== راه‌اندازی Firebase ====================
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // بررسی وضعیت ورود
-        auth.onAuthStateChanged(user => {
-            if (!user) {
-                console.log('❌ کاربر وارد نیست، انتقال به صفحه ورود');
-                window.location.href = 'login.html';
-            } else {
-                console.log('✅ کاربر وارد شد:', user.uid);
-                
-                // کاربر وارد شده، اطلاعاتش رو نشون بده
-                db.collection('users').doc(user.uid).get()
-                    .then(doc => {
-                        if (doc.exists) {
-                            const userData = doc.data();
-                            console.log('اطلاعات کاربر:', userData.name);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('خطا در دریافت اطلاعات کاربر:', error);
-                    });
+        console.log('✅ Firebase آماده است');
 
-                // بارگذاری پروفایل‌ها
-                loadProfiles();
+        // ==================== توابع کمکی ====================
+        function showError(msg) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = msg;
+            errorDiv.classList.add('show');
+            setTimeout(() => errorDiv.classList.remove('show'), 3000);
+        }
+
+        function switchTab(tab) {
+            const loginTab = document.querySelectorAll('.tab')[0];
+            const registerTab = document.querySelectorAll('.tab')[1];
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+            }
+        }
+
+        // ==================== ورود ====================
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showError('لطفاً ایمیل و رمز عبور را وارد کنید');
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    console.log('✅ ورود موفق:', userCredential.user.email);
+                    window.location.href = 'index.html';
+                })
+                .catch(error => {
+                    console.error('❌ خطا:', error);
+                    
+                    if (error.code === 'auth/user-not-found') {
+                        showError('کاربری با این ایمیل یافت نشد');
+                    } else if (error.code === 'auth/wrong-password') {
+                        showError('رمز عبور اشتباه است');
+                    } else if (error.code === 'auth/invalid-email') {
+                        showError('ایمیل نامعتبر است');
+                    } else {
+                        showError('خطا: ' + error.message);
+                    }
+                });
+        }
+
+        // ==================== ثبت‌نام ====================
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (!name || !email || !password) {
+                showError('لطفاً همه فیلدها را پر کنید');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('رمز عبور باید حداقل ۶ کاراکتر باشد');
+                return;
+            }
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    console.log('✅ ثبت‌نام موفق:', userCredential.user.email);
+                    
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        coins: 100,
+                        vip: false,
+                        createdAt: new Date().toISOString()
+                    });
+                })
+                .then(() => {
+                    window.location.href = 'index.html';
+                })
+                .catch(error => {
+                    console.error('❌ خطا:', error);
+                    
+                    if (error.code === 'auth/email-already-in-use') {
+                        showError('این ایمیل قبلاً ثبت نام کرده است');
+                    } else if (error.code === 'auth/invalid-email') {
+                        showError('ایمیل نامعتبر است');
+                    } else {
+                        showError('خطا: ' + error.message);
+                    }
+                });
+        }
+
+        // ==================== ورود مهمان ====================
+        function guestLogin() {
+            auth.signInAnonymously()
+                .then(userCredential => {
+                    console.log('✅ ورود مهمان موفق:', userCredential.user.uid);
+                    
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: 'مهمان',
+                        coins: 50,
+                        vip: false,
+                        guest: true,
+                        createdAt: new Date().toISOString()
+                    });
+                })
+                .then(() => {
+                    window.location.href = 'index.html';
+                })
+                .catch(error => {
+                    console.error('❌ خطا:', error);
+                    showError('خطا در ورود مهمان');
+                });
+        }
+
+        // ==================== چک کردن وضعیت ====================
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                console.log('کاربر از قبل وارد شده:', user.uid);
+                // اگه می‌خوای خودکار بره به index، کامنت زیر رو فعال کن
+                // window.location.href = 'index.html';
             }
         });
 
-        function loadProfiles() {
-            // برای نمونه از داده‌های سخت‌کد شده استفاده می‌کنیم
-            const profiles = [
-                {
-                    name: 'سارا محمدی',
-                    age: 24,
-                    city: 'تهران',
-                    distance: '۳ کیلومتری',
-                    bio: '✨ عاشق موسیقی، سفر و ماجراجویی',
-                    image: 'https://randomuser.me/api/portraits/women/1.jpg',
-                    tags: ['موسیقی', 'سفر', 'کتاب']
-                },
-                {
-                    name: 'علی رضایی',
-                    age: 28,
-                    city: 'اصفهان',
-                    distance: '۵ کیلومتری',
-                    bio: '🎮 گیمر | 🏋️ بدنساز | 💻 برنامه‌نویس',
-                    image: 'https://randomuser.me/api/portraits/men/1.jpg',
-                    tags: ['بازی', 'ورزش', 'برنامه‌نویسی']
-                },
-                {
-                    name: 'مریم کریمی',
-                    age: 26,
-                    city: 'شیراز',
-                    distance: '۲ کیلومتری',
-                    bio: '📸 عکاس | ✈️ عاشق سفر | ☕ قهوه',
-                    image: 'https://randomuser.me/api/portraits/women/2.jpg',
-                    tags: ['عکاسی', 'سفر', 'قهوه']
+        // ==================== ارسال با اینتر ====================
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const activeForm = document.querySelector('.tab.active').textContent;
+                if (activeForm === 'ورود') {
+                    login();
+                } else {
+                    register();
                 }
-            ];
-
-            const container = document.getElementById('profiles-container');
-            container.innerHTML = profiles.map(p => `
-                <div class="profile-card">
-                    <img src="${p.image}" class="profile-image">
-                    <div class="profile-details">
-                        <div class="row">
-                            <span class="name">${p.name}</span>
-                            <span class="age">${p.age}</span>
-                        </div>
-                        <div class="location">📍 ${p.city} • ${p.distance}</div>
-                        <div class="bio">${p.bio}</div>
-                        <div class="tags">
-                            ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-secondary" onclick="handleAction('dislike', '${p.name}')">✕</button>
-                            <button class="btn btn-primary" onclick="handleAction('like', '${p.name}')">❤️</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function handleAction(action, name) {
-            if (!auth.currentUser) {
-                alert('لطفاً ابتدا وارد شوید');
-                window.location.href = 'login.html';
-                return;
             }
-            
-            alert(`${action} روی ${name}`);
-            
-            // اینجا می‌تونید عملیات رو توی Firebase ذخیره کنید
-            if (action === 'like') {
-                db.collection('likes').add({
-                    from: auth.currentUser.uid,
-                    to: name,
-                    time: new Date().toISOString()
-                }).then(() => {
-                    console.log('✅ لایک ذخیره شد');
-                }).catch(error => {
-                    console.error('❌ خطا:', error);
-                });
-            }
-        }
-
-        console.log('✅ صفحه index.html آماده است');
+        });
     </script>
 </body>
 </html>
