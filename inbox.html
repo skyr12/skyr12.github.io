@@ -9,79 +9,72 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8f9fa;
             min-height: 100vh;
-            padding-bottom: 70px;
+            padding-bottom: 80px;
         }
 
-        /* هدر */
+        /* هدر - مثل Muzz */
         .header {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
-            color: white;
-            padding: 20px;
+            background: white;
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(255,77,109,0.3);
+            border-bottom: 1px solid #f0f0f0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #00b894;
+            letter-spacing: -0.5px;
         }
 
-        .coins {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 18px;
-            border-radius: 30px;
+        .header-icons {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(10px);
+            gap: 20px;
+        }
+
+        .header-icons span {
+            font-size: 20px;
+            color: #2d3436;
             cursor: pointer;
         }
 
-        .coins:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
+        /* پیام خوش‌آمدگویی - مثل Muzz */
+        .welcome-section {
+            background: white;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
 
-        /* پیام خوش‌آمدگویی */
-        .welcome-card {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            margin: 20px;
-            padding: 25px;
-            border-radius: 25px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .welcome-card h2 {
-            font-size: 24px;
+        .welcome-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3436;
             margin-bottom: 5px;
         }
 
-        .welcome-card p {
-            opacity: 0.9;
+        .welcome-subtitle {
+            color: #636e72;
             font-size: 14px;
         }
 
-        /* فیلترهای سریع */
+        /* فیلترهای سریع - مثل Muzz */
         .filters {
             display: flex;
-            gap: 10px;
-            padding: 15px 20px;
+            gap: 8px;
+            padding: 5px 15px 15px;
             overflow-x: auto;
             scrollbar-width: none;
         }
@@ -91,145 +84,132 @@
         }
 
         .filter-chip {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 10px 20px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 8px 20px;
             border-radius: 30px;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #2d3436;
             white-space: nowrap;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.2s;
         }
 
         .filter-chip.active {
-            background: #ff4d6d;
-            box-shadow: 0 5px 15px rgba(255,77,109,0.3);
+            background: #00b894;
+            border-color: #00b894;
+            color: white;
         }
 
-        .filter-chip:hover {
-            background: rgba(255,255,255,0.25);
-            transform: translateY(-2px);
-        }
-
-        /* کارت پروفایل */
+        /* کارت پروفایل - مثل Muzz */
         .profile-card {
             background: white;
-            margin: 20px;
-            border-radius: 25px;
+            margin: 0 15px 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            transition: 0.3s;
-        }
-
-        .profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
         }
 
         .profile-image {
             width: 100%;
-            height: 250px;
+            height: 220px;
             object-fit: cover;
         }
 
         .profile-info {
-            padding: 20px;
+            padding: 18px;
         }
 
-        .name-section {
+        .name-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .name {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
-            color: #333;
+            color: #2d3436;
         }
 
         .age {
-            background: #ffe5e9;
-            color: #ff4d6d;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 14px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #00b894;
         }
 
         .location {
             display: flex;
             align-items: center;
             gap: 5px;
-            color: #666;
+            color: #636e72;
             font-size: 14px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .bio {
-            color: #555;
+            color: #2d3436;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.5;
             margin-bottom: 15px;
-            padding: 10px 0;
+            opacity: 0.9;
         }
 
         .tags {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .tag {
-            background: #f0f0f0;
-            color: #555;
-            padding: 5px 15px;
+            background: #f1f3f5;
+            color: #2d3436;
+            padding: 5px 14px;
             border-radius: 30px;
             font-size: 12px;
+            font-weight: 500;
         }
 
-        .actions {
+        .action-buttons {
             display: flex;
             gap: 10px;
         }
 
         .btn {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            border-radius: 40px;
-            font-weight: 600;
+            border-radius: 12px;
             font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.2s;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            background: #00b894;
             color: white;
         }
 
         .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(255,77,109,0.3);
+            background: #019d7a;
         }
 
         .btn-secondary {
-            background: white;
-            color: #ff4d6d;
-            border: 1px solid #ff4d6d;
+            background: #f1f3f5;
+            color: #2d3436;
         }
 
         .btn-secondary:hover {
-            background: #ff4d6d;
-            color: white;
+            background: #e5e8eb;
         }
 
-        /* منوی پایین */
-        .navbar {
+        /* منوی پایین - مثل Muzz */
+        .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -238,158 +218,161 @@
             display: flex;
             justify-content: space-around;
             padding: 12px 0;
-            border-top: 1px solid #ddd;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            border-top: 1px solid #f0f0f0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
         }
 
         .nav-item {
             text-decoration: none;
-            color: #999;
-            font-size: 24px;
-            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #b2bec3;
+            font-size: 20px;
+            transition: color 0.2s;
         }
 
         .nav-item.active {
-            color: #ff4d6d;
-            transform: translateY(-5px);
+            color: #00b894;
         }
 
-        .nav-item:hover {
-            color: #ff4d6d;
+        .nav-label {
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: 500;
         }
 
-        /* نوتیفیکیشن */
+        .nav-item.active .nav-label {
+            color: #00b894;
+        }
+
+        /* نوتیفیکیشن - مثل Muzz */
         .toast {
             position: fixed;
-            top: 80px;
+            bottom: 100px;
             left: 50%;
-            transform: translateX(-50%) translateY(-100px);
+            transform: translateX(-50%) translateY(100px);
             background: white;
             padding: 12px 25px;
             border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             gap: 10px;
             z-index: 1000;
-            transition: 0.3s;
+            transition: transform 0.3s;
+            border-left: 4px solid #00b894;
         }
 
         .toast.show {
             transform: translateX(-50%) translateY(0);
         }
-
-        .toast.success { border-right: 4px solid #4caf50; }
-        .toast.error { border-right: 4px solid #f44336; }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="logo">
-            <span>❤️</span>
-            نیمه گمشده
-        </div>
-        <div class="coins" onclick="alert('کیف پول: ۱,۲۵۰ سکه')">
-            <span>🪙</span>
-            <span>۱,۲۵۰</span>
+        <div class="logo">نیمه گمشده</div>
+        <div class="header-icons">
+            <span>🔔</span>
+            <span>⚙️</span>
         </div>
     </div>
 
-    <div class="welcome-card">
-        <h2>سارا جان، خوش آمدی! 👋</h2>
-        <p>۸ نفر جدید امروز به تو نزدیک شدن</p>
+    <div class="welcome-section">
+        <div class="welcome-title">سارا، خوش آمدی 👋</div>
+        <div class="welcome-subtitle">امروز ۱۲ نفر جدید به تو نزدیک شدن</div>
     </div>
 
     <div class="filters">
-        <span class="filter-chip active">همه</span>
-        <span class="filter-chip">آنلاین</span>
+        <span class="filter-chip active">پیشنهادی</span>
         <span class="filter-chip">نزدیک من</span>
-        <span class="filter-chip">تازه‌ها</span>
+        <span class="filter-chip">آنلاین</span>
         <span class="filter-chip">VIP</span>
+        <span class="filter-chip">تازه‌ها</span>
         <span class="filter-chip">زن</span>
         <span class="filter-chip">مرد</span>
     </div>
 
     <div id="profilesContainer">
-        <!-- کارت 1 -->
+        <!-- پروفایل 1 -->
         <div class="profile-card">
             <img src="https://randomuser.me/api/portraits/women/1.jpg" class="profile-image">
             <div class="profile-info">
-                <div class="name-section">
+                <div class="name-row">
                     <span class="name">سارا محمدی</span>
                     <span class="age">۲۴</span>
                 </div>
                 <div class="location">
                     <span>📍</span>
-                    <span>تهران • ۳ کیلومتری</span>
+                    <span>تهران • ۳ کیلومتر</span>
                 </div>
                 <div class="bio">
                     ✨ عاشق موسیقی، سفر و کتاب<br>
-                    📸 عکاس آماتور
+                    📸 عکاس
                 </div>
                 <div class="tags">
-                    <span class="tag">🎵 موسیقی</span>
-                    <span class="tag">✈️ سفر</span>
-                    <span class="tag">📚 کتاب</span>
-                    <span class="tag">☕ قهوه</span>
+                    <span class="tag">موسیقی</span>
+                    <span class="tag">سفر</span>
+                    <span class="tag">کتاب</span>
+                    <span class="tag">قهوه</span>
                 </div>
-                <div class="actions">
+                <div class="action-buttons">
                     <button class="btn btn-secondary" onclick="handleAction('dislike', this)">✕ رد</button>
                     <button class="btn btn-primary" onclick="handleAction('like', this)">❤️ لایک</button>
                 </div>
             </div>
         </div>
 
-        <!-- کارت 2 -->
+        <!-- پروفایل 2 -->
         <div class="profile-card">
             <img src="https://randomuser.me/api/portraits/men/1.jpg" class="profile-image">
             <div class="profile-info">
-                <div class="name-section">
+                <div class="name-row">
                     <span class="name">علی رضایی</span>
                     <span class="age">۲۸</span>
                 </div>
                 <div class="location">
                     <span>📍</span>
-                    <span>اصفهان • ۵ کیلومتری</span>
+                    <span>اصفهان • ۵ کیلومتر</span>
                 </div>
                 <div class="bio">
                     🎮 گیمر حرفه‌ای<br>
                     💻 برنامه‌نویس
                 </div>
                 <div class="tags">
-                    <span class="tag">🎮 بازی</span>
-                    <span class="tag">⚽ ورزش</span>
-                    <span class="tag">💻 کدنویسی</span>
+                    <span class="tag">بازی</span>
+                    <span class="tag">ورزش</span>
+                    <span class="tag">کدنویسی</span>
                 </div>
-                <div class="actions">
+                <div class="action-buttons">
                     <button class="btn btn-secondary" onclick="handleAction('dislike', this)">✕ رد</button>
                     <button class="btn btn-primary" onclick="handleAction('like', this)">❤️ لایک</button>
                 </div>
             </div>
         </div>
 
-        <!-- کارت 3 -->
+        <!-- پروفایل 3 -->
         <div class="profile-card">
             <img src="https://randomuser.me/api/portraits/women/2.jpg" class="profile-image">
             <div class="profile-info">
-                <div class="name-section">
+                <div class="name-row">
                     <span class="name">مریم کریمی</span>
                     <span class="age">۲۶</span>
                 </div>
                 <div class="location">
                     <span>📍</span>
-                    <span>شیراز • ۲ کیلومتری</span>
+                    <span>شیراز • ۲ کیلومتر</span>
                 </div>
                 <div class="bio">
-                    📸 عکاس حرفه‌ای<br>
+                    📸 عکاس<br>
                     ✈️ عاشق سفر
                 </div>
                 <div class="tags">
-                    <span class="tag">📸 عکاسی</span>
-                    <span class="tag">✈️ سفر</span>
-                    <span class="tag">☕ قهوه</span>
+                    <span class="tag">عکاسی</span>
+                    <span class="tag">سفر</span>
+                    <span class="tag">قهوه</span>
                 </div>
-                <div class="actions">
+                <div class="action-buttons">
                     <button class="btn btn-secondary" onclick="handleAction('dislike', this)">✕ رد</button>
                     <button class="btn btn-primary" onclick="handleAction('like', this)">❤️ لایک</button>
                 </div>
@@ -397,54 +380,52 @@
         </div>
     </div>
 
-    <div class="navbar">
-        <a href="index.html" class="nav-item active">🏠</a>
-        <a href="discover.html" class="nav-item">🔍</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="profile.html" class="nav-item">👤</a>
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <span>🏠</span>
+            <span class="nav-label">خانه</span>
+        </a>
+        <a href="discover.html" class="nav-item">
+            <span>🔍</span>
+            <span class="nav-label">اکتشاف</span>
+        </a>
+        <a href="matches.html" class="nav-item">
+            <span>❤️</span>
+            <span class="nav-label">تطابق</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <span>👤</span>
+            <span class="nav-label">پروفایل</span>
+        </a>
     </div>
 
     <div class="toast" id="toast">
-        <span id="toastIcon">✅</span>
+        <span>✅</span>
         <span id="toastMessage"></span>
     </div>
 
     <script>
-        function handleAction(action, btn) {
-            const card = btn.closest('.profile-card');
+        function handleAction(action, button) {
+            const card = button.closest('.profile-card');
             const name = card.querySelector('.name').textContent;
+            const message = action === 'like' ? `به ${name} لایک دادی` : `${name} رو رد کردی`;
             
-            if (action === 'like') {
-                showToast(`❤️ به ${name} لایک دادی`, 'success');
-            } else {
-                showToast(`✕ ${name} رو رد کردی`, 'error');
-            }
+            showToast(message);
             
-            // انیمیشن محو شدن کارت
-            card.style.transition = 'opacity 0.3s, transform 0.3s';
-            card.style.opacity = '0.5';
-            card.style.transform = 'scale(0.95)';
-            
+            // انیمیشن
+            card.style.opacity = '0.7';
+            card.style.transform = 'scale(0.98)';
             setTimeout(() => {
                 card.style.opacity = '1';
                 card.style.transform = 'scale(1)';
-            }, 500);
+            }, 300);
         }
 
-        function showToast(message, type) {
+        function showToast(message) {
             const toast = document.getElementById('toast');
-            const icon = document.getElementById('toastIcon');
-            const msg = document.getElementById('toastMessage');
-            
-            toast.className = 'toast ' + type;
-            icon.innerHTML = type === 'success' ? '✅' : '❌';
-            msg.innerHTML = message;
-            
+            document.getElementById('toastMessage').textContent = message;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
     </script>
 </body>
