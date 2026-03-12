@@ -1,122 +1,31 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نیمه گمشده | اکتشاف</title>
-    <link href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
+    <title>نیمه گمشده</title>
     <style>
-        /* استایل‌های قبلی index.html */
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-family: Arial;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 { font-size: 48px; margin-bottom: 20px; }
+        a {
+            color: white;
+            background: #ff4d6d;
+            padding: 10px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">نیمه گمشده</div>
-        <div class="header-icons">
-            <span>🔔</span>
-            <span>⚙️</span>
-        </div>
-    </header>
-
-    <div class="filters">
-        <span class="filter-chip active">همه</span>
-        <span class="filter-chip">آنلاین</span>
-        <span class="filter-chip">نزدیک من</span>
-        <span class="filter-chip">تازه واردها</span>
-        <span class="filter-chip">VIP</span>
-    </div>
-
-    <div id="profiles-container"></div>
-
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active">🏠</a>
-        <a href="discover.html" class="nav-item">🔍</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="profile.html" class="nav-item">👤</a>
-    </nav>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyAA0xYFglY_0NI-PstgS4nP3uNIpyAq0_A",
-            authDomain: "nimeh-gomsodeh.firebaseapp.com",
-            projectId: "nimeh-gomsodeh",
-            storageBucket: "nimeh-gomsodeh.firebasestorage.app",
-            messagingSenderId: "815930956932",
-            appId: "1:815930956932:web:e8696a6a69b4458fd936d1"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // بررسی وضعیت ورود
-        auth.onAuthStateChanged(user => {
-            if (!user) {
-                window.location.href = 'login.html';
-            } else {
-                // کاربر وارد شده، اطلاعاتش رو نشون بده (مثلاً در هدر)
-                db.collection('users').doc(user.uid).get()
-                    .then(doc => {
-                        if (doc.exists) {
-                            const userData = doc.data();
-                            // می‌تونید نام کاربر رو در هدر نمایش بدید
-                            console.log('کاربر:', userData.name);
-                        }
-                    });
-
-                // بارگذاری پروفایل‌های دیگر (نمونه)
-                loadProfiles();
-            }
-        });
-
-        function loadProfiles() {
-            // اینجا باید پروفایل‌ها را از Firestore بخوانید
-            // برای نمونه از داده‌های سخت‌کد شده استفاده می‌کنیم
-            const profiles = [
-                {
-                    name: 'سارا محمدی',
-                    age: 24,
-                    city: 'تهران',
-                    distance: '۳ کیلومتری',
-                    bio: '✨ عاشق موسیقی، سفر و ماجراجویی',
-                    image: 'https://randomuser.me/api/portraits/women/1.jpg',
-                    tags: ['موسیقی', 'سفر', 'کتاب']
-                },
-                // ... بقیه پروفایل‌ها
-            ];
-
-            const container = document.getElementById('profiles-container');
-            container.innerHTML = profiles.map(p => `
-                <div class="profile-card">
-                    <img src="${p.image}" class="profile-image">
-                    <div class="profile-details">
-                        <div class="row">
-                            <span class="name">${p.name}</span>
-                            <span class="age">${p.age}</span>
-                        </div>
-                        <div class="location">📍 ${p.city} • ${p.distance}</div>
-                        <div class="bio">${p.bio}</div>
-                        <div class="tags">
-                            ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn btn-secondary" onclick="handleAction('dislike', '${p.name}')">✕</button>
-                            <button class="btn btn-primary" onclick="handleAction('like', '${p.name}')">❤️</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function handleAction(action, name) {
-            // اینجا می‌توانید عملیات لایک را در Firestore ذخیره کنید
-            alert(`${action} روی ${name}`);
-        }
-    </script>
+    <h1>❤️ خوش آمدید</h1>
+    <p>شما با موفقیت وارد شدید.</p>
+    <a href="login.html">بازگشت به صفحه ورود</a>
 </body>
 </html>
