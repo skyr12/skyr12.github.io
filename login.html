@@ -1,23 +1,624 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
 <head>
-    <title>ورود</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ورود | نیمه گمشده</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* انیمیشن پس زمینه */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* ایجاد ستاره‌ها */
+        for (let i = 0; i < 20; i++) {}
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 40px 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* لوگو */
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transform: rotate(45deg);
+            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.3);
+            animation: logoSpin 1s ease-out;
+        }
+
+        .logo-icon span {
+            transform: rotate(-45deg);
+            font-size: 48px;
+        }
+
+        @keyframes logoSpin {
+            from {
+                transform: rotate(0deg) scale(0);
+            }
+            to {
+                transform: rotate(45deg) scale(1);
+            }
+        }
+
+        .logo h1 {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* تب‌های ورود/ثبت‌نام */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            background: #f5f5f5;
+            padding: 5px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 45px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        /* فرم‌ها */
+        .form-container {
+            transition: all 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding-right: 10px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 50px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #ff4d6d;
+            box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.1);
+        }
+
+        .input-wrapper input::placeholder {
+            color: #bbb;
+        }
+
+        .forgot-password {
+            text-align: left;
+            margin: 15px 0 25px;
+        }
+
+        .forgot-password a {
+            color: #999;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .forgot-password a:hover {
+            color: #ff4d6d;
+        }
+
+        /* دکمه‌ها */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+            margin-bottom: 15px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #ff4d6d;
+            border: 2px solid #ff4d6d;
+        }
+
+        .btn-outline:hover {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        /* خط جداکننده */
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #f0f0f0;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            color: #999;
+            font-size: 13px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* گزینه‌های ورود با شبکه‌های اجتماعی */
+        .social-login {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #f0f0f0;
+            background: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-btn:hover {
+            border-color: #ff4d6d;
+            transform: translateY(-3px);
+        }
+
+        /* لینک ثبت‌نام */
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #ff4d6d;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* پیام خطا */
+        .error-message {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: shake 0.3s ease;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* لودینگ */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <h1>نیمه گمشده</h1>
-    <p>ورود به حساب کاربری</p>
-    
-    <form action="index.html">
-        <label>ایمیل:</label><br>
-        <input type="email" value="test@test.com"><br><br>
-        
-        <label>رمز عبور:</label><br>
-        <input type="password" value="123456"><br><br>
-        
-        <button type="submit">ورود</button>
-    </form>
-    
-    <br>
-    <a href="index.html">ورود مهمان</a>
+    <!-- انیمیشن پس زمینه -->
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <div class="container">
+        <div class="login-card">
+            <div class="logo">
+                <div class="logo-icon">
+                    <span>❤️</span>
+                </div>
+                <h1>نیمه گمشده</h1>
+                <p>به جمع ما بپیوندید و عشق را پیدا کنید</p>
+            </div>
+
+            <!-- تب‌ها -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login')">ورود</div>
+                <div class="tab" onclick="switchTab('register')">ثبت‌نام</div>
+            </div>
+
+            <!-- پیام خطا -->
+            <div class="error-message" id="errorMessage">
+                <span>⚠️</span>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- فرم ورود -->
+            <div id="loginForm" class="form-container">
+                <div class="form-group">
+                    <label>ایمیل</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" id="loginEmail" placeholder="example@email.com" value="test@test.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>رمز عبور</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="loginPassword" placeholder="********" value="123456">
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">رمز عبور را فراموش کرده‌اید؟</a>
+                </div>
+
+                <button class="btn btn-primary" onclick="handleLogin()">
+                    <span>ورود به حساب</span>
+                </button>
+
+                <button class="btn btn-outline" onclick="guestLogin()">
+                    ورود به عنوان مهمان
+                </button>
+            </div>
+
+            <!-- فرم ثبت‌نام (مخفی) -->
+            <div id="registerForm" class="form-container" style="display: none;">
+                <div class="form-group">
+                    <label>نام کامل</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="registerName" placeholder="مثال: سارا محمدی">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>ایمیل</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" id="registerEmail" placeholder="example@email.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>رمز عبور</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="registerPassword" placeholder="حداقل ۶ کاراکتر">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="handleRegister()">
+                    ثبت‌نام
+                </button>
+            </div>
+
+            <!-- خط جداکننده -->
+            <div class="divider">
+                <span>یا</span>
+            </div>
+
+            <!-- ورود با شبکه‌های اجتماعی -->
+            <div class="social-login">
+                <button class="social-btn" onclick="socialLogin('google')">🇬</button>
+                <button class="social-btn" onclick="socialLogin('facebook')">🇫</button>
+                <button class="social-btn" onclick="socialLogin('apple')">🍎</button>
+            </div>
+
+            <!-- لینک ثبت‌نام/ورود -->
+            <div class="register-link">
+                <span id="toggleText">حساب کاربری ندارید؟</span>
+                <a href="#" id="toggleLink" onclick="switchTab('register')">ثبت‌نام کنید</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ایجاد ستاره‌های پس زمینه
+        function createStars() {
+            const bg = document.getElementById('bgAnimation');
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('span');
+                const size = Math.random() * 30 + 10;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 10 + 's';
+                star.style.animationDuration = Math.random() * 20 + 10 + 's';
+                bg.appendChild(star);
+            }
+        }
+        createStars();
+
+        // نمایش خطا
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 3000);
+        }
+
+        // تغییر تب
+        function switchTab(tab) {
+            const loginTab = document.querySelectorAll('.tab')[0];
+            const registerTab = document.querySelectorAll('.tab')[1];
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const toggleText = document.getElementById('toggleText');
+            const toggleLink = document.getElementById('toggleLink');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                toggleText.textContent = 'حساب کاربری ندارید؟';
+                toggleLink.textContent = 'ثبت‌نام کنید';
+                toggleLink.setAttribute('onclick', 'switchTab("register")');
+            } else {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerForm.style.display = 'block';
+                loginForm.style.display = 'none';
+                toggleText.textContent = 'قبلاً ثبت‌نام کرده‌اید؟';
+                toggleLink.textContent = 'وارد شوید';
+                toggleLink.setAttribute('onclick', 'switchTab("login")');
+            }
+        }
+
+        // ورود
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showError('لطفاً ایمیل و رمز عبور را وارد کنید');
+                return;
+            }
+
+            // اینجا می‌تونید منطق ورود واقعی رو اضافه کنید
+            console.log('ورود با:', email, password);
+            window.location.href = 'index.html';
+        }
+
+        // ثبت‌نام
+        function handleRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (!name || !email || !password) {
+                showError('لطفاً همه فیلدها را پر کنید');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('رمز عبور باید حداقل ۶ کاراکتر باشد');
+                return;
+            }
+
+            console.log('ثبت‌نام:', name, email);
+            window.location.href = 'index.html';
+        }
+
+        // ورود مهمان
+        function guestLogin() {
+            console.log('ورود مهمان');
+            window.location.href = 'index.html';
+        }
+
+        // ورود با شبکه‌های اجتماعی
+        function socialLogin(provider) {
+            alert(`ورود با ${provider} به زودی اضافه می‌شود`);
+        }
+
+        // ارسال با اینتر
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const activeTab = document.querySelector('.tab.active').textContent;
+                if (activeTab === 'ورود') {
+                    handleLogin();
+                } else {
+                    handleRegister();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
