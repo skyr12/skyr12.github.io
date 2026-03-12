@@ -1,241 +1,31 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پروفایل من | نیمه گمشده</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Tahoma, Arial, sans-serif;
-        }
-
-        body {
-            background: #f0f2f5;
-            direction: rtl;
-        }
-
-        .header {
-            background: #ff4d6d;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-
-        .profile-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: block;
-            border: 3px solid #ff4d6d;
-        }
-
-        .name {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .location {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 20px;
-            font-weight: bold;
-            color: #ff4d6d;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .section {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .bio {
-            color: #555;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        .interests {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .interest {
-            background: #f0f0f0;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: #555;
-        }
-
-        .logout-btn {
-            background: #fee2e2;
-            color: #ef4444;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .logout-btn:hover {
-            background: #ef4444;
-            color: white;
-        }
-
-        .back-btn {
-            color: white;
-            text-decoration: none;
-            font-size: 20px;
-            margin-left: 10px;
-        }
-
-        .nav-bar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid #ddd;
-        }
-
-        .nav-item {
-            text-decoration: none;
-            color: #666;
-            font-size: 20px;
-        }
-
-        .nav-item.active {
-            color: #ff4d6d;
-        }
-    </style>
+    <title>پروفایل</title>
 </head>
 <body>
-    <div class="header">
-        <a href="javascript:history.back()" class="back-btn">←</a>
-        پروفایل من
-    </div>
-
-    <div class="container">
-        <div class="profile-card">
-            <img src="https://randomuser.me/api/portraits/women/1.jpg" class="avatar">
-            <div class="name">سارا محمدی</div>
-            <div class="location">📍 تهران • ۲۴ ساله</div>
-        </div>
-
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number">۱۲۸</div>
-                <div class="stat-label">لایک</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">۴۵</div>
-                <div class="stat-label">تطابق</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">۱,۲۵۰</div>
-                <div class="stat-label">سکه</div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">📝 درباره من</div>
-            <div class="bio">
-                ✨ عاشق موسیقی، سفر و ماجراجویی<br>
-                📸 عکاس آماتور<br>
-                ☕ قهوه و کتاب
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">🎯 علاقه‌مندی‌ها</div>
-            <div class="interests">
-                <span class="interest">🎵 موسیقی</span>
-                <span class="interest">✈️ سفر</span>
-                <span class="interest">📚 کتاب</span>
-                <span class="interest">☕ قهوه</span>
-                <span class="interest">🎮 بازی</span>
-            </div>
-        </div>
-
-        <button class="logout-btn" onclick="logout()">🚪 خروج از حساب</button>
-    </div>
-
-    <div class="nav-bar">
-        <a href="index.html" class="nav-item">🏠</a>
-        <a href="discover.html" class="nav-item">🔍</a>
-        <a href="matches.html" class="nav-item">❤️</a>
-        <a href="profile.html" class="nav-item active">👤</a>
-    </div>
-
-    <script>
-        function logout() {
-            if (confirm('آیا می‌خواهید خارج شوید؟')) {
-                window.location.href = 'login.html';
-            }
-        }
-    </script>
+    <a href="index.html">← بازگشت</a>
+    
+    <h1>پروفایل من</h1>
+    
+    <img src="https://randomuser.me/api/portraits/women/1.jpg" width="100">
+    <h2>سارا محمدی</h2>
+    <p>📍 تهران، ۲۴ ساله</p>
+    
+    <hr>
+    
+    <h3>آمار</h3>
+    <p>❤️ ۱۲۸ لایک</p>
+    <p>💕 ۴۵ تطابق</p>
+    <p>🪙 ۱,۲۵۰ سکه</p>
+    
+    <hr>
+    
+    <h3>درباره من</h3>
+    <p>عاشق موسیقی، سفر و کتاب</p>
+    
+    <hr>
+    
+    <a href="login.html">🚪 خروج</a>
 </body>
 </html>
