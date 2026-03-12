@@ -1,27 +1,273 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa" dir="rtl">
 <head>
-    <title>اکتشاف</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اکتشاف | نیمه گمشده</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff4d6d, #ff8a5c);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            flex: 1;
+        }
+
+        .coins {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+            background: white;
+            margin: 15px;
+            border-radius: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .filter-chip {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .filter-chip.active {
+            background: #ff4d6d;
+            color: white;
+        }
+
+        .search-box {
+            background: white;
+            margin: 0 15px 15px;
+            padding: 12px 20px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box span {
+            color: #999;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 15px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .user-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .user-info {
+            padding: 10px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .user-age {
+            color: #ff4d6d;
+            font-size: 12px;
+        }
+
+        .user-location {
+            color: #999;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            margin-top: 5px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid #ddd;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #999;
+            font-size: 24px;
+        }
+
+        .nav-item.active {
+            color: #ff4d6d;
+        }
+    </style>
 </head>
 <body>
-    <a href="index.html">← بازگشت</a>
-    
-    <h1>🔍 اکتشاف</h1>
-    
-    <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
-        <img src="https://randomuser.me/api/portraits/women/3.jpg" width="100">
-        <h3>زهرا حسینی، ۲۳</h3>
-        <p>📍 شیراز</p>
-        <button>❤️ لایک</button>
-        <button>✕ رد</button>
+    <div class="header">
+        <a href="index.html" class="back-btn">←</a>
+        <h1>اکتشاف</h1>
+        <div class="coins">
+            <span>🪙</span>
+            <span>۱,۲۵۰</span>
+        </div>
     </div>
-    
-    <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
-        <img src="https://randomuser.me/api/portraits/men/3.jpg" width="100">
-        <h3>محمد طاهری، ۳۲</h3>
-        <p>📍 کرج</p>
-        <button>❤️ لایک</button>
-        <button>✕ رد</button>
+
+    <div class="search-box">
+        <span>🔍</span>
+        <input type="text" placeholder="جستجوی نام، شهر، علاقه‌مندی...">
+    </div>
+
+    <div class="filters">
+        <span class="filter-chip active">همه</span>
+        <span class="filter-chip">آنلاین</span>
+        <span class="filter-chip">نزدیک من</span>
+        <span class="filter-chip">تازه‌واردها</span>
+        <span class="filter-chip">VIP</span>
+        <span class="filter-chip">زنان</span>
+        <span class="filter-chip">مردان</span>
+    </div>
+
+    <div class="grid">
+        <div class="user-card" onclick="location.href='profile.html'">
+            <img src="https://randomuser.me/api/portraits/women/1.jpg">
+            <div class="user-info">
+                <div class="user-name">سارا محمدی</div>
+                <div class="user-age">۲۴ ساله</div>
+                <div class="user-location">
+                    <span>📍</span>
+                    <span>تهران • ۳km</span>
+                </div>
+            </div>
+        </div>
+        <div class="user-card" onclick="location.href='profile.html'">
+            <img src="https://randomuser.me/api/portraits/men/1.jpg">
+            <div class="user-info">
+                <div class="user-name">علی رضایی</div>
+                <div class="user-age">۲۸ ساله</div>
+                <div class="user-location">
+                    <span>📍</span>
+                    <span>اصفهان • ۵km</span>
+                </div>
+            </div>
+        </div>
+        <div class="user-card" onclick="location.href='profile.html'">
+            <img src="https://randomuser.me/api/portraits/women/2.jpg">
+            <div class="user-info">
+                <div class="user-name">مریم کریمی</div>
+                <div class="user-age">۲۶ ساله</div>
+                <div class="user-location">
+                    <span>📍</span>
+                    <span>شیراز • ۲km</span>
+                </div>
+            </div>
+        </div>
+        <div class="user-card" onclick="location.href='profile.html'">
+            <img src="https://randomuser.me/api/portraits/men/2.jpg">
+            <div class="user-info">
+                <div class="user-name">رضا احمدی</div>
+                <div class="user-age">۳۰ ساله</div>
+                <div class="user-location">
+                    <span>📍</span>
+                    <span>مشهد • ۸km</span>
+                </div>
+            </div>
+        </div>
+        <div class="user-card" onclick="location.href='profile.html'">
+            <img src="https://randomuser.me/api/portraits/women/3.jpg">
+            <div class="user-info">
+                <div class="user-name">زهرا حسینی</div>
+                <div class="user-age">۲۳ ساله</div>
+                <div class="user-location">
+                    <span>📍</span>
+                    <span>تبریز • ۴km</span>
+                </div>
+            </div>
+        </div>
+        <div class="user-card" onclick="location.href='profile.html'">
+            <img src="https://randomuser.me/api/portraits/men/3.jpg">
+            <div class="user-info">
+                <div class="user-name">محمد طاهری</div>
+                <div class="user-age">۳۲ ساله</div>
+                <div class="user-location">
+                    <span>📍</span>
+                    <span>کرج • ۶km</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item">🏠</a>
+        <a href="discover.html" class="nav-item active">🔍</a>
+        <a href="matches.html" class="nav-item">❤️</a>
+        <a href="profile.html" class="nav-item">👤</a>
     </div>
 </body>
 </html>
